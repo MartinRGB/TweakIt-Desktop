@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/design/art/hero.png?token=ABVV6ITDI6TJGA3ACMZLD227XNSWG" />
+<img src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/design/art/hero.png?token=ABVV6ITDI6TJGA3ACMZLD227XNSWG" width="460" height="230"/>
 
 # TweakIt - Design
 
