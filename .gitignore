@@ -2,6 +2,10 @@
 # Project Ignores                       #
 #---------------------------------------#
 
+# package
+
+/packages
+
 # cache
 
 /.cache
@@ -18,6 +22,7 @@
 /plugins/@narative/gatsby-theme-novela/node_modules
 .package.swp
 package-lock.json
+yarn.lock
 
 # linters
 .eslintcache/
