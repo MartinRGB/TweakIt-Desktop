@@ -1,2 +1,7 @@
-Figma Link:
-https://www.figma.com/file/ZQtmLcv4iLl8S3ecVVHBgm/TweakIt?node-id=0%3A1
+<img src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/design/art/hero.png?token=ABVV6ITDI6TJGA3ACMZLD227XNSWG" />
+
+<br/>
+
+# TweakIt - Design
+
+made with Blender & Figma
