@@ -11,5 +11,8 @@ export const GlobalStyle = createGlobalStyle`
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #E1E1E6;
+    font-family: "-apple-system", "BlinkMacSystemFont", "San Francisco",
+    "Helvetica Neue", "Helvetica", "Ubuntu", "Roboto", "Noto", "Segoe UI",
+    "Arial", sans-serif;
   }
 `
