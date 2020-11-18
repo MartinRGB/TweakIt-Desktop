@@ -74,6 +74,7 @@
     "tailwindcss": "^1.0.0-beta.10",
     "theme-ui": "^0.3.3",
     "ts-jest": "^26.1.1",
+    "tsconfig-paths-webpack-plugin": "^3.3.0",
     "twin.macro": "^1.12.0",
     "typescript": "^3.9.5",
     "url-loader": "^4.1.1",

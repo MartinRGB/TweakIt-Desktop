@@ -1,21 +1,24 @@
 import React ,{ useContext, useEffect} from 'react';
 
-
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
 import {css} from "@emotion/core";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
-import '../../../components/i18n'
-import appIcon from '../../../assets/img/appIcon.png'
-import mainHeroImg from '../../../assets/img/main_hero_img.png'
-import mainHeroBg from '../../../assets/img/main_hero_bg.jpg'
-import mainIconImg from '../../../assets/img/main_icon.png'
+// import i18n from '@i18n'
+import '@Context/i18nContext'
 
-import CTAButton from '../../../components/CTAButton'
+// import CTAButton from '../../../components/CTAButton'
+import CTAButton from '@Components/CTAButton'
 
-import { ADBExpandStateContext } from '../../../sections/ADBPanel/ADBPanel.Context';
+import { ADBExpandStateContext } from '@Context/ADBExpandContext';
+
+
+import appIcon from '@Assets/img/appIcon.png'
+import mainHeroImg from '@Assets/img/main_hero_img.png'
+import mainHeroBg from '@Assets//img/main_hero_bg.jpg'
+import mainIconImg from '@Assets//img/main_icon.png'
 
 const MainIntroPage: React.FC = ({children}) => {
   const { t ,i18n} = useTranslation()

@@ -2,19 +2,17 @@ import React,{ useContext, useEffect, useState} from 'react';
 import styled from '@emotion/styled'
 import {css} from "@emotion/core";
 import { jsx,useColorMode} from 'theme-ui'
-import Icons from '../../icons';
-import Greetings from '../../components/Greetings'
 import MainIntroPage from './MainIntroPage'
 
 // i18n
-import '../../components/i18n'
+import '@Context/i18nContext'
 import { useTranslation, Trans} from 'react-i18next'
 
 //animation
-import { ADBExpandStateContext } from '../ADBPanel/ADBPanel.Context';
+import { ADBExpandStateContext } from '@Context/ADBExpandContext';
 import {useSpring, animated,interpolate} from 'react-spring'
-import animationConfig from '../../config/animation.json';
-import MainTweakItPage from './MainTweakItPage/MainTweakItPage';
+import animationConfig from '@Config/animation.json';
+import MainTweakItPage from '@Sections/MainPanel/MainTweakItPage';
 
 
 const MainPanel: React.FC = ({ children }) => {
@@ -55,6 +53,7 @@ const MainPanel: React.FC = ({ children }) => {
         active={adbIsExpand}
       >
              <MainTweakItPage><Trans>greetings</Trans></MainTweakItPage>
+             {/* <MainIntroPage></MainIntroPage> */}
       </Container>
     </animated.div>
   );

@@ -6,10 +6,10 @@ import styled from '@emotion/styled';
 import {css} from "@emotion/core";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
-import '../../../../components/i18n'
+import '@Context/i18nContext'
 import ListTree from './ListTree'
 
-import animationList from '../../../../config/animator_list.json'
+import animationList from '@Config/animator_list.json'
 
 const ListArea: React.FC = ({children}) => {
   const { t ,i18n} = useTranslation()

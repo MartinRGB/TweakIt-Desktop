@@ -4,17 +4,17 @@ import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
 import {css} from "@emotion/core";
+import { CallToActionButton } from "@Types";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
-import '../i18n'
-
+import '@Context/i18nContext'
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
-import animationConfig from '../../config/animation.json';
+import animationConfig from '@Config/animation.json';
 
 // Call To Action Big Green Btns
 
-const CTAButton: React.FC = ({children,onClick}) => {
+const CTAButton:  React.FC<CallToActionButton> = ({ children , onClick}) => {
   const { t ,i18n} = useTranslation()
 
   const [colorMode] = useColorMode();
@@ -38,7 +38,7 @@ const CTAButton: React.FC = ({children,onClick}) => {
     }>
       <Button
         onClick={onClick}>
-        {children}
+        <Trans>{children}</Trans>
       </Button>
   </animated.div>);
 }

@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import {css} from "@emotion/core";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
-import '../../../../components/i18n'
+import '@Context/i18nContext'
 
 const CodeArea: React.FC = ({children}) => {
   const { t ,i18n} = useTranslation()

@@ -3,11 +3,11 @@ import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
 import {css} from "@emotion/core";
-import { IButton } from "@types";
+import { IButton } from "@Types";
 
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
-import animationConfig from '../../config/animation.json';
+import animationConfig from '@Config/animation.json';
 
 const TitleButtonNormal: React.FC<IButton> = ({ children , onClick}) => {
   const [colorMode, setColorMode] = useColorMode()

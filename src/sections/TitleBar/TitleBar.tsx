@@ -1,18 +1,18 @@
 import React, { useContext, useEffect} from 'react';
 import styled from '@emotion/styled'
-import {css} from '@emotion/core'
-import { useColorMode,jsx } from 'theme-ui'
-import TitleButtonNormal from '../../components/TitleButtonNormal'
-import TitleButtonToggle from '../../components/TitleButtonToggle'
-import Icons from '../../assets/icons';
+//import {css} from '@emotion/core'
+import { useColorMode,jsx,css} from 'theme-ui'
+import TitleButtonNormal from '@Components/TitleButtonNormal'
+import TitleButtonToggle from '@Components/TitleButtonToggle'
+import Icons from '@Assets/icons';
 
 // i18n
-import '../../components/i18n'
+import '@Context/i18nContext'
 import { useTranslation, Trans} from 'react-i18next'
 
-import { ADBExpandStateContext } from '../ADBPanel/ADBPanel.Context';
+import { ADBExpandStateContext } from '@Context/ADBExpandContext';
 
-import initState from '../../config/init_state.json'
+import initState from '@Config/init_state.json'
 
 const TitleBar: React.FC = ({ children }) => {
   // return <button type="button">{children}</button>
@@ -99,5 +99,7 @@ const TitleBox = styled.div`
     line-height:38px;
     font-size:12px;
     font-weight: 500;
+    position: absolute;
+    width: 100%;
     color:${p => p.theme.colors.primary};
 `;

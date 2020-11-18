@@ -3,7 +3,7 @@ import React, { memo, useState, useRef, useEffect,useContext } from 'react'
 import { useSpring,animated,a} from 'react-spring'
 import ResizeObserver from 'resize-observer-polyfill'
 //import styled from 'styled-components'
-import { IListTree,ListSVGIcon } from "@types";
+import { IListTree,ListSVGIcon } from "@Types";
 // import * as Icons from './ListIcon'
 
 import { useColorMode,jsx } from 'theme-ui'
@@ -12,11 +12,12 @@ import styled from '@emotion/styled';
 import {css} from "@emotion/core";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
-import '../../../../components/i18n'
+import '@Context/i18nContext'
 
-import animationConfig from '../../../../config/animation.json'
+import animationConfig from '@Config/animation.json'
 
-import { ListSelectContext } from './ListSelect.Context';
+
+import { ListSelectStateContext } from '@Context/ListSelectContext';
 
 const ListTree:React.FC<IListTree> = memo(({ children, name, style, defaultOpen = false,info }) => {
 
@@ -25,7 +26,7 @@ const ListTree:React.FC<IListTree> = memo(({ children, name, style, defaultOpen 
   const UlVerticalPadding:number = 6; 
   
   const { currentAnimation, selectAnimation} = useContext(
-    ListSelectContext
+    ListSelectStateContext
   );
   const [colorMode] = useColorMode();
 

@@ -14,9 +14,19 @@
     "outDir": "./dist",
     "strict": true ,
     "esModuleInterop": true,
+    "moduleResolution": "node",
     "resolveJsonModule": true,
+    "baseUrl": "./",
     "paths":{
-      "*.ts":["*"]
+      "*.ts":["*"],
+      "@i18n/*": ["src/components/i18n/*"],
+      "@Assets/*": ["src/assets/*"],
+      "@Components/*": ["src/components/*"],
+      "@Config/*": ["src/config/*"],
+      "@Context/*": ["src/context/*"],
+      "@Sections/*": ["src/sections/*"],
+      "@Styles/*": ["src/styles/*"],
+      "@Types": ["src/types"],
     }
   }
 }

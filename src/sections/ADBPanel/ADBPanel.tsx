@@ -2,15 +2,13 @@ import React,{ useContext, useEffect, useState} from 'react';
 import styled from '@emotion/styled'
 import {css} from "@emotion/core";
 import { jsx,useColorMode} from 'theme-ui'
-import Icons from '../../icons';
 
 // i18n
-import '../../components/i18n'
+import '@Context/i18nContext'
 import { useTranslation, Trans} from 'react-i18next'
-import { ADBExpandStateContext } from '../ADBPanel/ADBPanel.Context';
+import { ADBExpandStateContext } from '@Context/ADBExpandContext';
 import {useSpring, animated,interpolate} from 'react-spring'
-import animationConfig from '../../config/animation.json';
-
+import animationConfig from '@Config/animation.json';
 import ReactPlaceholder from 'react-placeholder';
 
 const ADBPanel: React.FC = ({ children }) => {

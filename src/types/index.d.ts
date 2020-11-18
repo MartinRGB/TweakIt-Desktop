@@ -6,6 +6,12 @@ export interface IButton {
   active?: boolean;
 }
 
+export interface CallToActionButton {
+  children?: React.ReactNode;
+  onClick?: any;
+  active?: boolean;
+}
+
 export type Icon = React.FC<{
   fill: string
 }>
@@ -15,7 +21,7 @@ export type ListSVGIcon = React.FC<{
 }>
 
 export interface IListTree {
-  children?: React.ReactNode?
+  children?: React.ReactNode;
   name?: string;
   style?: any;
   defaultOpen?: boolean;

@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import initState from "../../config/init_state.json";
+import initState from "@Config/init_state.json";
 
 export var ADBExpandStateContext = createContext({
   adbIsExpand: initState.isExpand,

@@ -1,27 +1,26 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { GlobalStyle } from './styles/GlobalStyle'
+import { GlobalStyle } from '@Styles/GlobalStyle'
 import { css, keyframes } from '@emotion/core';
 import styled from '@emotion/styled';
 import tw from 'twin.macro'
 
-import Greetings from './components/Greetings'
 //import Button from './components/Button'
-import TitleBar from './sections/TitleBar';
-import ADBPanel from './sections/ADBPanel';
-import MainPanel from './sections/MainPanel';
+import TitleBar from '@Sections/TitleBar';
+import ADBPanel from '@Sections/ADBPanel';
+import MainPanel from '@Sections/MainPanel';
 
 // theme-ui
 import { ThemeProvider, useColorMode } from 'theme-ui'
-import theme from './styles/theme.ts'
+import theme from '@Styles/theme'
 
 // i18n
-import './components/i18n'
+import '@Context/i18nContext'
 import { useTranslation, Trans} from 'react-i18next'
 
-import ADBExpandStateProvider from "./sections/ADBPanel/ADBPanel.Context";
+import ADBExpandStateProvider from "@Context/ADBExpandContext";
 
-import animatorList from './config/animator_list.json';
+import animatorList from '@Config/animator_list.json';
 
 
 // twmacro
@@ -46,9 +45,8 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <ADBExpandStateProvider>
-          <TitleBar></TitleBar>
+          <TitleBar>123</TitleBar>
           <ADBPanel></ADBPanel>
-          {/* <Greetings><Trans>greetings</Trans></Greetings> */}
           <MainPanel></MainPanel>
         </ADBExpandStateProvider>
       </ThemeProvider>

@@ -1,1 +1,1 @@
-export { default } from './MainTweakItPage'
+export { default } from './MainIntroPage'
