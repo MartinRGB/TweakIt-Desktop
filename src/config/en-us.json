@@ -5,5 +5,19 @@
   "lan_switch":"lanSwitch",
   "theme_switch":"themeSwitch",
   "greetings_2":"Welcome to React",
-  "fucking":"this is fucking greetings"
+  "Android":"Android",
+  "iOS":"iOS",
+  "Web":"Web",
+  "Cubic Bezier":"Cubic Bezier",
+  "Design Tools":"Design Tools",
+  "Stiffness":"Stiffness",
+  "Damping":"Damping",
+  "Factor":"Factor",
+  "DampingRatio":"DampingRatio",
+  "Tension":"Tension",
+  "Friction":"Friction",
+  "Duration":"Duration",
+  "Speed":"Speed",
+  "Velocity":"Velocity",
+  "Mass":"Mass"
 }

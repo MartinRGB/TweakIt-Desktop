@@ -10,6 +10,18 @@ export type Icon = React.FC<{
   fill: string
 }>
 
+export type ListSVGIcon = React.FC<{
+  props: JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>;
+}>
+
+export interface IListTree {
+  children?: React.ReactNode?
+  name?: string;
+  style?: any;
+  defaultOpen?: boolean;
+  info?: string;
+}
+
 // export interface IPaginator {
 //   pageCount: number;
 //   index: number;

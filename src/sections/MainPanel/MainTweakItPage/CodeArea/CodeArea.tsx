@@ -1,0 +1,35 @@
+import React ,{ useContext, useEffect} from 'react';
+
+import { useColorMode,jsx } from 'theme-ui'
+import tw from 'twin.macro'
+import styled from '@emotion/styled';
+import {css} from "@emotion/core";
+
+import { useTranslation, Trans, Translation } from 'react-i18next'
+import '../../../../components/i18n'
+
+const CodeArea: React.FC = ({children}) => {
+  const { t ,i18n} = useTranslation()
+
+  const [colorMode] = useColorMode();
+
+
+  return (
+    <Container>
+
+    </Container>
+  )
+}
+
+export default CodeArea
+
+const Container = styled.div`
+    //height: 100%;
+    height:300px;
+    min-height:50px;
+    //background:blue;
+    display: flex;
+    flex-direction: column;
+    box-shadow:0px -1px 0px ${p => p.theme.colors.adb_border}
+    //flex:4;
+`

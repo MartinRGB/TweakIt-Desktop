@@ -69,6 +69,7 @@
     "react-placeholder": "^4.0.3",
     "react-spring": "^8.0.27",
     "react-with-gesture": "^4.0.8",
+    "resize-observer-polyfill": "^1.5.1",
     "tailwind.macro": "^1.0.0-alpha.10",
     "tailwindcss": "^1.0.0-beta.10",
     "theme-ui": "^0.3.3",

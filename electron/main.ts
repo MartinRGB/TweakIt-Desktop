@@ -11,6 +11,7 @@ function createWindow() {
     height: 800,
     minHeight: 500,
     minWidth: 700,
+    //frame: false,
     backgroundColor: '#2e2c29',
     // backgroundColor: '#191622',
     titleBarStyle: 'hiddenInset',

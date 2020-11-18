@@ -41,6 +41,7 @@ const TitleBar: React.FC = ({ children }) => {
 
   return (
     <Container >
+      <ContainerBackground></ContainerBackground>
       <TitleBox>
         {children}
       </TitleBox>
@@ -70,14 +71,25 @@ const ButtonLayout = styled.div`
   float: right;
 `
 
+const ContainerBackground = styled.div`
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  top:0;
+  left:0;
+  background: linear-gradient(180deg, ${p => p.theme.colors.title_background_top} 0%, ${p => p.theme.colors.title_background_bottom} 100%);
+  -webkit-app-region: drag;
+  // z-index:10;
+`
 
 
 const Container = styled.div`
     width: 100%;
     height: 38px;
-    background: linear-gradient(180deg, ${p => p.theme.colors.title_background_top} 0%, ${p => p.theme.colors.title_background_bottom} 100%);
+    position:relative;
+    // background: linear-gradient(180deg, ${p => p.theme.colors.title_background_top} 0%, ${p => p.theme.colors.title_background_bottom} 100%);
     box-shadow: 0px 4px 4px ${p => p.theme.colors.title_box_shadow};
-    -webkit-app-region: drag;
+    // -webkit-app-region: drag;
     z-index:10;
 `;
 

@@ -5,5 +5,19 @@
   "lan_switch":"切换语言",
   "theme_switch":"切换主题",
   "greetings_2":"欢迎使用 React",
-  "fucking":"呵呵"
+  "Android":"Android",
+  "iOS":"iOS",
+  "Web":"Web",
+  "Cubic Bezier":"贝塞尔曲线",
+  "Design Tools":"设计工具",
+  "Stiffness":"刚性",
+  "Damping":"阻尼",
+  "Factor":"因数",
+  "DampingRatio":"阻尼比",
+  "Tension":"拉力",
+  "Friction":"摩擦力",
+  "Duration":"时间",
+  "Speed":"速度",
+  "Velocity":"速率",
+  "Mass":"质量"
 }

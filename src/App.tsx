@@ -40,7 +40,7 @@ document.body.appendChild(mainElement)
 
 const App = () => {
   const { t ,i18n} = useTranslation()
-  console.log(animatorList)
+  //console.log(animatorList)
   return (
     <>
       <ThemeProvider theme={theme}>

@@ -8,5 +8,10 @@
   { "mass": 1, 
     "tension": 600,
     "friction": 25 
+  },
+  "list_reveal":
+  { "mass": 1, 
+    "tension": 1200,
+    "friction": 95
   }
 }

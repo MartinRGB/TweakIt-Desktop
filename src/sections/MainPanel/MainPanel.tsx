@@ -14,6 +14,7 @@ import { useTranslation, Trans} from 'react-i18next'
 import { ADBExpandStateContext } from '../ADBPanel/ADBPanel.Context';
 import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '../../config/animation.json';
+import MainTweakItPage from './MainTweakItPage/MainTweakItPage';
 
 
 const MainPanel: React.FC = ({ children }) => {
@@ -53,7 +54,7 @@ const MainPanel: React.FC = ({ children }) => {
       <Container
         active={adbIsExpand}
       >
-             <MainIntroPage><Trans>greetings</Trans></MainIntroPage>
+             <MainTweakItPage><Trans>greetings</Trans></MainTweakItPage>
       </Container>
     </animated.div>
   );
