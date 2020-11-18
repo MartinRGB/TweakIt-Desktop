@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import '../../translations/i18n'
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import appIcon from '../../icons/appIcon.png'
+import mainHeroImg from '../../img/main_hero_img.jpg'
+import mainHeroBg from '../../img/main_hero_bg.jpg'
 
 import { ADBExpandStateContext } from '../../sections/ADBPanel/ADBPanel.Context';
 

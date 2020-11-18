@@ -1,0 +1,12 @@
+{
+  "panel_slide":
+    { "mass": 1, 
+      "tension": 600,
+      "friction": 45 
+    },
+  "button_pressed":
+  { "mass": 1, 
+    "tension": 600,
+    "friction": 25 
+  }
+}

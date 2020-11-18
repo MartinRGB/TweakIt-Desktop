@@ -1,0 +1,9 @@
+{
+  "title":"TweakIt",
+  "connect_tweakit_android":"连接 TweakIt 安卓库",
+  "greetings":"Electron, TypeScript, React, TailWindCSS, Emotion, i18n, Theme UI, React Spring, Jest 和 ESLint 构建的跨桌面安卓调试工具。",
+  "lan_switch":"切换语言",
+  "theme_switch":"切换主题",
+  "greetings_2":"欢迎使用 React",
+  "fucking":"呵呵"
+}

@@ -1,0 +1,9 @@
+{
+  "title":"TweakIt",
+  "connect_tweakit_android":"Connect TweakIt Android",
+  "greetings":"An Android debugging tool build with Electron, TypeScript, React, TailWindCSS, Emotion, i18nReact, Theme UI, React Spring, Jest and ESLint.",
+  "lan_switch":"lanSwitch",
+  "theme_switch":"themeSwitch",
+  "greetings_2":"Welcome to React",
+  "fucking":"this is fucking greetings"
+}

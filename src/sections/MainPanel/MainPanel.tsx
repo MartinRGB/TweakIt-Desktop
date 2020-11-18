@@ -3,17 +3,20 @@ import styled from '@emotion/styled'
 import {css} from "@emotion/core";
 import { jsx,useColorMode} from 'theme-ui'
 import Icons from '../../icons';
+import Greetings from '../../components/Greetings'
+import MainIntroPage from './MainIntroPage'
 
 // i18n
 import '../../components/i18n'
 import { useTranslation, Trans} from 'react-i18next'
+
+//animation
 import { ADBExpandStateContext } from '../ADBPanel/ADBPanel.Context';
 import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '../../config/animation.json';
 
-import ReactPlaceholder from 'react-placeholder';
 
-const ADBPanel: React.FC = ({ children }) => {
+const MainPanel: React.FC = ({ children }) => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();
   const isDark = colorMode === `dark`;
@@ -32,61 +35,40 @@ const ADBPanel: React.FC = ({ children }) => {
   // React Spring State
   // const [isExpand, set] = useState(false)
   // React Spring Property
-  const {rightProps} = useSpring({
-    rightProps: adbIsExpand ? 0 : -320,
-    config: animationConfig.panel_slide,
+  const {widthProps} = useSpring({
+    // opacity: flipped ? 1 : 0,
+    widthProps: adbIsExpand ? 320 : 0,
+    config: animationConfig.panel_slide
   })
-
+  //calc(100% - 320px)':'calc(100%)
   return (
     <animated.div
       // static base style
-      // css={{
-      //   position: "fixed",
-      //   width: "33vw",
-      //   height: "100vw",
-      //   backgroundColor: "magenta"
-      // }}
       css={AnimatedContainerCSS}
       // animated dynamic style
       style={{
-        // transform: interpolate([x], (x) => `translate3d(${x}px,0,0)`),
-        right: interpolate([rightProps], (rightProps => `${rightProps}px`))
+        width: interpolate([widthProps], (widthProps => `calc(100% - ${widthProps}px)`))
       }}
     >
       <Container
         active={adbIsExpand}
       >
-        <ReactPlaceholder type='text' ready={false} rows={30} 
-          css={PlaceHolderCSS}
-          color='#929292'
-          >
-
-        </ReactPlaceholder>
+             <MainIntroPage><Trans>greetings</Trans></MainIntroPage>
       </Container>
     </animated.div>
   );
 }
 
-export default ADBPanel
-
-const PlaceHolderCSS = css`
-  width: 100%;
-  height: calc(100% - 24px);
-  padding: 24px;
-  overflow: hidden;
-  opacity:0.15;
-  
-`;
-
-
-
+export default MainPanel
 
 
 const AnimatedContainerCSS = css`
-  width: 320px;
+  // width: 320px;
+  // height: calc(100vh - 38px);
+  // position: absolute;  
+  // height: 100%;
   height: calc(100vh - 38px);
-  position: absolute;  
-  z-index:9;
+  z-index:8;
 `;
 
 const Container = styled.div<
@@ -94,14 +76,8 @@ const Container = styled.div<
   active:boolean;
 }
 >`
-    // width: 320px;
-    // height: calc(100vh - 38px);
-    // position:absolute;
-    // transition:all 0.3s;
-    // transition-timing-function: cubic-bezier(0,0,0.2,1);
-    //right:${p => (p.active? '0px':'-320px')};
     width: 100%;
     height: 100%;
-    background: ${p => p.theme.colors.adb_background};
-    box-shadow: -1px 0px 0px ${p => p.theme.colors.adb_border};
+    background: ${p => p.theme.colors.background};
+
 `;

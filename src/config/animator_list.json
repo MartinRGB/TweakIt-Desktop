@@ -1,0 +1,318 @@
+{
+  "ul": [
+      {
+      "index": 0,
+      "name": "Android",
+      "icon": "url(./image/icon/android_icon.png)",
+      "li":[
+          {
+          "index": 0,
+          "tag":0,
+          "name": "Spring",
+          "calculator":"SpringAnimationCalculator",
+          "animation_data":["Stiffness:",1500,0.01,5000,"Damping:",0.5,0.01,0.99,"Velocity",0,0,500]
+          },
+          {
+          "index": 1,
+          "tag":1,
+          "name": "Fling",
+          "calculator":"FlingAnimationCalculator",
+          "animation_data":["Velocity:",-4000,-5000,5000,"Damping:",0.8,0.01,10]
+          },
+          {
+          "index": 2,
+          "name": "Divide"
+          },
+          {
+          "index": 3,
+          "tag":2,
+          "name": "AccelerateDecelerate",
+          "calculator":"InterpolatorCalculator",
+          "animation_data":["Duration:",1,0.01,10]
+          },
+          {
+          "index": 4,
+          "tag":3,
+          "name": "Accelerate",
+          "calculator":"InterpolatorCalculator",
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 5,
+          "tag":4,
+          "name": "Decelerate",
+          "calculator":"InterpolatorCalculator",
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 6,
+          "tag":5,
+          "name": "Anticipate",
+          "calculator":"InterpolatorCalculator",
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 7,
+          "tag":6,
+          "name": "Overshoot",
+          "calculator":"InterpolatorCalculator",
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 8,
+          "tag":7,
+          "name": "AnticipateOvershoot",
+          "calculator":"InterpolatorCalculator",
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 9,
+          "tag":8,
+          "name": "Bounce",
+          "calculator":"InterpolatorCalculator",
+          "animation_data":["Duration:",1,0.01,10]
+          },
+          {
+          "index": 10,
+          "tag":9,
+          "name": "Cycle",
+          "calculator":"InterpolatorCalculator",
+          "animation_data":["Factor:",2,0,5,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 11,
+          "tag":10,
+          "name": "Linear",
+          "calculator":"InterpolatorCalculator",
+          "animation_data":["Duration:",1,0.01,10]
+          },
+          {
+          "index": 12,
+          "name": "Divide"
+          },
+          {
+          "index": 13,
+          "tag":11,
+          "name": "FastOutSlowIn",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.40, 0.00, 0.20, 1.00,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 14,
+          "tag":12,
+          "name": "LinearOutSlowIn",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.00, 0.00, 0.20, 1.00,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 15,
+          "tag":13,
+          "name": "FastOutLinear",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.40, 0.00, 1.00, 1.00,"Duration:",1,0.01,10]
+          }
+          ,{
+          "index": 16,
+          "name": "Divide"
+          },
+          {
+          "index": 17,
+          "tag":14,
+          "name": "CustomMocosSpring",
+          "calculator":"CustomMocosSpringCalculator",
+          "animation_data":["Tension:", 100, 0, 200,"Friction:",15,0,100,"Velocity:",0,0,1000]
+          },
+          {
+          "index": 18,
+          "tag":15,
+          "name": "CustomSpring",
+          "calculator":"CustomSpringCalculator",
+          "animation_data":["Factor:", 0.5, 0, 2,"Duration",1,0,10]
+          },
+          {
+          "index": 19,
+          "tag":16,
+          "name": "CustomBounce",
+          "calculator":"CustomBounceCalculator",
+          "animation_data":["Tension:", 0, 0, 100,"Friction:",0,0,100]
+          },
+          {
+          "index": 20,
+          "tag":17,
+          "name": "CustomDamping",
+          "calculator":"CustomDampingCalculator",
+          "animation_data":["Tension:", 0, 0, 100,"Friction:",0,0,100]
+          }
+          ,{
+            "index": 21,
+            "name": "Divide"
+          },
+          {
+            "index": 22,
+            "tag":35,
+            "name": "ViscosFluid",
+            "calculator":"InterpolatorCalculator",
+            "animation_data":["factor:", 2, 0, 20,"Duration:",1,0.01,10]
+          }
+      ]
+      },
+      {
+      "index": 1,
+      "name": "iOS",
+      "icon": "url(./image/icon/apple_icon.png)",
+      "li":[
+          {
+          "index": 0,
+          "tag":18,
+          "name": "UIViewSpring",
+          "calculator":"SpringAnimationCalculator",
+          "converter":"UIViewSpringConverter",
+          "animation_data":["Damping:", 0.5, 0, 1,"Duration:",0.5,0.01,5]
+          },
+          {
+          "index": 1,
+          "tag":18,
+          "name": "CASpring",
+          "calculator":"SpringAnimationCalculator",
+          "converter":"FramerDHOConverter",
+          "animation_data":["Stiffness:", 100, 0, 3000,"Damping:",10,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000]
+          },
+          {
+          "index": 2,
+          "name": "Divide"
+          },
+          {
+          "index": 3,
+          "tag":20,
+          "name": "Linear",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.25, 0.25, 0.75, 0.75,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 5,
+          "tag":21,
+          "name": "EaseIn",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.42, 0.00, 1.00, 1.00,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 6,
+          "tag":22,
+          "name": "EaseOut",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.00, 0.00, 0.58, 1.00,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 7,
+          "tag":23,
+          "name": "EaseInOut",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.42, 0.00, 0.58, 1.00,"Duration:",1,0.01,10]
+          }
+      ]
+      },
+      {
+      "index": 2,
+      "name": "Web",
+      "icon": "url(./image/icon/web_icon.png)",
+      "li":[
+          {
+          "index": 0,
+          "tag":24,
+          "name": "Linear",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.25, 0.25, 0.75, 0.75,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 1,
+          "tag":25,
+          "name": "Ease",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.25, 0.10, 0.25, 1.00,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 2,
+          "tag":26,
+          "name": "EaseIn",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.42, 0.00, 1.00, 1.00,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 3,
+          "tag":27,
+          "name": "EaseOut",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.00, 0.00, 0.58, 1.00,"Duration:",1,0.01,10]
+          },
+          {
+          "index": 3,
+          "tag":28,
+          "name": "EaseInOut",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.42, 0.00, 0.58, 1.00,"Duration:",1,0.01,10]
+          }
+      ]
+      },
+      {
+      "index": 3,
+      "name": "Cubic Beizer",
+      "icon": "url(./image/icon/bezier_icon.png)",
+      "li":[
+          {
+          "index": 0,
+          "tag":29,
+          "name": "Cubic Bezier",
+          "calculator":"CubicBezierCalculator",
+          "animation_data":[0.50, 0.00, 0.50, 1.00,"Duration:",1,0.01,10]
+          }
+      ]
+      },
+      {
+      "index": 4,
+      "name": "Design Tools",
+      "icon": "url(./image/icon/tools_icon.png)",
+      "li":[
+          {
+          "index": 0,
+          "tag":30,
+          "name": "Origami POP Spring",
+          "calculator": "SpringAnimationCalculator",
+          "converter": "OrigamiSpringConverter",
+          "animation_data":["Bounciness:", 5, 0, 100,"Speed:",10,0,100],
+          },
+          {
+          "index": 1,
+          "tag":31,
+          "name": "Framer RK4 Spring",
+          "calculator": "SpringAnimationCalculator",
+          "converter": "FramerRK4Converter",
+          "animation_data":["Tension:", 200, 0, 3000,"Friction:",25,0,100,"Velocity:",0,0,100],
+          },
+          {
+          "index": 2,
+          "tag":32,
+          "name": "Framer DHO Spring",
+          "calculator": "SpringAnimationCalculator",
+          "converter": "FramerDHOConverter",
+          "animation_data":["Stiffness:", 50, 0, 3000,"Damping:",2,0,100,"Mass:",1,0,10,"Velocity:",0,0,1000],
+          },
+          {
+          "index": 3,
+          "tag":33,
+          "name": "Protopie Spring",
+          "calculator": "SpringAnimationCalculator",
+          "converter": "FramerRK4Converter",
+          "animation_data":["Tension:", 300, 0, 1000,"Friction:",15,0,100],
+          },
+          {
+            "index": 4,
+            "tag":34,
+            "name": "Principle Spring",
+            "calculator": "SpringAnimationCalculator",
+            "converter": "FramerRK4Converter",
+            "animation_data":["Tension:", 380, 0, 1000,"Friction:",20,0,100],
+          }
+      ]
+      }
+  ]
+}
