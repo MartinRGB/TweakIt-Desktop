@@ -12,37 +12,33 @@ import ListTree from './ListTree'
 import animationList from '@Config/animator_list.json'
 
 const ListArea: React.FC = ({children}) => {
+  
   const { t ,i18n} = useTranslation()
-
   const [colorMode] = useColorMode();
 
   return (
     <Container>
-      {/* <ListTree name="main">
-        <ListTree name="hello" />
-        <ListTree name="subtree with children">
-          <ListTree name="hello" />
-          <ListTree name="sub-subtree with children">
-            <ListTree name="child 1" style={{ color: '#37ceff' }} />
-            <ListTree name="child 2" style={{ color: '#37ceff' }} />
-            <ListTree name="child 3" style={{ color: '#37ceff' }} />
-          </ListTree>
-          <ListTree name="hello" />
-        </ListTree>
-        <ListTree name="world" />
-        <ListTree name={<span>🙀 something something</span>} />
-      </ListTree> */}
       {
           animationList.map(function (data:any,index:number) {
-            //console.log(data)
-            //console.log(data['name'])
             return (
-              <ListTree name={data['name']} info={data['name']}  key={data['name']+'_'+index}>
+              <ListTree 
+                key={data['name']+'_'+index} 
+                index={index}
+                info={data['name']} 
+                isUlElement={true}
+                name={data['name']}>
               {
-                data['li'].map(function (subdata:any,i:number) {
-                //console.log(subdata['name'])
-                return <ListTree name={subdata['name']} key={data['name']+'_'+subdata['name']+'_'+i} info={data['name']+'_'+subdata['name']}/>
-              })
+                data['li'].map(function (animData:any,i:number) {
+                  return <ListTree 
+                            key={data['name']+'_'+animData['name']+'_'+i} 
+                            index={i}
+                            info={data['name']+'_'+animData['name']} 
+                            isUlElement={false} 
+                            name={animData['name']} 
+                            calculator={animData['calculator']}
+                            animation_data={animData['animation_data']}>
+                         </ListTree>
+                })
               }
               </ListTree>
             )
@@ -60,15 +56,26 @@ export default ListArea
 
 const Container = styled.div`
     height: 100%;
-    //background:#00AA00;
+    background:${p => p.theme.colors.main_top_bg};
     display: flex;
     flex-direction: column;
     //flex:1;
     width:250px;
     // Need a fake scrollbar
     //overflow-y: auto;
-    overflow:hidden;
-    padding:25px;
+    overflow-y:auto;
+    padding:24px 14px 24px 14px;
     // Or it will re-rendering cause performance issue
     min-width:250px;
+
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 2px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: ${p => p.theme.colors.text};
+    }
 `

@@ -1,12 +1,13 @@
 import React from "react";
-import { Icon } from '@types';
+import { Icon } from '@Types';
 
-const ADB: Icon = ({}) => {
+const ADB: Icon = ({style}) => {
   return (
     <svg 
     width={16} 
     height={16} 
     viewBox="0 0 16 16"
+    style={{ ...style }}
     xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"

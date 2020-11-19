@@ -17,8 +17,7 @@ var ADBExpandStateProvider: React.FC<{}> = ({ children }) => {
       value={{
         adbIsExpand:expandState,
         setADBExpandState: setExpandStateAndSave,
-      }}
-    >
+      }}>
       {children}
     </ADBExpandStateContext.Provider>
   );

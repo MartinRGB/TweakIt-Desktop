@@ -4,7 +4,7 @@ import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
 import {css} from "@emotion/core";
-import { CallToActionButton } from "@Types";
+import { ICallToActionButton } from "@Types";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
@@ -14,7 +14,7 @@ import animationConfig from '@Config/animation.json';
 
 // Call To Action Big Green Btns
 
-const CTAButton:  React.FC<CallToActionButton> = ({ children , onClick}) => {
+const CTAButton:  React.FC<ICallToActionButton> = ({ children , onClick}) => {
   const { t ,i18n} = useTranslation()
 
   const [colorMode] = useColorMode();

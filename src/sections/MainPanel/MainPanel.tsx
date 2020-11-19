@@ -30,12 +30,7 @@ const MainPanel: React.FC = ({ children }) => {
   const { adbIsExpand, setADBExpandState} = useContext(
     ADBExpandStateContext,
   );
-  
-  // React Spring State
-  // const [isExpand, set] = useState(false)
-  // React Spring Property
   const {widthProps} = useSpring({
-    // opacity: flipped ? 1 : 0,
     widthProps: adbIsExpand ? 320 : 0,
     config: animationConfig.panel_slide
   })
@@ -49,11 +44,10 @@ const MainPanel: React.FC = ({ children }) => {
         width: interpolate([widthProps], (widthProps => `calc(100% - ${widthProps}px)`))
       }}
     >
-      <Container
-        active={adbIsExpand}
-      >
-             <MainTweakItPage><Trans>greetings</Trans></MainTweakItPage>
-             {/* <MainIntroPage></MainIntroPage> */}
+      <Container active={adbIsExpand}>
+        <MainTweakItPage>
+          <Trans>greetings</Trans>
+        </MainTweakItPage>
       </Container>
     </animated.div>
   );

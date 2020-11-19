@@ -19,5 +19,6 @@
   "Duration":"Duration",
   "Speed":"Speed",
   "Velocity":"Velocity",
-  "Mass":"Mass"
+  "Mass":"Mass",
+  "select_an_animator":"Select An Animator"
 }

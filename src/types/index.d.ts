@@ -4,29 +4,40 @@ export interface IButton {
   children?: React.ReactNode;
   onClick?: any;
   active?: boolean;
+  style?:any;
 }
 
-export interface CallToActionButton {
+export interface ICallToActionButton {
   children?: React.ReactNode;
   onClick?: any;
   active?: boolean;
+  style?:any;
 }
 
 export type Icon = React.FC<{
-  fill: string
-}>
-
-export type ListSVGIcon = React.FC<{
-  props: JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>;
+  style?:any;
 }>
 
 export interface IListTree {
   children?: React.ReactNode;
-  name?: string;
+  name: string;
   style?: any;
   defaultOpen?: boolean;
   info?: string;
+  isUlElement?:boolean;
+  index?: number;
+  animation_data?:any;
+  calculator?:any;
 }
+
+export interface IInputTree {
+  style?: any;
+  name: string;
+  defaultVal: number;
+  min: number;
+  max: number;
+}
+
 
 // export interface IPaginator {
 //   pageCount: number;

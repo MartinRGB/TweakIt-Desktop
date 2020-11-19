@@ -88,7 +88,7 @@ const Container = styled.div`
     height: 38px;
     position:relative;
     // background: linear-gradient(180deg, ${p => p.theme.colors.title_background_top} 0%, ${p => p.theme.colors.title_background_bottom} 100%);
-    box-shadow: 0px 4px 4px ${p => p.theme.colors.title_box_shadow};
+    box-shadow: 0px 2px 14px ${p => p.theme.colors.title_box_shadow};
     // -webkit-app-region: drag;
     z-index:10;
 `;

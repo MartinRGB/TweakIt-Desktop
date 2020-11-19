@@ -15,9 +15,7 @@ const SelectArea: React.FC = ({children}) => {
 
 
   return (
-    <Container>
-
-    </Container>
+    <Container></Container>
   )
 }
 
@@ -25,9 +23,11 @@ export default SelectArea
 
 const Container = styled.div`
     width:100%;
-    height: 50px;
-    min-height:50px;
+    height: 56px;
+    min-height:56px;
     display: flex;
     flex-direction: column;
+    z-index:2;
+    background:${p => p.theme.colors.main_top_bg};
     box-shadow: 0px 1px 0px ${p => p.theme.colors.adb_border};
 `

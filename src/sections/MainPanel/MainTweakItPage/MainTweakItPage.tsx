@@ -12,6 +12,7 @@ import PreviewArea from './PreviewArea';
 import SelectArea from './SelectArea';
 import CodeArea from './CodeArea';
 import ListSelectStateProvider from '@Context/ListSelectContext'
+import AnimatorTypeProvider from '@Context/AnimatorTypeContext'
 
 
 const MainTweakItPage: React.FC = ({children}) => {
@@ -21,15 +22,17 @@ const MainTweakItPage: React.FC = ({children}) => {
 
   return (
     <Container>
-      <ListSelectStateProvider>
+      <AnimatorTypeProvider>
         <SelectArea></SelectArea>
         <TopContainer>
-          <ListArea></ListArea>
-          <CanvasArea></CanvasArea>
+          <ListSelectStateProvider>
+            <ListArea></ListArea>
+            <CanvasArea></CanvasArea>
+          </ListSelectStateProvider>
           <PreviewArea></PreviewArea>
         </TopContainer>
         <CodeArea></CodeArea>
-      </ListSelectStateProvider>
+      </AnimatorTypeProvider>
     </Container>
   )
 }

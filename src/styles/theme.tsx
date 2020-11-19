@@ -6,7 +6,7 @@ export default {
     normalText:'-apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
   },
   colors: {
-    text: '#000',
+    text: '#0d0d0d',
     background: '#fff',
     white: '#fff',
     title_background_top: '#b4b4b4',
@@ -16,6 +16,9 @@ export default {
     normal_button_active:'#3F3E3E',
     toggle_button_bg:'#6d6d6d',
     toggle_button_active:'#888888',    
+
+    main_top_bg:'#F9FBF9',
+    main_bottom_bg:'#FFFFFF',
     primary: '#05A447',
     adb_background:'#EDEFEE',
     adb_border:'#DBDBDB',
@@ -31,7 +34,9 @@ export default {
         normal_button_active:'#CECDCD',
         toggle_button_bg:'#a0a0a0',
         toggle_button_active:'#888888',
-        adb_background:'#151416',
+        main_top_bg:'#141615',
+        main_bottom_bg:'#030303',
+        adb_background:'#131614',
         adb_border:'#242424'
       },
       splash:{

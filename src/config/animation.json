@@ -13,5 +13,10 @@
   { "mass": 1, 
     "tension": 1200,
     "friction": 95
+  },
+  "slider_drag":
+  { "mass": 1, 
+    "tension": 600,
+    "friction": 35
   }
 }

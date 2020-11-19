@@ -15,9 +15,7 @@ const PreviewArea: React.FC = ({children}) => {
 
 
   return (
-    <Container>
-
-    </Container>
+    <Container></Container>
   )
 }
 
@@ -25,7 +23,7 @@ export default PreviewArea
 
 const Container = styled.div`
     height: 100%;
-    //background:#00FF00;
+    background:${p => p.theme.colors.main_top_bg};
     display: flex;
     flex-direction: column;
     //flex:1;
