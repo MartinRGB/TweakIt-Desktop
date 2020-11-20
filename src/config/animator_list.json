@@ -206,22 +206,22 @@
                 "name": "FastOutSlowIn",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.40,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.20,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -239,22 +239,22 @@
                 "name": "LinearOutSlowIn",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.20,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -272,22 +272,22 @@
                 "name": "FastOutLinear",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.40,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -467,22 +467,22 @@
                 "name": "Linear",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.25,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.25,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.75,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 0.75,
                         "min": 0.00,
                         "max": 1.00
@@ -500,22 +500,22 @@
                 "name": "EaseIn",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.42,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -533,22 +533,22 @@
                 "name": "EaseOut",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.58,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -566,22 +566,22 @@
                 "name": "EaseInOut",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.42,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.58,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -606,22 +606,22 @@
                 "name": "Linear",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.25,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.25,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.75,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 0.75,
                         "min": 0.00,
                         "max": 1.00
@@ -639,22 +639,22 @@
                 "name": "Ease",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.25,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.10,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.25,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -672,22 +672,22 @@
                 "name": "EaseIn",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.42,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -705,22 +705,22 @@
                 "name": "EaseOut",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.58,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -738,22 +738,22 @@
                 "name": "EaseInOut",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.42,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.58,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00
@@ -778,22 +778,22 @@
                 "name": "Custom Bezier",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
-                    "p1": {
+                    "P1": {
                         "default": 0.50,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p2": {
+                    "P2": {
                         "default": 0.00,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p3": {
+                    "P3": {
                         "default": 0.50,
                         "min": 0.00,
                         "max": 1.00
                     },
-                    "p4": {
+                    "P4": {
                         "default": 1.00,
                         "min": 0.00,
                         "max": 1.00

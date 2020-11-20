@@ -18,8 +18,9 @@ import animationConfig from '@Config/animation.json'
 
 import Icons from '@Assets/icons'
 
-import { ListSelectStateContext } from '@Context/ListSelectContext';
-import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
+import RangeInput from '@Components/RangeInput'
+import TextInput from '@Components/TextInput'
+import DescText from '@Components/DescText'
 
 const InputTree: React.FC<IInputTree> = memo(({ 
   style,
@@ -32,111 +33,121 @@ const InputTree: React.FC<IInputTree> = memo(({
   const { t, i18n } = useTranslation()
   const [colorMode] = useColorMode();
 
-  const { setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData} = useContext(
-    AnimatorTypeContext
-  );
+  const [rangeValue, setRangeValue] = useState<number>(defaultVal);
+  const [previousRangeValue,setPreviousRangeValue] = useState<number>(0);
+  const [targetRangeValue,setTargetRangeValue] = useState<number>(0);
+  const [isRangeAnimTriggered,setRangeAnimTriggered] = useState<boolean>(false);
 
-
-  const [inputValue, setInputValue] = useState<number>(defaultVal);
-
-  const [previousValue,setPreviousValue] = useState<number>(0);
-  const [targetValue,setTargetValue] = useState<number>(0);
-
-  const [isTriggered,setTriggered] = useState<boolean>(false);
-
-  const [mainValue,setMainValue] = useState<number>(defaultVal);
+  const [textValue,setTextValue] = useState<number>(defaultVal);
+  const [isTextBlurred,setTextBlur] = useState<boolean>(true);
 
   const { revealProgress } = useSpring({
-    from:{revealProgress:previousValue},
-    to:{revealProgress:isTriggered?targetValue:previousValue},
-    //duration: 250,
+    from:{revealProgress:previousRangeValue},
+    to:{revealProgress:isRangeAnimTriggered?targetRangeValue:previousRangeValue},
     config: animationConfig.slider_drag,
     onFrame: () =>{
+      // console.log(previousRangeValue)
+      // console.log(targetRangeValue)
+      // console.log(revealProgress)
       var value = revealProgress.value.toFixed(2);
-      setInputValue(Math.min(max,Math.max(Number(value),min)))
+      setRangeValue(Math.min(max,Math.max(Number(value),min)))
 
     },
     onRest: () => {
-      setPreviousValue(inputValue)
-      setTriggered(false)
+      setPreviousRangeValue(rangeValue)
+      setRangeAnimTriggered(false)
     }
   })
 
   const handleRangeChange = (e:any) => {
-    setPreviousValue(inputValue);
-    setTargetValue(Math.min(max,Math.max(e.target.value,min)))
-    setTriggered(true)
+    setPreviousRangeValue(rangeValue);
+    setTargetRangeValue(Math.min(max,Math.max(e.target.value,min)))
+    setRangeAnimTriggered(true)
 
     //update text
-    setMainValue(Math.min(max,Math.max(e.target.value,min)))
+    setTextValue(Math.min(max,Math.max(e.target.value,min)))
   }
 
   const handleTextChange = (e:any) => {
 
-    setPreviousValue(inputValue);
-    setTargetValue(Math.min(max,Math.max(e.target.value,min)))
-    setTriggered(true)
+    // - . 0~9
+    var lmtVal = e.target.value.replace(/[^\-?\d.]/g,'')
 
-    setMainValue(Math.min(max,Math.max(e.target.value,min)))
+    if(lmtVal != '-'){
+      setPreviousRangeValue(rangeValue);
+      setTargetRangeValue(Math.min(max,Math.max(Number(lmtVal),min)))
+      setRangeAnimTriggered(true)
+    }
+
+    setTextBlur(false)
+    setTextValue(lmtVal)
+
   }
 
   const handleTextBlur = (e:any) => {
-    // setPreviousValue(inputValue);
-    // setTargetValue(Math.min(max,Math.max(e.target.value,min)))
-    // setTriggered(true)
-
-    //setMainValue(Math.min(max,Math.max(e.target.value,min)))
+    setTextBlur(true)
+    setTextValue(Math.min(max,Math.max(e.target.value,min)))
+  }
+  
+  const handleTextFocus = (e:any) => {
+    setTextBlur(false)
   }
   
 
   return (
     <Frame>
-      <div> 
-        <p>{name}</p>
-        <input type="text" 
-          value={mainValue}
-          min={min} 
-          max={max} 
-          step={0.01} 
+      <InputContainer> 
+        <DescText
+        style={{
+          width:'66px',
+          lineHeight: '16px'
+        }}
+        >{name}</DescText>
+        <TextInput 
+        value={textValue}
+        // min={min} 
+        // max={max} 
+        step={0.01} 
 
-          onChange={e => {
-            e.preventDefault();
-            handleTextChange(e)
-          }}   
+        onChange={(e: React.FormEvent<HTMLInputElement>) => {
+          e.preventDefault();
+          handleTextChange(e)
+        }}   
 
-          onKeyUp={e => {
-            // PressEnter
-            if(e.keyCode ===13){
-              e.preventDefault();
-              handleTextBlur(e)
-            }
-          }}
-          onBlur={e => {
-            // Out of Focus
+        onKeyUp={(e: React.FormEvent<HTMLInputElement>) => {
+          // PressEnter
+          if(e.keyCode ===13){
             e.preventDefault();
             handleTextBlur(e)
-            }
           }
-        />
+        }}
+        onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+          // Out of Focus
+          e.preventDefault();
+          handleTextBlur(e)
+          }
+        }
 
-        <input 
-          type="range" 
-          value={inputValue} 
+        onFocus={(e: React.FormEvent<HTMLInputElement>) => {
+          // Out of Focus
+          e.preventDefault();
+          handleTextFocus(e)
+          }
+
+        }/>
+
+        <RangeInput 
+          style={{
+            marginLeft:'12px',
+          }}
+          value={rangeValue} 
           min={min} 
           max={max} 
           step={0.01} 
-          onChange={e => {
+          onChange={(e: React.FormEvent<HTMLInputElement>) => {
             handleRangeChange(e)
-          }
-          }/>
-
-          {/* <animated.div
-              style={{
-                transform: interpolate([revealProgress], (r) => `translate3d(${r/200 * 150}px,0px,0px)`)
-              }}>
-              <Icons.CollapsedArrow />
-          </animated.div> */}
-      </div>
+          }} />
+      </InputContainer>
     </Frame>
   )
 })
@@ -146,6 +157,18 @@ export default InputTree;
 
 // Styles
 
+const InputContainer = styled.div`
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  padding-left: 28px;
+  padding-right: 28px;
+  height: 16px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 12px;
+`
+
 const Frame = styled('div')`
   position: relative;
   padding: 1px 0px 1px 0px;
@@ -154,39 +177,4 @@ const Frame = styled('div')`
   vertical-align: middle;
   color:  ${p => p.theme.colors.text};
   fill: ${p => p.theme.colors.text};
-`
-
-const LiTitle = styled.span<{
-  isSelected: boolean;
-}>`
-  vertical-align: middle;
-  user-select:none;
-  font-family: Montserrat;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 11px;
-  line-height: 11px;
-  margin-left: 25px;
-  color:${p => (p.isSelected ? p.theme.colors.primary : p.theme.colors.text)};
-`
-
-const UlTitle = styled('span')`
-  vertical-align: middle;
-  user-select:none;
-  font-family: Montserrat;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 21px;
-`
-const Content = styled(animated.div)`
-  will-change: transform, opacity, height;
-  margin-left: 6px;
-  padding: 0px 0px 0px 14px;
-  border-left: 1px dashed ${p => p.theme.colors.title_background_bottom};
-  overflow: hidden;
-`
-
-const Toggle = css`
-  cursor:pointer
 `

@@ -173,19 +173,20 @@ const LiTitle = styled.span<{
 }>`
   vertical-align: middle;
   user-select:none;
-  font-family: Montserrat;
+  font-family: ${props => props.theme.fonts.normalText};
   font-style: normal;
   font-weight: 400;
   font-size: 11px;
   line-height: 11px;
   margin-left: 25px;
   color:${p => (p.isSelected ? p.theme.colors.primary : p.theme.colors.text)};
+  opacity:0.8;
 `
 
 const UlTitle = styled('span')`
   vertical-align: middle;
   user-select:none;
-  font-family: Montserrat;
+  font-family: ${props => props.theme.fonts.headText};
   font-style: normal;
   font-weight: 400;
   font-size: 13px;

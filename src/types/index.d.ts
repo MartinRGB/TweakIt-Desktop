@@ -38,6 +38,25 @@ export interface IInputTree {
   max: number;
 }
 
+export interface IInput {
+  style?: any;
+  value?: number;
+  defaultValue?: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  onChange?: any;
+  onKeyUp?: any;
+  onKeyDown?: any;
+  onBlur?: any;
+  onFocus?: any;
+}
+
+export interface IDescText {
+  style?: any;
+  children?: React.ReactNode;
+}
+
 
 // export interface IPaginator {
 //   pageCount: number;

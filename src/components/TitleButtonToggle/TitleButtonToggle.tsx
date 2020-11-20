@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const TitleButtonToggle: React.FC<IButton> = ({ children , onClick, active}) => {
+const TitleButtonToggle: React.FC<IButton> = ({ style,children , onClick, active}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -35,6 +35,7 @@ const TitleButtonToggle: React.FC<IButton> = ({ children , onClick, active}) => 
         }
       }>
         <Button
+          style={style}
           onClick={onClick}
           active={active}>
           {children}

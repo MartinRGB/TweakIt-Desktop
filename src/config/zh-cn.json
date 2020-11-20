@@ -20,5 +20,6 @@
   "Speed":"速度",
   "Velocity":"速率",
   "Mass":"质量",
-  "select_an_animator":"选择一个动画器"
+  "select_an_animator":"选择一个动画器",
+  "Bounciness":"弹性"
 }

@@ -17,6 +17,11 @@
   "slider_drag":
   { "mass": 1, 
     "tension": 600,
-    "friction": 35
+    "friction": 45
+  },
+  "graph_trasition":
+  { "mass": 1, 
+    "tension": 400,
+    "friction": 15
   }
 }
