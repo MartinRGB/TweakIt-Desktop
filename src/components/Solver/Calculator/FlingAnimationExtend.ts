@@ -5,3 +5,9 @@ export class AndroidFling extends FlingAnimationCalculator{
         super(velocity,dampingRatio)
     }
 }
+
+export class Foo {
+    constructor(){
+        console.log('Foo22222!');
+    }
+};

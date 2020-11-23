@@ -13,7 +13,10 @@ import InputTree from './InputTree'
 
 import animationConfig from '@Config/animation.json'
 import Solver from '@Components/Solver';
-import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTransitionTemplate_100,} from './SVGUtil'
+import CreateSolverByString2 from '@Components/Solver'
+
+import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTransitionTemplate_100} from '@Components/SVGGraph/SVGUtil'
+import SVGGraph from '@Components/SVGGraph'
 
 const CanvasArea: React.FC = ({children}) => {
   
@@ -22,104 +25,94 @@ const CanvasArea: React.FC = ({children}) => {
   const { currentAnimationItem, selectAnimationItem} = useContext(
     ListSelectStateContext
   );
-
-  const currentAnimationName = currentAnimationItem.split("_").pop();
-
   const { currentAnimName, currentAnimCalculator, currentAnimData} = useContext(
     AnimatorTypeContext
   );
 
+  const currentAnimationName = currentAnimationItem.split("_").pop();
+
+
   // DataUtil
   const svgPointNumber = 200;
-  const svgScale = 3;
-  const svgWidth:number = 800;
-  const svgHeight:number = 800;
+  const svgPointScale = 3;
+  const svgWidth:number = 200;
+  const svgHeight:number = 200;
+  const svgScale:number = 1; 
 
   Solver.setCalculatorSamplePointNumber(svgPointNumber)
-  Solver.setCalculatorSampleScale(svgScale)
+  Solver.setCalculatorSampleScale(svgPointScale)
 
   const calc = new Solver.HorizontalLineCalculator;
+
   // need new arr
   //var calc2 = new Solver.FramerDHOSpring(50,2,1,0);
-  var calc2 = new Solver.EaseInOut;
+  
+  //var calc2 = new Solver.EaseInOut;
+  var calc2 = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentAnimData);
+  //console.log(calc2);
 
-  var newSVGData = SVGTemplate(calc2.getStepArray(),calc2.getValueArray(),svgWidth,svgHeight,1.);
-  const [isTriggered,setIsTriggered] = useState<boolean>(true);
+  //var newSVGData = SVGTemplate(calc2.getStepArray(),calc2.getValueArray(),svgWidth,svgHeight,1.);
+  const [isBtnTriggered,setIsBtnTriggered] = useState<boolean>(false);
+  const [isSliderTriggered,setIsSliderTriggered] = useState<boolean>(false);
+  const [newSVGData,setNewSVGData] = useState<any>();
 
 
   const { revealProgress } = useSpring({
     from:{revealProgress:0},
-    to:{revealProgress:isTriggered?1:0},
+    to:{revealProgress:isBtnTriggered?1:0},
     config: animationConfig.graph_trasition,
     onFrame: () => {
-      var progress:number = revealProgress.value.toFixed(2);
-      newSVGData = SVGTransitionTemplate(calc.getStepArray(),calc.getValueArray(),calc2.getStepArray(),calc2.getValueArray(),svgWidth,svgHeight,progress);
-      document.getElementById('pathEl').setAttribute('d', newSVGData);
+      if(!isSliderTriggered){
+        var progress:number = revealProgress.value.toFixed(2);
+        setNewSVGData(SVGTransitionTemplate(calc.getStepArray(),calc.getValueArray(),calc2.getStepArray(),calc2.getValueArray(),svgWidth,svgHeight,progress));
+      }
     },
     onRest: () => {
-      setIsTriggered(false)
+      //setIsTriggered(false)
     }
   })
 
-  // //M0 0C280 50 320 50 420 420
-  const triggerChange = () =>{
-    setIsTriggered(true)
+  const triggerBtn = () =>{
+    setIsBtnTriggered(!isBtnTriggered)
   }
 
-  //calc2 = new Solver.AndroidSpring(1500,0.5,0);
-  // calc2 = new Solver.CustomFunctionInterpolator(
-  //   (x:number)=>{
-  //         return 0.5;
-  //   }
+  // const triggerSlider = (e:any) =>{
+  //   setIsBtnTriggered(true);
+  //   setNewSVGData(SVGTemplate(new Solver.AndroidSpring(1500,e.target.value,0).getStepArray(),new Solver.AndroidSpring(1500,e.target.value,0).getValueArray(),svgWidth,svgHeight,e.target.value))
+  // }
 
-  // )
-  //newSVGData = SVGTemplate(calc2.getStepArray(),calc2.getValueArray(),svgWidth,svgHeight,1.);
-  const triggerSlide = (e:any) =>{
-    newSVGData = SVGTemplate(new Solver.AndroidSpring(1500,e.target.value,0).getStepArray(),new Solver.AndroidSpring(1500,e.target.value,0).getValueArray(),svgWidth,svgHeight,e.target.value);
-    console.log(e.target.value)
-    document.getElementById('pathEl').setAttribute('d', newSVGData);
-  }
-
-
-
+  // const blurSlider = (e:any) =>{
+  //   setIsBtnTriggered(false);
+  // }
 
   return (
     <Container>
 
-      <svg 
-        width={svgWidth} 
-        height={svgHeight} 
-        key={'svg_test'} 
-        viewBox ={`0 0 ${svgWidth} ${svgHeight}`}
-        style={
-        {
-        }
-      }>
-        <SVGPathG
-          style={{
-            transform:`translate(0,${svgHeight}px) scale(0.25,-0.25)`
-          }}
-        >
-        <path id="pathEl"
-          fill="none" 
-          strokeWidth="16" 
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d={newSVGData}/>
-      </SVGPathG>
-      </svg>
+      <SVGGraph
+        svgWidth={svgWidth}
+        svgHeight={svgHeight}
+        svgScale={svgScale}
+        svgData={newSVGData}
+        ></SVGGraph>
 
-      <button onClick={triggerChange}></button>
-        <input
+      <button onClick={triggerBtn}></button>
+        
+      <input
           type="range"
           min="0.01"
           max="1"
           step="0.01"
           defaultValue="0.15"
-          onChange={e => triggerSlide(e)}
-        />
+          onChange={e => triggerSlider(e)}
+          onBlur={e => blurSlider(e)}
+      />
       
-      <AnimationTitle><Trans>{currentAnimName}</Trans></AnimationTitle>
+      <AnimationTitle>
+        {currentAnimName? 
+          <Trans>{currentAnimName}</Trans>:
+          <Trans>select_an_animator</Trans>
+        }
+      </AnimationTitle>
       {
           Object.entries(currentAnimData).map(function (data:any,index:number) {
             return (
@@ -139,12 +132,6 @@ const CanvasArea: React.FC = ({children}) => {
 }
 
 export default CanvasArea
-
-
-const SVGPathG = styled.g`
-  position: relative;
-  stroke:${p => p.theme.colors.primary};
-`
 
 
 const AnimationTitle = styled.p`

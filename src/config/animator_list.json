@@ -7,7 +7,7 @@
             {
                 "index": 0,
                 "tag": 0,
-                "name": "Spring",
+                "name": "AndroidSpring",
                 "calculator": "SpringAnimationCalculator",
                 "animation_data": {
                     "Stiffness": {
@@ -30,7 +30,7 @@
             {
                 "index": 1,
                 "tag": 1,
-                "name": "Fling",
+                "name": "AndroidFling",
                 "calculator": "FlingAnimationCalculator",
                 "animation_data": {
                     "Velocity": {

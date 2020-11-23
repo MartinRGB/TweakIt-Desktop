@@ -45,51 +45,42 @@ import {
     } from '@Components/Solver/Calculator/SpringAnimationExtend'
 
 import {
-    AndroidFling
+    AndroidFling,
 } from '@Components/Solver/Calculator/FlingAnimationExtend'
 
-import {
-    CreateSolverByString
-} from '@Components/Solver/CreateSolverByString'
 
-const Solver = {
-    setCalculatorSamplePointNumber,
-    setCalculatorSampleScale,
-    CreateSolverByString,
-    HorizontalLineCalculator,
-    CubicBezier,
-    CustomFunctionInterpolator,
-    LinearInterpolator,
-    AccelerateInterpolator,
-    DecelerateInterpolator,
-    AccelerateDecelerateInterpolator,
-    AnticipateInterpolator,
-    OvershootInterpolator,
-    AnticipateOvershootInterpolator,
-    BounceInterpolator,
-    CycleInterpolator,
-    ViscosFluidInterpolator,
-    CustomSpringInterpolator,
-    LookupTableCalculator,
-    CustomMocosSpringInterpolator,
-    CustomBounceInterpolator,
-    CustomDampingInterpolator,
-    Linear,
-    EaseIn,
-    EaseOut,
-    EaseInOut,
-    Ease,
-    FastOutSlowIn,
-    LinearOutSlowIn,
-    FastOutLinear,
-    AndroidSpring,
-    AndroidFling,
-    FramerDHOSpring,
-    FramerRK4Spring,
-    OrigamiPOPSpring,
-    UIViewSpring,
-    ProtopieSpring,
-    PrincipleSpring,
+
+
+export const CreateSolverByString = (calculator:string,name:string,data:any) =>{
+    console.log(calculator)
+    console.log(name)
+    console.log(data)
+
+
+    const para1 = 50;
+    const para2 = 2;
+    //const clzNam = 'mProtopieSpring';
+
+    // class mProtopieSpring extends ProtopieSpring{
+    //     constructor(tension:number, friction:number){
+    //         super(tension, friction)
+    //     }
+    // };
+
+    
+    //const bar = new ProtopieSpring(para1,para2)
+
+    //console.log(`new ${clzNam}(${para1},${para2})`)
+    //const bar = eval(`new ProtopieSpring(50,2)`);
+
+    //const bar = eval(`new ${clzNam}(50,2)`)
+    
+    //console.log(bar);
+
+
+    // const foo = 'Foo';
+    // const bar = eval(`new ${foo}()`);
+    // console.log(bar);
+
+    return new EaseOut();
 }
-
-export default Solver

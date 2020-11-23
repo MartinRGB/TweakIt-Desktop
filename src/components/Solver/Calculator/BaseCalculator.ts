@@ -439,6 +439,8 @@ export class CubicBezierCalculator {
     private cy:any;
     private by:any;
     private ay:any;
+
+    private abc:any;
     
     constructor(p1x:any,p1y:any,p2x:any,p2y:any) { //,duration:any
       
@@ -458,6 +460,7 @@ export class CubicBezierCalculator {
     private UnitBezier(p1x:number, p1y:number, p2x:number, p2y:number) {
         // pre-calculate the polynomial coefficients
         // First and last control points are implied to be (0,0) and (1.0, 1.0)
+
         this.cx = 3.0 * p1x;
         this.bx = 3.0 * (p2x - p1x) - this.cx;
         this.ax = 1.0 - this.cx -this.bx;
@@ -600,8 +603,6 @@ export class HorizontalLineCalculator{
                 stepArray.push(valX);
                 valueArray.push(valY);
         }
-    
-        console.log(stepArray)
 
         return [stepArray,valueArray,transitionArray];
     }

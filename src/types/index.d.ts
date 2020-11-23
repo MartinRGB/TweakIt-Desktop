@@ -52,6 +52,15 @@ export interface IInput {
   onFocus?: any;
 }
 
+export interface ISVG {
+  pathStyle?: any;
+  svgStyle?:any;
+  svgWidth?: number;
+  svgHeight?: number;
+  svgScale?: number;
+  svgData?: string;
+}
+
 export interface IDescText {
   style?: any;
   children?: React.ReactNode;
