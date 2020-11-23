@@ -9,15 +9,20 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const SVGGraph: React.FC<ISVG> = ({ pathStyle,svgStyle,svgWidth,svgHeight,svgScale,svgData}) => {
-//   const [colorMode, setColorMode] = useColorMode()
+import Solver from '@Components/Solver';
+//import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 
-//   const [bind, { delta, down }] = useGesture()
-//   const {size} = useSpring({
-//     size: down ? 1.1: 1,
-//     immediate: name => down && name === 'x',
-//     config:animationConfig.button_pressed
-//  })
+import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTransitionTemplate_100} from '@Components/SVGGraph/SVGUtil'
+
+const SVGGraph: React.FC<ISVG> = ({ pathStyle,svgStyle,svgWidth,svgHeight,svgScale,svgStrokeWidth,svgPointScale,svgPointNumber,svgCalculator,svgAnimName,svgSolverData}) => {
+
+  Solver.setCalculatorSamplePointNumber(svgPointNumber?svgPointNumber:200)
+  Solver.setCalculatorSampleScale(svgPointScale?svgPointScale:3)
+  const realSVGScale = svgScale;
+
+  // const { currentAnimName, currentAnimCalculator, currentAnimData,currentSolverData} = useContext(
+  //   AnimatorTypeContext
+  // );
 
   return (<CustomSVG 
             width={svgWidth} 
@@ -27,18 +32,29 @@ const SVGGraph: React.FC<ISVG> = ({ pathStyle,svgStyle,svgWidth,svgHeight,svgSca
             <CustomPathG
               style={{
                 ...pathStyle,
-                transform:`translate(0,${svgHeight}px) scale(${svgScale},-${svgScale})`,
-                strokeWidth:`${svgScale*2.0}`,
+                transform:`translate(${svgWidth/2 - svgWidth/2*svgScale}px,${svgHeight - (svgHeight/2- svgHeight/2*svgScale)}px) scale(${svgScale},-${svgScale})`,
+                strokeWidth:`${svgStrokeWidth}`,
               }}
             >
               <CustomPath 
-                d={svgData}/>
+                d={SVGTemplate(
+                  Solver.CreateSolverByString(svgCalculator,svgAnimName,svgSolverData).getStepArray(),
+                  Solver.CreateSolverByString(svgCalculator,svgAnimName,svgSolverData).getValueArray(),
+                  svgWidth,svgHeight,
+                  1.)}/>
             </CustomPathG>
         </CustomSVG>)
   ;
 }
 
 const CustomSVG = styled.svg`
+width: 400px;
+height: 400px;
+position: absolute;
+
+/* bottom: 50%; */
+left: 50%;
+transform: translate3d(-50%, 50%, 0px);
 
 `
 

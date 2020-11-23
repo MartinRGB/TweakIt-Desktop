@@ -42,8 +42,7 @@ const ListTree: React.FC<IListTree> = memo(({
   const [colorMode] = useColorMode();
 
   const [isOpen, setOpen] = useState(defaultOpen)
-  const [selectedName, setSelectedName] = useState('false');
-  const previousName = usePrevious(selectedName)
+
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
@@ -51,12 +50,24 @@ const ListTree: React.FC<IListTree> = memo(({
     AnimatorTypeContext
   );
 
-
   const { revealProgress } = useSpring({
     revealProgress: isOpen ? 1 : 0,
     config: animationConfig.list_reveal,
   })
 
+  // if(animation_data){
+  //   console.log(Object.entries(animation_data))
+  // }
+  // else{
+  //   console.log('undefined 2323')
+  // }
+
+  // useEffect(() => {
+  //   console.log(1)
+  //   setIsListClicked(false)
+  // }, [])
+
+  // console.log(2)
 
   // TODO
   var PlatformIcon;
@@ -99,10 +110,17 @@ const ListTree: React.FC<IListTree> = memo(({
             onClick={() => 
               {
                 if(name != "Divide"){
+
                   selectAnimationItem(info)
                   setCurrentAnimName(name)
                   setCurrentAnimCalculator(calculator)
-                  setCurrentAnimData(animation_data)
+                  if(animation_data){
+                    setCurrentAnimData(Object.entries(animation_data))
+                  }
+                  else{
+                    setCurrentAnimData([])
+                  }
+
                 }
               }
             }><Trans>{name}</Trans></LiTitle>

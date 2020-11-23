@@ -21,14 +21,20 @@ import Icons from '@Assets/icons'
 import RangeInput from '@Components/RangeInput'
 import TextInput from '@Components/TextInput'
 import DescText from '@Components/DescText'
+import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 
 const InputTree: React.FC<IInputTree> = memo(({ 
   style,
+  index,
   name,
   defaultVal,
   min,
   max,
 }) => {
+
+  const {setCurrentSolverDataByIndex} = useContext(
+    AnimatorTypeContext
+  );
 
   const { t, i18n } = useTranslation()
   const [colorMode] = useColorMode();
@@ -50,6 +56,7 @@ const InputTree: React.FC<IInputTree> = memo(({
       // console.log(targetRangeValue)
       // console.log(revealProgress)
       var value = revealProgress.value.toFixed(2);
+      setCurrentSolverDataByIndex(value,index);
       setRangeValue(Math.min(max,Math.max(Number(value),min)))
 
     },

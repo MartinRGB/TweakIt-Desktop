@@ -17,19 +17,19 @@ import AnimatorTypeProvider from '@Context/AnimatorTypeContext'
 
 const MainTweakItPage: React.FC = ({children}) => {
 
-  const [colorMode] = useColorMode();
-
-
   return (
     <Container>
       <AnimatorTypeProvider>
         <SelectArea></SelectArea>
         <TopContainer>
+
+
           <ListSelectStateProvider>
-            <ListArea></ListArea>
-            <CanvasArea></CanvasArea>
+              <ListArea></ListArea>
+              <CanvasArea></CanvasArea>
           </ListSelectStateProvider>
           <PreviewArea></PreviewArea>
+
         </TopContainer>
         <CodeArea></CodeArea>
       </AnimatorTypeProvider>

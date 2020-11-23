@@ -163,7 +163,6 @@ export class SpringAnimationCalculator{
 
         var maxIterationTimes = (isFixed)?Math.max(1.,duration + mTheresholdValue/(samplePointNumber*sampleScale)):duration + mTheresholdValue/(samplePointNumber*sampleScale);
         
-        console.log(duration)
         for (var i = 1/(samplePointNumber*sampleScale) ;
             //i < 1+1/(sampleTimes*sampleScale);
             i< maxIterationTimes; //duration + mTheresholdValue/(samplePointNumber*sampleScale)

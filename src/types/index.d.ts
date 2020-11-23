@@ -32,6 +32,7 @@ export interface IListTree {
 
 export interface IInputTree {
   style?: any;
+  index?:number;
   name: string;
   defaultVal: number;
   min: number;
@@ -58,7 +59,13 @@ export interface ISVG {
   svgWidth?: number;
   svgHeight?: number;
   svgScale?: number;
+  svgStrokeWidth?:number;
   svgData?: string;
+  svgPointNumber?:number;
+  svgPointScale?:number;
+  svgCalculator?:any;
+  svgAnimName?:any;
+  svgSolverData?:any;
 }
 
 export interface IDescText {

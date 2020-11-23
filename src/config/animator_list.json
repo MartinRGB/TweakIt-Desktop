@@ -7,7 +7,7 @@
             {
                 "index": 0,
                 "tag": 0,
-                "name": "AndroidSpring",
+                "name": "Android Spring",
                 "calculator": "SpringAnimationCalculator",
                 "animation_data": {
                     "Stiffness": {
@@ -30,7 +30,7 @@
             {
                 "index": 1,
                 "tag": 1,
-                "name": "AndroidFling",
+                "name": "Android Fling",
                 "calculator": "FlingAnimationCalculator",
                 "animation_data": {
                     "Velocity": {
@@ -307,7 +307,7 @@
                 "index": 17,
                 "tag": 14,
                 "name": "CustomMocosSpring",
-                "calculator": "CustomMocosSpringCalculator",
+                "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Tension": {
                         "default": 100,
@@ -330,7 +330,7 @@
                 "index": 18,
                 "tag": 15,
                 "name": "CustomSpring",
-                "calculator": "CustomSpringCalculator",
+                "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Factor": {
                         "default": 0.5,
@@ -348,7 +348,7 @@
                 "index": 19,
                 "tag": 16,
                 "name": "CustomBounce",
-                "calculator": "CustomBounceCalculator",
+                "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Tension": {
                         "default": 0,
@@ -366,7 +366,7 @@
                 "index": 20,
                 "tag": 17,
                 "name": "CustomDamping",
-                "calculator": "CustomDampingCalculator",
+                "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Tension": {
                         "default": 0,
@@ -775,26 +775,26 @@
             {
                 "index": 0,
                 "tag": 30,
-                "name": "Custom Bezier",
+                "name": "Cubic Bezier",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
                     "P1": {
-                        "default": 0.50,
+                        "default": 0.25,
                         "min": 0.00,
                         "max": 1.00
                     },
                     "P2": {
-                        "default": 0.00,
+                        "default": 0.25,
                         "min": 0.00,
                         "max": 1.00
                     },
                     "P3": {
-                        "default": 0.50,
+                        "default": 0.75,
                         "min": 0.00,
                         "max": 1.00
                     },
                     "P4": {
-                        "default": 1.00,
+                        "default": 0.75,
                         "min": 0.00,
                         "max": 1.00
                     },

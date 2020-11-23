@@ -36,6 +36,12 @@ export class FramerDHOSpring extends SpringAnimationCalculator {
   }
 }
 
+export class CASpring extends FramerDHOSpring{
+  constructor (stiffness:number, damping:number, mass:number, velocity:number) {
+    super(stiffness,damping,mass,velocity)
+  }
+}
+
 export class FramerRK4Spring extends SpringAnimationCalculator {
   constructor (tension:number, friction:number, velocity:number) {
     super()
