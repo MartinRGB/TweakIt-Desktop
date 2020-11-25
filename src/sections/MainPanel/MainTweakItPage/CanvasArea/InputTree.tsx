@@ -20,16 +20,18 @@ import Icons from '@Assets/icons'
 
 import RangeInput from '@Components/RangeInput'
 import TextInput from '@Components/TextInput'
+import BezierTextInput from '@Components/BezierTextInput'
 import DescText from '@Components/DescText'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import { GraphUpdateContext } from '@Context/GraphUpdateContext'
-import * as easings from 'd3-ease'
 
 const InputTree: React.FC<IInputTree> = memo(({ 
   style,
   isLast,
+  isEditable,
   index,
   name,
+  //calculator,
   defaultVal,
   min,
   max,
@@ -47,45 +49,41 @@ const InputTree: React.FC<IInputTree> = memo(({
   const { t, i18n } = useTranslation()
   const [colorMode] = useColorMode();
 
-  const [rangeValue, setRangeValue] = useState<number>(defaultVal);
-  const [previousRangeValue,setPreviousRangeValue] = useState<number>(0);
-  const [targetRangeValue,setTargetRangeValue] = useState<number>(0);
+  const [rangeValue, setRangeValue] = useState<any>(defaultVal);
+  const [previousRangeValue,setPreviousRangeValue] = useState<any>(0);
+  const [targetRangeValue,setTargetRangeValue] = useState<any>(0);
   const [isRangeAnimTriggered,setRangeAnimTriggered] = useState<boolean>(false);
 
   const [textValue,setTextValue] = useState<number>(defaultVal);
+  const [textPreviousValue,setTextPreviousValue] = useState<number>(defaultVal);
   const [isTextBlurred,setTextBlur] = useState<boolean>(true);
 
-  var iterationTimes = -1;
-  var iterationInterval:any;
-  //var iterationCount = new Date().getTime();
-
-
+  //console.log('input tree rerender')
+ 
   useEffect(() => {
     setTriggeredIndex(-1)
-    //setGraphShouldUpdate(false)
-    // setRangeAnimTriggered(false)
-    // console.log('Input components has rendered')
-    // console.log(triggredIndex)
   }, [])
+
 
   const { sliderProgress } = useSpring({
     from:{sliderProgress:previousRangeValue},
     to:{sliderProgress:isRangeAnimTriggered?targetRangeValue:previousRangeValue},
     config: animationConfig.slider_drag,
-    // easings:easings.easeExpOut(4),
-    // duration:100,
+    //easings:easings.easeExpOut(4),
+    //duration:16,
     onFrame: () =>{
 
       var value = sliderProgress.value.toFixed(2);
       var clampedValue = Math.min(max,Math.max(Number(value),min));
       setRangeValue(Math.min(max,Math.max(Number(value),min)))
-
+      console.log('trigger')
     },
     onRest: () => {
       setPreviousRangeValue(rangeValue)
       setRangeAnimTriggered(false)
     }
   })
+
 
   const { curveProgress } = useSpring({
     from:{curveProgress:previousRangeValue},
@@ -116,8 +114,9 @@ const InputTree: React.FC<IInputTree> = memo(({
       console.log('stop')
     }
   })
+   
 
-  //console.log('233')
+
 
   const handleRangeChange = (e:any) => {
     setPreviousRangeValue(rangeValue);
@@ -134,22 +133,40 @@ const InputTree: React.FC<IInputTree> = memo(({
 
   const handleTextChange = (e:any) => {
 
-    // - . 0~9
-    var lmtVal = e.target.value.replace(/[^\-?\d.]/g,'')
+    // . 0~9
+    var lmtVal = e.target.value.replace(/[^\?\d.]/g,'');
+    // Hold the CharaPostion
+    var target = e.target;
+    var position = target.selectionStart; // Capture initial position
+    var shouldFoward = (lmtVal === target.value)
 
-    if(lmtVal != '-'){
-      setPreviousRangeValue(rangeValue);
-      setTargetRangeValue(Math.min(max,Math.max(Number(lmtVal),min)))
-      setTriggeredIndex(index)
-      setRangeAnimTriggered(true)
-      setGraphShouldUpdate(true)
-      //console.log('textChange')
+    console.log(target.selectionEnd)
+
+    // only 1 . in Input Area
+    if((lmtVal.split(".").length - 1) > 1){
+      lmtVal=textPreviousValue
+      shouldFoward = false;
     }
+    else{
+      
+    }
+
+    setPreviousRangeValue(rangeValue);
+    setTargetRangeValue(Math.min(max,Math.max(Number(lmtVal),min)))
+    setTriggeredIndex(index)
+    setRangeAnimTriggered(true)
+    setGraphShouldUpdate(true)
+    //console.log('textChange')
 
     setTextBlur(false)
     setTextValue(lmtVal)
+    setTextPreviousValue(lmtVal);
 
+    target.value = lmtVal.replace(/\s/g, '');  // This triggers the cursor to move.
+    target.selectionEnd = shouldFoward?position:position-1;
   }
+
+
 
   const handleTextBlur = (e:any) => {
     setTextBlur(true)
@@ -159,7 +176,6 @@ const InputTree: React.FC<IInputTree> = memo(({
   const handleTextFocus = (e:any) => {
     setTextBlur(false)
   }
-  
 
   return (
     <Frame>
@@ -176,32 +192,32 @@ const InputTree: React.FC<IInputTree> = memo(({
         value={textValue}
         // min={min} 
         // max={max} 
+        isEditable={isEditable}
         step={0.01} 
 
         onChange={(e: React.FormEvent<HTMLInputElement>) => {
           e.preventDefault();
-          handleTextChange(e)
+          isEditable?handleTextChange(e):''
         }}   
 
         onKeyUp={(e: React.FormEvent<HTMLInputElement>) => {
           // PressEnter
           if(e.keyCode ===13){
             e.preventDefault();
-            handleTextBlur(e)
+            isEditable?handleTextBlur(e):''
           }
         }}
         onBlur={(e: React.FormEvent<HTMLInputElement>) => {
           // Out of Focus
           e.preventDefault();
-          handleTextBlur(e)
-          }
-        }
+          isEditable?handleTextBlur(e):''
+        }}
 
         onFocus={(e: React.FormEvent<HTMLInputElement>) => {
           // Out of Focus
           e.preventDefault();
-          handleTextFocus(e)
-          }
+          isEditable?handleTextFocus(e):''
+        }
 
         }/>
 
@@ -210,15 +226,13 @@ const InputTree: React.FC<IInputTree> = memo(({
             marginLeft:'12px',
           }}
           value={rangeValue} 
+          isEditable={isEditable}
           min={min} 
           max={max} 
           step={0.01} 
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
-            handleRangeChange(e)
-          }}
-          
-          
-          />
+            isEditable?handleRangeChange(e):''
+          }}/>
       </InputContainer>
     </Frame>
   )

@@ -34,16 +34,19 @@ export interface IInputTree {
   style?: any;
   index:number;
   isLast?:boolean;
+  isEditable?:boolean;
   name: string;
-  defaultVal: number;
-  min: number;
-  max: number;
+  calculator?:string
+  defaultVal: any;
+  min: any;
+  max: any;
 }
 
 export interface IInput {
   style?: any;
   value?: number;
   defaultValue?: number;
+  isEditable?:boolean;
   min?: number;
   max?: number;
   step?: number;
@@ -61,7 +64,7 @@ export interface ISVG {
   svgHeight: number;
   svgScale: number;
   svgStrokeWidth:number;
-  svgData: string;
+  svgData?: string;
   svgPointNumber?:number;
   svgPointScale?:number;
   isError?:boolean;

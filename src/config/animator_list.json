@@ -13,17 +13,20 @@
                     "Stiffness": {
                         "default": 1500,
                         "min": 0.01,
-                        "max": 5000
+                        "max": 5000,
+                        "editable": true
                     },
                     "Damping": {
                         "default": 0.5,
                         "min": 0.01,
-                        "max": 0.99
+                        "max": 0.99,
+                        "editable": true
                     },
                     "Velocity": {
                         "default": 0,
                         "min": 0,
-                        "max": 1000
+                        "max": 1000,
+                        "editable": true
                     }
                 }
             },
@@ -36,12 +39,14 @@
                     "Velocity": {
                         "default": -2000,
                         "min": -5000,
-                        "max": 5000
+                        "max": 5000,
+                        "editable": true
                     },
                     "Damping": {
                         "default": 0.8,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -58,7 +63,8 @@
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -71,12 +77,14 @@
                     "Factor": {
                         "default": 2,
                         "min": 0,
-                        "max": 5
+                        "max": 5,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -89,12 +97,14 @@
                     "Factor": {
                         "default": 2,
                         "min": 0,
-                        "max": 5
+                        "max": 5,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -107,12 +117,14 @@
                     "Factor": {
                         "default": 2,
                         "min": 0,
-                        "max": 5
+                        "max": 5,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -125,12 +137,14 @@
                     "Factor": {
                         "default": 2,
                         "min": 0,
-                        "max": 5
+                        "max": 5,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -143,12 +157,14 @@
                     "Factor": {
                         "default": 2,
                         "min": 0,
-                        "max": 5
+                        "max": 5,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -161,7 +177,8 @@
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -174,12 +191,14 @@
                     "Factor": {
                         "default": 2,
                         "min": 0,
-                        "max": 5
+                        "max": 5,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -192,7 +211,8 @@
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -209,27 +229,32 @@
                     "P1": {
                         "default": 0.40,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 0.20,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -242,27 +267,32 @@
                     "P1": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 0.20,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -275,27 +305,32 @@
                     "P1": {
                         "default": 0.40,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -312,17 +347,20 @@
                     "Tension": {
                         "default": 100,
                         "min": 0,
-                        "max": 200
+                        "max": 200,
+                        "editable": true
                     },
                     "Friction": {
                         "default": 15,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     },
                     "Velocity": {
                         "default": 0,
                         "min": 0,
-                        "max": 1000
+                        "max": 1000,
+                        "editable": true
                     }
                 }
             },
@@ -335,12 +373,14 @@
                     "Factor": {
                         "default": 0.5,
                         "min": 0,
-                        "max": 2
+                        "max": 2,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -353,12 +393,14 @@
                     "Tension": {
                         "default": 0,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     },
                     "Friction": {
                         "default": 0,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     }
                 }
             },
@@ -371,12 +413,14 @@
                     "Tension": {
                         "default": 0,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     },
                     "Friction": {
                         "default": 0,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     }
                 }
             },
@@ -393,12 +437,14 @@
                     "Factor": {
                         "default": 2,
                         "min": 0,
-                        "max": 20
+                        "max": 20,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             }
@@ -419,12 +465,14 @@
                     "Damping": {
                         "default": 0.5,
                         "min": 0,
-                        "max": 1
+                        "max": 1,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 0.5,
                         "min": 0.01,
-                        "max": 5
+                        "max": 5,
+                        "editable": true
                     }
                 }
             },
@@ -438,22 +486,26 @@
                     "Stiffness": {
                         "default": 100,
                         "min": 0,
-                        "max": 3000
+                        "max": 3000,
+                        "editable": true
                     },
                     "Damping": {
                         "default": 10,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     },
                     "Mass": {
                         "default": 1,
                         "min": 0,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     },
                     "Velocity": {
                         "default": 0,
                         "min": 0,
-                        "max": 1000
+                        "max": 1000,
+                        "editable": true
                     }
                 }
             },
@@ -470,27 +522,32 @@
                     "P1": {
                         "default": 0.25,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.25,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 0.75,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 0.75,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -503,27 +560,32 @@
                     "P1": {
                         "default": 0.42,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -536,27 +598,32 @@
                     "P1": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 0.58,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -569,27 +636,32 @@
                     "P1": {
                         "default": 0.42,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 0.58,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             }
@@ -609,27 +681,32 @@
                     "P1": {
                         "default": 0.25,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.25,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 0.75,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 0.75,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -642,27 +719,32 @@
                     "P1": {
                         "default": 0.25,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.10,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 0.25,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -675,27 +757,32 @@
                     "P1": {
                         "default": 0.42,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -708,27 +795,32 @@
                     "P1": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 0.58,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -741,27 +833,32 @@
                     "P1": {
                         "default": 0.42,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P2": {
                         "default": 0.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P3": {
                         "default": 0.58,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "P4": {
                         "default": 1.00,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": false
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             }
@@ -781,27 +878,32 @@
                     "P1": {
                         "default": 0.25,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": true
                     },
                     "P2": {
                         "default": 0.25,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": true
                     },
                     "P3": {
                         "default": 0.75,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": true
                     },
                     "P4": {
                         "default": 0.75,
                         "min": 0.00,
-                        "max": 1.00
+                        "max": 1.00,
+                        "editable": true
                     },
                     "Duration": {
                         "default": 1,
                         "min": 0.01,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     }
                 }
             }
@@ -822,12 +924,14 @@
                     "Bounciness": {
                         "default": 5,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     },
                     "Speed": {
                         "default": 10,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     }
                 }
             },
@@ -841,17 +945,20 @@
                     "Tension": {
                         "default": 200,
                         "min": 0,
-                        "max": 3000
+                        "max": 3000,
+                        "editable": true
                     },
                     "Friction": {
                         "default": 25,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     },
                     "Velocity": {
                         "default": 0,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     }
                 }
             },
@@ -865,22 +972,26 @@
                     "Stiffness": {
                         "default": 50,
                         "min": 0,
-                        "max": 3000
+                        "max": 3000,
+                        "editable": true
                     },
                     "Damping": {
                         "default": 2,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     },
                     "Mass": {
                         "default": 1,
                         "min": 0,
-                        "max": 10
+                        "max": 10,
+                        "editable": true
                     },
                     "Velocity": {
                         "default": 0,
                         "min": 0,
-                        "max": 1000
+                        "max": 1000,
+                        "editable": true
                     }
                 }
             },
@@ -894,12 +1005,14 @@
                     "Tension": {
                         "default": 300,
                         "min": 0,
-                        "max": 1000
+                        "max": 1000,
+                        "editable": true
                     },
                     "Friction": {
                         "default": 15,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     }
                 }
             },
@@ -913,12 +1026,14 @@
                     "Tension": {
                         "default": 380,
                         "min": 0,
-                        "max": 1000
+                        "max": 1000,
+                        "editable": true
                     },
                     "Friction": {
                         "default": 20,
                         "min": 0,
-                        "max": 100
+                        "max": 100,
+                        "editable": true
                     }
                 }
             }

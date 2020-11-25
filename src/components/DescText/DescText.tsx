@@ -23,10 +23,12 @@ const DescText: React.FC<IDescText> = ({ style,children}) => {
  })
 
   return (
-    <Text style={style}><Trans>{children}</Trans></Text>);
+    <Text style={style} ><Trans>{children}</Trans></Text>);
 }
 
-const Text  = styled.span`
+const Text  = styled.span<{
+  isEditable:boolean
+}>`
   font-family: ${props => props.theme.fonts.normalText};
   font-style: normal;
   font-weight: 600;

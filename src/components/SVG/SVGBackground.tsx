@@ -1,22 +1,9 @@
-import React, { useContext, useEffect,useState,useCallback}from 'react'
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import React from 'react'
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
 import { ISVG } from "@Types";
 
-import {useSpring, animated,interpolate} from 'react-spring'
-import { useGesture } from 'react-with-gesture'
-import animationConfig from '@Config/animation.json';
 
-import { AnimatorTypeContext } from '@Context/AnimatorTypeContext'
-
-import Solver from '@Components/Solver';
-import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTransitionTemplate_100} from '@Components/SVGGraph/SVGUtil'
-import { GraphUpdateContext } from '@Context/GraphUpdateContext'
-
-
-const SVGGraph: React.FC<ISVG> = ({ 
+const SVGBackground: React.FC<ISVG> = ({ 
   pathStyle,
   svgStyle,
   svgWidth,
@@ -25,7 +12,7 @@ const SVGGraph: React.FC<ISVG> = ({
   svgStrokeWidth,
   svgPointNumber,
   svgPointScale,
-  svgData,
+  // svgData,
   isError,
   // currentAnimCalculator,
   // currentAnimName,
@@ -35,27 +22,12 @@ const SVGGraph: React.FC<ISVG> = ({
 
 
 
-  // const {shouldGraphUpdate,setGraphShouldUpdate} = useContext(
-  //   GraphUpdateContext
-  // );
-
-  // const { currentAnimName, currentAnimCalculator, currentAnimData,currentSolverData} = useContext(
-  //   AnimatorTypeContext
-  // ); //currentSolverData
-
-  // const {shouldGraphUpdate} = useContext(
-  //   GraphUpdateContext
-  // );
-
-  // Solver.setCalculatorSamplePointNumber(svgPointNumber?svgPointNumber:200)
-  // Solver.setCalculatorSampleScale(svgPointScale?svgPointScale:3)
-
   const viewBoxWFixed = svgWidth*0.5;
   const viewBoxHFixed = svgHeight*0.5;
   const extendLineScale = 1.25
+  const mIsError = isError?isError:false;
 
-  //console.log(svgData.includes('NaN'))
-
+  //console.log("canvas background re render")
 
   return (<CustomSVG 
             width={svgWidth} 
@@ -81,7 +53,7 @@ const SVGGraph: React.FC<ISVG> = ({
               }}
             >
               <CustomBGRect 
-                isError={isError}
+                isError={mIsError}
                 x="0" 
                 y="0" 
                 width={svgWidth} 
@@ -112,23 +84,6 @@ const SVGGraph: React.FC<ISVG> = ({
                     y2={svgHeight+viewBoxHFixed/4} 
                     strokeWidth={svgStrokeWidth/2}/>
             </g>
-            
-            <CustomGraphG
-              style={{
-                ...pathStyle,
-                transform:`translate3d(${svgWidth/2 - svgWidth/2*svgScale + viewBoxWFixed/2}px,${svgHeight - (svgHeight/2- svgHeight/2*svgScale) + viewBoxHFixed/2}px,0) scale3d(${svgScale},-${svgScale},1)`,
-                strokeWidth:`${svgStrokeWidth}`,
-              }}
-            >
-              <CustomPath 
-                // d={SVGTemplate(
-                //   Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData).getStepArray(),
-                //   Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData).getValueArray(),
-                //   svgWidth,svgHeight,
-                //   1.)}
-                d={svgData}
-                />
-            </CustomGraphG>
         </CustomSVG>)
   ;
 }
@@ -139,7 +94,7 @@ const CustomSVG = styled.svg`
 // position: absolute;
 // left: 50%;
 // transform: translate3d(-50%, 50%, 0px);
-  margin:12px auto;
+  // margin:12px auto;
   min-height: 160px;
   display: block;
 
@@ -167,8 +122,4 @@ const CustomBorderline = styled.line`
   stroke-linejoin:round;
   stroke:${p => p.theme.colors.adb_border};
 `
-
-const CustomPath = styled.path`
-`
-
-export default SVGGraph
+export default SVGBackground

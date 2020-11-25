@@ -16,8 +16,13 @@
   },
   "slider_drag":
   { "mass": 1, 
-    "tension": 600,
-    "friction": 45
+    "tension": 900,
+    "friction": 40
+  },
+  "beizer_transition":
+  { "mass": 1, 
+    "tension": 1000,
+    "friction": 30
   },
   "graph_trasition":
   { "mass": 1, 

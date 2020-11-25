@@ -88,7 +88,7 @@ const ListTree: React.FC<IListTree> = memo(({
             }
             style={{
               transform: interpolate([revealProgress], (r) => `rotate(${r * 90}deg) translate3d(0px,${r * 1.5}px,0px) scale3d(${1 - r * 0.1},${1 - r * 0.1},${1 - r * 0.1})`),
-              marginTop: `-1px`,
+              marginTop: `-2px`,
             }}>
             <Icons.CollapsedArrow />
           </animated.div>
@@ -99,7 +99,7 @@ const ListTree: React.FC<IListTree> = memo(({
               verticalAlign: `middle`,
               marginLeft: `8px`,
               marginRight: `4px`,
-              marginTop: `-1px`,
+              marginTop: `-2px`,
             }}></PlatformIcon>:<div></div>
           }
           <UlTitle style={style}><Trans>{name}</Trans></UlTitle>
@@ -218,7 +218,7 @@ const UlTitle = styled('span')`
   font-style: normal;
   font-weight: 600;
   font-size: 12px;
-  line-height: 18px;
+  line-height: 21px;
 `
 const Content = styled(animated.div)`
   will-change: transform, opacity, height;

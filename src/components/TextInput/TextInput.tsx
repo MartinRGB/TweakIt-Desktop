@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const TextInput: React.FC<IInput> = ({  style,value,min,max,step,onChange,onKeyUp,onKeyDown,onBlur,onFocus}) => {
+const TextInput: React.FC<IInput> = ({  style,value,min,max,step,isEditable,onChange,onKeyUp,onKeyDown,onBlur,onFocus}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -18,6 +18,7 @@ const TextInput: React.FC<IInput> = ({  style,value,min,max,step,onChange,onKeyU
     immediate: name => down && name === 'x',
     config:animationConfig.button_pressed
  })
+ const mIsEditable = isEditable?isEditable:true;
 
   return (<Input
     type="text" 
@@ -26,6 +27,7 @@ const TextInput: React.FC<IInput> = ({  style,value,min,max,step,onChange,onKeyU
     min={min} 
     max={max} 
     step={step} 
+    isEditable={isEditable}
     onChange={onChange}
     onKeyUp={onKeyUp}
     onKeyDown={onKeyDown}
@@ -35,7 +37,9 @@ const TextInput: React.FC<IInput> = ({  style,value,min,max,step,onChange,onKeyU
   ;
 }
 
-const Input = styled.input`
+const Input = styled.input<{
+  isEditable:boolean;
+}>`
   background: ${props => props.theme.colors.text_input_bg};
   border: 1px solid ${props => props.theme.colors.text_input_border};
   color: ${props => props.theme.colors.text_input_text};
@@ -49,6 +53,8 @@ const Input = styled.input`
   font-size: 10px;
   line-height: 10px;
   outline: none;
+  cursor: ${p => p.isEditable?'text':'not-allowed'};
+  opacity: ${p => p.isEditable?'1':'0.3'}
 `;
 
 
