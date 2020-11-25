@@ -28,6 +28,7 @@ export interface IListTree {
   index?: number;
   animation_data?:any;
   calculator?:any;
+  listOnClickCallBack?:any;
 }
 
 export interface IInputTree {
@@ -68,6 +69,7 @@ export interface ISVG {
   svgPointNumber?:number;
   svgPointScale?:number;
   isError?:boolean;
+  isVisable?boolean;
 }
 
 export interface IDescText {

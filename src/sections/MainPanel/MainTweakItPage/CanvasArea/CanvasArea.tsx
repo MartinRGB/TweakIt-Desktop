@@ -2,19 +2,9 @@ import React ,{ useEffect, useState,useRef,useLayoutEffect} from 'react';
 
 import styled from '@emotion/styled';
 
-import SVGGraph from '@Components/SVG/SVGGraph'
-import SVGBackground from '@Components/SVG/SVGBackground'
 import CanvasTitle from './CanvasTitle'
 import CanvasInput from './CanvasInput'
-
-class PointObject {
-  private x:number;
-  private y:number;
-  constructor(x:number,y:number){
-    this.x = x;
-    this.y = y;
-  }
-}
+import CanvasSVG from './CanvasSVG'
 
 const CanvasArea: React.FC = ({children}) => {
   
@@ -22,9 +12,9 @@ const CanvasArea: React.FC = ({children}) => {
   const svgHeight = 240;
   const svgScale = 0.75;
   const svgStrokeWidth = 3;
-  const svgPointNumber = 100;
+  const svgPointNumber = 50;
   const svgPointScale = 3;
-  
+
   // ############ Reszie ############
   const sizeRef = useRef(null);
   const [isLayoutRow, setIsLayoutRow] = useState<boolean>(false);
@@ -59,8 +49,17 @@ const CanvasArea: React.FC = ({children}) => {
       <GraphContainer
         isLayoutRow={isLayoutRow}>
           <CanvasTitle></CanvasTitle>
-
-          <SVGContainer
+          <CanvasSVG
+            isLayoutRow={isLayoutRow} 
+            svgWidth={svgWidth}
+            svgHeight={svgHeight}
+            svgScale={svgScale}
+            svgStrokeWidth={svgStrokeWidth} 
+            svgPointNumber={svgPointNumber}
+            svgPointScale={svgPointScale}
+          
+          ></CanvasSVG>
+          {/* <SVGContainer
             isLayoutRow={isLayoutRow}
             svgHeight={svgHeight}>
       
@@ -93,7 +92,7 @@ const CanvasArea: React.FC = ({children}) => {
                 transform: `translate3d(-50%, -50%, 0px)`
               }}
             />
-          </SVGContainer>
+          </SVGContainer> */}
       </GraphContainer>
       
       <InputContainer
@@ -134,17 +133,17 @@ const Container = styled.div<{
     box-shadow: 1px 0px 0px ${p => p.theme.colors.adb_border},-1px 0px 0px ${p => p.theme.colors.adb_border};
 `
 
-const SVGContainer = styled.div<{
-  isLayoutRow:boolean
-  svgHeight:number;
-}>`
-  display:block;
-  height: ${p => p.svgHeight}px;
-  position: ${p => p.isLayoutRow?'absolute':'relative'};
-  left: ${p => p.isLayoutRow?'50%':'0'};
-  top: ${p => p.isLayoutRow?'50%':'0'};
-  transform: ${p => p.isLayoutRow?'translate3d(-50%, -50%, 0px)':'translate3d(0, 0, 0px)'};
-`
+// const SVGContainer = styled.div<{
+//   isLayoutRow:boolean
+//   svgHeight:number;
+// }>`
+//   display:block;
+//   height: ${p => p.svgHeight}px;
+//   position: ${p => p.isLayoutRow?'absolute':'relative'};
+//   left: ${p => p.isLayoutRow?'50%':'0'};
+//   top: ${p => p.isLayoutRow?'50%':'0'};
+//   transform: ${p => p.isLayoutRow?'translate3d(-50%, -50%, 0px)':'translate3d(0, 0, 0px)'};
+// `
 
 
 const InputContainer = styled.div<{

@@ -15,7 +15,7 @@ const CanvasInput: React.FC = ({}) => {
 
   return (
     <div>
-    {currentAnimName?(
+    {(currentAnimName != 'HorizontalLine')?(
           isBezierCalculator?
             currentAnimData.map(function (data:any,index:number) {
               if(index === currentAnimData.length - 1){

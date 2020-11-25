@@ -595,7 +595,7 @@ export class HorizontalLineCalculator{
                 // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
     
                 var valX = i;
-                var valY = 0.;
+                var valY = 0.001;
                 //console.log(valY)
                 transitionArray.push([valX,valY]);
     
@@ -611,7 +611,7 @@ export class HorizontalLineCalculator{
     }
 
     public getValueArray(){
-        return getFixedValueArray(this.array[1])
+        return getFixedValueArrayUnLitmited(this.array[1])
     }
 
     public getFullArray() {
@@ -642,6 +642,7 @@ const getFixedValueArray = (array:any) => {
     if(fixedValueArray[fixedValueArray.length - 1] != 1){
         fixedValueArray[fixedValueArray.length - 1] = 1.00
     }
+
     //var maxValue = Math.max(...fixedValueArray);
 
     // if(maxValue > 1.){
@@ -652,3 +653,11 @@ const getFixedValueArray = (array:any) => {
 
     return fixedValueArray;
 }
+
+const getFixedValueArrayUnLitmited = (array:any) => {
+    var fixedValueArray = new LookupTableCalculator(array,samplePointNumber).getAnimationArray();
+
+    return fixedValueArray;
+}
+
+

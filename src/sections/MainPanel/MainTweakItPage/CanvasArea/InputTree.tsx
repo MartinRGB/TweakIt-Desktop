@@ -45,7 +45,6 @@ const InputTree: React.FC<IInputTree> = memo(({
     GraphUpdateContext
   );
 
-
   const { t, i18n } = useTranslation()
   const [colorMode] = useColorMode();
 
@@ -58,6 +57,7 @@ const InputTree: React.FC<IInputTree> = memo(({
   const [textPreviousValue,setTextPreviousValue] = useState<number>(defaultVal);
   const [isTextBlurred,setTextBlur] = useState<boolean>(true);
 
+
   //console.log('input tree rerender')
  
   useEffect(() => {
@@ -65,6 +65,9 @@ const InputTree: React.FC<IInputTree> = memo(({
   }, [])
 
 
+  //console.log('rerender')
+
+  // 2 Group Control -> 4 Time Spring
   const { sliderProgress } = useSpring({
     from:{sliderProgress:previousRangeValue},
     to:{sliderProgress:isRangeAnimTriggered?targetRangeValue:previousRangeValue},
@@ -76,7 +79,7 @@ const InputTree: React.FC<IInputTree> = memo(({
       var value = sliderProgress.value.toFixed(2);
       var clampedValue = Math.min(max,Math.max(Number(value),min));
       setRangeValue(Math.min(max,Math.max(Number(value),min)))
-      console.log('trigger')
+      //console.log('trigger')
     },
     onRest: () => {
       setPreviousRangeValue(rangeValue)
@@ -90,7 +93,6 @@ const InputTree: React.FC<IInputTree> = memo(({
     to:{curveProgress:shouldGraphUpdate?targetRangeValue:previousRangeValue},
     config: animationConfig.graph_trasition,
     onFrame: () =>{
-      
       var value = sliderProgress.value.toFixed(2);
       var clampedValue = Math.min(max,Math.max(Number(value),min));
       if(triggredIndex === index){
@@ -110,8 +112,7 @@ const InputTree: React.FC<IInputTree> = memo(({
 
     },
     onRest: () => {
-      
-      console.log('stop')
+      //console.log('stop')
     }
   })
    

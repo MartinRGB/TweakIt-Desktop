@@ -1,6 +1,7 @@
 // Social
 
-import {SpringAnimationCalculator,FlingAnimationCalculator,CubicBezierCalculator,InterpolatorCalculator} from '@Components/Solver/Calculator/BaseCalculator'
+import {SpringAnimationCalculator,FlingAnimationCalculator,CubicBezierCalculator,HorizontalLineCalculator,InterpolatorCalculator} from '@Components/Solver/Calculator/BaseCalculator'
+import initState from '@Config/init_state.json'
 
 class AndroidSpring extends SpringAnimationCalculator {
     constructor (stiffness:number, dampingratio:number, velocity:number) {
@@ -187,6 +188,7 @@ class Ease extends CubicBezierCalculator{constructor(){super(0.25,0.10,0.25,1.00
 class FastOutSlowIn extends CubicBezierCalculator{constructor(){super(0.40,0.00,0.20,1.00);}}
 class LinearOutSlowIn extends CubicBezierCalculator{constructor(){super(0.00,0.00,0.20,1.00);}}
 class FastOutLinear extends CubicBezierCalculator{constructor(){super(0.40,0.00,1.00,1.00);}}
+class HorizontalLine extends HorizontalLineCalculator{constructor(){super()}}
 
 class CustomFunctionInterpolator extends InterpolatorCalculator{
     constructor(funs?:(x:number) =>void) {
@@ -621,11 +623,12 @@ export const CreateSolverByString = (calculator:string,name:string,data:any) =>{
         }
     }
 
+    console.log()
     if(name){
         return  eval(`new ${initClazzStr}(${initParaStr})`);
     }
     else{
-        return new Linear();
+        return eval(`new ${initState.initAnimName}`);
     }
 
 }

@@ -2,5 +2,8 @@
   "isExpand":false,
   "isDarkMode":false,
   "isChineseLanguage":true,
-  "initAnimationItemSelect":""
+  "initAnimationItemSelect":"",
+  "initAnimName":"HorizontalLine",
+  "initAnimCalculator":"HorizontalLineCalculator"
 }
+

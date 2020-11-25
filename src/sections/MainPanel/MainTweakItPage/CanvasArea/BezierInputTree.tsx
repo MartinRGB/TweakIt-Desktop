@@ -64,14 +64,14 @@ const BezierInputTree: React.FC<IInputTree> = memo(({
   const {bezierFakeSliderProgress}  = useSpring({
     from:{bezierFakeSliderProgress:bezierPreviousRangeValue},
     to:{bezierFakeSliderProgress:(isBezierRangeAnimTriggered)?bezierTargetRangeValue:bezierPreviousRangeValue},
-    config: animationConfig.beizer_transition,
+    config: animationConfig.bezier_input,
     //easings:easings.easeExpOut(4),
     //duration:16,
     onFrame: () =>{
 
       var value = bezierFakeSliderProgress.value.toFixed(2);
       setBezierRangeValue(Math.min(1,Math.max(Number(value),0)))
-      console.log('bezier trigger')
+      //console.log('bezier trigger')
     },
     onRest: () => {
       setBezierPreviousRangeValue(bezierTargetRangeValue)
@@ -86,7 +86,9 @@ const BezierInputTree: React.FC<IInputTree> = memo(({
     onFrame: () =>{
       
       var value = bezierFakeSliderProgress.value.toFixed(2);
-      setCurrentSolverDataByIndex(value,triggredIndex);
+      if(triggredIndex !=-1){
+        setCurrentSolverDataByIndex(value,triggredIndex);
+      }
       var fps_60 = Math.round((new Date().getTime() - bezierCurveProgress.startTime)/16);
       if(fps_60 %2 ==0){
         setGraphShouldUpdate(false)
@@ -97,7 +99,7 @@ const BezierInputTree: React.FC<IInputTree> = memo(({
 
     },
     onRest: () => {
-      console.log('bezier stop')
+      //console.log('bezier stop')
     }
   })
 

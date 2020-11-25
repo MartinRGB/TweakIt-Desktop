@@ -18,8 +18,12 @@ import animationConfig from '@Config/animation.json'
 
 import Icons from '@Assets/icons'
 
-import { ListSelectStateContext } from '@Context/ListSelectContext';
+import { ListSelectStateContext } from '@Context/ListSelectStateContext';
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
+import { GraphTransitionContext } from '@Context/GraphTransitionContext';
+
+import Solver from '@Components/Solver';
+import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTemplate_50,SVGTransitionTemplate_100,SVGTransitionTemplate_50} from '@Components/SVG/SVGUtil'
 
 const ListTree: React.FC<IListTree> = memo(({ 
   children, 
@@ -30,7 +34,7 @@ const ListTree: React.FC<IListTree> = memo(({
   isUlElement, 
   index, 
   animation_data,
-  calculator }) => {
+  calculator}) => {
 
   const { t, i18n } = useTranslation()
 
@@ -46,31 +50,20 @@ const ListTree: React.FC<IListTree> = memo(({
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
-  const { setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData} = useContext(
+  const { currentAnimName,currentAnimCalculator,currentAnimData,currentSolverData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition} = useContext(
     AnimatorTypeContext
   );
+
 
   const { revealProgress } = useSpring({
     revealProgress: isOpen ? 1 : 0,
     config: animationConfig.list_reveal
-  })
-
-  // if(animation_data){
-  //   console.log(Object.entries(animation_data))
-  // }
-  // else{
-  //   console.log('undefined 2323')
-  // }
-
-  // useEffect(() => {
-  //   console.log(1)
-  //   setIsListClicked(false)
-  // }, [])
-
-  // console.log(2)
+  }) 
 
   // TODO
   var PlatformIcon;
+
+  //console.log('rerender')
 
   if(isUlElement){
     PlatformIcon = Icons[(name.replace(/\s/g, "")!)];
@@ -113,6 +106,10 @@ const ListTree: React.FC<IListTree> = memo(({
               {
                 if(name != "Divide"){
 
+                  setPreviousAnimName(currentAnimName);
+                  setPreviousAnimCalculator(currentAnimCalculator);
+                  setPreviousSolverData(currentSolverData);
+
                   selectAnimationItem(info)
                   setCurrentAnimName(name)
                   setCurrentAnimCalculator(calculator)
@@ -122,6 +119,8 @@ const ListTree: React.FC<IListTree> = memo(({
                   else{
                     setCurrentAnimData([])
                   }
+
+                  setSelectTransition(true)
 
                 }
               }

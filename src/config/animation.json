@@ -19,14 +19,14 @@
     "tension": 900,
     "friction": 40
   },
-  "beizer_transition":
+  "bezier_input":
   { "mass": 1, 
-    "tension": 1000,
-    "friction": 30
+    "tension": 900,
+    "friction": 40
   },
   "graph_trasition":
   { "mass": 1, 
     "tension": 600,
-    "friction": 45
+    "friction": 15
   }
 }

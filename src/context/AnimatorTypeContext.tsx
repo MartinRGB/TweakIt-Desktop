@@ -1,34 +1,55 @@
 import React, { createContext, useState } from "react";
+import initState from '@Config/init_state.json'
 
 export var AnimatorTypeContext = createContext({
-  currentAnimName: '',
-  currentAnimCalculator: '',
+  currentAnimName: initState.initAnimName,
+  currentAnimCalculator: initState.initAnimCalculator,
   currentAnimData: [],
   currentSolverData: [],
   setCurrentAnimName: (tag: string) => {},
   setCurrentAnimCalculator: (tag: string) => {},
   setCurrentAnimData: (tag: any) => {},
   setCurrentSolverData: (tag: any) => {},
-  setCurrentSolverDataByIndex:(value:number,index:number) =>{}
+  setCurrentSolverDataByIndex:(value:number,index:number) =>{},
+  previousAnimName:'',
+  previousAnimCalculator:'',
+  previousAnimData: [],
+  previousSolverData:[],
+  setPreviousAnimName: (tag: string) => {},
+  setPreviousAnimCalculator: (tag: string) => {},
+  setPreviousSolverData: (tag: any) => {},
+  setPreviousAnimData:(tag: any) => {},
+  selectTransition:false,
+  setSelectTransition:(tag: boolean) => {},
+  selectTransitionProgress:0,
+  setSelectTransitionProgress:(tag: number) => {},
 });
 
 var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
   
-  const [mAnimName, setAnimName] = useState<string>('');
-  const [mAnimCalculator, setAnimCalculator] = useState<string>('');
-  const [mAnimData, setAnimData] = useState<any>([]);
-  const [mSolverData, setSolverData] = useState<any>([]);
+  const [mCurrAnimName, setCurrAnimName] = useState<string>(initState.initAnimName);
+  const [mCurrAnimCalculator, setCurrAnimCalculator] = useState<string>(initState.initAnimCalculator);
+  const [mCurrAnimData, setCurrAnimData] = useState<any>([]);
+  const [mCurrSolverData, setCurrSolverData] = useState<any>([]);
 
-  function setAnimNameAndSave(tag: string) {
-    setAnimName(tag);
+  const [mPrevAnimName, setPrevAnimName] = useState<string>('');
+  const [mPrevAnimCalculator, setPrevAnimCalculator] = useState<string>('');
+  const [mPrevAnimData, setPrevAnimData] = useState<any>([]);
+  const [mPrevSolverData, setPrevSolverData] = useState<any>([]);
+
+  const [mSelectTransition, setSelectTransition] = useState<boolean>(true);
+  const [mSelectTransitionProgress, setSelectTransitionProgress] = useState<number>(0);
+
+  function setCurrAnimNameAndSave(tag: string) {
+    setCurrAnimName(tag);
   }
 
-  function setAnimCalculatorAndSave(tag: string) {
-    setAnimCalculator(tag);
+  function setCurrAnimCalculatorAndSave(tag: string) {
+    setCurrAnimCalculator(tag);
   }
 
-  function setAnimDataAndSave(tag: any) {
-    setAnimData(tag);
+  function setCurrAnimDataAndSave(tag: any) {
+    setCurrAnimData(tag);
 
     var solverData:any = [];
   
@@ -37,35 +58,79 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
         solverData.push(data[1].default);
       })
     }
-    setSolverData(solverData);
+    setCurrSolverData(solverData);
   }
 
-  function setSolverDataAndSave(tag: any) {
-    setSolverData(tag);
+  function setCurrSolverDataAndSave(tag: any) {
+    setCurrSolverData(tag);
   }
 
 
-  function setSolverDataByIndexAndSave(value: number,index:number) {
+  function setCurrSolverDataByIndexAndSave(value: number,index:number) {
     //setSolverData(tag);
-    var solverData:any = mSolverData;
+    var solverData:any = mCurrSolverData;
     solverData[index] = Number(value);
     //console.log(solverData)
-    setSolverData(solverData);
+    setCurrSolverData(solverData);
   }
 
+  function setPrevAnimNameAndSave(tag: string) {
+    setPrevAnimName(tag);
+  }
+
+  function setPrevAnimCalculatorAndSave(tag: string) {
+    setPrevAnimCalculator(tag);
+  }
+
+  function setPrevAnimDataAndSave(tag: any) {
+    setPrevAnimData(tag);
+
+    var solverData:any = [];
+  
+    if(tag){
+      tag.map(function (data:any,index:number) {
+        solverData.push(data[1].default);
+      })
+    }
+    setPrevSolverData(solverData);
+  }
+
+  function setPrevSolverDataAndSave(tag: any) {
+    setPrevSolverData(tag);
+  }
+
+  function setSelectTransitionAndSave(tag: boolean) {
+    setSelectTransition(tag);
+  }
+
+  function setSelectProgressTransitionAndSave(tag: number) {
+    setSelectTransitionProgress(tag);
+  }
 
   return (
     <AnimatorTypeContext.Provider
       value={{
-        currentAnimName: mAnimName,
-        currentAnimCalculator: mAnimCalculator,
-        currentAnimData: mAnimData,
-        currentSolverData: mSolverData,
-        setCurrentAnimName: setAnimNameAndSave,
-        setCurrentAnimCalculator: setAnimCalculatorAndSave,
-        setCurrentAnimData: setAnimDataAndSave,
-        setCurrentSolverData: setSolverDataAndSave,
-        setCurrentSolverDataByIndex: setSolverDataByIndexAndSave
+        currentAnimName: mCurrAnimName,
+        currentAnimCalculator: mCurrAnimCalculator,
+        currentAnimData: mCurrAnimData,
+        currentSolverData: mCurrSolverData,
+        setCurrentAnimName: setCurrAnimNameAndSave,
+        setCurrentAnimCalculator: setCurrAnimCalculatorAndSave,
+        setCurrentAnimData: setCurrAnimDataAndSave,
+        setCurrentSolverData: setCurrSolverDataAndSave,
+        setCurrentSolverDataByIndex: setCurrSolverDataByIndexAndSave,
+        previousAnimName:mPrevAnimName,
+        previousAnimCalculator:mPrevAnimCalculator,
+        previousAnimData:mPrevAnimData,
+        previousSolverData:mPrevSolverData,
+        setPreviousAnimName: setPrevAnimNameAndSave,
+        setPreviousAnimCalculator: setPrevAnimCalculatorAndSave,
+        setPreviousAnimData: setPrevAnimDataAndSave,
+        setPreviousSolverData: setPrevSolverDataAndSave,
+        selectTransition:mSelectTransition,
+        setSelectTransition:setSelectTransitionAndSave,
+        selectTransitionProgress:mSelectTransitionProgress,
+        setSelectTransitionProgress:setSelectProgressTransitionAndSave,
       }}>
       {children}
     </AnimatorTypeContext.Provider>
