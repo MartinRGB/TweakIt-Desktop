@@ -13,7 +13,7 @@ import SelectArea from './SelectArea';
 import CodeArea from './CodeArea';
 import ListSelectStateProvider from '@Context/ListSelectContext'
 import AnimatorTypeProvider from '@Context/AnimatorTypeContext'
-
+import GraphUpdateProvider from '@Context/GraphUpdateContext'
 
 const MainTweakItPage: React.FC = ({children}) => {
 
@@ -25,8 +25,10 @@ const MainTweakItPage: React.FC = ({children}) => {
 
 
           <ListSelectStateProvider>
+            <GraphUpdateProvider>
               <ListArea></ListArea>
               <CanvasArea></CanvasArea>
+            </GraphUpdateProvider>
           </ListSelectStateProvider>
           <PreviewArea></PreviewArea>
 
@@ -50,5 +52,5 @@ const TopContainer = styled.div`
     display: flex;
     flex-direction: row;
     //flex:7;
-    min-height:350px;
+    min-height:528px;
 `

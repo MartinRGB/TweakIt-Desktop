@@ -22,9 +22,12 @@ import RangeInput from '@Components/RangeInput'
 import TextInput from '@Components/TextInput'
 import DescText from '@Components/DescText'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
+import { GraphUpdateContext } from '@Context/GraphUpdateContext'
+import * as easings from 'd3-ease'
 
 const InputTree: React.FC<IInputTree> = memo(({ 
   style,
+  isLast,
   index,
   name,
   defaultVal,
@@ -35,6 +38,11 @@ const InputTree: React.FC<IInputTree> = memo(({
   const {setCurrentSolverDataByIndex} = useContext(
     AnimatorTypeContext
   );
+
+  const {shouldGraphUpdate,setGraphShouldUpdate,triggredIndex,setTriggeredIndex} = useContext(
+    GraphUpdateContext
+  );
+
 
   const { t, i18n } = useTranslation()
   const [colorMode] = useColorMode();
@@ -47,16 +55,29 @@ const InputTree: React.FC<IInputTree> = memo(({
   const [textValue,setTextValue] = useState<number>(defaultVal);
   const [isTextBlurred,setTextBlur] = useState<boolean>(true);
 
-  const { revealProgress } = useSpring({
-    from:{revealProgress:previousRangeValue},
-    to:{revealProgress:isRangeAnimTriggered?targetRangeValue:previousRangeValue},
+  var iterationTimes = -1;
+  var iterationInterval:any;
+  //var iterationCount = new Date().getTime();
+
+
+  useEffect(() => {
+    setTriggeredIndex(-1)
+    //setGraphShouldUpdate(false)
+    // setRangeAnimTriggered(false)
+    // console.log('Input components has rendered')
+    // console.log(triggredIndex)
+  }, [])
+
+  const { sliderProgress } = useSpring({
+    from:{sliderProgress:previousRangeValue},
+    to:{sliderProgress:isRangeAnimTriggered?targetRangeValue:previousRangeValue},
     config: animationConfig.slider_drag,
+    // easings:easings.easeExpOut(4),
+    // duration:100,
     onFrame: () =>{
-      // console.log(previousRangeValue)
-      // console.log(targetRangeValue)
-      // console.log(revealProgress)
-      var value = revealProgress.value.toFixed(2);
-      setCurrentSolverDataByIndex(value,index);
+
+      var value = sliderProgress.value.toFixed(2);
+      var clampedValue = Math.min(max,Math.max(Number(value),min));
       setRangeValue(Math.min(max,Math.max(Number(value),min)))
 
     },
@@ -66,10 +87,46 @@ const InputTree: React.FC<IInputTree> = memo(({
     }
   })
 
+  const { curveProgress } = useSpring({
+    from:{curveProgress:previousRangeValue},
+    to:{curveProgress:shouldGraphUpdate?targetRangeValue:previousRangeValue},
+    config: animationConfig.graph_trasition,
+    onFrame: () =>{
+      
+      var value = sliderProgress.value.toFixed(2);
+      var clampedValue = Math.min(max,Math.max(Number(value),min));
+      if(triggredIndex === index){
+        // console.log('triggredIndex ——————' + triggredIndex)
+        // console.log('index ——————' + index)
+        setCurrentSolverDataByIndex(Math.min(max,Math.max(Number(value),min)),index);
+        var fps_60 = Math.round((new Date().getTime() - curveProgress.startTime)/16);
+        if(fps_60 %2 ==0){
+          setGraphShouldUpdate(false)
+          //console.log('odd' + fps_60);
+        }
+        else{
+          setGraphShouldUpdate(true)
+          //console.log('even' + fps_60);
+        }
+      }
+
+    },
+    onRest: () => {
+      
+      console.log('stop')
+    }
+  })
+
+  //console.log('233')
+
   const handleRangeChange = (e:any) => {
     setPreviousRangeValue(rangeValue);
     setTargetRangeValue(Math.min(max,Math.max(e.target.value,min)))
+
+    setTriggeredIndex(index)
     setRangeAnimTriggered(true)
+    setGraphShouldUpdate(true)
+    //console.log('rangeChange')
 
     //update text
     setTextValue(Math.min(max,Math.max(e.target.value,min)))
@@ -83,7 +140,10 @@ const InputTree: React.FC<IInputTree> = memo(({
     if(lmtVal != '-'){
       setPreviousRangeValue(rangeValue);
       setTargetRangeValue(Math.min(max,Math.max(Number(lmtVal),min)))
+      setTriggeredIndex(index)
       setRangeAnimTriggered(true)
+      setGraphShouldUpdate(true)
+      //console.log('textChange')
     }
 
     setTextBlur(false)
@@ -103,7 +163,9 @@ const InputTree: React.FC<IInputTree> = memo(({
 
   return (
     <Frame>
-      <InputContainer> 
+      <InputContainer
+        isLast={isLast}
+      > 
         <DescText
         style={{
           width:'66px',
@@ -153,7 +215,10 @@ const InputTree: React.FC<IInputTree> = memo(({
           step={0.01} 
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
             handleRangeChange(e)
-          }} />
+          }}
+          
+          
+          />
       </InputContainer>
     </Frame>
   )
@@ -164,7 +229,11 @@ export default InputTree;
 
 // Styles
 
-const InputContainer = styled.div`
+const InputContainer = styled.div<
+  {
+    isLast:boolean;
+  }
+>`
   width: 100%;
   max-width: 450px;
   margin: 0 auto;
@@ -173,7 +242,7 @@ const InputContainer = styled.div`
   height: 16px;
   display: flex;
   flex-direction: row;
-  margin-bottom: 12px;
+  margin-bottom:  ${p => p.isLast?'0px':'24px'};
 `
 
 const Frame = styled('div')`

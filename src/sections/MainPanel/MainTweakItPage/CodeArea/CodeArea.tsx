@@ -26,7 +26,7 @@ export default CodeArea
 const Container = styled.div`
     //height: 100%;
     height:350px;
-    min-height:50px;
+    // min-height:50px;
     //background:blue;
     display: flex;
     flex-direction: column;

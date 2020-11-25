@@ -52,7 +52,7 @@ const ListTree: React.FC<IListTree> = memo(({
 
   const { revealProgress } = useSpring({
     revealProgress: isOpen ? 1 : 0,
-    config: animationConfig.list_reveal,
+    config: animationConfig.list_reveal
   })
 
   // if(animation_data){
@@ -87,7 +87,8 @@ const ListTree: React.FC<IListTree> = memo(({
               height: 18px;`
             }
             style={{
-              transform: interpolate([revealProgress], (r) => `rotate(${r * 90}deg) translate3d(0px,${r * 1.5}px,0px) scale3d(${1 - r * 0.1},${1 - r * 0.1},${1 - r * 0.1})`)
+              transform: interpolate([revealProgress], (r) => `rotate(${r * 90}deg) translate3d(0px,${r * 1.5}px,0px) scale3d(${1 - r * 0.1},${1 - r * 0.1},${1 - r * 0.1})`),
+              marginTop: `-1px`,
             }}>
             <Icons.CollapsedArrow />
           </animated.div>
@@ -98,6 +99,7 @@ const ListTree: React.FC<IListTree> = memo(({
               verticalAlign: `middle`,
               marginLeft: `8px`,
               marginRight: `4px`,
+              marginTop: `-1px`,
             }}></PlatformIcon>:<div></div>
           }
           <UlTitle style={style}><Trans>{name}</Trans></UlTitle>
@@ -129,22 +131,28 @@ const ListTree: React.FC<IListTree> = memo(({
       }
       <Content style={{
         opacity: interpolate([revealProgress], (r) => `${r * 1}`),
-        height: isOpen && previous === isOpen ? 'auto' : interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`)
+        // height: isOpen && previous === isOpen ? 'auto' : interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`)
+        // height: isOpen ? 'auto' : interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`),
+
+        display: isOpen?'block':'none',
+        height: isOpen? interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`): '0px'
+        //display:'block',
+        //height: interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`)
       }}>
 
-        <animated.div
-          css={css`
-              padding-top:${UlVerticalPadding}px;
-              padding-bottom:${UlVerticalPadding}px
-            `}
-          style={{
-            transform: interpolate([revealProgress], (r) => `translate3d(${20 - r * 20}px,0,0)`)
-          }
-          }
-          {...bind}
-        >
-          {children}
-        </animated.div>
+          <animated.div
+            css={css`
+                padding-top:${UlVerticalPadding}px;
+                padding-bottom:${UlVerticalPadding}px
+              `}
+            style={{
+              transform: interpolate([revealProgress], (r) => `translate3d(${10 - r * 10}px,0,0)`)
+            }
+            }
+            {...bind}
+          >
+            {children}
+          </animated.div>
       </Content>
     </Frame>
   )
@@ -186,6 +194,7 @@ const Frame = styled('div')`
   fill: ${p => p.theme.colors.text};
 `
 
+
 const LiTitle = styled.span<{
   isSelected: boolean;
 }>`
@@ -193,8 +202,8 @@ const LiTitle = styled.span<{
   user-select:none;
   font-family: ${props => props.theme.fonts.normalText};
   font-style: normal;
-  font-weight: 400;
-  font-size: 11px;
+  font-weight: 300;
+  font-size: 10px;
   line-height: 11px;
   margin-left: 25px;
   color:${p => (p.isSelected ? p.theme.colors.primary : p.theme.colors.text)};
@@ -206,9 +215,10 @@ const UlTitle = styled('span')`
   user-select:none;
   font-family: ${props => props.theme.fonts.headText};
   font-style: normal;
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 21px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
 `
 const Content = styled(animated.div)`
   will-change: transform, opacity, height;

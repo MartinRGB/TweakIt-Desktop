@@ -775,7 +775,7 @@
             {
                 "index": 0,
                 "tag": 30,
-                "name": "Cubic Bezier",
+                "name": "Custom Bezier",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
                     "P1": {

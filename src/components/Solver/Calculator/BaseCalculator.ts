@@ -639,6 +639,9 @@ const getFixedStepArray = (array:any) => {
 const getFixedValueArray = (array:any) => {
     var fixedValueArray = new LookupTableCalculator(array,samplePointNumber).getAnimationArray();
 
+    if(fixedValueArray[fixedValueArray.length - 1] != 1){
+        fixedValueArray[fixedValueArray.length - 1] = 1.00
+    }
     //var maxValue = Math.max(...fixedValueArray);
 
     // if(maxValue > 1.){

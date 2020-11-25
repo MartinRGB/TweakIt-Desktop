@@ -27,13 +27,17 @@ const MainPanel: React.FC = ({ children }) => {
     setColorMode(colorMode === 'default' ? 'dark' : 'default')
   }
 
+  //TODO Issue:Will caused canvas's re-render
   const { adbIsExpand, setADBExpandState} = useContext(
     ADBExpandStateContext,
   );
+  
   const {widthProps} = useSpring({
     widthProps: adbIsExpand ? 320 : 0,
     config: animationConfig.panel_slide
   })
+
+  
   //calc(100% - 320px)':'calc(100%)
   return (
     <animated.div
@@ -44,7 +48,9 @@ const MainPanel: React.FC = ({ children }) => {
         width: interpolate([widthProps], (widthProps => `calc(100% - ${widthProps}px)`))
       }}
     >
-      <Container active={adbIsExpand}>
+      <Container 
+        // active={adbIsExpand}
+        >
         <MainTweakItPage>
           <Trans>greetings</Trans>
         </MainTweakItPage>

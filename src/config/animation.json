@@ -21,7 +21,7 @@
   },
   "graph_trasition":
   { "mass": 1, 
-    "tension": 400,
-    "friction": 15
+    "tension": 600,
+    "friction": 45
   }
 }

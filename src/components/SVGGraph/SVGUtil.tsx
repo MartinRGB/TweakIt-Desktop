@@ -11,7 +11,7 @@ const SVGTemplate = function (
   // }
   // console.log(mStr)
 
-
+  
   // ========== Loop ==========
   var mStr = `M0,0`;
   for(let i=0;i<dX.length;i++){
@@ -151,6 +151,63 @@ const SVGTemplate_100 = function(dX:any,dY:any,width:number,height:number,progre
           ` L${(dX[99])*width},${(dY[99])*height}`
 }
 
+
+const SVGTemplate_50 = function(dX:any,dY:any,width:number,height:number,progress:number){
+
+
+  return  `M0,0` +
+          ` L${(dX[0])*width},${(dY[0])*height}` + 
+          ` L${(dX[1])*width},${(dY[1])*height}` + 
+          ` L${(dX[2])*width},${(dY[2])*height}` + 
+          ` L${(dX[3])*width},${(dY[3])*height}` + 
+          ` L${(dX[4])*width},${(dY[4])*height}` + 
+          ` L${(dX[5])*width},${(dY[5])*height}` + 
+          ` L${(dX[6])*width},${(dY[6])*height}` + 
+          ` L${(dX[7])*width},${(dY[7])*height}` + 
+          ` L${(dX[8])*width},${(dY[8])*height}` + 
+          ` L${(dX[9])*width},${(dY[9])*height}` + 
+          ` L${(dX[10])*width},${(dY[10])*height}` + 
+          ` L${(dX[11])*width},${(dY[11])*height}` + 
+          ` L${(dX[12])*width},${(dY[12])*height}` + 
+          ` L${(dX[13])*width},${(dY[13])*height}` + 
+          ` L${(dX[14])*width},${(dY[14])*height}` + 
+          ` L${(dX[15])*width},${(dY[15])*height}` + 
+          ` L${(dX[16])*width},${(dY[16])*height}` + 
+          ` L${(dX[17])*width},${(dY[17])*height}` + 
+          ` L${(dX[18])*width},${(dY[18])*height}` + 
+          ` L${(dX[19])*width},${(dY[19])*height}` + 
+          ` L${(dX[20])*width},${(dY[20])*height}` + 
+          ` L${(dX[21])*width},${(dY[21])*height}` + 
+          ` L${(dX[22])*width},${(dY[22])*height}` + 
+          ` L${(dX[23])*width},${(dY[23])*height}` + 
+          ` L${(dX[24])*width},${(dY[24])*height}` + 
+          ` L${(dX[25])*width},${(dY[25])*height}` + 
+          ` L${(dX[26])*width},${(dY[26])*height}` + 
+          ` L${(dX[27])*width},${(dY[27])*height}` + 
+          ` L${(dX[28])*width},${(dY[28])*height}` + 
+          ` L${(dX[29])*width},${(dY[29])*height}` + 
+          ` L${(dX[30])*width},${(dY[30])*height}` + 
+          ` L${(dX[31])*width},${(dY[31])*height}` + 
+          ` L${(dX[32])*width},${(dY[32])*height}` + 
+          ` L${(dX[33])*width},${(dY[33])*height}` + 
+          ` L${(dX[34])*width},${(dY[34])*height}` + 
+          ` L${(dX[35])*width},${(dY[35])*height}` + 
+          ` L${(dX[36])*width},${(dY[36])*height}` + 
+          ` L${(dX[37])*width},${(dY[37])*height}` + 
+          ` L${(dX[38])*width},${(dY[38])*height}` + 
+          ` L${(dX[39])*width},${(dY[39])*height}` + 
+          ` L${(dX[40])*width},${(dY[40])*height}` + 
+          ` L${(dX[41])*width},${(dY[41])*height}` + 
+          ` L${(dX[42])*width},${(dY[42])*height}` + 
+          ` L${(dX[43])*width},${(dY[43])*height}` + 
+          ` L${(dX[44])*width},${(dY[44])*height}` + 
+          ` L${(dX[45])*width},${(dY[45])*height}` + 
+          ` L${(dX[46])*width},${(dY[46])*height}` + 
+          ` L${(dX[47])*width},${(dY[47])*height}` + 
+          ` L${(dX[48])*width},${(dY[48])*height}` + 
+          ` L${(dX[49])*width},${(dY[49])*height}`
+}
+
 // const ZeroSVG = function (pointNumber:number,width:number) {
 
 //   // ========= Generator =========
@@ -282,4 +339,4 @@ const SVGTransitionTemplate_100 = function (
 }
 
 
-export {SVGTemplate,SVGTransitionTemplate,SVGTemplate_100,SVGTransitionTemplate_100}
+export {SVGTemplate,SVGTransitionTemplate,SVGTemplate_100,SVGTransitionTemplate_100,SVGTemplate_50}

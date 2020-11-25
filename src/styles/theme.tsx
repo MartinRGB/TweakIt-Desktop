@@ -49,7 +49,7 @@ export default {
         main_top_bg:'#141615',
         main_bottom_bg:'#030303',
         adb_background:'#131614',
-        adb_border:'#242424'
+        adb_border:'#242424',
       },
       splash:{
         title_background_top: '#46484900',

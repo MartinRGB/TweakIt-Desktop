@@ -178,7 +178,7 @@ class PrincipleSpring extends FramerRK4Spring {
   
 class AndroidFling extends FlingAnimationCalculator{constructor(velocity:number, dampingRatio:number) { super(velocity,dampingRatio)}}
 
-class CubicBezier extends CubicBezierCalculator{constructor(p1x:any,p1y:any,p2x:any,p2y:any){super(p1x,p1y,p2x,p2y);}}
+class CustomBezier extends CubicBezierCalculator{constructor(p1x:any,p1y:any,p2x:any,p2y:any){super(p1x,p1y,p2x,p2y);}}
 class Linear extends CubicBezierCalculator{constructor(){super(0.25,0.25,0.75,0.75);}}
 class EaseIn extends CubicBezierCalculator{constructor(){super(0.42,0.00,1.00,1.00);}}
 class EaseOut extends CubicBezierCalculator{constructor(){super(0.00,0.00,0.58,1.00);}}

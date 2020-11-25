@@ -24,7 +24,7 @@ import {
     CustomDampingInterpolator} from '@Components/Solver/Calculator/InterpolatorExtend'
 
 import {    
-    CubicBezier,
+    CustomBezier,
     Linear,
     EaseIn,
     EaseOut,
@@ -57,7 +57,7 @@ const Solver = {
     setCalculatorSampleScale,
     CreateSolverByString,
     HorizontalLineCalculator,
-    CubicBezier,
+    CustomBezier,
     CustomFunctionInterpolator,
     LinearInterpolator,
     AccelerateInterpolator,

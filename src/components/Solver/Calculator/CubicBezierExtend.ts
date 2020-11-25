@@ -1,7 +1,7 @@
 import {CubicBezierCalculator} from './BaseCalculator'
 
 
-export class CubicBezier extends CubicBezierCalculator{
+export class CustomBezier extends CubicBezierCalculator{
     constructor(p1x:any,p1y:any,p2x:any,p2y:any){
         super(p1x,p1y,p2x,p2y);
     }
