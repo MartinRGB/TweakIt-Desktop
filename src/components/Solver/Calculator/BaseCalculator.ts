@@ -563,11 +563,16 @@ export class CubicBezierCalculator {
         var transitionArray = [],stepArray = [],valueArray:any = [];
 
         // strange 4
+        // for (
+        // var i = 0/(samplePointNumber*sampleScale);
+        // i < 1.+4/(samplePointNumber*sampleScale);
+        // i += 1/(samplePointNumber*sampleScale)
+        // ){
         for (
-        var i = 0/(samplePointNumber*sampleScale);
-        i < 1.+4/(samplePointNumber*sampleScale);
-        i += 1/(samplePointNumber*sampleScale)
-        ){
+            var i = 0/(samplePointNumber*sampleScale);
+            i < 1.+0/(samplePointNumber*sampleScale);
+            i += 1/(samplePointNumber*sampleScale)
+            ){
             // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
 
             var valX = i;

@@ -45,6 +45,7 @@ const PreviewArea: React.FC = ({children}) => {
 
     startAnimator = new DataDrivenAnimator(currSolverValueData);
     startAnimator.setFromToDuration(0,1.,currDuration*1000)
+    console.log(startAnimator)
     startAnimator.start();
     startAnimator.setOnFrameCallback(()=>{
       setCSSAnimationProgress(startAnimator.getProgress());

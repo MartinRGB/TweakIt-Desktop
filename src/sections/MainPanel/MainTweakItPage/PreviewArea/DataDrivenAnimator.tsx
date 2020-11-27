@@ -45,7 +45,7 @@ export default class DataDrivenPropertyAnimator{
       _this.animating = true;
       _this.onStart()
       function animate () {
-          if (count/60 >= _this.duration) {
+          if (count/60 > _this.duration) {
               _this.stop(_this.animationFrame)
               _this.onEnd();
 
@@ -165,8 +165,6 @@ export default class DataDrivenPropertyAnimator{
       // Linearly interpolate between the table values
       return data[position] + weight * (data[position + 1] - data[position]);
   }
-
-
 
 
 }
