@@ -21,12 +21,17 @@
   },
   "bezier_input":
   { "mass": 1, 
-    "tension": 900,
-    "friction": 40
+    "tension": 1000,
+    "friction": 50
   },
   "graph_trasition":
   { "mass": 1, 
     "tension": 600,
     "friction": 15
+  },
+  "bezier_dragger":
+  { "mass": 1, 
+    "tension": 800,
+    "friction": 30
   }
 }

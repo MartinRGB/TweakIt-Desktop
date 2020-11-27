@@ -14,6 +14,9 @@ const SVGBackground: React.FC<ISVG> = ({
   svgPointScale,
   // svgData,
   isError,
+  viewBoxHFixed,
+  viewBoxWFixed,
+  extendLineScale,
   // currentAnimCalculator,
   // currentAnimName,
   // currentSolverData,
@@ -22,9 +25,9 @@ const SVGBackground: React.FC<ISVG> = ({
 
 
 
-  const viewBoxWFixed = svgWidth*0.5;
-  const viewBoxHFixed = svgHeight*0.5;
-  const extendLineScale = 1.25
+  // const viewBoxWFixed = svgWidth*0.5;
+  // const viewBoxHFixed = svgHeight*0.5;
+  // const extendLineScale = 1.25
   const mIsError = isError?isError:false;
 
   //console.log("canvas background re render")
@@ -63,25 +66,25 @@ const SVGBackground: React.FC<ISVG> = ({
                 }}
                 />
 
-              <CustomBorderline x1={-viewBoxWFixed/4}
+              <CustomBorderline x1={-viewBoxWFixed/4*extendLineScale}
                     y1={svgHeight}
-                    x2={svgWidth+viewBoxWFixed/4} 
+                    x2={svgWidth+viewBoxWFixed/4*extendLineScale} 
                     y2={svgHeight}   
                     strokeWidth={svgStrokeWidth/2}/>
-              <CustomBorderline x1={-viewBoxWFixed/4}
+              <CustomBorderline x1={-viewBoxWFixed/4*extendLineScale}
                       y1='0'
-                      x2={svgWidth+viewBoxWFixed/4} 
+                      x2={svgWidth+viewBoxWFixed/4*extendLineScale} 
                       y2='0'
                       strokeWidth={svgStrokeWidth/2}/>
               <CustomBorderline x1='0'
-                    y1={-viewBoxHFixed/4}
+                    y1={-viewBoxHFixed/4*extendLineScale}
                     x2='0'
-                    y2={svgHeight+viewBoxHFixed/4} 
+                    y2={svgHeight+viewBoxHFixed/4*extendLineScale} 
                     strokeWidth={svgStrokeWidth/2}/>
               <CustomBorderline x1={svgWidth}
-                    y1={-viewBoxHFixed/4}
+                    y1={-viewBoxHFixed/4*extendLineScale}
                     x2={svgWidth}
-                    y2={svgHeight+viewBoxHFixed/4} 
+                    y2={svgHeight+viewBoxHFixed/4*extendLineScale} 
                     strokeWidth={svgStrokeWidth/2}/>
             </g>
         </CustomSVG>)

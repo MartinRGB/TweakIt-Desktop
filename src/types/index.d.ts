@@ -44,6 +44,7 @@ export interface IInputTree {
 }
 
 export interface IInput {
+  id:any;
   style?: any;
   value?: number;
   defaultValue?: number;
@@ -69,7 +70,10 @@ export interface ISVG {
   svgPointNumber?:number;
   svgPointScale?:number;
   isError?:boolean;
-  isVisable?boolean;
+  isVisable?:boolean;
+  viewBoxWFixed?:number;
+  viewBoxHFixed?:number;
+  extendLineScale?:number;
 }
 
 export interface IDescText {

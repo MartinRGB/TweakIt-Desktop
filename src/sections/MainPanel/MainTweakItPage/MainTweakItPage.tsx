@@ -20,23 +20,18 @@ const MainTweakItPage: React.FC = ({children}) => {
   return (
     <Container>
       <AnimatorTypeProvider>
-        <SelectArea></SelectArea>
-        <TopContainer>
 
-
-              <ListSelectStateProvider>
-
-
-                <GraphUpdateProvider>
-                  <ListArea></ListArea>
-                  <CanvasArea></CanvasArea>
-                </GraphUpdateProvider>
-
-              </ListSelectStateProvider>
-              <PreviewArea></PreviewArea>
-
-        </TopContainer>
-        <CodeArea></CodeArea>
+        <ListSelectStateProvider>
+          <GraphUpdateProvider>
+          <SelectArea></SelectArea>
+          <TopContainer>
+            <ListArea></ListArea>
+            <CanvasArea></CanvasArea>
+            <PreviewArea></PreviewArea>
+          </TopContainer>
+          <CodeArea></CodeArea>
+          </GraphUpdateProvider>
+        </ListSelectStateProvider>
       </AnimatorTypeProvider>
     </Container>
   )

@@ -443,7 +443,7 @@ export class CubicBezierCalculator {
     
     constructor(p1x:any,p1y:any,p2x:any,p2y:any) { //,duration:any
       
-      this.epsilon = 1e-6;
+      this.epsilon = 0.001; //1e-6
       this.UnitBezier(p1x,p1y,p2x,p2y);
       this.array = this.bezierCalculator(); //p1x,p1y,p2x,p2y
       this.bezier = [p1x,p1y,p2x,p2y];
@@ -530,7 +530,7 @@ export class CubicBezierCalculator {
 
         for (
         var i = 1/(samplePointNumber*sampleScale);
-        i < 1+1/(samplePointNumber*sampleScale);
+        i < 1.+2/(samplePointNumber*sampleScale);
         i += 1/(samplePointNumber*sampleScale)
         ){
             // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
@@ -562,7 +562,7 @@ export class CubicBezierCalculator {
     //     return this.array[1];
     // }
     public getStepArray(){
-        return getFixedStepArray(this.array[0])
+        return getFixedValueArray(this.array[0])
     }
 
     public getValueArray(){

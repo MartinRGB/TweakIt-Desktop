@@ -361,6 +361,12 @@
                         "min": 0,
                         "max": 1000,
                         "editable": true
+                    },
+                    "Duration": {
+                        "default": 1,
+                        "min": 0.01,
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -401,6 +407,12 @@
                         "min": 0,
                         "max": 100,
                         "editable": true
+                    },
+                    "Duration": {
+                        "default": 1,
+                        "min": 0.01,
+                        "max": 10,
+                        "editable": true
                     }
                 }
             },
@@ -420,6 +432,12 @@
                         "default": 0,
                         "min": 0,
                         "max": 100,
+                        "editable": true
+                    },
+                    "Duration": {
+                        "default": 1,
+                        "min": 0.01,
+                        "max": 10,
                         "editable": true
                     }
                 }

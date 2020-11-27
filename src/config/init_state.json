@@ -4,6 +4,15 @@
   "isChineseLanguage":true,
   "initAnimationItemSelect":"",
   "initAnimName":"HorizontalLine",
-  "initAnimCalculator":"HorizontalLineCalculator"
+  "initAnimCalculator":"HorizontalLineCalculator",
+  "svgWidth":300,
+  "svgHeight": 300,
+  "svgScale": 0.75,
+  "svgStrokeWidth": 3,
+  "svgPointNumber": 50,
+  "svgPointScale": 3,
+  "viewBoxFixedScale": 0.5,
+  "extendLineScale":1.25
+
 }
 

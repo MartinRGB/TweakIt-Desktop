@@ -7,6 +7,14 @@ export default {
     normalText:'Montserrat,-apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif',
     numberInput:'DIN Alternate'
   },
+  svg:{
+    svgWidth:240,
+    svgHeight: 240,
+    svgScale: 0.75,
+    svgStrokeWidth: 3,
+    svgPointNumber: 50,
+    svgPointScale: 3
+  },
   colors: {
     white: '#fff',
 
@@ -25,7 +33,7 @@ export default {
     text_input_border:'#0D0D0D10',
     range_input_thumb:'#343434',
     range_input_thumb_active:'#33a852',
-    range_input_thumb_unactive:'#D1D6D1',
+    range_input_thumb_unactive:'#B1B6B1',
     main_top_bg:'#F9FBF9',
     main_bottom_bg:'#FFFFFF',
     adb_background:'#EDEFEE',

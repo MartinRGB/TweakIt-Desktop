@@ -22,5 +22,9 @@
   "Mass":"质量",
   "select_an_animator":"选择一个动画器",
   "Bounciness":"弹性",
-  "property":"动画属性"
+  "property":"动画属性",
+  "Scale":"缩放",
+  "Trans":"移动",
+  "Rot":"旋转",
+  "Run":"执行"
 }

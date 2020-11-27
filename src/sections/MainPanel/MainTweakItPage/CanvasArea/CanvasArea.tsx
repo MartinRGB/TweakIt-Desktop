@@ -5,15 +5,20 @@ import styled from '@emotion/styled';
 import CanvasTitle from './CanvasTitle'
 import CanvasInput from './CanvasInput'
 import CanvasSVG from './CanvasSVG'
+import initState from '@Config/init_state.json'
 
 const CanvasArea: React.FC = ({children}) => {
   
-  const svgWidth = 240;
-  const svgHeight = 240;
-  const svgScale = 0.75;
-  const svgStrokeWidth = 3;
-  const svgPointNumber = 50;
-  const svgPointScale = 3;
+  const svgWidth = initState.svgWidth;
+  const svgHeight = initState.svgHeight;
+  const svgScale = initState.svgScale;
+  const svgStrokeWidth = initState.svgStrokeWidth;
+  const svgPointNumber = initState.svgPointNumber;
+  const svgPointScale = initState.svgPointScale;
+  const viewBoxHFixed = svgHeight * initState.viewBoxFixedScale;
+  const viewBoxWFixed = svgWidth * initState.viewBoxFixedScale;
+  const extendLineScale = initState.extendLineScale;
+
 
   // ############ Reszie ############
   const sizeRef = useRef(null);
@@ -57,42 +62,11 @@ const CanvasArea: React.FC = ({children}) => {
             svgStrokeWidth={svgStrokeWidth} 
             svgPointNumber={svgPointNumber}
             svgPointScale={svgPointScale}
+            viewBoxHFixed={viewBoxHFixed}
+            viewBoxWFixed={viewBoxWFixed}
+            extendLineScale={extendLineScale}
           
           ></CanvasSVG>
-          {/* <SVGContainer
-            isLayoutRow={isLayoutRow}
-            svgHeight={svgHeight}>
-      
-            <SVGBackground
-              svgWidth={svgWidth}
-              svgHeight={svgHeight}
-              svgScale={svgScale}
-              svgStrokeWidth={svgStrokeWidth}
-              svgPointNumber={svgPointNumber}
-              svgPointScale={svgPointScale}
-              svgStyle={{
-                position: `absolute`,
-                left: `50%`,
-                top: `50%`,
-                transform: `translate3d(-50%, -50%, 0px)`
-              }}
-              />
-
-            <SVGGraph
-              svgWidth={svgWidth}
-              svgHeight={svgHeight}
-              svgScale={svgScale}
-              svgStrokeWidth={svgStrokeWidth}
-              svgPointNumber={svgPointNumber}
-              svgPointScale={svgPointScale}
-              svgStyle={{
-                position: `absolute`,
-                left: `50%`,
-                top: `50%`,
-                transform: `translate3d(-50%, -50%, 0px)`
-              }}
-            />
-          </SVGContainer> */}
       </GraphContainer>
       
       <InputContainer

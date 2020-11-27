@@ -18,12 +18,15 @@ const SVGGraph: React.FC<ISVG> = ({
   isVisable,
   svgData,
   isError,
+  viewBoxHFixed,
+  viewBoxWFixed,
+  extendLineScale,
   }) => {
 
   useContext(GraphUpdateContext);
 
 
-  const { selectTransition,currentAnimName, currentAnimCalculator,currentSolverData,previousAnimName, previousAnimCalculator, previousSolverData} = useContext(
+  const { selectTransition,currentAnimName, currentAnimCalculator,currentSolverData} = useContext(
     AnimatorTypeContext
   );
 
@@ -35,32 +38,15 @@ const SVGGraph: React.FC<ISVG> = ({
   const currStepData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData).getStepArray();
   const currValueData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData).getValueArray();
   
-  const viewBoxWFixed = svgWidth*0.5;
-  const viewBoxHFixed = svgHeight*0.5;
   const mIsError = !currValueData[0];
   var mSVGData:any;
-
-
-  // if(selectTransition){
-  //   console.log(previousAnimName)
-    // const prevStepData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimName,previousSolverData).getStepArray();
-    // const prevValueData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimName,previousSolverData).getStepArray();
-  //   mSVGData  = mIsError?`M0,0`:SVGTransitionTemplate_50(prevStepData,prevValueData,currStepData,currValueData,svgWidth,svgHeight,selectTransitionProgress)
-  // }
-  // else{
-  //   mSVGData  = mIsError?`M0,0`:SVGTemplate_50(currStepData,currValueData,svgWidth,svgHeight,1.)
-  // }
-
-
-//  prevStepData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimName,previousSolverData).getStepArray();
-//  prevValueData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimName,previousSolverData).getStepArray();
-
 
   if(selectTransition){
     mSVGData=`M0,240`
   }
   else{
     mSVGData  = mIsError?`M0,0`:SVGTemplate_50(currStepData,currValueData,svgWidth,svgHeight,1.)
+  
   }
   
 

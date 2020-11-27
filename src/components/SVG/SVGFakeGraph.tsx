@@ -19,6 +19,9 @@ const SVGFakeGraph: React.FC<ISVG> = ({
   isVisable,
   svgData,
   isError,
+  viewBoxWFixed,
+  viewBoxHFixed,
+  extendLineScale,
   }) => {
 
     useContext(ListSelectStateContext)
@@ -34,9 +37,7 @@ const SVGFakeGraph: React.FC<ISVG> = ({
     const currValueData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData).getValueArray();
 
     var mSVGData;
-    const viewBoxWFixed = svgWidth*0.5;
-    const viewBoxHFixed = svgHeight*0.5;
-  
+    
     var t = 0;
     if(selectTransition){
 

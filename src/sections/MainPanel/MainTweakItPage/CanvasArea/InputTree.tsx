@@ -37,20 +37,34 @@ const InputTree: React.FC<IInputTree> = memo(({
   max,
 }) => {
 
-  const {setCurrentSolverDataByIndex} = useContext(
+  const {previousDataRange,currentDataRange,setCurrentSolverDataByIndex,currentSolverData,currentAnimCalculator,previousSolverData} = useContext(
     AnimatorTypeContext
   );
 
-  const {shouldGraphUpdate,setGraphShouldUpdate,triggredIndex,setTriggeredIndex} = useContext(
+  const {setGraphShouldUpdate,triggredIndex,setTriggeredIndex} = useContext(
     GraphUpdateContext
   );
 
   const { t, i18n } = useTranslation()
   const [colorMode] = useColorMode();
 
+
+
   const [rangeValue, setRangeValue] = useState<any>(defaultVal);
-  const [previousRangeValue,setPreviousRangeValue] = useState<any>(0);
-  const [targetRangeValue,setTargetRangeValue] = useState<any>(0);
+  // TODO
+  //(previousSolverData[index] === undefined)?0:previousSolverData[index] -> current
+  // 0 -> default
+  // prev range
+  // console.log('ISSUE HERE')
+  // console.log(currentSolverData)
+  console.log('============= Input Tree ============')
+  console.log('prev SolvData  ---- ' + previousSolverData)
+  console.log('curr SolvData ----' + currentSolverData)
+  console.log('prev DataRange  ---- ' + previousDataRange)
+  console.log('curr DataRange ----' + currentDataRange)
+  console.log('============= Input Tree ============')
+  const [previousRangeValue,setPreviousRangeValue] = useState<number>((previousSolverData[index] === undefined)?0:previousSolverData[index]);
+  const [targetRangeValue,setTargetRangeValue] = useState<number>((currentSolverData[index] === undefined)?0:currentSolverData[index]);
   const [isRangeAnimTriggered,setRangeAnimTriggered] = useState<boolean>(false);
 
   const [textValue,setTextValue] = useState<number>(defaultVal);
@@ -64,7 +78,6 @@ const InputTree: React.FC<IInputTree> = memo(({
     setTriggeredIndex(-1)
   }, [])
 
-
   //console.log('rerender')
 
   // 2 Group Control -> 4 Time Spring
@@ -72,47 +85,34 @@ const InputTree: React.FC<IInputTree> = memo(({
     from:{sliderProgress:previousRangeValue},
     to:{sliderProgress:isRangeAnimTriggered?targetRangeValue:previousRangeValue},
     config: animationConfig.slider_drag,
-    //easings:easings.easeExpOut(4),
-    //duration:16,
     onFrame: () =>{
 
       var value = sliderProgress.value.toFixed(2);
-      var clampedValue = Math.min(max,Math.max(Number(value),min));
       setRangeValue(Math.min(max,Math.max(Number(value),min)))
       //console.log('trigger')
+
+      //console.log(index)
+      if(triggredIndex === index){
+
+        setCurrentSolverDataByIndex(Math.min(max,Math.max(Number(value),min)),index);
+        var fps_60 = Math.round((new Date().getTime() - sliderProgress.startTime)/16);
+
+        //if(currentAnimCalculator != 'CubicBezierCalculator'){
+          if(fps_60 %2 ==0){
+            setGraphShouldUpdate(false)
+            //console.log('odd' + fps_60);
+          }
+          else{
+            setGraphShouldUpdate(true)
+            //console.log('even' + fps_60);
+          }
+        //}
+      }
+      //console.log('input setting!')
     },
     onRest: () => {
       setPreviousRangeValue(rangeValue)
       setRangeAnimTriggered(false)
-    }
-  })
-
-
-  const { curveProgress } = useSpring({
-    from:{curveProgress:previousRangeValue},
-    to:{curveProgress:shouldGraphUpdate?targetRangeValue:previousRangeValue},
-    config: animationConfig.graph_trasition,
-    onFrame: () =>{
-      var value = sliderProgress.value.toFixed(2);
-      var clampedValue = Math.min(max,Math.max(Number(value),min));
-      if(triggredIndex === index){
-        // console.log('triggredIndex ——————' + triggredIndex)
-        // console.log('index ——————' + index)
-        setCurrentSolverDataByIndex(Math.min(max,Math.max(Number(value),min)),index);
-        var fps_60 = Math.round((new Date().getTime() - curveProgress.startTime)/16);
-        if(fps_60 %2 ==0){
-          setGraphShouldUpdate(false)
-          //console.log('odd' + fps_60);
-        }
-        else{
-          setGraphShouldUpdate(true)
-          //console.log('even' + fps_60);
-        }
-      }
-
-    },
-    onRest: () => {
-      //console.log('stop')
     }
   })
    
@@ -125,7 +125,10 @@ const InputTree: React.FC<IInputTree> = memo(({
 
     setTriggeredIndex(index)
     setRangeAnimTriggered(true)
-    setGraphShouldUpdate(true)
+
+    //if(currentAnimCalculator != 'CubicBezierCalculator'){
+      setGraphShouldUpdate(true)
+    //}
     //console.log('rangeChange')
 
     //update text
@@ -166,7 +169,6 @@ const InputTree: React.FC<IInputTree> = memo(({
     target.value = lmtVal.replace(/\s/g, '');  // This triggers the cursor to move.
     target.selectionEnd = shouldFoward?position:position-1;
   }
-
 
 
   const handleTextBlur = (e:any) => {

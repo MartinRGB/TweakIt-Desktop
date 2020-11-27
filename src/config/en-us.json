@@ -22,5 +22,9 @@
   "Mass":"Mass",
   "select_an_animator":"Select An Animator",
   "Bounciness":"Bounciness",
-  "property":"property"
+  "property":"property",
+  "Scale":"Scale",
+  "Trans":"Trans",
+  "Rot":"Rot",
+  "Run":"Run"
 }

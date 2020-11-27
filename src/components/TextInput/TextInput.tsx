@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const TextInput: React.FC<IInput> = ({  style,value,min,max,step,isEditable,onChange,onKeyUp,onKeyDown,onBlur,onFocus}) => {
+const TextInput: React.FC<IInput> = ({ id,style,value,min,max,step,isEditable,onChange,onKeyUp,onKeyDown,onBlur,onFocus}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -21,6 +21,7 @@ const TextInput: React.FC<IInput> = ({  style,value,min,max,step,isEditable,onCh
  const mIsEditable = isEditable?isEditable:true;
 
   return (<Input
+    id={id}
     type="text" 
     style={style}
     value={value} 

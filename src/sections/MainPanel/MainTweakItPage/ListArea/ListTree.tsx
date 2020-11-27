@@ -50,7 +50,7 @@ const ListTree: React.FC<IListTree> = memo(({
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
-  const { currentAnimName,currentAnimCalculator,currentAnimData,currentSolverData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition} = useContext(
+  const { setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex} = useContext(
     AnimatorTypeContext
   );
 
@@ -104,21 +104,62 @@ const ListTree: React.FC<IListTree> = memo(({
             <LiTitle style={{ ...style }} css={Toggle} isSelected={currentAnimationItem === info } 
             onClick={() => 
               {
-                if(name != "Divide"){
+                if(name != "Divide" && (currentAnimationItem != info)){
 
+                  console.log(currentSolverData)
+
+                  // TODO Work for GraphTransition,but not For Input
                   setPreviousAnimName(currentAnimName);
                   setPreviousAnimCalculator(currentAnimCalculator);
                   setPreviousSolverData(currentSolverData);
+                  //setPreviousDataRange(currentDataRange)
+
+                  console.log(currentAnimData)
+                  //console.log(Object.entries(animation_data))
+                  //这里的 animation_Data 是被点击 list 的，所以这样设置 Previous 用以出问题这里有问题
+                  Object.entries(currentAnimData).map(function (data:any,index:number) {
+                    setPreviousDataRangeByIndex(data[1].max - data[1].min,index)
+                    //TODO 有问题
+                    //console.log('ISSUE HERE')
+                    // console.log(index)
+                    // console.log(data[1].)
+                  })
+
+  
 
                   selectAnimationItem(info)
                   setCurrentAnimName(name)
                   setCurrentAnimCalculator(calculator)
+
                   if(animation_data){
                     setCurrentAnimData(Object.entries(animation_data))
                   }
                   else{
                     setCurrentAnimData([])
                   }
+
+                  Object.entries(animation_data).map(function (data:any,index:number) {
+                    setCurrentDataRangeByIndex(data[1].max - data[1].min,index)
+                    //TODO 有问题
+                    //console.log('ISSUE HERE')
+                    // console.log(index)
+                    // console.log(data[1].)
+                    console.log(data[1].max - data[1].min)
+                  })
+                
+                  // Object.entries(animation_data).map(function (data:any,index:number) {
+                  //   setCurrentSolverDataByIndex(data[1].default,index)
+                  // })
+
+                  //console.log(currentSolverData)
+
+                  console.log('============= List Tree ============')
+                  console.log('prev SolvData  ---- ' + previousSolverData)
+                  console.log('curr SolvData ----' + currentSolverData)
+                  console.log('prev DateRange  ---- ' + previousDataRange)
+                  console.log('curr DateRange ----' + currentDataRange)
+                  console.log('curr AnimData ----' + currentAnimData)
+                  console.log('============= List Tree ============')
 
                   setSelectTransition(true)
 
