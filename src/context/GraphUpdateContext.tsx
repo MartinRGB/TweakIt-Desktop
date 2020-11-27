@@ -13,10 +13,7 @@ export var GraphUpdateContext = createContext({
   bezierDragValue:'',
   setBezierDragValue: (tag: string) => {},
   bezierTextValue:'0.5,0.2,0.1,1.0',
-  setBezierTextValue: (tag: any) => {},
-
-  // graphUpdateTimes:-1,
-  // setGraphUpdateTimes: (tag: number) => {},
+  setBezierTextValue: (tag: any) => {}
 });
 
 var GraphUpdateProvider: React.FC<{}> = ({ children }) => {
@@ -27,7 +24,6 @@ var GraphUpdateProvider: React.FC<{}> = ({ children }) => {
   var [isDrag, setIsDrag] = useState<boolean>(false);
   var [dragValue, setDragValue] = useState<string>('');
   var [textValue, setTextValue] = useState<any>('0.5,0.2,0.1,1.0');
-
 
   function setShouldUpdateAndSave(tag: boolean) {
     setIsUpdate(tag);
@@ -54,6 +50,8 @@ var GraphUpdateProvider: React.FC<{}> = ({ children }) => {
     setDragValue(tag);
   }
 
+
+
   // const [times, setTimes] = useState<number>(-1);
   // function setUpdateTimeAndSave(tag: number) {
   //   setTimes(tag);
@@ -72,9 +70,7 @@ var GraphUpdateProvider: React.FC<{}> = ({ children }) => {
         bezierDragValue:dragValue,
         setBezierDragValue:setDragValueAndSave,
         bezierTextValue:textValue,
-        setBezierTextValue:setTextValueAndSave,
-        // graphUpdateTimes:times,
-        // setGraphUpdateTimes:setUpdateTimeAndSave,
+        setBezierTextValue:setTextValueAndSave
       }}>
       {children}
     </GraphUpdateContext.Provider>

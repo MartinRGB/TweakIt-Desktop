@@ -2,108 +2,52 @@ export default class DataDrivenPropertyAnimator{
   private data:any;
   private dataLength:number;
   private stepSize:number;
-  private element:any;
-  private property:string;
   private from:any;
   private to:any;
   private duration:number;
   private animationFrame:number;
-  private transformPrefixString:any;
-  private transformSuffixString:any;
   private progress:number;
-  private callback:any;
+  private startCallback:any;
+  private endCallback:any;
+  private frameCallback:any;
   private animating:boolean;
 
   constructor(calculator:any){
-      this.data = this.parseData(calculator);
+      this.data = calculator;
       this.dataLength = this.data.length;
       this.stepSize = 1 / (this.dataLength - 1)
-      this.element = null;
-      this.property = 'translationY'
       this.from = 0;
       this.to = 1;
       this.duration = 1;
       this.animationFrame = 0;
-      this.transformPrefixString = ''
-      this.transformSuffixString = ''
-      //this.animationFrame = null
-      //this.transformPrefixString = null;
-      //this.transformSuffixString = null;
       this.progress = 0;
-      this.callback = null;
+      this.startCallback = null;
+      this.endCallback = null;
+      this.frameCallback = null;
       this.animating = false;
 
   }
 
   // ############ Init animator with data ############
 
-  parseData(calc:any){
-      var data = [];
-      for (var i = 0;i <calc.array.length - 1;i++){
-          data.push(calc.array[i][1]);
-      }
-      data.push([1,1])
-      return data;
-  }
-
-  setAttribute(element:any,property:string,from:number,to:number,duration:number){
-      this.element = element;
-      this.property = property
-      this.from = from;
-      this.to = to;
-      this.duration = duration/1000.;
-      this.initAnimationProperty(property)
-  }
-
-  setMultipleAttribute(element:any,property:string,prefix:string,suffix:string,from:number,to:number,duration:number){
-      this.element = element;
-      this.property = property
-      this.from = from;
-      this.to = to;
-      this.duration = duration/1000.;
-      this.transformPrefixString = prefix;
-      this.transformSuffixString = suffix;
-  }
-
-  initAnimationProperty(property:string){
-      var _this = this;
-      switch (property){
-          case 'translationX':
-              _this.transformPrefixString =`translate3d(`
-              _this.transformSuffixString =`px,0px,0px)`
-              break;
-          case 'translationY':
-              _this.transformPrefixString =`translate3d(0px,`
-              _this.transformSuffixString =`px,0px)`
-              break;
-          case 'translationZ':
-              _this.transformPrefixString =`translate3d(0px,0px,`
-              _this.transformSuffixString =`px)`
-              break;
-          case 'scale':
-              _this.transformPrefixString =`scale(`
-              _this.transformSuffixString =`)`
-              break;
-          case 'rotate':
-              _this.transformPrefixString =`rotate(`
-              _this.transformSuffixString =`deg)`
-              break;
-          default:
-      }
+  public setFromToDuration(from:number,to:number,duration:number){
+    this.from = from;
+    this.to = to;
+    this.duration = duration/1000.;
   }
 
   // ############ Animator state ############
 
-  start(){
+  public start(){
       var count = 0
       var _this = this;
-      
-      _this.end();
+      _this.reset();
       _this.animating = true;
+      _this.onStart()
       function animate () {
           if (count/60 >= _this.duration) {
               _this.stop(_this.animationFrame)
-              _this.finish();
+              _this.onEnd();
 
               return
           }
@@ -122,17 +66,21 @@ export default class DataDrivenPropertyAnimator{
           // console.log(count * 16 + 'ms')
           
           _this.animationFrame = requestAnimationFrame(animate)
+
+          _this.onFrame()
+          
       }
       
       animate()
   }
 
-  delayStart(delay:number){
+  public delayStart(delay:number){
 
       var _this = this;
       
-      setTimeout(function() {
+      var timeOut = setTimeout(function() {
           _this.start();
+          clearTimeout(timeOut)
       }, delay);
 
   }
@@ -142,7 +90,7 @@ export default class DataDrivenPropertyAnimator{
       this.animating = false;
   }
 
-  end(){
+  public reset(){
       var _this = this;
 
       _this.stop(_this.animationFrame)
@@ -151,37 +99,49 @@ export default class DataDrivenPropertyAnimator{
 
   }
 
-  finish(){
-      if(this.callback){
-          this.callback()
-      }
+
+  onStart(){
+    if(this.startCallback){
+        this.startCallback()
+    }
   }
 
-  setCallback(callback:any){
-      this.callback = callback;
+  onFrame(){
+    if(this.frameCallback){
+        this.frameCallback()
+    }
   }
 
-  isAnimating(){
+  onEnd(){
+    if(this.endCallback){
+        this.endCallback()
+    }
+  }
+
+  public setOnEndCallback(callback:any){
+      this.endCallback = callback;
+  }
+
+  public setOnFrameCallback(callback:any){
+      this.frameCallback = callback;
+  }
+
+  public setOnStartCallback(callback:any){
+    this.startCallback = callback;
+  }
+
+  public isAnimating(){
       return this.animating;
   }
 
   // ############ 0~1 Progress based interpolation ############
 
-  setProgress(progress:number){
-      var _this =this;
+  public setProgress(progress:number){
+      this.progress = progress;
+  }
 
-      if(_this.element != null){
-
-          if(!Array.isArray(_this.element)){
-              _this.element.style.transform = _this.transformPrefixString + (_this.from+(_this.to-_this.from) * progress) + _this.transformSuffixString
-          }
-          else{
-              for (var i = 0;i < ((_this.element).length);i++){
-                  _this.element[i].style.transform = _this.transformPrefixString[i] + (_this.from[i]+(_this.to[i]-_this.from[i]) * progress) + _this.transformSuffixString[i];
-              }
-          }
-
-      }
+  public getProgress(){
+    return this.progress
   }
 
   // ############ Lookuptable Interpolation Method ############

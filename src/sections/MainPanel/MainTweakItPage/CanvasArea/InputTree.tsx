@@ -37,7 +37,7 @@ const InputTree: React.FC<IInputTree> = memo(({
   max,
 }) => {
 
-  const {previousDataRange,currentDataRange,setCurrentSolverDataByIndex,currentSolverData,previousDataMin,currentAnimCalculator,previousSolverData} = useContext(
+  const {setDurationData,previousDataRange,currentDataRange,setCurrentSolverDataByIndex,currentSolverData,previousDataMin,currentAnimCalculator,previousSolverData} = useContext(
     AnimatorTypeContext
   );
 
@@ -92,47 +92,47 @@ const InputTree: React.FC<IInputTree> = memo(({
 
       var value = sliderProgress.value.toFixed(2);
       setRangeValue(Math.min(max,Math.max(Number(value),min)))
-      //console.log('trigger')
 
-      //console.log(index)
       if(triggredIndex === index){
-
+   
         setCurrentSolverDataByIndex(Math.min(max,Math.max(Number(value),min)),index);
         var fps_60 = Math.round((new Date().getTime() - sliderProgress.startTime)/16);
+        if(fps_60 %2 ==0){
+          setGraphShouldUpdate(false)
+          //console.log('odd' + fps_60);
+        }
+        else{
+          setGraphShouldUpdate(true)
+          //console.log('even' + fps_60);
+        }
 
-        //if(currentAnimCalculator != 'CubicBezierCalculator'){
-          if(fps_60 %2 ==0){
-            setGraphShouldUpdate(false)
-            //console.log('odd' + fps_60);
+        // THIS IS KEY BUG ,sth still need update duration the animation should put here
+        if(rangeValue === targetRangeValue){
+          setTriggeredIndex(-1)
+          if(name === 'Duration'){
+            setDurationData(Math.min(max,Math.max(Number(value),min)));
           }
-          else{
-            setGraphShouldUpdate(true)
-            //console.log('even' + fps_60);
-          }
-        //}
+        }
       }
-      //console.log('input setting!')
+
     },
     onRest: () => {
-      // KEY BUG
-      setTriggeredIndex(-1)
       setPreviousRangeValue(rangeValue)
       setRangeAnimTriggered(false)
     }
   })
-   
+
 
 
 
   const handleRangeChange = (e:any) => {
     setPreviousRangeValue(rangeValue);
     setTargetRangeValue(Math.min(max,Math.max(e.target.value,min)))
-
     setTriggeredIndex(index)
     setRangeAnimTriggered(true)
 
     //if(currentAnimCalculator != 'CubicBezierCalculator'){
-      setGraphShouldUpdate(true)
+    setGraphShouldUpdate(true)
     //}
     //console.log('rangeChange')
 
@@ -149,7 +149,7 @@ const InputTree: React.FC<IInputTree> = memo(({
     var position = target.selectionStart; // Capture initial position
     var shouldFoward = (lmtVal === target.value)
 
-    console.log(target.selectionEnd)
+    //console.log(target.selectionEnd)
 
     // only 1 . in Input Area
     if((lmtVal.split(".").length - 1) > 1){
@@ -192,7 +192,7 @@ const InputTree: React.FC<IInputTree> = memo(({
       > 
         <DescText
         style={{
-          width:'66px',
+          width:'86px',
           lineHeight: '16px'
         }}
         >{name}</DescText>

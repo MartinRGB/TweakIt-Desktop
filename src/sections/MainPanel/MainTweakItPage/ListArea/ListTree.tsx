@@ -20,10 +20,7 @@ import Icons from '@Assets/icons'
 
 import { ListSelectStateContext } from '@Context/ListSelectStateContext';
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
-import { GraphTransitionContext } from '@Context/GraphTransitionContext';
 
-import Solver from '@Components/Solver';
-import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTemplate_50,SVGTransitionTemplate_100,SVGTransitionTemplate_50} from '@Components/SVG/SVGUtil'
 
 const ListTree: React.FC<IListTree> = memo(({ 
   children, 
@@ -50,7 +47,7 @@ const ListTree: React.FC<IListTree> = memo(({
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
-  const { setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex} = useContext(
+  const { setDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex} = useContext(
     AnimatorTypeContext
   );
 
@@ -106,13 +103,11 @@ const ListTree: React.FC<IListTree> = memo(({
               {
                 if(name != "Divide" && (currentAnimationItem != info)){
 
-                  console.log(currentSolverData)
 
                   // TODO Work for GraphTransition,but not For Input
                   setPreviousAnimName(currentAnimName);
                   setPreviousAnimCalculator(currentAnimCalculator);
                   setPreviousSolverData(currentSolverData);
-                  console.log(currentAnimData)
                   Object.entries(currentAnimData).map(function (data:any,index:number) {
                     setPreviousDataMinByIndex(data[1][1].min,index)
                     setPreviousDataRangeByIndex(data[1][1].max - data[1][1].min,index)
@@ -131,11 +126,19 @@ const ListTree: React.FC<IListTree> = memo(({
                     setCurrentAnimData([])
                   }
 
-                  Object.entries(animation_data).map(function (data:any,index:number) {
-                    setCurrentDataRangeByIndex(data[1].max - data[1].min,index)
-                    console.log(data[1].max - data[1].min)
-                  })
+                  // if(name === 'Duration'){
+                  //   setDurationData(Math.min(max,Math.max(Number(value),min)),index);
+                  // }
 
+                  Object.entries(animation_data).map(function (data:any,index:number) {
+                    if(data[0] === "Duration"){
+                      setDurationData(data[1].default)
+                    }
+                    else{
+                      setDurationData(-1)
+                    }
+                    setCurrentDataRangeByIndex(data[1].max - data[1].min,index)
+                  })
                   // BUGS:Delete Comments will delete transition anim
                   // Object.entries(animation_data).map(function (data:any,index:number) {
                   //   setCurrentSolverDataByIndex(data[1].default,index)

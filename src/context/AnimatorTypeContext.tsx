@@ -31,6 +31,8 @@ export var AnimatorTypeContext = createContext({
   setPreviousDataMinByIndex:(value:number,index:number) =>{},
   selectTransition:false,
   setSelectTransition:(tag: boolean) => {},
+  durationData:0,
+  setDurationData:(tag: number) => {},
 });
 
 var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
@@ -50,6 +52,7 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
   const [mPrevDataMin,setPrevMinData] = useState<any>([]);
 
   const [mSelectTransition, setSelectTransition] = useState<boolean>(true);
+  const [mDuration, setDuration] = useState<number>(0);
   
 
   function setCurrAnimNameAndSave(tag: string) {
@@ -155,6 +158,10 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
     setSelectTransition(tag);
   }
 
+  function setDurationAndSave(tag: number) {
+    setDuration(tag);
+  }
+
 
   return (
     <AnimatorTypeContext.Provider
@@ -188,6 +195,8 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
         setPreviousDataMinByIndex:setPrevDataMinByIndexAndSave,
         selectTransition:mSelectTransition,
         setSelectTransition:setSelectTransitionAndSave,
+        durationData:mDuration,
+        setDurationData:setDurationAndSave,
       }}>
       {children}
     </AnimatorTypeContext.Provider>

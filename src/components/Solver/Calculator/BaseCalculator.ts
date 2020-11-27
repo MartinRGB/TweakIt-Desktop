@@ -52,11 +52,18 @@ export class SpringAnimationCalculator{
         return friction / (2 * Math.sqrt(mass * tension));
     }
 
+    computeOverDampingTension(oldFriction:number,newDampingratio:number,mass:number){
+       return Math.pow(oldFriction/(2*newDampingratio),2)/mass
+    }
+
+
     computeDuration(tension:number, friction:number,mass:number,factor:number) {
         let epsilon = 0.001/factor;
         let velocity = 0.0;
         let dampingRatio = this.computeDampingRatio(tension, friction,mass)
         let undampedFrequency = Math.sqrt(tension / mass)
+
+        // Key Bug When dampingRatio > 1
         if (dampingRatio < 1) {
             let a = Math.sqrt(1 - Math.pow(dampingRatio, 2))
             let b = velocity / (a * undampedFrequency)
@@ -69,6 +76,22 @@ export class SpringAnimationCalculator{
         } else {
             return 0.0
         }
+    }
+
+    computeDurationWithDampingRatio(tension:number,dampingRatio:number,mass:number,factor:number) {
+        let epsilon = 0.001/factor;
+        let velocity = 0.0;
+        let undampedFrequency = Math.sqrt(tension / mass)
+
+        // Key Bug When dampingRatio > 1
+        let a = Math.sqrt(Math.abs(1 - Math.pow(dampingRatio, 2)))
+        let b = velocity / (a * undampedFrequency)
+        let c = dampingRatio / a
+        let d = -((b - c) / epsilon)
+        if (d <= 0) {
+            d = 1
+        }
+        return Math.log(d) / (dampingRatio * undampedFrequency)
     }
 
     bouncyTesnionConversion(tension:number){
@@ -162,6 +185,7 @@ export class SpringAnimationCalculator{
         // i < 1+1/(sampleTimes*sampleScale)
 
         var maxIterationTimes = (isFixed)?Math.max(1.,duration + mTheresholdValue/(samplePointNumber*sampleScale)):duration + mTheresholdValue/(samplePointNumber*sampleScale);
+        var holdedLastDisplacement = 0;
         
         for (var i = 1/(samplePointNumber*sampleScale) ;
             //i < 1+1/(sampleTimes*sampleScale);
@@ -169,12 +193,13 @@ export class SpringAnimationCalculator{
             i += 1/(samplePointNumber*sampleScale)
             ){
             var deltaT = i;
-            var lastDisplacement  = i/(5*samplePointNumber) -  endVal;
+            var lastDisplacement  = i/(samplePointNumber) -  endVal;
             var cosCoeff = lastDisplacement;
             var sinCoeff = 1.0 / mDampedFreq * (dampingratio * mNaturalFreq * lastDisplacement + lastVelocity);
             var displacement = Math.pow(Math.E,-dampingratio * mNaturalFreq * deltaT) * (lastDisplacement * Math.cos(mDampedFreq * deltaT) + sinCoeff * Math.sin(mDampedFreq * deltaT));
 
             var mValue = displacement + endVal;
+
 
             // useless
             // currentVelocity = displacement * (-mNaturalFreq) * dampingratio + Math.pow(Math.E, -dampingratio * mNaturalFreq * deltaT) * (-mDampedFreq * cosCoeff * Math.sin(mDampedFreq * deltaT)+ mDampedFreq * sinCoeff * Math.cos(mDampedFreq * deltaT));
@@ -216,6 +241,10 @@ export class SpringAnimationCalculator{
         return this.array[2].toString().split(',').map(Number);
     }
 
+    public getDuration(){
+        return this.duration;
+    }
+
 }
 
 export class InterpolatorCalculator {
@@ -234,7 +263,8 @@ export class InterpolatorCalculator {
     interpolatorCalculator(funs:(a:number) =>void) {  
         var transitionArray = [],stepArray = [],valueArray = [];
 
-        for (var i = 1/(samplePointNumber*sampleScale);i < 1;i += 1/(samplePointNumber*sampleScale)){
+        // strange 4
+        for (var i = 0/(samplePointNumber*sampleScale);i < 1 + 4/(samplePointNumber*sampleScale);i += 1/(samplePointNumber*sampleScale)){
 
             var valX = i;
             var valY = funs(i);
@@ -362,6 +392,10 @@ export class FlingAnimationCalculator {
 
     public getMergedFullArray(){
         return this.array[2].toString().split(',').map(Number);
+    }
+
+    public getDuration(){
+        return this.duration;
     }
 
 }
@@ -528,9 +562,10 @@ export class CubicBezierCalculator {
         //var transitionArray = [[0,0]];
         var transitionArray = [],stepArray = [],valueArray:any = [];
 
+        // strange 4
         for (
-        var i = 1/(samplePointNumber*sampleScale);
-        i < 1.+2/(samplePointNumber*sampleScale);
+        var i = 0/(samplePointNumber*sampleScale);
+        i < 1.+4/(samplePointNumber*sampleScale);
         i += 1/(samplePointNumber*sampleScale)
         ){
             // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
@@ -653,6 +688,8 @@ const getFixedValueArray = (array:any) => {
 
     return fixedValueArray;
 }
+
+
 
 const getFixedValueArrayUnLitmited = (array:any) => {
     var fixedValueArray = new LookupTableCalculator(array,samplePointNumber).getAnimationArray();

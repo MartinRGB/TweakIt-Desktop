@@ -42,10 +42,11 @@ const SVGGraph: React.FC<ISVG> = ({
   var mSVGData:any;
 
   if(selectTransition){
-    mSVGData=`M0,240`
+    mSVGData=`M0,0`
   }
   else{
-    mSVGData  = mIsError?`M0,0`:SVGTemplate_50(currStepData,currValueData,svgWidth,svgHeight,1.)
+    //mSVGData  = mIsError?`M0,0`:SVGTemplate_50(currStepData,currValueData,svgWidth,svgHeight,1.)
+    mSVGData  = SVGTemplate_50(currStepData,currValueData,svgWidth,svgHeight,1.)
   
   }
   

@@ -32,7 +32,17 @@ export class FramerDHOSpring extends SpringAnimationCalculator {
     this.friction = this.damping
     this.dampingratio = this.computeDampingRatio(this.tension, this.friction, this.mass)
     this.duration = this.computeDuration(this.tension, this.friction, this.mass, 1.0)
+
+    // DAMPINGRATIO FIX
+    if(this.dampingratio >= 1){
+      this.friction = this.computeDamping(this.stiffness,Math.max(0.,Math.min(0.9999,this.dampingratio)),this.mass)
+      this.stiffness = this.computeOverDampingTension(this.friction,this.dampingratio,this.mass)
+      this.dampingratio = Math.max(0.,Math.min(0.9999,this.dampingratio));
+      this.duration = this.computeDuration(this.stiffness, this.computeDamping(this.stiffness,this.dampingratio,this.mass), this.mass, 1.0)
+    }
+
     this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+  
   }
 }
 
@@ -57,6 +67,15 @@ export class FramerRK4Spring extends SpringAnimationCalculator {
 
     this.dampingratio = this.computeDampingRatio(this.tension, this.friction, this.mass)
     this.duration = this.computeDuration(this.tension, this.friction, this.mass, 1.0)
+
+    // DAMPINGRATIO FIX
+    if(this.dampingratio >= 1){
+      this.friction = this.computeDamping(this.stiffness,Math.max(0.,Math.min(0.9999,this.dampingratio)),this.mass)
+      this.stiffness = this.computeOverDampingTension(this.friction,this.dampingratio,this.mass)
+      this.dampingratio = Math.max(0.,Math.min(0.9999,this.dampingratio));
+      this.duration = this.computeDuration(this.stiffness, this.computeDamping(this.stiffness,this.dampingratio,this.mass), this.mass, 1.0)
+    }
+
     this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
   }
 }
@@ -84,6 +103,14 @@ export class OrigamiPOPSpring extends SpringAnimationCalculator {
     this.damping = this.friction
     this.dampingratio = this.computeDampingRatio(this.tension, this.friction, this.mass)
     this.duration = this.computeDuration(this.tension, this.friction, this.mass, 1.0)
+
+    // BUT BUGS HERE:DAMPINGRATIO FIX
+    if(this.dampingratio >= 1){
+      this.friction = this.computeDamping(this.stiffness,Math.max(0.,Math.min(0.9999,this.dampingratio)),this.mass)
+      this.stiffness = this.computeOverDampingTension(this.friction,this.dampingratio,this.mass)
+      this.dampingratio = Math.max(0.,Math.min(0.9999,this.dampingratio));
+      this.duration = this.computeDuration(this.stiffness, this.computeDamping(this.stiffness,this.dampingratio,this.mass), this.mass, 1.0)
+    }
 
     this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
   }

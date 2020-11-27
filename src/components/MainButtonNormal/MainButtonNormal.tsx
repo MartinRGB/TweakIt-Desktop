@@ -77,7 +77,7 @@ font-family: ${props => props.theme.fonts.numberInput};
 font-style: normal;
 font-weight: bold;
 font-size: 11px;
-line-height: 15px;
+line-height: 14px;
 `
 
 

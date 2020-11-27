@@ -63,7 +63,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     AnimatorTypeContext
   );
 
-  const {setBezierTriggeredIndex,bezierTriggeredIndex,triggredIndex,setTriggeredIndex,setGraphShouldUpdate,shouldGraphupdate} = useContext(
+  const {setBezierTriggeredIndex,bezierTriggeredIndex,setGraphShouldUpdate,shouldGraphupdate} = useContext(
     GraphUpdateContext
   );
 
@@ -117,6 +117,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
       }
     },
     onRest: () => {
+      // Maybe Bugs Here
+      setBezierTriggeredIndex(-1)
       setGraphShouldUpdate(false)
       setStartAnimation(false)
     }
@@ -129,7 +131,6 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     onFrame: () =>{
       var value = progress1.value.toFixed(2);
       if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,0);
-      console.log('bezier setting!')
     },
     onRest: () => {
       setPrev1(target1)
@@ -159,7 +160,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     //duration: 0,
     onFrame: () =>{
       var value = progress3.value.toFixed(2);
-      if(triggredIndex != -1) setCurrentSolverDataByIndex(value,2);
+      if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,2);
     },
     onRest: () => {
       setPrev3(target3)
@@ -522,5 +523,5 @@ const CustomBorderline = styled.line<{
   position: relative;
   stroke-linecap:round;
   stroke-linejoin:round;
-  stroke:${p => p.isEditable? p.theme.colors.range_input_thumb:p.theme.colors.range_input_thumb_unactive};
+  stroke:${p => p.isEditable? p.theme.colors.range_input_thumb:p.theme.colors.slider_input_thumb_unactive};
 `

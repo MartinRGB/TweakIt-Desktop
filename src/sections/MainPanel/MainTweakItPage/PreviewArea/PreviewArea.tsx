@@ -10,30 +10,56 @@ import '@Context/i18nContext'
 import initState from '@Config/init_state.json'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import { GraphUpdateContext } from '@Context/GraphUpdateContext';
-import MainButtonNormal from '@Components/MainButtonNormal'
+import MainButtonNormal from '@Components/MainButtonNormal';
+import Solver from '@Components/Solver';
+import DataDrivenAnimator from './DataDrivenAnimator'
 
 const PreviewArea: React.FC = ({children}) => {
   const { t ,i18n} = useTranslation()
 
   const [colorMode] = useColorMode();
 
-  const {currentSolverData,currentAnimCalculator} = useContext(
+  const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimName} = useContext(
     AnimatorTypeContext
   );
 
-  const {setGraphShouldUpdate,triggredIndex,setTriggeredIndex} = useContext(
+  const {triggredIndex,bezierTriggeredIndex} = useContext(
     GraphUpdateContext
   );
 
   const [animProperty,setAnimProerty] = useState<string>('scale')
-
-  console.log(currentSolverData)
-  const svgHeight = initState.svgHeight;
-
+  // strange bug here
+  const [cssAnimationProgress,setCSSAnimationProgress] = useState<number>(0)
   const setScale = () =>{setAnimProerty('scale')}
   const setTrans = () =>{setAnimProerty('translationY')}
   const setRot = () =>{setAnimProerty('rotate')}
-  const startAnimate = () => {}
+
+  const svgHeight = initState.svgHeight;
+
+  var startAnimator:any,endAnimator:any;
+
+  const startAnimate = () => {
+    const currSolver:any = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData);
+    const currSolverValueData = currSolver.getValueArray()
+    const currDuration = (durationData != -1)?durationData:currSolver.duration;
+
+    startAnimator = new DataDrivenAnimator(currSolverValueData);
+    startAnimator.setFromToDuration(0,1.,currDuration*1000)
+    startAnimator.start();
+    startAnimator.setOnFrameCallback(()=>{
+      setCSSAnimationProgress(startAnimator.getProgress());
+    })
+    startAnimator.setOnEndCallback(()=>{
+      endAnimator = new DataDrivenAnimator(currSolverValueData);
+      endAnimator.setFromToDuration(0,1,currDuration*1000)
+      endAnimator.delayStart(200);
+      endAnimator.setOnFrameCallback(()=>{
+        setCSSAnimationProgress(1. - endAnimator.getProgress());
+      })
+      endAnimator.setOnEndCallback(()=>{
+      })
+    })
+  }
 
   return (
     <Container>
@@ -42,17 +68,38 @@ const PreviewArea: React.FC = ({children}) => {
         style={{
           height:`${svgHeight}px`
         }}>
-        <Box></Box>
+        <Box
+          id="box"
+          style={{
+          
+          transform:`${(animProperty === 'rotate')?
+                        `rotate(${cssAnimationProgress*360}deg)`
+                        :
+                        (animProperty === 'scale')?
+                          `scale(${1+cssAnimationProgress*0.5})`
+                          :
+                          `translate3d(0,${cssAnimationProgress*-150}px,0px)`}`,
+          
+          }}
+          
+          >
+
+        </Box>
       </BoxContainer>
       <BtnContainer>
-        <MainButtonNormal onClick={setScale}><Trans>Scale</Trans></MainButtonNormal>
-        <MainButtonNormal onClick={setTrans}><Trans>Trans</Trans></MainButtonNormal>
-        <MainButtonNormal onClick={setRot}><Trans>Rot</Trans></MainButtonNormal>
-        
+        <MainButtonNormal style={{
+          cursor:`${(triggredIndex === -1 && bezierTriggeredIndex === -1 && (currentAnimName != 'HorizontalLine'))?'initial':'not-allowed'}`,
+          opacity:`${(triggredIndex === -1 && bezierTriggeredIndex === -1 && (currentAnimName != 'HorizontalLine'))?'1':'0.5'}`,
+        }} onClick={() =>{setScale();(triggredIndex === -1 && bezierTriggeredIndex === -1 && (currentAnimName != 'HorizontalLine'))?startAnimate():'';}}><Trans>Scale</Trans></MainButtonNormal>
+        <MainButtonNormal style={{
+          cursor:`${(triggredIndex === -1 && bezierTriggeredIndex === -1 && (currentAnimName != 'HorizontalLine'))?'initial':'not-allowed'}`,
+          opacity:`${(triggredIndex === -1 && bezierTriggeredIndex === -1 && (currentAnimName != 'HorizontalLine'))?'1':'0.5'}`,
+        }}onClick={() =>{setTrans();(triggredIndex === -1 && bezierTriggeredIndex === -1 && (currentAnimName != 'HorizontalLine'))?startAnimate():'';}}><Trans>Trans</Trans></MainButtonNormal>
+        <MainButtonNormal style={{
+          cursor:`${(triggredIndex === -1 && bezierTriggeredIndex === -1 && (currentAnimName != 'HorizontalLine'))?'initial':'not-allowed'}`,
+          opacity:`${(triggredIndex === -1 && bezierTriggeredIndex === -1 && (currentAnimName != 'HorizontalLine'))?'1':'0.5'}`,
+        }} onClick={() =>{setRot();(triggredIndex === -1 && bezierTriggeredIndex === -1 && (currentAnimName != 'HorizontalLine'))?startAnimate():'';}}><Trans>Rot</Trans></MainButtonNormal>
       </BtnContainer>
-      <RunContainer>
-        <MainButtonNormal onClick={startAnimate}><Trans>Run</Trans></MainButtonNormal>
-      </RunContainer>
     </Container>
   )
 }
@@ -89,16 +136,7 @@ const BtnContainer = styled.div`
   flex-direction: row;
   padding: 0 28px;
   height: 16px;
-`
-
-const RunContainer = styled.div`
-  width:100%;
-  display:flex;
-  align-items:center;
-  flex-direction: row;
-  padding: 0 28px;
   flex: 1;
-}
 `
 
 
