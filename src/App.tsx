@@ -45,7 +45,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <ADBExpandStateProvider>
-          <TitleBar>123</TitleBar>
+          <TitleBar>TWEAKIT</TitleBar>
           <ADBPanel></ADBPanel>
           <MainPanel></MainPanel>
         </ADBExpandStateProvider>

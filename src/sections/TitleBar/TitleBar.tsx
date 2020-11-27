@@ -92,14 +92,17 @@ const Container = styled.div`
     // -webkit-app-region: drag;
     z-index:10;
 `;
-
+//${props => props.theme.fonts.numberInput};
 
 const TitleBox = styled.div`
     text-align: center;
     line-height:38px;
-    font-size:12px;
-    font-weight: 500;
+    font-size:13px;
     position: absolute;
     width: 100%;
+    font-family: FUTURA; 
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 10px;
     color:${p => p.theme.colors.primary};
 `;

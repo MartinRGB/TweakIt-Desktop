@@ -14,10 +14,7 @@ const CanvasTitle: React.FC = ({}) => {
 
   return (
       <AnimationTitle>
-        {currentAnimName? 
-          <Trans>{currentAnimName}</Trans>:
-          <Trans>select_an_animator</Trans>
-        }
+          <Trans>{(currentAnimName && currentAnimName != 'HorizontalLine')?currentAnimName:'select_an_animator'}</Trans>
       </AnimationTitle>
 
   )
