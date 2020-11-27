@@ -2,6 +2,8 @@ import React, { createContext, useState } from "react";
 import initState from "@Config/init_state.json";
 
 export var GraphUpdateContext = createContext({
+  bezierTriggeredIndex: -1,
+  setBezierTriggeredIndex: (tag: number) => {},
   triggredIndex:-1,
   setTriggeredIndex: (tag: number) => {},
   shouldGraphUpdate: false,
@@ -20,6 +22,7 @@ export var GraphUpdateContext = createContext({
 var GraphUpdateProvider: React.FC<{}> = ({ children }) => {
   var [isUpdate, setIsUpdate] = useState<boolean>(false);
   var [index, setIndex] = useState<number>(-1);
+  var [bezierIndex, setBezierIndex] = useState<number>(-1);
 
   var [isDrag, setIsDrag] = useState<boolean>(false);
   var [dragValue, setDragValue] = useState<string>('');
@@ -32,6 +35,10 @@ var GraphUpdateProvider: React.FC<{}> = ({ children }) => {
 
   function setIndexAndSave(tag: number) {
     setIndex(tag);
+  }
+
+  function setBezierIndexAndSave(tag: number) {
+    setBezierIndex(tag);
   }
 
   function setIsDragAndSave(tag: boolean) {
@@ -54,6 +61,8 @@ var GraphUpdateProvider: React.FC<{}> = ({ children }) => {
   return (
     <GraphUpdateContext.Provider
       value={{
+        bezierTriggeredIndex: bezierIndex,
+        setBezierTriggeredIndex: setBezierIndexAndSave,
         triggredIndex:index,
         setTriggeredIndex: setIndexAndSave,
         shouldGraphUpdate:isUpdate,

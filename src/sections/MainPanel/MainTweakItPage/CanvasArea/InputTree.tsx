@@ -37,7 +37,7 @@ const InputTree: React.FC<IInputTree> = memo(({
   max,
 }) => {
 
-  const {previousDataRange,currentDataRange,setCurrentSolverDataByIndex,currentSolverData,currentAnimCalculator,previousSolverData} = useContext(
+  const {previousDataRange,currentDataRange,setCurrentSolverDataByIndex,currentSolverData,previousDataMin,currentAnimCalculator,previousSolverData} = useContext(
     AnimatorTypeContext
   );
 
@@ -55,16 +55,19 @@ const InputTree: React.FC<IInputTree> = memo(({
   //(previousSolverData[index] === undefined)?0:previousSolverData[index] -> current
   // 0 -> default
   // prev range
-  // console.log('ISSUE HERE')
-  // console.log(currentSolverData)
-  console.log('============= Input Tree ============')
-  console.log('prev SolvData  ---- ' + previousSolverData)
-  console.log('curr SolvData ----' + currentSolverData)
-  console.log('prev DataRange  ---- ' + previousDataRange)
-  console.log('curr DataRange ----' + currentDataRange)
-  console.log('============= Input Tree ============')
-  const [previousRangeValue,setPreviousRangeValue] = useState<number>((previousSolverData[index] === undefined)?0:previousSolverData[index]);
-  const [targetRangeValue,setTargetRangeValue] = useState<number>((currentSolverData[index] === undefined)?0:currentSolverData[index]);
+  // console.log('============= Input Tree ' + index + '============')
+  // console.log('prev SolvData  ---- ' + previousSolverData)
+  // console.log('curr SolvData ----' + currentSolverData)
+  // console.log('default Value ----' + defaultVal)
+  // console.log('prev DataRange  ---- ' + previousDataRange)
+  // console.log('curr DataRange ----' + currentDataRange)
+  const prevSolverData = (previousSolverData[index] === undefined)?min:(previousSolverData[index]);
+  const currSolverData = (currentSolverData[index]  === undefined)?defaultVal:currentSolverData[index];
+  const prevSolverRange = (previousDataRange[index] === undefined)?1:(previousDataRange[index]);
+  const prevSolverMin = (previousDataMin[index] === undefined)?0:(previousDataMin[index]);
+  const transedPrevSolverData = min + (prevSolverData - prevSolverMin)/prevSolverRange*(max-min);
+  const [previousRangeValue,setPreviousRangeValue] = useState<number>(min + transedPrevSolverData);
+  const [targetRangeValue,setTargetRangeValue] = useState<number>(currSolverData);
   const [isRangeAnimTriggered,setRangeAnimTriggered] = useState<boolean>(false);
 
   const [textValue,setTextValue] = useState<number>(defaultVal);
@@ -111,6 +114,8 @@ const InputTree: React.FC<IInputTree> = memo(({
       //console.log('input setting!')
     },
     onRest: () => {
+      // KEY BUG
+      setTriggeredIndex(-1)
       setPreviousRangeValue(rangeValue)
       setRangeAnimTriggered(false)
     }

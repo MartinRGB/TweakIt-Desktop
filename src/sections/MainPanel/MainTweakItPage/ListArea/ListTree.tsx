@@ -50,7 +50,7 @@ const ListTree: React.FC<IListTree> = memo(({
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
-  const { setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex} = useContext(
+  const { setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex} = useContext(
     AnimatorTypeContext
   );
 
@@ -112,17 +112,10 @@ const ListTree: React.FC<IListTree> = memo(({
                   setPreviousAnimName(currentAnimName);
                   setPreviousAnimCalculator(currentAnimCalculator);
                   setPreviousSolverData(currentSolverData);
-                  //setPreviousDataRange(currentDataRange)
-
                   console.log(currentAnimData)
-                  //console.log(Object.entries(animation_data))
-                  //这里的 animation_Data 是被点击 list 的，所以这样设置 Previous 用以出问题这里有问题
                   Object.entries(currentAnimData).map(function (data:any,index:number) {
-                    setPreviousDataRangeByIndex(data[1].max - data[1].min,index)
-                    //TODO 有问题
-                    //console.log('ISSUE HERE')
-                    // console.log(index)
-                    // console.log(data[1].)
+                    setPreviousDataMinByIndex(data[1][1].min,index)
+                    setPreviousDataRangeByIndex(data[1][1].max - data[1][1].min,index)
                   })
 
   
@@ -140,26 +133,14 @@ const ListTree: React.FC<IListTree> = memo(({
 
                   Object.entries(animation_data).map(function (data:any,index:number) {
                     setCurrentDataRangeByIndex(data[1].max - data[1].min,index)
-                    //TODO 有问题
-                    //console.log('ISSUE HERE')
-                    // console.log(index)
-                    // console.log(data[1].)
                     console.log(data[1].max - data[1].min)
                   })
-                
+
+                  // BUGS:Delete Comments will delete transition anim
                   // Object.entries(animation_data).map(function (data:any,index:number) {
                   //   setCurrentSolverDataByIndex(data[1].default,index)
                   // })
 
-                  //console.log(currentSolverData)
-
-                  console.log('============= List Tree ============')
-                  console.log('prev SolvData  ---- ' + previousSolverData)
-                  console.log('curr SolvData ----' + currentSolverData)
-                  console.log('prev DateRange  ---- ' + previousDataRange)
-                  console.log('curr DateRange ----' + currentDataRange)
-                  console.log('curr AnimData ----' + currentAnimData)
-                  console.log('============= List Tree ============')
 
                   setSelectTransition(true)
 

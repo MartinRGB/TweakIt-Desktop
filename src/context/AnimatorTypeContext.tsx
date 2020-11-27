@@ -19,6 +19,7 @@ export var AnimatorTypeContext = createContext({
   previousAnimData: [],
   previousSolverData:[],
   previousDataRange:[],
+  previousDataMin:[],
   setPreviousAnimName: (tag: string) => {},
   setPreviousAnimCalculator: (tag: string) => {},
   setPreviousAnimData:(tag: any) => {},
@@ -26,6 +27,8 @@ export var AnimatorTypeContext = createContext({
   setPreviousSolverDataByIndex:(value:number,index:number) =>{},
   setPreviousDataRange: (tag: any) => {},
   setPreviousDataRangeByIndex:(value:number,index:number) =>{},
+  setPreviousDataMin: (tag: any) => {},
+  setPreviousDataMinByIndex:(value:number,index:number) =>{},
   selectTransition:false,
   setSelectTransition:(tag: boolean) => {},
 });
@@ -44,6 +47,7 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
   const [mPrevAnimData, setPrevAnimData] = useState<any>([]);
   const [mPrevSolverData, setPrevSolverData] = useState<any>([]);
   const [mPrevDataRange,setPrevRangeData] = useState<any>([]);
+  const [mPrevDataMin,setPrevMinData] = useState<any>([]);
 
   const [mSelectTransition, setSelectTransition] = useState<boolean>(true);
   
@@ -135,6 +139,17 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
     setPrevRangeData(dataRange);
   }
 
+  function setPrevDataMinAndSave(tag: any) {
+    setPrevMinData(tag);
+  }
+
+  function setPrevDataMinByIndexAndSave(value: number,index:number) {
+    var dataMin:any = mPrevDataMin;
+    dataMin[index] = Number(value);
+    //console.log(solverData)
+    setPrevMinData(dataMin);
+  }
+
 
   function setSelectTransitionAndSave(tag: boolean) {
     setSelectTransition(tag);
@@ -161,6 +176,7 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
         previousAnimData:mPrevAnimData,
         previousSolverData:mPrevSolverData,
         previousDataRange:mPrevDataRange,
+        previousDataMin:mPrevDataMin,
         setPreviousAnimName: setPrevAnimNameAndSave,
         setPreviousAnimCalculator: setPrevAnimCalculatorAndSave,
         setPreviousAnimData: setPrevAnimDataAndSave,
@@ -168,6 +184,8 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
         setPreviousSolverDataByIndex: setPrevSolverDataByIndexAndSave,
         setPreviousDataRange: setPrevDataRangeAndSave,
         setPreviousDataRangeByIndex: setPrevDataRangeByIndexAndSave,
+        setPreviousDataMin:setPrevDataMinAndSave,
+        setPreviousDataMinByIndex:setPrevDataMinByIndexAndSave,
         selectTransition:mSelectTransition,
         setSelectTransition:setSelectTransitionAndSave,
       }}>

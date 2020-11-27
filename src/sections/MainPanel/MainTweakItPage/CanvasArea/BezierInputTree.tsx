@@ -63,7 +63,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     AnimatorTypeContext
   );
 
-  const {triggredIndex,setTriggeredIndex,setGraphShouldUpdate,shouldGraphupdate} = useContext(
+  const {setBezierTriggeredIndex,bezierTriggeredIndex,triggredIndex,setTriggeredIndex,setGraphShouldUpdate,shouldGraphupdate} = useContext(
     GraphUpdateContext
   );
 
@@ -101,7 +101,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
 
   //console.log('input tree rerender')
   useEffect(() => {
-    setTriggeredIndex(-1)
+    setBezierTriggeredIndex(-1)
   }, [])
 
   const {renderProgress}  = useSpring({
@@ -110,7 +110,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     config: animationConfig.bezier_input,
     //duration: 0,
     onFrame: () =>{
-      if(triggredIndex != -1){
+      if(bezierTriggeredIndex != -1){
         var fps_60 = Math.round((new Date().getTime() - progress1.startTime)/16);
         if(fps_60 %2 ==0){setGraphShouldUpdate(false)}
         else{setGraphShouldUpdate(true)}
@@ -128,7 +128,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     config: animationConfig.bezier_input,
     onFrame: () =>{
       var value = progress1.value.toFixed(2);
-      if(triggredIndex != -1) setCurrentSolverDataByIndex(value,0);
+      if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,0);
       console.log('bezier setting!')
     },
     onRest: () => {
@@ -144,7 +144,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     //duration: 0,
     onFrame: () =>{
       var value = progress2.value.toFixed(2);
-      if(triggredIndex != -1) setCurrentSolverDataByIndex(value,1);
+      if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,1);
     },
     onRest: () => {
       setPrev2(target2)
@@ -174,7 +174,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     //duration: 0,
     onFrame: () =>{
       var value = progress4.value.toFixed(2);
-      if(triggredIndex != -1) setCurrentSolverDataByIndex(value,3);
+      if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,3);
     },
     onRest: () => {
       setPrev4(target4)
@@ -216,7 +216,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
       setPrev4(Number(lmtVal.toString().split(",")[3]))
       setTarget4(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[3]),0)))
 
-      setTriggeredIndex(10)
+      setBezierTriggeredIndex(10)
       setGraphShouldUpdate(true)
       setTextPreviousValue(lmtVal);
       setStartAnimation(true)
@@ -261,7 +261,6 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
   const handleStart=(e:any,ui:any)=>{
   }
   const handleStop=(e:any,ui:any)=>{
-    console.log(currentSolverData)
     setPrev1(currentSolverData[0])
     setPrev2(currentSolverData[1])
     setPrev3(currentSolverData[2])
@@ -286,7 +285,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     var p2V = (boxHeight -  ui.y)/boxHeight
     setCurrentSolverDataByIndex(Number(p1V.toFixed(2)),0);
     setCurrentSolverDataByIndex(Number(p2V.toFixed(2)),1)
-    setTriggeredIndex(-1)
+    setBezierTriggeredIndex(-1)
     setStartAnimation(false)
     setGraphShouldUpdate(!shouldGraphupdate)
    
@@ -303,7 +302,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
    
     setCurrentSolverDataByIndex(Number(p3V.toFixed(2)),2);
     setCurrentSolverDataByIndex(Number(p4V.toFixed(2)),3)
-    setTriggeredIndex(-1)
+    setBezierTriggeredIndex(-1)
     setStartAnimation(false)
     setGraphShouldUpdate(!shouldGraphupdate)
 

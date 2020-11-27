@@ -39,7 +39,7 @@ const MainButtonNormal: React.FC<IButton> = ({ style,children , onClick}) => {
 }
 
 const AnimatedContainerCSS = css`
-  height:24px;
+  height:16px;
   flex:1;
   display:flex;
 `;
@@ -48,7 +48,7 @@ const AnimatedContainerCSS = css`
 const Button = styled.button`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
   width: 40px;
-  height: 24px;
+  height: 16px;
   border-radius:4px;
   padding: 0;
   background: ${p => p.theme.colors.normal_button_bg};
@@ -76,8 +76,8 @@ text-align: center;
 font-family: ${props => props.theme.fonts.numberInput};
 font-style: normal;
 font-weight: bold;
-font-size: 12px;
-line-height: 24px;
+font-size: 11px;
+line-height: 15px;
 `
 
 

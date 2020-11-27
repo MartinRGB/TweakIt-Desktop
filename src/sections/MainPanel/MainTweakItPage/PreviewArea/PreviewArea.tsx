@@ -27,7 +27,7 @@ const PreviewArea: React.FC = ({children}) => {
 
   const [animProperty,setAnimProerty] = useState<string>('scale')
 
-  //console.log(currentSolverData)
+  console.log(currentSolverData)
   const svgHeight = initState.svgHeight;
 
   const setScale = () =>{setAnimProerty('scale')}
@@ -88,7 +88,7 @@ const BtnContainer = styled.div`
   align-items:center;
   flex-direction: row;
   padding: 0 28px;
-  height: 24px;
+  height: 16px;
 `
 
 const RunContainer = styled.div`
