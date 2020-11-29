@@ -527,13 +527,17 @@ exports.CreateSolverByString = function (calculator, platform, name, data) {
         data.map(function (val, index) {
             if (Array.isArray(val)) {
                 val.map(function (d, i) {
-                    initParaStr += (i === 0 ? "" + d : "," + d);
+                    //initParaStr += (i === 0?`${d}`:`,${d}`)
+                    initParaStr += d + ",";
                 });
             }
             else {
-                initParaStr += (index === 0 ? "" + val : "," + val);
+                //initParaStr += (index === 0?`${val}`:`,${val}`)
+                initParaStr += val + ",";
             }
         });
+        initParaStr.slice(0, -1);
+        console.log(initParaStr);
     }
     console.log("new " + solverStr + "." + trimEmptyStr(platform) + "." + initClazzStr + "(" + initParaStr + ")");
     if (platform) {

@@ -660,12 +660,16 @@ export const CreateSolverByString = (calculator:string,platform:string,name:stri
         data.map(function (val:any,index:number) {
             if(Array.isArray(val)){
                 val.map(function(d:any,i:number){
-                    initParaStr += (i === 0?`${d}`:`,${d}`)
+                    //initParaStr += (i === 0?`${d}`:`,${d}`)
+                    initParaStr += `${d},`
                 })
             }else{
-                initParaStr += (index === 0?`${val}`:`,${val}`)
+                //initParaStr += (index === 0?`${val}`:`,${val}`)
+                initParaStr += `${val},`
             }
         })
+        initParaStr.slice(0, -1);
+        console.log(initParaStr)
     }
 
     console.log(`new ${solverStr}.${trimEmptyStr(platform)}.${initClazzStr}(${initParaStr})`)

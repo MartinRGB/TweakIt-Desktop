@@ -49,6 +49,7 @@ const TopContainer = styled.div`
     height: 100%;
     display: flex;
     flex-direction: row;
+    overflow:hidden;
     //flex:7;
     //min-height:528px;
 `

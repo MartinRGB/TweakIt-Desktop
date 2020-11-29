@@ -117,11 +117,6 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
                 console.log(data)
 
               if(index != currentAnimData.length - 1){
-                var p1:any = currentAnimData[index];
-                // var p2:any = currentAnimData[1];
-                // var p3:any = currentAnimData[2];
-                // var p4:any = currentAnimData[3];
-                console.log(p1)
                 console.log(currentSolverData[index])
                 return (
                 <BezierInputTree 
@@ -140,6 +135,10 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
                   svgStrokeWidth={svgStrokeWidth}
                   viewBoxHFixed={viewBoxHFixed}
                   viewBoxWFixed={viewBoxWFixed}
+                  startPointX={0.0}
+                  startPointY={0.0}
+                  endPointX={1.0}
+                  endPointY={1.0}
                   style={{
                     width:`100%`,
                     height:`${svgHeight}px`,
@@ -156,21 +155,18 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
           {/* {(isDoubleBezierCalculator)?(            
               currentAnimData.map(function (data:any,index:number) {
 
-              if(index === currentAnimData.length - 2){
-                var p1:any = currentAnimData[0];
-                var p2:any = currentAnimData[1];
-                var p3:any = currentAnimData[2];
-                var p4:any = currentAnimData[3];
+              if(index === 0){
                 return (
                 <BezierInputTree 
                   name={''}
-                  index={(0)}
+                  index={(index)}
                   isLast={false}
-                  defaultVal={[currentSolverData[0],currentSolverData[1],currentSolverData[2],currentSolverData[3]]}
-                  isDoubleBezier={false}
-                  isEditable={p1[1].editable}
-                  min={data[1].min}
-                  max={data[1].max}
+                  defaultVal={[currentSolverData[index]]} //,currentSolverData[1],currentSolverData[2],currentSolverData[3]
+                  isDoubleLast={false}
+                  isDoubleBezier={true}
+                  isEditable={currentAnimData[index][1].editable}
+                  min={currentAnimData[index][1].min}
+                  max={currentAnimData[index][1].max}
                   key={currentAnimName + 0}
                   svgWidth={svgWidth}
                   svgHeight={svgHeight}
@@ -178,6 +174,10 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
                   svgStrokeWidth={svgStrokeWidth}
                   viewBoxHFixed={viewBoxHFixed}
                   viewBoxWFixed={viewBoxWFixed}
+                  startPointX={0}
+                  startPointY={0}
+                  endPointX={currentAnimData[2][1].default}
+                  endPointY={currentAnimData[3][1].default}
                   style={{
                     width:`100%`,
                     height:`${svgHeight}px`,
@@ -187,6 +187,39 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
                   }}
                   >
                 </BezierInputTree>)
+              }
+              else if(index === 1){
+                return (
+                  <BezierInputTree 
+                    name={''}
+                    index={(index)}
+                    isLast={false}
+                    defaultVal={[currentSolverData[index]]} //,currentSolverData[1],currentSolverData[2],currentSolverData[3]
+                    isDoubleLast={true}
+                    isDoubleBezier={true}
+                    isEditable={currentAnimData[index][1].editable}
+                    min={currentAnimData[index][1].min}
+                    max={currentAnimData[index][1].max}
+                    key={currentAnimName + 0}
+                    svgWidth={svgWidth}
+                    svgHeight={svgHeight}
+                    svgScale={svgScale}
+                    svgStrokeWidth={svgStrokeWidth}
+                    viewBoxHFixed={viewBoxHFixed}
+                    viewBoxWFixed={viewBoxWFixed}
+                    startPointX={currentAnimData[2][1].default}
+                    startPointY={currentAnimData[3][1].default}
+                    endPointX={1}
+                    endPointY={1}
+                    style={{
+                      width:`100%`,
+                      height:`${svgHeight}px`,
+                      margin:`0 atuo`,
+                      position: `relative`,
+                      marginBottom:` 0px`,
+                    }}
+                    >
+                  </BezierInputTree>)
               }
             })):''} */}
 

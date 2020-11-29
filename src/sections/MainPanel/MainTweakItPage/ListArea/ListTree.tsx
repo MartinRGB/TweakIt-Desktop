@@ -64,6 +64,7 @@ const ListTree: React.FC<IListTree> = memo(({
   var PlatformIcon;
 
   //console.log('rerender')
+  console.log(platform)
 
   if(isUlElement){
     PlatformIcon = Icons[(platform.replace(/\s/g, "")!)];

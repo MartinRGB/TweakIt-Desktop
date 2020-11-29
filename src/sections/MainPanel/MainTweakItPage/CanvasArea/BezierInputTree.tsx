@@ -36,10 +36,15 @@ export interface IBezierInputTree{
   index:number;
   isLast?:boolean;
   isDoubleBezier?:boolean;
+  isDoubleLast?:boolean;
   isEditable?:boolean;
   name: string;
   calculator?:string
   defaultVal: any;
+  startPointX:number;
+  startPointY:number;
+  endPointX:number;
+  endPointY:number;
   min: any;
   max: any;
 }
@@ -48,6 +53,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
   style,
   isLast,
   isDoubleBezier,
+  isDoubleLast,
   isEditable,
   index,
   name,
@@ -59,6 +65,10 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
   viewBoxWFixed,
   isBezier,
   viewBoxHFixed,
+  startPointX,
+  startPointY,
+  endPointX,
+  endPointY,
 }) => {
 
   const {selectTransition,currentSolverData,setCurrentSolverDataByIndex} = useContext(
@@ -69,9 +79,14 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     GraphUpdateContext
   );
 
-  const boxWidth = svgWidth*(svgWidth/(svgWidth+viewBoxWFixed))*svgScale;
-  const boxHeight = svgHeight*(svgHeight/(svgHeight+viewBoxHFixed))*svgScale;
-  const boxPadding = 40;
+  const boxWidthO = svgWidth*(svgWidth/(svgWidth+viewBoxWFixed))*svgScale;
+  const boxHeightO = svgHeight*(svgHeight/(svgHeight+viewBoxHFixed))*svgScale;
+
+
+  const boxWidth = svgWidth*(svgWidth/(svgWidth+viewBoxWFixed))*svgScale*(endPointX - startPointX);
+  const boxHeight = svgHeight*(svgHeight/(svgHeight+viewBoxHFixed))*svgScale*(endPointY - startPointY);
+  const boxPaddingW = 40*(endPointX - startPointX);
+  const boxPaddingH = 40*(endPointY - startPointY);
   const circleRadius = 8;
 
   const { t, i18n } = useTranslation()
@@ -202,6 +217,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     
     var shouldFoward = (lmtVal === target.value)
 
+    console.log(lmtVal)
+
     if((lmtVal.toString().split(".").length - 1) > 4 || (lmtVal.toString().split(",").length - 1) > 3){
       lmtVal=textPreviousValue
       shouldFoward = false;
@@ -316,29 +333,52 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
 
 
   return (
-    <div>
+    <div
+      style={{
+        width:`${svgWidth}px`,
+        height:`${svgHeight}px`,
+        margin:`0 auto`,
+        position:`absolute`,
+        left: `50%`,
+        top: `50%`,
+        transform: `translate3d(-50%, -50%, 0px)`,
+
+      }}
+    >
+        <div
+        style={
+            {
+              width:`${boxWidth}px`,
+              height:`${boxHeight}px`,
+              margin: `0 auto`,
+              position: `absolute`,
+              left: `${svgHeight*(1 - svgScale) + boxWidthO*(startPointX)}px`,
+              bottom: `${svgHeight*(1-svgScale) + boxHeightO*(startPointY)  }px`,
+            }
+          }
+        >
         <CustomSVG
           canShow = {!selectTransition}
-          width={boxWidth + boxPadding} 
-          height={boxHeight + boxPadding} 
+          width={boxWidth + boxPaddingW} 
+          height={boxHeight + boxPaddingH} 
           
           >
           <g
           >
             <CustomBorderline
               isEditable={isEditable}
-              x1={boxPadding/2}
-              y1={boxPadding/2}
-              x2={boxWidth*currentSolverData[index][0]*transitionScale+boxPadding/2} 
-              y2={boxHeight*currentSolverData[index][1]*transitionScale+boxPadding/2}   
+              x1={boxPaddingW/2}
+              y1={boxPaddingH/2}
+              x2={boxWidth*currentSolverData[index][0]*transitionScale+boxPaddingW/2} 
+              y2={boxHeight*currentSolverData[index][1]*transitionScale+boxPaddingH/2}   
               strokeWidth={svgStrokeWidth/2}
             />
             <CustomBorderline
               isEditable={isEditable}
-              x1={boxWidth*(1-transitionScale) + boxWidth*currentSolverData[index][2]*transitionScale+boxPadding/2}
-              y1={boxHeight*(1-transitionScale) + boxHeight*currentSolverData[index][3]*transitionScale+boxPadding/2}
-              x2={boxWidth+boxPadding/2} 
-              y2={boxHeight+boxPadding/2}   
+              x1={boxWidth*(1-transitionScale) + boxWidth*currentSolverData[index][2]*transitionScale+boxPaddingW/2}
+              y1={boxHeight*(1-transitionScale) + boxHeight*currentSolverData[index][3]*transitionScale+boxPaddingH/2}
+              x2={boxWidth+boxPaddingW/2} 
+              y2={boxHeight+boxPaddingH/2}   
               strokeWidth={svgStrokeWidth/2}
             />
           </g>
@@ -349,8 +389,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
             width:`${boxWidth}px`,
             height:`${boxHeight}px`,
             transform:`translate3d(-50%,-50%,0) scale3d(1,1,1)`
-          }}
-        >
+          }}>
 
           <Draggable
             axis="both"
@@ -418,14 +457,16 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
           </Draggable>
 
 
-        </DraggableContainer>:<DraggableContainer
-          canShow={!selectTransition}
-          style={{
-            width:`${boxWidth}px`,
-            height:`${boxHeight}px`,
-            transform:`translate3d(-50%,-50%,0) scale3d(1,1,1)`
-          }}
-        >
+          </DraggableContainer>
+          :
+          <DraggableContainer
+            canShow={!selectTransition}
+            style={{
+              width:`${boxWidth}px`,
+              height:`${boxHeight}px`,
+              transform:`translate3d(-50%,-50%,0) scale3d(1,1,1)`
+            }}
+          >
 
               <DraggableCircle
                 canShow={!selectTransition}
@@ -460,8 +501,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
               ></DraggableCircle>
 
 
-        </DraggableContainer>
-        }
+          </DraggableContainer>
+        }</div>
         <TextInput 
         id={'bezier_input'}
         value={textValue}
@@ -469,14 +510,19 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
         step={0.01} 
 
         style={{
-          width:'100%',
+          width:`${isDoubleBezier?'auto':'100%'}`,
           height:'auto',
-          marginLeft:'0px',
+          margin:'0 auto',
           background:'transparent',
           border:'none',
           fontSize:'12px',
           position:'absolute',
-          bottom:'42px',
+          bottom:`${isDoubleBezier?`${isDoubleLast?'':'42px'}`:'42px'}`,
+          top:`${isDoubleBezier?`${isDoubleLast?'42px':''}`:''}`,
+          left:`${isDoubleBezier?`${isDoubleLast?'':'0px'}`:''}`,
+          right:`${isDoubleBezier?`${isDoubleLast?'0px':''}`:''}`,
+          // left: `50%`,
+          // transform: `translate3d(-50%, 0%, 0px)`,
         }}
 
         onChange={(e: React.FormEvent<HTMLInputElement>) => {

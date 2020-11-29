@@ -29,5 +29,5 @@ var MainTweakItPage = function (_a) {
 };
 exports["default"] = MainTweakItPage;
 var Container = styled_1["default"].div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n"], ["\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n"])));
-var TopContainer = styled_1["default"].div(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    //flex:7;\n    //min-height:528px;\n"], ["\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    //flex:7;\n    //min-height:528px;\n"])));
+var TopContainer = styled_1["default"].div(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    overflow:hidden;\n    //flex:7;\n    //min-height:528px;\n"], ["\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n    overflow:hidden;\n    //flex:7;\n    //min-height:528px;\n"])));
 var templateObject_1, templateObject_2;

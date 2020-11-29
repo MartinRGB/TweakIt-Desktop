@@ -17,12 +17,15 @@ var AnimatorTypeContext_1 = require("@Context/AnimatorTypeContext");
 var GraphUpdateContext_1 = require("@Context/GraphUpdateContext");
 var react_draggable_1 = require("react-draggable");
 var BezierInputTree = react_1.memo(function (_a) {
-    var style = _a.style, isLast = _a.isLast, isDoubleBezier = _a.isDoubleBezier, isEditable = _a.isEditable, index = _a.index, name = _a.name, defaultVal = _a.defaultVal, svgHeight = _a.svgHeight, svgWidth = _a.svgWidth, svgScale = _a.svgScale, svgStrokeWidth = _a.svgStrokeWidth, viewBoxWFixed = _a.viewBoxWFixed, isBezier = _a.isBezier, viewBoxHFixed = _a.viewBoxHFixed;
+    var style = _a.style, isLast = _a.isLast, isDoubleBezier = _a.isDoubleBezier, isDoubleLast = _a.isDoubleLast, isEditable = _a.isEditable, index = _a.index, name = _a.name, defaultVal = _a.defaultVal, svgHeight = _a.svgHeight, svgWidth = _a.svgWidth, svgScale = _a.svgScale, svgStrokeWidth = _a.svgStrokeWidth, viewBoxWFixed = _a.viewBoxWFixed, isBezier = _a.isBezier, viewBoxHFixed = _a.viewBoxHFixed, startPointX = _a.startPointX, startPointY = _a.startPointY, endPointX = _a.endPointX, endPointY = _a.endPointY;
     var _b = react_1.useContext(AnimatorTypeContext_1.AnimatorTypeContext), selectTransition = _b.selectTransition, currentSolverData = _b.currentSolverData, setCurrentSolverDataByIndex = _b.setCurrentSolverDataByIndex;
     var _c = react_1.useContext(GraphUpdateContext_1.GraphUpdateContext), setBezierTriggeredIndex = _c.setBezierTriggeredIndex, bezierTriggeredIndex = _c.bezierTriggeredIndex, setGraphShouldUpdate = _c.setGraphShouldUpdate, shouldGraphupdate = _c.shouldGraphupdate;
-    var boxWidth = svgWidth * (svgWidth / (svgWidth + viewBoxWFixed)) * svgScale;
-    var boxHeight = svgHeight * (svgHeight / (svgHeight + viewBoxHFixed)) * svgScale;
-    var boxPadding = 40;
+    var boxWidthO = svgWidth * (svgWidth / (svgWidth + viewBoxWFixed)) * svgScale;
+    var boxHeightO = svgHeight * (svgHeight / (svgHeight + viewBoxHFixed)) * svgScale;
+    var boxWidth = svgWidth * (svgWidth / (svgWidth + viewBoxWFixed)) * svgScale * (endPointX - startPointX);
+    var boxHeight = svgHeight * (svgHeight / (svgHeight + viewBoxHFixed)) * svgScale * (endPointY - startPointY);
+    var boxPaddingW = 40 * (endPointX - startPointX);
+    var boxPaddingH = 40 * (endPointY - startPointY);
     var circleRadius = 8;
     var _d = react_i18next_1.useTranslation(), t = _d.t, i18n = _d.i18n;
     var colorMode = theme_ui_1.useColorMode()[0];
@@ -138,6 +141,7 @@ var BezierInputTree = react_1.memo(function (_a) {
         var lmtVal = target.value.replace(/[^\?\d,.]/g, '');
         var position = target.selectionStart; // Capture initial position
         var shouldFoward = (lmtVal === target.value);
+        console.log(lmtVal);
         if ((lmtVal.toString().split(".").length - 1) > 4 || (lmtVal.toString().split(",").length - 1) > 3) {
             lmtVal = textPreviousValue;
             shouldFoward = false;
@@ -223,79 +227,100 @@ var BezierInputTree = react_1.memo(function (_a) {
         setGraphShouldUpdate(!shouldGraphupdate);
         setTextValue(currentSolverData[index][0] + "," + currentSolverData[index][1] + "," + p3V.toFixed(2) + "," + p4V.toFixed(2));
     };
-    return (react_1["default"].createElement("div", null,
-        react_1["default"].createElement(CustomSVG, { canShow: !selectTransition, width: boxWidth + boxPadding, height: boxHeight + boxPadding },
-            react_1["default"].createElement("g", null,
-                react_1["default"].createElement(CustomBorderline, { isEditable: isEditable, x1: boxPadding / 2, y1: boxPadding / 2, x2: boxWidth * currentSolverData[index][0] * transitionScale + boxPadding / 2, y2: boxHeight * currentSolverData[index][1] * transitionScale + boxPadding / 2, strokeWidth: svgStrokeWidth / 2 }),
-                react_1["default"].createElement(CustomBorderline, { isEditable: isEditable, x1: boxWidth * (1 - transitionScale) + boxWidth * currentSolverData[index][2] * transitionScale + boxPadding / 2, y1: boxHeight * (1 - transitionScale) + boxHeight * currentSolverData[index][3] * transitionScale + boxPadding / 2, x2: boxWidth + boxPadding / 2, y2: boxHeight + boxPadding / 2, strokeWidth: svgStrokeWidth / 2 }))),
-        isEditable ? react_1["default"].createElement(DraggableContainer, { canShow: !selectTransition, style: {
+    return (react_1["default"].createElement("div", { style: {
+            width: svgWidth + "px",
+            height: svgHeight + "px",
+            margin: "0 auto",
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translate3d(-50%, -50%, 0px)"
+        } },
+        react_1["default"].createElement("div", { style: {
                 width: boxWidth + "px",
                 height: boxHeight + "px",
-                transform: "translate3d(-50%,-50%,0) scale3d(1,1,1)"
+                margin: "0 auto",
+                position: "absolute",
+                left: svgHeight * (1 - svgScale) + boxWidthO * (startPointX) + "px",
+                bottom: svgHeight * (1 - svgScale) + boxHeightO * (startPointY) + "px"
             } },
-            react_1["default"].createElement(react_draggable_1["default"], { axis: "both", handle: ".handle", position: { x: boxWidth * currentSolverData[index][0] * transitionScale, y: boxHeight - boxHeight * currentSolverData[index][1] * transitionScale }, 
-                // position={{x:isDragInit?(boxWidth*currentSolverData[0]*transitionScale):null,y:isDragInit?(boxHeight - boxHeight*currentSolverData[1]*transitionScale):null}}
-                scale: 1, bounds: { top: -boxHeight / 2, left: 0, right: boxWidth, bottom: boxHeight + boxHeight / 2 }, 
-                // position={null}
-                onStart: handleStart, onDrag: handleDragLeft, onStop: handleStop },
-                react_1["default"].createElement(DraggableCircle, { className: "handle", canShow: !selectTransition, isEditable: isEditable, radius: circleRadius, onMouseDown: function () {
-                        //addDragEvent(document.getElementById('draggable_1'),true)
-                    }, style: {
-                        // left:`${boxWidth*currentSolverData[0]*transitionScale}px`,
-                        // top:`${boxHeight - boxHeight*currentSolverData[1]*transitionScale}px`,
-                        // transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`
-                        width: transitionScale * circleRadius + "px",
-                        height: transitionScale * circleRadius + "px",
-                        left: -circleRadius / 2 * transitionScale + "px",
-                        top: -circleRadius / 2 * transitionScale + "px"
-                    } })),
-            react_1["default"].createElement(react_draggable_1["default"], { axis: "both", handle: ".handle", position: { x: boxWidth * (1 - transitionScale) + boxWidth * currentSolverData[index][2] * transitionScale, y: boxHeight * (1 - currentSolverData[index][3]) * transitionScale }, 
-                // position={{x:isDragInit?(boxWidth*currentSolverData[0]*transitionScale):null,y:isDragInit?(boxHeight - boxHeight*currentSolverData[1]*transitionScale):null}}
-                scale: 1, bounds: { top: -boxHeight / 2, left: 0, right: boxWidth, bottom: boxHeight + boxHeight / 2 }, 
-                // position={null}
-                onStart: handleStart, onDrag: handleDragRight, onStop: handleStop },
-                react_1["default"].createElement(DraggableCircle, { className: "handle", canShow: !selectTransition, radius: circleRadius, isEditable: isEditable, onMouseDown: function () {
-                        //addDragEvent(document.getElementById('draggable_1'),true)
-                    }, style: {
-                        // left:`${boxWidth*currentSolverData[0]*transitionScale}px`,
-                        // top:`${boxHeight - boxHeight*currentSolverData[1]*transitionScale}px`,
-                        // transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`
-                        width: transitionScale * circleRadius + "px",
-                        height: transitionScale * circleRadius + "px",
-                        left: -circleRadius / 2 * transitionScale + "px",
-                        top: -circleRadius / 2 * transitionScale + "px"
-                    } }))) : react_1["default"].createElement(DraggableContainer, { canShow: !selectTransition, style: {
-                width: boxWidth + "px",
-                height: boxHeight + "px",
-                transform: "translate3d(-50%,-50%,0) scale3d(1,1,1)"
-            } },
-            react_1["default"].createElement(DraggableCircle, { canShow: !selectTransition, isEditable: isEditable, radius: circleRadius, onMouseDown: function () {
-                    //addDragEvent(document.getElementById('draggable_1'),true)
-                }, style: {
-                    left: boxWidth * currentSolverData[index][0] * transitionScale + "px",
-                    top: boxHeight - boxHeight * currentSolverData[index][1] * transitionScale + "px",
-                    transform: "translate3d(" + -circleRadius / 2 + "px," + -circleRadius / 2 + "px,0) scale3d(" + transitionScale + "," + transitionScale + ",1)",
-                    width: transitionScale * circleRadius + "px",
-                    height: transitionScale * circleRadius + "px"
-                } }),
-            react_1["default"].createElement(DraggableCircle, { canShow: !selectTransition, radius: circleRadius, isEditable: isEditable, onMouseDown: function () {
-                    //addDragEvent(document.getElementById('draggable_1'),true)
-                }, style: {
-                    left: boxWidth * (1 - transitionScale) + boxWidth * currentSolverData[index][2] * transitionScale + "px",
-                    top: boxHeight * (1 - currentSolverData[index][3]) * transitionScale + "px",
-                    transform: "translate3d(" + -circleRadius / 2 + "px," + -circleRadius / 2 + "px,0) scale3d(" + transitionScale + "," + transitionScale + ",1)",
-                    width: transitionScale * circleRadius + "px",
-                    height: transitionScale * circleRadius + "px"
-                } })),
+            react_1["default"].createElement(CustomSVG, { canShow: !selectTransition, width: boxWidth + boxPaddingW, height: boxHeight + boxPaddingH },
+                react_1["default"].createElement("g", null,
+                    react_1["default"].createElement(CustomBorderline, { isEditable: isEditable, x1: boxPaddingW / 2, y1: boxPaddingH / 2, x2: boxWidth * currentSolverData[index][0] * transitionScale + boxPaddingW / 2, y2: boxHeight * currentSolverData[index][1] * transitionScale + boxPaddingH / 2, strokeWidth: svgStrokeWidth / 2 }),
+                    react_1["default"].createElement(CustomBorderline, { isEditable: isEditable, x1: boxWidth * (1 - transitionScale) + boxWidth * currentSolverData[index][2] * transitionScale + boxPaddingW / 2, y1: boxHeight * (1 - transitionScale) + boxHeight * currentSolverData[index][3] * transitionScale + boxPaddingH / 2, x2: boxWidth + boxPaddingW / 2, y2: boxHeight + boxPaddingH / 2, strokeWidth: svgStrokeWidth / 2 }))),
+            isEditable ? react_1["default"].createElement(DraggableContainer, { canShow: !selectTransition, style: {
+                    width: boxWidth + "px",
+                    height: boxHeight + "px",
+                    transform: "translate3d(-50%,-50%,0) scale3d(1,1,1)"
+                } },
+                react_1["default"].createElement(react_draggable_1["default"], { axis: "both", handle: ".handle", position: { x: boxWidth * currentSolverData[index][0] * transitionScale, y: boxHeight - boxHeight * currentSolverData[index][1] * transitionScale }, 
+                    // position={{x:isDragInit?(boxWidth*currentSolverData[0]*transitionScale):null,y:isDragInit?(boxHeight - boxHeight*currentSolverData[1]*transitionScale):null}}
+                    scale: 1, bounds: { top: -boxHeight / 2, left: 0, right: boxWidth, bottom: boxHeight + boxHeight / 2 }, 
+                    // position={null}
+                    onStart: handleStart, onDrag: handleDragLeft, onStop: handleStop },
+                    react_1["default"].createElement(DraggableCircle, { className: "handle", canShow: !selectTransition, isEditable: isEditable, radius: circleRadius, onMouseDown: function () {
+                            //addDragEvent(document.getElementById('draggable_1'),true)
+                        }, style: {
+                            // left:`${boxWidth*currentSolverData[0]*transitionScale}px`,
+                            // top:`${boxHeight - boxHeight*currentSolverData[1]*transitionScale}px`,
+                            // transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`
+                            width: transitionScale * circleRadius + "px",
+                            height: transitionScale * circleRadius + "px",
+                            left: -circleRadius / 2 * transitionScale + "px",
+                            top: -circleRadius / 2 * transitionScale + "px"
+                        } })),
+                react_1["default"].createElement(react_draggable_1["default"], { axis: "both", handle: ".handle", position: { x: boxWidth * (1 - transitionScale) + boxWidth * currentSolverData[index][2] * transitionScale, y: boxHeight * (1 - currentSolverData[index][3]) * transitionScale }, 
+                    // position={{x:isDragInit?(boxWidth*currentSolverData[0]*transitionScale):null,y:isDragInit?(boxHeight - boxHeight*currentSolverData[1]*transitionScale):null}}
+                    scale: 1, bounds: { top: -boxHeight / 2, left: 0, right: boxWidth, bottom: boxHeight + boxHeight / 2 }, 
+                    // position={null}
+                    onStart: handleStart, onDrag: handleDragRight, onStop: handleStop },
+                    react_1["default"].createElement(DraggableCircle, { className: "handle", canShow: !selectTransition, radius: circleRadius, isEditable: isEditable, onMouseDown: function () {
+                            //addDragEvent(document.getElementById('draggable_1'),true)
+                        }, style: {
+                            // left:`${boxWidth*currentSolverData[0]*transitionScale}px`,
+                            // top:`${boxHeight - boxHeight*currentSolverData[1]*transitionScale}px`,
+                            // transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`
+                            width: transitionScale * circleRadius + "px",
+                            height: transitionScale * circleRadius + "px",
+                            left: -circleRadius / 2 * transitionScale + "px",
+                            top: -circleRadius / 2 * transitionScale + "px"
+                        } })))
+                :
+                    react_1["default"].createElement(DraggableContainer, { canShow: !selectTransition, style: {
+                            width: boxWidth + "px",
+                            height: boxHeight + "px",
+                            transform: "translate3d(-50%,-50%,0) scale3d(1,1,1)"
+                        } },
+                        react_1["default"].createElement(DraggableCircle, { canShow: !selectTransition, isEditable: isEditable, radius: circleRadius, onMouseDown: function () {
+                                //addDragEvent(document.getElementById('draggable_1'),true)
+                            }, style: {
+                                left: boxWidth * currentSolverData[index][0] * transitionScale + "px",
+                                top: boxHeight - boxHeight * currentSolverData[index][1] * transitionScale + "px",
+                                transform: "translate3d(" + -circleRadius / 2 + "px," + -circleRadius / 2 + "px,0) scale3d(" + transitionScale + "," + transitionScale + ",1)",
+                                width: transitionScale * circleRadius + "px",
+                                height: transitionScale * circleRadius + "px"
+                            } }),
+                        react_1["default"].createElement(DraggableCircle, { canShow: !selectTransition, radius: circleRadius, isEditable: isEditable, onMouseDown: function () {
+                                //addDragEvent(document.getElementById('draggable_1'),true)
+                            }, style: {
+                                left: boxWidth * (1 - transitionScale) + boxWidth * currentSolverData[index][2] * transitionScale + "px",
+                                top: boxHeight * (1 - currentSolverData[index][3]) * transitionScale + "px",
+                                transform: "translate3d(" + -circleRadius / 2 + "px," + -circleRadius / 2 + "px,0) scale3d(" + transitionScale + "," + transitionScale + ",1)",
+                                width: transitionScale * circleRadius + "px",
+                                height: transitionScale * circleRadius + "px"
+                            } }))),
         react_1["default"].createElement(TextInput_1["default"], { id: 'bezier_input', value: textValue, isEditable: isEditable, step: 0.01, style: {
-                width: '100%',
+                width: "" + (isDoubleBezier ? 'auto' : '100%'),
                 height: 'auto',
-                marginLeft: '0px',
+                margin: '0 auto',
                 background: 'transparent',
                 border: 'none',
                 fontSize: '12px',
                 position: 'absolute',
-                bottom: '42px'
+                bottom: "" + (isDoubleBezier ? "" + (isDoubleLast ? '' : '42px') : '42px'),
+                top: "" + (isDoubleBezier ? "" + (isDoubleLast ? '42px' : '') : ''),
+                left: "" + (isDoubleBezier ? "" + (isDoubleLast ? '' : '0px') : ''),
+                right: "" + (isDoubleBezier ? "" + (isDoubleLast ? '0px' : '') : '')
             }, onChange: function (e) {
                 e.preventDefault();
                 isEditable ? handleBezierTextChange(e) : '';

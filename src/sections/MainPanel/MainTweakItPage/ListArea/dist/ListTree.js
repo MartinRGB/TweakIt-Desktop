@@ -45,6 +45,7 @@ var ListTree = react_1.memo(function (_a) {
     // TODO
     var PlatformIcon;
     //console.log('rerender')
+    console.log(platform);
     if (isUlElement) {
         PlatformIcon = icons_1["default"][(platform.replace(/\s/g, ""))];
     }

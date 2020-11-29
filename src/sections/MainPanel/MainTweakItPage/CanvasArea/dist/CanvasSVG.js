@@ -46,13 +46,8 @@ var CanvasSVG = function (_a) {
         (isBezierCalculator) ? (currentAnimData.map(function (data, index) {
             console.log(data);
             if (index != currentAnimData.length - 1) {
-                var p1 = currentAnimData[index];
-                // var p2:any = currentAnimData[1];
-                // var p3:any = currentAnimData[2];
-                // var p4:any = currentAnimData[3];
-                console.log(p1);
                 console.log(currentSolverData[index]);
-                return (react_1["default"].createElement(BezierInputTree_1["default"], { name: '', index: (index), isLast: false, defaultVal: [currentSolverData[index]], isDoubleBezier: false, isEditable: currentAnimData[index][1].editable, min: currentAnimData[index][1].min, max: currentAnimData[index][1].max, key: currentAnimName + 0, svgWidth: svgWidth, svgHeight: svgHeight, svgScale: svgScale, svgStrokeWidth: svgStrokeWidth, viewBoxHFixed: viewBoxHFixed, viewBoxWFixed: viewBoxWFixed, style: {
+                return (react_1["default"].createElement(BezierInputTree_1["default"], { name: '', index: (index), isLast: false, defaultVal: [currentSolverData[index]], isDoubleBezier: false, isEditable: currentAnimData[index][1].editable, min: currentAnimData[index][1].min, max: currentAnimData[index][1].max, key: currentAnimName + 0, svgWidth: svgWidth, svgHeight: svgHeight, svgScale: svgScale, svgStrokeWidth: svgStrokeWidth, viewBoxHFixed: viewBoxHFixed, viewBoxWFixed: viewBoxWFixed, startPointX: 0.0, startPointY: 0.0, endPointX: 1.0, endPointY: 1.0, style: {
                         width: "100%",
                         height: svgHeight + "px",
                         margin: "0 atuo",
