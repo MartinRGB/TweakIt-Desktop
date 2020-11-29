@@ -22,7 +22,9 @@ import { ListSelectStateContext } from '@Context/ListSelectStateContext';
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 
 
-const ListTree: React.FC<IListTree> = memo(({ 
+const ListTree: React.FC<IListTree> = memo(({
+  clickable, 
+  platform,
   children, 
   name, 
   style,
@@ -31,7 +33,8 @@ const ListTree: React.FC<IListTree> = memo(({
   isUlElement, 
   index, 
   animation_data,
-  calculator}) => {
+  calculator,
+  visible,}) => {
 
   const { t, i18n } = useTranslation()
 
@@ -47,7 +50,7 @@ const ListTree: React.FC<IListTree> = memo(({
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
-  const { setDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex} = useContext(
+  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex} = useContext(
     AnimatorTypeContext
   );
 
@@ -63,7 +66,7 @@ const ListTree: React.FC<IListTree> = memo(({
   //console.log('rerender')
 
   if(isUlElement){
-    PlatformIcon = Icons[(name.replace(/\s/g, "")!)];
+    PlatformIcon = Icons[(platform.replace(/\s/g, "")!)];
   }
 
   return (
@@ -92,19 +95,20 @@ const ListTree: React.FC<IListTree> = memo(({
               marginTop: `-2px`,
             }}></PlatformIcon>:<div></div>
           }
-          <UlTitle style={style}><Trans>{name}</Trans></UlTitle>
+          <UlTitle style={style}><Trans>{platform}</Trans></UlTitle>
         </div> :
 
         <div>
-          {name === "Divide" ?
-            <div css={css`height:1px`}></div> :
-            <LiTitle style={{ ...style }} css={Toggle} isSelected={currentAnimationItem === info } 
+          {!visible?
+            <div css={css`height:3px`}></div> :
+            <LiTitle style={{ ...style }} isClickable={clickable} isSelected={currentAnimationItem === info } 
             onClick={() => 
               {
-                if(name != "Divide" && (currentAnimationItem != info)){
+                if((currentAnimationItem != info) && clickable){
 
 
                   // TODO Work for GraphTransition,but not For Input
+                  setPreviousAnimPlatform(currentAnimPlatform);
                   setPreviousAnimName(currentAnimName);
                   setPreviousAnimCalculator(currentAnimCalculator);
                   setPreviousSolverData(currentSolverData);
@@ -113,9 +117,8 @@ const ListTree: React.FC<IListTree> = memo(({
                     setPreviousDataRangeByIndex(data[1][1].max - data[1][1].min,index)
                   })
 
-  
-
                   selectAnimationItem(info)
+                  setCurrentAnimPlatform(platform);
                   setCurrentAnimName(name)
                   setCurrentAnimCalculator(calculator)
 
@@ -221,6 +224,7 @@ const Frame = styled('div')`
 
 const LiTitle = styled.span<{
   isSelected: boolean;
+  isClickable:boolean;
 }>`
   vertical-align: middle;
   user-select:none;
@@ -231,7 +235,8 @@ const LiTitle = styled.span<{
   line-height: 11px;
   margin-left: 25px;
   color:${p => (p.isSelected ? p.theme.colors.primary : p.theme.colors.text)};
-  opacity:0.8;
+  opacity:${p => (p.isClickable ? '0.8':'0.4')};
+  cursor:${p => (p.isClickable ? 'pointer':'not-allowed')};
 `
 
 const UlTitle = styled('span')`

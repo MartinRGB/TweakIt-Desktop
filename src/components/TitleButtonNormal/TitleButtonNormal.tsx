@@ -32,7 +32,9 @@ const TitleButtonNormal: React.FC<IButton> = ({ style,children , onClick}) => {
       <Button
         style={style}
         onClick={onClick}>
-        {children}
+          <div>
+            {children}
+          </div>
       </Button>
   </animated.div>);
 
@@ -59,13 +61,13 @@ const Button = styled.button`
   left:0;
   border: 0.5px solid rgba(255, 255, 255, 0.06);
 
-  > svg{
+  > div > svg{
 
     height: 20px;
     position: absolute;
     top: -1px;
     text-align: center;
-    left: 4px;
+    left: 3px;
 
     vertical-align: middle;
     fill: ${p => p.theme.colors.text};
@@ -76,7 +78,7 @@ const Button = styled.button`
     background: ${p => p.theme.colors.normal_button_active};
   }
 
-  &:active  > svg{
+  &:active  > div > svg{
     fill: ${p => p.theme.colors.background};
   }
 `;

@@ -26,24 +26,25 @@ const SVGFakeGraph: React.FC<ISVG> = ({
 
     useContext(ListSelectStateContext)
 
-    const { currentAnimName, currentAnimCalculator,currentSolverData,previousAnimName, previousAnimCalculator, previousSolverData,selectTransition,setSelectTransition} = useContext(
+    const { currentAnimPlatform,previousAnimPlatform,currentAnimName, currentAnimCalculator,currentSolverData,previousAnimName, previousAnimCalculator, previousSolverData,selectTransition,setSelectTransition} = useContext(
       AnimatorTypeContext
     );
   
     Solver.setCalculatorSamplePointNumber(svgPointNumber?svgPointNumber:50)
-    Solver.setCalculatorSampleScale(svgPointScale?svgPointScale:3)
+    Solver.setCalculatorSampleScale(svgPointScale?svgPointScale:3);
   
-    const currStepData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData).getStepArray();
-    const currValueData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData).getValueArray();
+    const currStepData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getStepArray();
+    const currValueData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getValueArray();
 
     var mSVGData;
     
     var t = 0;
     if(selectTransition){
 
-      const prevStepData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimName,previousSolverData).getStepArray();
-      const prevValueData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimName,previousSolverData).getValueArray();
+      const prevStepData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimPlatform,previousAnimName,previousSolverData).getStepArray();
+      const prevValueData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimPlatform,previousAnimName,previousSolverData).getValueArray();
 
+      const springValueData = new Solver.Android.Spring(800,0.5,0).getValueArray();
       var animInterval = setInterval(()=>{
         t += 1;
         if(t >= currValueData.length){
@@ -53,10 +54,10 @@ const SVGFakeGraph: React.FC<ISVG> = ({
           clearInterval(animInterval)
         }
         else{
-          mSVGData = SVGTransitionTemplate_50(prevStepData,prevValueData,currStepData,currValueData,svgWidth,svgHeight,currValueData[t]);
+          mSVGData = SVGTransitionTemplate_50(prevStepData,prevValueData,currStepData,currValueData,svgWidth,svgHeight,springValueData[t]);
           document.getElementById('pathEl')?.setAttribute('d',mSVGData)
         }
-      } ,5)
+      } ,10)
     }
 
   return (<CustomSVG

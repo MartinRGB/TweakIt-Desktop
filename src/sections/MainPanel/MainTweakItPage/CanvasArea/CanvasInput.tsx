@@ -3,6 +3,7 @@ import '@Context/i18nContext'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 
 import InputTree from './InputTree'
+import initState from '@Config/init_state.json'
 
 const CanvasInput: React.FC = ({}) => {
   
@@ -15,7 +16,7 @@ const CanvasInput: React.FC = ({}) => {
   
   return (
     <div>
-    {(currentAnimName != 'HorizontalLine')?(
+    {(currentAnimName != initState.initAnimName)?(
           isBezierCalculator?
             currentAnimData.map(function (data:any,index:number) {
               if(index === currentAnimData.length - 1){
@@ -79,7 +80,7 @@ const CanvasInput: React.FC = ({}) => {
           name={'property'}
           index={0}
           isLast={true}
-          defaultVal={0.5}
+          defaultVal={initState.initSliderValue}
           isEditable={false}
           min={0}
           max={1}

@@ -1,12 +1,12 @@
-import { SpringAnimationCalculator } from './BaseCalculator'
+import { SpringAnimationCalculator } from '@Components/Solver/Calculator/BaseCalculator'
 
 export class AndroidSpring extends SpringAnimationCalculator {
-  constructor (stiffness:number, dampingratio:number, velocity:number) {
+  constructor (stiffness?:number, dampingratio?:number, velocity?:number) {
     super()
 
-    this.stiffness = stiffness
-    this.dampingratio = dampingratio
-    this.velocity = velocity
+    this.stiffness = stiffness?stiffness:1500;
+    this.dampingratio = dampingratio?dampingratio:0.5;
+    this.velocity = velocity?velocity:0;
     this.mass = 1.0
     this.fixedGraph = false
 
@@ -19,13 +19,13 @@ export class AndroidSpring extends SpringAnimationCalculator {
 }
 
 export class FramerDHOSpring extends SpringAnimationCalculator {
-  constructor (stiffness:number, damping:number, mass:number, velocity:number) {
+  constructor (stiffness?:number, damping?:number, mass?:number, velocity?:number) {
     super()
 
-    this.stiffness = stiffness
-    this.damping = damping
-    this.mass = mass
-    this.velocity = velocity
+    this.stiffness = stiffness?stiffness:50;
+    this.damping = damping?damping:2;
+    this.mass = mass?mass:1;
+    this.velocity = velocity?velocity:0;
     this.fixedGraph = true
 
     this.tension = this.stiffness
@@ -46,19 +46,19 @@ export class FramerDHOSpring extends SpringAnimationCalculator {
   }
 }
 
-export class CASpring extends FramerDHOSpring{
-  constructor (stiffness:number, damping:number, mass:number, velocity:number) {
-    super(stiffness,damping,mass,velocity)
+export class iOSCASpring extends FramerDHOSpring{
+  constructor (stiffness?:number, damping?:number, mass?:number, velocity?:number) {
+    super(stiffness?stiffness:100,damping?damping:10,mass?mass:1,velocity?velocity:0)
   }
 }
 
 export class FramerRK4Spring extends SpringAnimationCalculator {
-  constructor (tension:number, friction:number, velocity:number) {
+  constructor (tension?:number, friction?:number, velocity?:number) {
     super()
 
-    this.tension = tension
-    this.friction = friction
-    this.velocity = velocity
+    this.tension = tension?tension:200
+    this.friction = friction?friction:25
+    this.velocity = velocity?velocity:0
 
     this.stiffness = this.tension
     this.damping = this.friction
@@ -81,13 +81,13 @@ export class FramerRK4Spring extends SpringAnimationCalculator {
 }
 
 export class OrigamiPOPSpring extends SpringAnimationCalculator {
-  constructor (bounciness:number, speed:number) {
+  constructor (bounciness?:number, speed?:number) {
     super()
 
     this.fixedGraph = false
 
-    this.bounciness = bounciness
-    this.speed = speed
+    this.bounciness = bounciness?bounciness:5
+    this.speed = speed?speed:10
     this.velocity = 0.0
     let b = this.normalize(bounciness / 1.7, 0, 20.0)
     b = this.projectNormal(b, 0.0, 0.8)
@@ -124,14 +124,14 @@ export class OrigamiPOPSpring extends SpringAnimationCalculator {
   }
 }
 
-export class UIViewSpring extends SpringAnimationCalculator {
-  constructor (dampingratio:number, duration:number) {
+export class iOSUIViewSpring extends SpringAnimationCalculator {
+  constructor (dampingratio?:number, duration?:number) {
     super()
 
     // this.stiffness = this.tensionFromOrigamiValue(stiffness);
     // this.damping = this.frictionFromOrigamiValue(damping);
-    this.dampingratio = dampingratio
-    this.duration = duration
+    this.dampingratio = dampingratio?dampingratio:0.5
+    this.duration = duration?duration:0.5
     this.fixedGraph = false
 
     // Output
@@ -189,13 +189,31 @@ export class UIViewSpring extends SpringAnimationCalculator {
 }
 
 export class ProtopieSpring extends FramerRK4Spring {
-  constructor (tension:number, friction:number) {
-    super(tension, friction, 0)
+  constructor (tension?:number, friction?:number) {
+    super(tension?tension:300, friction?friction:15, 0)
   }
 }
 
 export class PrincipleSpring extends FramerRK4Spring {
-  constructor (tension:number, friction:number) {
-    super(tension, friction, 0)
+  constructor (tension?:number, friction?:number) {
+    super(tension?tension:380, friction?friction:20, 0)
+  }
+}
+
+export class SOSPowerSpring extends SpringAnimationCalculator {
+  constructor (stiffness?:number, dampingratio?:number) {
+    super()
+
+    this.stiffness = stiffness?stiffness:1500;
+    this.dampingratio = dampingratio?dampingratio:0.5;
+    this.velocity = 0;
+    this.mass = 1.0
+    this.fixedGraph = false
+
+    this.damping = this.computeDamping(this.stiffness, this.dampingratio, this.mass)
+    this.tension = this.stiffness
+    this.friction = this.damping
+    this.duration = this.computeDuration(this.tension, this.friction, this.mass, 2.0)
+    this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
   }
 }

@@ -20,7 +20,7 @@ export type Icon = React.FC<{
 
 export interface IListTree {
   children?: React.ReactNode;
-  name: string;
+  name?: string;
   style?: any;
   defaultOpen?: boolean;
   info?: string;
@@ -29,6 +29,9 @@ export interface IListTree {
   animation_data?:any;
   calculator?:any;
   listOnClickCallBack?:any;
+  visible?:boolean;
+  platform:string;
+  clickable?:boolean;
 }
 
 export interface IInputTree {

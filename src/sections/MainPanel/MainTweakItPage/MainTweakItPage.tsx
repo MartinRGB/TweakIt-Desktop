@@ -50,5 +50,5 @@ const TopContainer = styled.div`
     display: flex;
     flex-direction: row;
     //flex:7;
-    min-height:528px;
+    //min-height:528px;
 `

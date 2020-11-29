@@ -7,6 +7,7 @@ import SVGBackground from '@Components/SVG/SVGBackground'
 import SVGFakeGraph from '@Components/SVG/SVGFakeGraph'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import BezierInputTree from './BezierInputTree'
+import SVGBlurContainer from '@Components/SVG/SVGBlurContainer'
 
 export interface ISVGContainer {
   isLayoutRow:boolean;
@@ -42,6 +43,7 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
   ); 
 
   const isBezierCalculator = (currentAnimCalculator === 'CubicBezierCalculator')
+  const isDoubleBezierCalculator = (currentAnimCalculator === 'DoubleCubicBezierCalculator')
 
   // console.log(typeof(currentAnimData[0]))
   // Object.entries(currentAnimData).map(function (data:any,index:number) {
@@ -112,22 +114,26 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
 
             {(isBezierCalculator)?(            
               currentAnimData.map(function (data:any,index:number) {
+                console.log(data)
 
-              if(index === currentAnimData.length - 2){
-                var p1:any = currentAnimData[0];
-                var p2:any = currentAnimData[1];
-                var p3:any = currentAnimData[2];
-                var p4:any = currentAnimData[3];
+              if(index != currentAnimData.length - 1){
+                var p1:any = currentAnimData[index];
+                // var p2:any = currentAnimData[1];
+                // var p3:any = currentAnimData[2];
+                // var p4:any = currentAnimData[3];
+                console.log(p1)
+                console.log(currentSolverData[index])
                 return (
                 <BezierInputTree 
                   name={''}
                   index={(index)}
                   isLast={false}
-                  defaultVal={[currentSolverData[0],currentSolverData[1],currentSolverData[2],currentSolverData[3]]}
-                  isEditable={p1[1].editable}
-                  min={data[1].min}
-                  max={data[1].max}
-                  key={currentAnimName + index}
+                  defaultVal={[currentSolverData[index]]} //,currentSolverData[1],currentSolverData[2],currentSolverData[3]
+                  isDoubleBezier={false}
+                  isEditable={currentAnimData[index][1].editable}
+                  min={currentAnimData[index][1].min}
+                  max={currentAnimData[index][1].max}
+                  key={currentAnimName + 0}
                   svgWidth={svgWidth}
                   svgHeight={svgHeight}
                   svgScale={svgScale}
@@ -145,6 +151,51 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
                 </BezierInputTree>)
               }
             })):''}
+
+
+          {/* {(isDoubleBezierCalculator)?(            
+              currentAnimData.map(function (data:any,index:number) {
+
+              if(index === currentAnimData.length - 2){
+                var p1:any = currentAnimData[0];
+                var p2:any = currentAnimData[1];
+                var p3:any = currentAnimData[2];
+                var p4:any = currentAnimData[3];
+                return (
+                <BezierInputTree 
+                  name={''}
+                  index={(0)}
+                  isLast={false}
+                  defaultVal={[currentSolverData[0],currentSolverData[1],currentSolverData[2],currentSolverData[3]]}
+                  isDoubleBezier={false}
+                  isEditable={p1[1].editable}
+                  min={data[1].min}
+                  max={data[1].max}
+                  key={currentAnimName + 0}
+                  svgWidth={svgWidth}
+                  svgHeight={svgHeight}
+                  svgScale={svgScale}
+                  svgStrokeWidth={svgStrokeWidth}
+                  viewBoxHFixed={viewBoxHFixed}
+                  viewBoxWFixed={viewBoxWFixed}
+                  style={{
+                    width:`100%`,
+                    height:`${svgHeight}px`,
+                    margin:`0 atuo`,
+                    position: `relative`,
+                    marginBottom:` 0px`,
+                  }}
+                  >
+                </BezierInputTree>)
+              }
+            })):''} */}
+
+
+            <SVGBlurContainer
+             svgWidth={svgWidth}
+             svgHeight={svgHeight}
+            
+            ></SVGBlurContainer>
     </Container>)
 }
 
@@ -155,6 +206,8 @@ const Container = styled.div<{
   isLayoutRow:boolean
   svgHeight:number;
 }>`
+  overflow:hidden;
+  z-index:1;
   display:block;
   height: ${p => p.svgHeight}px;
   position: ${p => p.isLayoutRow?'absolute':'relative'};

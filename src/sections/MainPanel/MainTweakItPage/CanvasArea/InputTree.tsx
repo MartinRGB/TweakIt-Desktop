@@ -79,6 +79,8 @@ const InputTree: React.FC<IInputTree> = memo(({
  
   useEffect(() => {
     setTriggeredIndex(-1)
+    // Maybe Cause Bug
+    setCurrentSolverDataByIndex(defaultVal,index);
   }, [])
 
   //console.log('rerender')

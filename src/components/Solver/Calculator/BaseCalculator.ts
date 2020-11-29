@@ -27,6 +27,7 @@ export class SpringAnimationCalculator{
     bouncyFriction?:number;
     bounciness?:number;
     speed?:number;
+    factor?:number;
 
     constructor(stiffness?:number,dampingratio?:number,velocity?:number,mass?:number) {
         this.stiffness = stiffness;
@@ -216,6 +217,69 @@ export class SpringAnimationCalculator{
         return [stepArray,valueArray,transitionArray];
     }
 
+
+    public computeMaxValue(stiffness:number,damping:number,mass:number,velocity:number){
+        let time = 0;
+        let value = 0;
+        let maxValue = 0;
+        let epsilon = 0.001;
+
+        while (!(time > 0 && Math.abs(velocity) < epsilon)) {
+
+            time += epsilon;
+
+            let k = 0 - stiffness;
+            let b = 0 - damping;
+            let F_spring = k * ((value) - 1);
+            let F_damper = b * (velocity);
+
+            velocity += ((F_spring + F_damper) / mass) * epsilon;
+            value += velocity * epsilon;
+
+            if (maxValue < value) {
+                maxValue = value;
+            }
+        }
+        return maxValue;
+    }
+
+    computeSpringMax(factor:number){
+        let maxValue = 0;
+        let epsilon = 0.001;
+        let count = 1 / epsilon;
+        for (let i = 0; i < count; i++) {
+            let x = i * epsilon;
+            let result = Math.pow(2, -10 * x) * Math.sin((x - factor / 4) * (2 * Math.PI) / factor) + 1;
+
+            if (maxValue < result) {
+                maxValue = result;
+            }
+        }
+        return maxValue;
+    }
+
+    public findCloseNum(num:number){
+        let epsilon = 0.001
+        let arr = new Array(1/epsilon);
+        for (let i = 0; i < 1/epsilon; i++) {
+            arr[i] = this.computeSpringMax(i * epsilon)
+        }
+        var index = 0;
+        var d_value = Number.MAX_VALUE;
+        for (var i = 0; i < arr.length; i++) {
+            var new_d_value = Math.abs(arr[i] - num);
+            if (new_d_value <= d_value) {
+                if (new_d_value === d_value && arr[i] < arr[index]) {
+                    continue;
+                }
+                index = i;
+                d_value = new_d_value;
+            }
+        }
+        return index / (1/epsilon);
+    }
+
+
     public getFinalDuration(){
         return this.duration;
     }
@@ -302,8 +366,8 @@ export class FlingAnimationCalculator {
     private duration:any;
     private transition:any;
 
-    constructor(velocity:number, dampingRatio:number) {
-        this.friction = dampingRatio*-4.2;
+    constructor(velocity:number, friction:number) {
+        this.friction = friction*-4.2;
         this.velocity = velocity;
         this.array = this.flingCalculator(this.velocity,this.friction);
         this.duration = this.array[3];
@@ -703,3 +767,185 @@ const getFixedValueArrayUnLitmited = (array:any) => {
 }
 
 
+export class DoubleCubicBezierCalculator {
+    private epsilon:number;
+    private array:any;
+    private bezier:any;
+    private editable:boolean;
+    //private duration:number;
+    private cx:any;
+    private bx:any;
+    private ax:any;
+    private cy:any;
+    private by:any;
+    private ay:any;
+
+    private abc:any;
+    private p1x:any;
+    private p1y:any;
+    private p2x:any;
+    private p2y:any;
+    private p3x:any;
+    private p3y:any;
+    private p4x:any;
+    private p4y:any;
+    private bpX:any;
+    private bpY:any
+
+    constructor(p1x:any,p1y:any,p2x:any,p2y:any,p3x:any,p3y:any,p4x:any,p4y:any,bpX:any,bpY:any) { //,duration:any
+      
+      this.epsilon = 0.001; //1e-6
+      this.p1x = p1x;
+      this.p1y = p1y;
+      this.p2x = p2x;
+      this.p2y = p2y;
+      this.p3x = p3x;
+      this.p3y = p3y;
+      this.p4x = p4x;
+      this.p4y = p4y;
+      this.bpX = bpX;
+      this.bpY = bpY;
+      this.array = this.bezierCalculator(); //p1x,p1y,p2x,p2y
+      this.editable = true;
+
+       //this.duration = duration;
+      
+    }
+
+    // private setDuration(duration:number){
+    //   this.duration = duration;
+    // }
+
+    private UnitBezier(p1x:number, p1y:number, p2x:number, p2y:number) {
+        // pre-calculate the polynomial coefficients
+        // First and last control points are implied to be (0,0) and (1.0, 1.0)
+
+        this.cx = 3.0 * p1x;
+        this.bx = 3.0 * (p2x - p1x) - this.cx;
+        this.ax = 1.0 - this.cx -this.bx;
+
+        this.cy = 3.0 * p1y;
+        this.by = 3.0 * (p2y - p1y) - this.cy;
+        this.ay = 1.0 - this.cy - this.by;
+    }
+
+    private sampleCurveX(t:any) {
+        return ((this.ax * t + this.bx) * t + this.cx) * t;
+    }
+    private sampleCurveY(t:any) {
+        return ((this.ay * t + this.by) * t + this.cy) * t;
+    }
+
+    private sampleCurveDerivativeX(t:any) {
+        return (3.0 * this.ax * t + 2.0 * this.bx) * t + this.cx;
+    }
+
+    private solveCurveX(x:any, epsilon:any) {
+        var t0; 
+        var t1;
+        var t2;
+        var x2;
+        var d2;
+        var i;
+
+        // First try a few iterations of Newton's method -- normally very fast.
+        for (t2 = x, i = 0; i < 8; i++) {
+            x2 = this.sampleCurveX(t2) - x;
+            if (Math.abs (x2) < epsilon)
+                return t2;
+            d2 = this.sampleCurveDerivativeX(t2);
+            if (Math.abs(d2) < epsilon)
+                break;
+            t2 = t2 - x2 / d2;
+        }
+
+        // No solution found - use bi-section
+        t0 = 0.0;
+        t1 = 1.0;
+        t2 = x;
+        if (t2 < t0) return t0;
+        if (t2 > t1) return t1;
+
+        while (t0 < t1) {
+            x2 = this.sampleCurveX(t2);
+            if (Math.abs(x2 - x) < epsilon)
+                return t2;
+            if (x > x2) t0 = t2;
+            else t1 = t2;
+
+            t2 = (t1 - t0) * .5 + t0;
+        }
+
+        // Give up
+        return t2;
+    }
+
+    private solve(iterationTime:any, epsilon:any) {
+        return this.sampleCurveY( this.solveCurveX(iterationTime, epsilon) );
+    }
+
+    private bezierCalculator() {  
+        //var transitionArray = [[0,0]];
+        var transitionArray = [],stepArray = [],valueArray:any = [];
+
+        this.UnitBezier(this.p1x,this.p1y,this.p2x,this.p2y);
+        for (
+            var i = 0;
+            i < 1.+0/(samplePointNumber*sampleScale);
+            i += 1/(samplePointNumber*sampleScale)
+            ){
+            // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
+
+            var valX = i*this.bpX;
+            var valY = this.solve(i,this.epsilon)*this.bpY;
+            //console.log(valY)
+            transitionArray.push([valX,valY]);
+
+            stepArray.push(valX);
+            valueArray.push(valY);
+        }
+
+        this.UnitBezier(this.p3x,this.p3y,this.p4x,this.p4y);
+
+        for (
+            var i = 0;
+            i < 1.+0/(samplePointNumber*sampleScale);
+            i += 1/(samplePointNumber*sampleScale)
+            ){
+            // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
+
+            var valX:number = this.bpX + i*(1-this.bpX);
+            var valY:number = this.bpY + this.solve(i,this.epsilon)*(1-this.bpY);
+            //console.log(valY)
+            transitionArray.push([valX,valY]);
+
+            stepArray.push(valX);
+            valueArray.push(valY);
+        }
+
+        var lastValue = valueArray[valueArray.length-1]
+        if(lastValue > 1.){
+            valueArray.map(function (val:any,index:number) {
+                valueArray[index] /= lastValue;
+            })
+        }
+
+        return [stepArray,valueArray,transitionArray];
+    }
+
+    public getStepArray(){
+        return getFixedValueArray(this.array[0])
+    }
+
+    public getValueArray(){
+        return getFixedValueArray(this.array[1])
+    }
+
+    public getFullArray() {
+        return this.array[2];
+    }
+
+    public getMergedFullArray(){
+        return this.array[2].toString().split(',').map(Number);
+    }
+}

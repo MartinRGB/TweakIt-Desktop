@@ -9,7 +9,11 @@ import Android from '@Assets/icons/svg/Android.Icon';
 import iOS from '@Assets/icons/svg/iOS.Icon';
 import Web from '@Assets/icons/svg/Web.Icon';
 import DesignTools from '@Assets/icons/svg/DesignTools.Icon';
-import CubicBezier from '@Assets/icons/svg/CubicBezier.Icon';
+import BezierCurve from '@Assets/icons/svg/BezierCurve.Icon';
+import Flutter from '@Assets/icons/svg/Flutter.Icon';
+import Fluent from '@Assets/icons/svg/Fluent.Icon';
+import Smartisan from '@Assets/icons/svg/Smartisan.Icon';
+import CollapsedArrowAlertNative from '@Assets/icons/svg/CollapsedArrowAlertNative.Icon';
 
 export default {
   DarkMode,
@@ -21,5 +25,9 @@ export default {
   iOS,
   Web,
   DesignTools,
-  CubicBezier,
+  BezierCurve,
+  Flutter,
+  Fluent,
+  Smartisan,
+  CollapsedArrowAlertNative,
 };

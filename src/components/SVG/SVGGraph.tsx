@@ -26,7 +26,7 @@ const SVGGraph: React.FC<ISVG> = ({
   useContext(GraphUpdateContext);
 
 
-  const { selectTransition,currentAnimName, currentAnimCalculator,currentSolverData} = useContext(
+  const { selectTransition,currentAnimName,currentAnimPlatform, currentAnimCalculator,currentSolverData} = useContext(
     AnimatorTypeContext
   );
 
@@ -35,8 +35,11 @@ const SVGGraph: React.FC<ISVG> = ({
   Solver.setCalculatorSampleScale(svgPointScale?svgPointScale:3)
 
 
-  const currStepData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData).getStepArray();
-  const currValueData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData).getValueArray();
+  console.log(currentAnimCalculator)
+  console.log(currentSolverData)
+
+  const currStepData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getStepArray();
+  const currValueData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getValueArray();
   
   const mIsError = !currValueData[0];
   var mSVGData:any;

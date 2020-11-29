@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from '@Types';
 
-const CubicBezier: Icon = ({style}) => {
+const BezierCurve: Icon = ({style}) => {
   return (
     <svg 
     width={16} 
@@ -21,4 +21,4 @@ const CubicBezier: Icon = ({style}) => {
   );
 }
 
-export default CubicBezier;
+export default BezierCurve;

@@ -1,4 +1,5 @@
-import {InterpolatorCalculator} from './BaseCalculator'
+import {InterpolatorCalculator} from '@Components/Solver/Calculator/BaseCalculator'
+
 
 // e.g
 // new CustomFunctionInterpolator((x:number)=>{
@@ -108,40 +109,6 @@ export class CycleInterpolator extends InterpolatorCalculator{
         this.array = this.interpolatorCalculator((t:number) =>{return Math.sin(2*Math.PI * c * t);});
     }
 }
-
-export class ViscosFluidInterpolator extends InterpolatorCalculator{
-
-    constructor(a?:number) {
-        super();
-        var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return this.getViscosFluid(t,c);});
-    }
-
-    viscousFluid(x:number,c:number) {
-        x *= c ;
-        if (x < 1.0) {
-            x -= (1.0 - Math.exp(-x));
-        } else {
-            var start = 0.36787944117;   // 1/e == exp(-1)
-            x = 1.0 - Math.exp(1.0 - x);
-            x = start + x * (1.0 - start);
-        }
-        return x;
-      }
-
-    getViscosFluid(t:number,c:number){
-        var VISCOUS_FLUID_NORMALIZE = 1.0 / this.viscousFluid(1.0,c);
-        // account for very small floating-point error
-        var VISCOUS_FLUID_OFFSET = 1.0 - VISCOUS_FLUID_NORMALIZE * this.viscousFluid(1.0,c);
-  
-        var interpolated = VISCOUS_FLUID_NORMALIZE * this.viscousFluid(t,c);
-        if (interpolated > 0) {
-            return interpolated + VISCOUS_FLUID_OFFSET;
-        }
-        return interpolated;
-    }
-}
-
 
 export class CustomSpringInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
@@ -413,3 +380,164 @@ export class CustomDampingInterpolator extends InterpolatorCalculator {
     }
 
 }
+
+export class ViscosFluidInterpolator extends InterpolatorCalculator{
+
+    constructor(a?:number) {
+        super();
+        var c:number = a?a:2
+        this.array = this.interpolatorCalculator((t:number) =>{return this.getViscosFluid(t,c);});
+    }
+
+    viscousFluid(x:number,c:number) {
+        x *= c ;
+        if (x < 1.0) {
+            x -= (1.0 - Math.exp(-x));
+        } else {
+            var start = 0.36787944117;   // 1/e == exp(-1)
+            x = 1.0 - Math.exp(1.0 - x);
+            x = start + x * (1.0 - start);
+        }
+        return x;
+      }
+
+    getViscosFluid(t:number,c:number){
+        var VISCOUS_FLUID_NORMALIZE = 1.0 / this.viscousFluid(1.0,c);
+        // account for very small floating-point error
+        var VISCOUS_FLUID_OFFSET = 1.0 - VISCOUS_FLUID_NORMALIZE * this.viscousFluid(1.0,c);
+  
+        var interpolated = VISCOUS_FLUID_NORMALIZE * this.viscousFluid(t,c);
+        if (interpolated > 0) {
+            return interpolated + VISCOUS_FLUID_OFFSET;
+        }
+        return interpolated;
+    }
+}
+
+export class FlutterLinear extends InterpolatorCalculator{
+    constructor(a?:number) {
+        super();
+        this.array = this.interpolatorCalculator((t:number) =>{return t});
+    }
+}
+
+
+export class FlutterDecelerate extends InterpolatorCalculator{
+    constructor(a?:number) {
+        super();
+        this.array = this.interpolatorCalculator((t:number) =>{
+            t = 1.0 - t;
+            return 1.0 - t * t;
+        });
+    }
+}
+
+export class FlutterElasticIn extends InterpolatorCalculator{
+    private period:number;
+    constructor(a?:number) {
+        super();
+        this.period = 0.4;
+        this.array = this.interpolatorCalculator((t:number) =>{
+            var s:number = this.period / 4.0;
+            t = t - 1.0;
+            return -Math.pow(2.0, 10.0 * t) * Math.sin((t - s) * (Math.PI * 2.0) / this.period);
+        });
+    }
+}
+
+export class FlutterElasticOut extends InterpolatorCalculator{
+    private period:number;
+    constructor(a?:number) {
+        super();
+        this.period = 0.4;
+        this.array = this.interpolatorCalculator((t:number) =>{
+            var s:number = this.period / 4.0;
+            return Math.pow(2.0, -10 * t) * Math.sin((t - s) * (Math.PI * 2.0) / this.period) + 1.0;
+        });
+    }
+}
+
+export class FlutterElasticInOut extends InterpolatorCalculator{
+    private period:number;
+    constructor(a?:number) {
+        super();
+        this.period = 0.4;
+        this.array = this.interpolatorCalculator((t:number) =>{
+            var s:number = this.period / 4.0;
+            t = 2.0 * t - 1.0;
+            if (t < 0.0)
+              return -0.5 * Math.pow(2.0, 10.0 * t) * Math.sin((t - s) * (Math.PI * 2.0) / this.period);
+            else
+              return Math.pow(2.0, -10.0 * t) * Math.sin((t - s) * (Math.PI * 2.0) / this.period) * 0.5 + 1.0;
+        });
+    }
+}
+
+export class FlutterBounceIn extends InterpolatorCalculator{
+    constructor(a?:number) {
+        super();
+        this.array = this.interpolatorCalculator((t:number) =>{return 1.0 - this._bounce(1.0 - t)});
+    }
+
+    _bounce(t:number) {
+        if (t < 1.0 / 2.75) {
+            return 7.5625 * t * t;
+        } else if (t < 2 / 2.75) {
+            t -= 1.5 / 2.75;
+            return 7.5625 * t * t + 0.75;
+        } else if (t < 2.5 / 2.75) {
+            t -= 2.25 / 2.75;
+            return 7.5625 * t * t + 0.9375;
+        }
+        t -= 2.625 / 2.75;
+        return 7.5625 * t * t + 0.984375;
+    }
+}
+
+export class FlutterBounceOut extends InterpolatorCalculator{
+    constructor(a?:number) {
+        super();
+        this.array = this.interpolatorCalculator((t:number) =>{return this._bounce(t)});
+    }
+
+    _bounce(t:number) {
+        if (t < 1.0 / 2.75) {
+            return 7.5625 * t * t;
+        } else if (t < 2 / 2.75) {
+            t -= 1.5 / 2.75;
+            return 7.5625 * t * t + 0.75;
+        } else if (t < 2.5 / 2.75) {
+            t -= 2.25 / 2.75;
+            return 7.5625 * t * t + 0.9375;
+        }
+        t -= 2.625 / 2.75;
+        return 7.5625 * t * t + 0.984375;
+    }
+}
+
+export class FlutterBounceInOut extends InterpolatorCalculator{
+    constructor(a?:number) {
+        super();
+        this.array = this.interpolatorCalculator((t:number) =>{
+            if (t < 0.5)
+                return (1.0 - this._bounce(1.0 - t * 2.0)) * 0.5;
+            else
+                return this._bounce(t * 2.0 - 1.0) * 0.5 + 0.5;
+        });
+    }
+
+    _bounce(t:number) {
+        if (t < 1.0 / 2.75) {
+            return 7.5625 * t * t;
+        } else if (t < 2 / 2.75) {
+            t -= 1.5 / 2.75;
+            return 7.5625 * t * t + 0.75;
+        } else if (t < 2.5 / 2.75) {
+            t -= 2.25 / 2.75;
+            return 7.5625 * t * t + 0.9375;
+        }
+        t -= 2.625 / 2.75;
+        return 7.5625 * t * t + 0.984375;
+    }
+}
+

@@ -19,7 +19,7 @@ const PreviewArea: React.FC = ({children}) => {
 
   const [colorMode] = useColorMode();
 
-  const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimName} = useContext(
+  const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimPlatform,currentAnimName} = useContext(
     AnimatorTypeContext
   );
 
@@ -36,16 +36,21 @@ const PreviewArea: React.FC = ({children}) => {
 
   const svgHeight = initState.svgHeight;
 
+
+  const currSolver:any = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
+  const currSolverValueData = currSolver.getValueArray()
+  const currDuration = (durationData != -1)?durationData:currSolver.duration;
+
   var startAnimator:any,endAnimator:any;
 
   const startAnimate = () => {
-    const currSolver:any = Solver.CreateSolverByString(currentAnimCalculator,currentAnimName,currentSolverData);
-    const currSolverValueData = currSolver.getValueArray()
-    const currDuration = (durationData != -1)?durationData:currSolver.duration;
+
+    // TODO RESET
+    if(startAnimator && startAnimator.isAnimating())(startAnimator.reset())
+    if(endAnimator && endAnimator.isAnimating())(endAnimator.reset())
 
     startAnimator = new DataDrivenAnimator(currSolverValueData);
     startAnimator.setFromToDuration(0,1.,currDuration*1000)
-    console.log(startAnimator)
     startAnimator.start();
     startAnimator.setOnFrameCallback(()=>{
       setCSSAnimationProgress(startAnimator.getProgress());
@@ -53,7 +58,7 @@ const PreviewArea: React.FC = ({children}) => {
     startAnimator.setOnEndCallback(()=>{
       endAnimator = new DataDrivenAnimator(currSolverValueData);
       endAnimator.setFromToDuration(0,1,currDuration*1000)
-      endAnimator.delayStart(200);
+      endAnimator.start();
       endAnimator.setOnFrameCallback(()=>{
         setCSSAnimationProgress(1. - endAnimator.getProgress());
       })

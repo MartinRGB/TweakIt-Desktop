@@ -35,6 +35,7 @@ export interface IBezierInputTree{
   isBezier:boolean;
   index:number;
   isLast?:boolean;
+  isDoubleBezier?:boolean;
   isEditable?:boolean;
   name: string;
   calculator?:string
@@ -46,6 +47,7 @@ export interface IBezierInputTree{
 const BezierInputTree: React.FC<IBezierInputTree> = memo(({ 
   style,
   isLast,
+  isDoubleBezier,
   isEditable,
   index,
   name,
@@ -70,25 +72,25 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
   const boxWidth = svgWidth*(svgWidth/(svgWidth+viewBoxWFixed))*svgScale;
   const boxHeight = svgHeight*(svgHeight/(svgHeight+viewBoxHFixed))*svgScale;
   const boxPadding = 40;
-  const circleRadius = 14;
+  const circleRadius = 8;
 
   const { t, i18n } = useTranslation()
   const [colorMode] = useColorMode();
 
-  const [prev1,setPrev1] = useState<any>(currentSolverData[0]);
-  const [target1,setTarget1] = useState<any>(currentSolverData[0]);
+  const [prev1,setPrev1] = useState<any>(currentSolverData[index][0]);
+  const [target1,setTarget1] = useState<any>(currentSolverData[index][0]);
   const [isStart1,setStart1] = useState<boolean>(false);
 
-  const [prev2,setPrev2] = useState<any>(currentSolverData[1]);
-  const [target2,setTarget2] = useState<any>(currentSolverData[1]);
+  const [prev2,setPrev2] = useState<any>(currentSolverData[index][1]);
+  const [target2,setTarget2] = useState<any>(currentSolverData[index][1]);
   const [isStart2,setStart2] = useState<boolean>(false);
 
-  const [prev3,setPrev3] = useState<any>(currentSolverData[2]);
-  const [target3,setTarget3] = useState<any>(currentSolverData[2]);
+  const [prev3,setPrev3] = useState<any>(currentSolverData[index][2]);
+  const [target3,setTarget3] = useState<any>(currentSolverData[index][2]);
   const [isStart3,setStart3] = useState<boolean>(false);
 
-  const [prev4,setPrev4] = useState<any>(currentSolverData[3]);
-  const [target4,setTarget4] = useState<any>(currentSolverData[3]);
+  const [prev4,setPrev4] = useState<any>(currentSolverData[index][3]);
+  const [target4,setTarget4] = useState<any>(currentSolverData[index][3]);
   const [isStart4,setStart4] = useState<boolean>(false);
 
   const [isStartAnimation,setStartAnimation] = useState<boolean>(false);
@@ -104,33 +106,13 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     setBezierTriggeredIndex(-1)
   }, [])
 
-  const {renderProgress}  = useSpring({
-    from:{renderProgress:0},
-    to:{renderProgress:(isStartAnimation)?1:0},
-    config: animationConfig.bezier_input,
-    //duration: 0,
-    onFrame: () =>{
-      if(bezierTriggeredIndex != -1){
-        var fps_60 = Math.round((new Date().getTime() - progress1.startTime)/16);
-        if(fps_60 %2 ==0){setGraphShouldUpdate(false)}
-        else{setGraphShouldUpdate(true)}
-      }
-    },
-    onRest: () => {
-      // Maybe Bugs Here
-      setBezierTriggeredIndex(-1)
-      setGraphShouldUpdate(false)
-      setStartAnimation(false)
-    }
-  })
-
   const {progress1}  = useSpring({
     from:{progress1:prev1},
     to:{progress1:(isStart1)?target1:prev1},
     config: animationConfig.bezier_input,
     onFrame: () =>{
       var value = progress1.value.toFixed(2);
-      if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,0);
+      //if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,index*4+0);
     },
     onRest: () => {
       setPrev1(target1)
@@ -145,7 +127,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     //duration: 0,
     onFrame: () =>{
       var value = progress2.value.toFixed(2);
-      if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,1);
+      //if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,index*4+1);
     },
     onRest: () => {
       setPrev2(target2)
@@ -160,7 +142,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     //duration: 0,
     onFrame: () =>{
       var value = progress3.value.toFixed(2);
-      if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,2);
+      //if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,index*4+2);
     },
     onRest: () => {
       setPrev3(target3)
@@ -175,7 +157,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     //duration: 0,
     onFrame: () =>{
       var value = progress4.value.toFixed(2);
-      if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,3);
+      //if(bezierTriggeredIndex != -1) setCurrentSolverDataByIndex(value,index*4+3);
     },
     onRest: () => {
       setPrev4(target4)
@@ -184,6 +166,27 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
   })
 
 
+  const {renderProgress}  = useSpring({
+    from:{renderProgress:0},
+    to:{renderProgress:(isStartAnimation)?1:0},
+    config: animationConfig.bezier_input,
+    //duration: 0,
+    onFrame: () =>{
+      if(bezierTriggeredIndex != -1){
+        console.log([progress1.value.toFixed(2),progress2.value.toFixed(2),progress3.value.toFixed(2),progress4.value.toFixed(2)])
+        setCurrentSolverDataByIndex([progress1.value.toFixed(2),progress2.value.toFixed(2),progress3.value.toFixed(2),progress4.value.toFixed(2)],index);
+        var fps_60 = Math.round((new Date().getTime() - progress1.startTime)/16);
+        if(fps_60 %2 ==0){setGraphShouldUpdate(false)}
+        else{setGraphShouldUpdate(true)}
+      }
+    },
+    onRest: () => {
+      // Maybe Bugs Here
+      setBezierTriggeredIndex(-1)
+      setGraphShouldUpdate(false)
+      setStartAnimation(false)
+    }
+  })
 
   const charLocation = (substring:string,string:string) => {
     var a=[0],i=-1;
@@ -262,37 +265,33 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
   const handleStart=(e:any,ui:any)=>{
   }
   const handleStop=(e:any,ui:any)=>{
-    setPrev1(currentSolverData[0])
-    setPrev2(currentSolverData[1])
-    setPrev3(currentSolverData[2])
-    setPrev4(currentSolverData[3])
-    setTarget1(currentSolverData[0])
-    setTarget2(currentSolverData[1])
-    setTarget3(currentSolverData[2])
-    setTarget4(currentSolverData[3])
+    setPrev1(currentSolverData[index][0])
+    setPrev2(currentSolverData[index][1])
+    setPrev3(currentSolverData[index][2])
+    setPrev4(currentSolverData[index][3])
+    setTarget1(currentSolverData[index][0])
+    setTarget2(currentSolverData[index][1])
+    setTarget3(currentSolverData[index][2])
+    setTarget4(currentSolverData[index][3])
   }
-
-
-
-  const p1:number = Number(textValue.toString().split(",")[0]);
-  const p2:number = Number(textValue.toString().split(",")[1]);
-  const p3:number = Number(textValue.toString().split(",")[2]);
-  const p4:number = Number(textValue.toString().split(",")[3]);
 
 
 
   const handleDragLeft = (e:any,ui:any) =>{
     var p1V = ui.x/boxWidth;
     var p2V = (boxHeight -  ui.y)/boxHeight
-    setCurrentSolverDataByIndex(Number(p1V.toFixed(2)),0);
-    setCurrentSolverDataByIndex(Number(p2V.toFixed(2)),1)
+    //setCurrentSolverDataByIndex(Number(p1V.toFixed(2)),index*4+0);
+    //setCurrentSolverDataByIndex(Number(p2V.toFixed(2)),index*4+1)
+    console.log(Number(p1V.toFixed(2)))
+    console.log(Number(p2V.toFixed(2)))
+    setCurrentSolverDataByIndex([Number(p1V.toFixed(2)),Number(p2V.toFixed(2)),Number(currentSolverData[index][2]),Number(currentSolverData[index][3])],index)
     setBezierTriggeredIndex(-1)
     setStartAnimation(false)
     setGraphShouldUpdate(!shouldGraphupdate)
    
 
     setTextValue(
-      p1V.toFixed(2) + `,` + p2V.toFixed(2) + `,` + currentSolverData[2].toFixed(2) + `,` + currentSolverData[3].toFixed(2)
+      p1V.toFixed(2) + `,` + p2V.toFixed(2) + `,` + currentSolverData[index][2] + `,` + currentSolverData[index][3]
     )
 
   }
@@ -301,14 +300,15 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
     var p3V = ui.x/boxWidth;
     var p4V = (boxHeight -  ui.y)/boxHeight
    
-    setCurrentSolverDataByIndex(Number(p3V.toFixed(2)),2);
-    setCurrentSolverDataByIndex(Number(p4V.toFixed(2)),3)
+    // setCurrentSolverDataByIndex(Number(p3V.toFixed(2)),index*4+2);
+    // setCurrentSolverDataByIndex(Number(p4V.toFixed(2)),index*4+3)
+    setCurrentSolverDataByIndex([Number(currentSolverData[index][0]),Number(currentSolverData[index][1]),Number(p3V.toFixed(2)),Number(p4V.toFixed(2))],index)
     setBezierTriggeredIndex(-1)
     setStartAnimation(false)
     setGraphShouldUpdate(!shouldGraphupdate)
 
     setTextValue(
-      currentSolverData[0].toFixed(2) + `,` + currentSolverData[1].toFixed(2) + `,` + p3V.toFixed(2) + `,` + p4V.toFixed(2)
+      currentSolverData[index][0] + `,` + currentSolverData[index][1] + `,` + p3V.toFixed(2) + `,` + p4V.toFixed(2)
     )
 
   }
@@ -329,14 +329,14 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
               isEditable={isEditable}
               x1={boxPadding/2}
               y1={boxPadding/2}
-              x2={boxWidth*currentSolverData[0]*transitionScale+boxPadding/2} 
-              y2={boxHeight*currentSolverData[1]*transitionScale+boxPadding/2}   
+              x2={boxWidth*currentSolverData[index][0]*transitionScale+boxPadding/2} 
+              y2={boxHeight*currentSolverData[index][1]*transitionScale+boxPadding/2}   
               strokeWidth={svgStrokeWidth/2}
             />
             <CustomBorderline
               isEditable={isEditable}
-              x1={boxWidth*(1-transitionScale) + boxWidth*currentSolverData[2]*transitionScale+boxPadding/2}
-              y1={boxHeight*(1-transitionScale) + boxHeight*currentSolverData[3]*transitionScale+boxPadding/2}
+              x1={boxWidth*(1-transitionScale) + boxWidth*currentSolverData[index][2]*transitionScale+boxPadding/2}
+              y1={boxHeight*(1-transitionScale) + boxHeight*currentSolverData[index][3]*transitionScale+boxPadding/2}
               x2={boxWidth+boxPadding/2} 
               y2={boxHeight+boxPadding/2}   
               strokeWidth={svgStrokeWidth/2}
@@ -355,10 +355,10 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
           <Draggable
             axis="both"
             handle=".handle"
-            position={{x: boxWidth*currentSolverData[0], y: boxHeight - boxHeight*currentSolverData[1]*1.}}
+            position={{x: boxWidth*currentSolverData[index][0]*transitionScale, y: boxHeight - boxHeight*currentSolverData[index][1]*transitionScale}}
             // position={{x:isDragInit?(boxWidth*currentSolverData[0]*transitionScale):null,y:isDragInit?(boxHeight - boxHeight*currentSolverData[1]*transitionScale):null}}
             scale={1}
-            bounds={{top: 0, left: 0, right: boxWidth, bottom: boxHeight}}
+            bounds={{top: -boxHeight/2, left: 0, right: boxWidth, bottom: boxHeight+boxHeight/2}}
             // position={null}
             onStart={handleStart}
             onDrag={handleDragLeft}
@@ -384,13 +384,14 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
               ></DraggableCircle>
           </Draggable>
 
+
           <Draggable
             axis="both"
             handle=".handle"
-            position={{x: boxWidth*currentSolverData[2], y:boxHeight*(1-currentSolverData[3])}}
+            position={{x:  boxWidth*(1- transitionScale) + boxWidth*currentSolverData[index][2]*transitionScale, y:boxHeight*(1 - currentSolverData[index][3])*transitionScale}}
             // position={{x:isDragInit?(boxWidth*currentSolverData[0]*transitionScale):null,y:isDragInit?(boxHeight - boxHeight*currentSolverData[1]*transitionScale):null}}
             scale={1}
-            bounds={{top: 0, left: 0, right: boxWidth, bottom: boxHeight}}
+            bounds={{top: -boxHeight/2, left: 0, right: boxWidth, bottom: boxHeight + boxHeight/2}}
             // position={null}
             onStart={handleStart}
             onDrag={handleDragRight}
@@ -417,7 +418,49 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
           </Draggable>
 
 
-        </DraggableContainer>:''
+        </DraggableContainer>:<DraggableContainer
+          canShow={!selectTransition}
+          style={{
+            width:`${boxWidth}px`,
+            height:`${boxHeight}px`,
+            transform:`translate3d(-50%,-50%,0) scale3d(1,1,1)`
+          }}
+        >
+
+              <DraggableCircle
+                canShow={!selectTransition}
+                isEditable={isEditable}
+                radius={circleRadius}
+                onMouseDown={()=>{
+                  //addDragEvent(document.getElementById('draggable_1'),true)
+                }}
+                style={{
+                  left:`${boxWidth*currentSolverData[index][0]*transitionScale}px`,
+                  top:`${boxHeight - boxHeight*currentSolverData[index][1]*transitionScale}px`,
+                  transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`,
+                  width:`${transitionScale*circleRadius}px`,
+                  height:`${transitionScale*circleRadius}px`,
+                }}
+              ></DraggableCircle>
+
+              <DraggableCircle
+                canShow={!selectTransition}
+                radius={circleRadius}
+                isEditable={isEditable}
+                onMouseDown={()=>{
+                  //addDragEvent(document.getElementById('draggable_1'),true)
+                }}
+                style={{
+                  left:`${boxWidth*(1- transitionScale) + boxWidth*currentSolverData[index][2]*transitionScale}px`,
+                  top:`${boxHeight*(1 - currentSolverData[index][3])*transitionScale}px`,
+                  transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`,
+                  width:`${transitionScale*circleRadius}px`,
+                  height:`${transitionScale*circleRadius}px`,
+                }}
+              ></DraggableCircle>
+
+
+        </DraggableContainer>
         }
         <TextInput 
         id={'bezier_input'}
@@ -433,7 +476,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
           border:'none',
           fontSize:'12px',
           position:'absolute',
-          bottom:'32px',
+          bottom:'42px',
         }}
 
         onChange={(e: React.FormEvent<HTMLInputElement>) => {
@@ -516,6 +559,7 @@ const CustomSVG = styled.svg<{
   left:50%;
   top:50%;
   display:${p => p.canShow?'block':'none'};
+  overflow:inherit;
 `
 const CustomBorderline = styled.line<{
   isEditable:boolean;

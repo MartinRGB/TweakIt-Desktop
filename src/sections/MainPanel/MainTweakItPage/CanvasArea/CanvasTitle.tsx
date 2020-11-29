@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { Trans } from 'react-i18next'
 import '@Context/i18nContext'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
-
+import initState from '@Config/init_state.json'
 
 const CanvasTitle: React.FC = ({}) => {
   
@@ -14,7 +14,7 @@ const CanvasTitle: React.FC = ({}) => {
 
   return (
       <AnimationTitle>
-          <Trans>{(currentAnimName && currentAnimName != 'HorizontalLine')?currentAnimName:'select_an_animator'}</Trans>
+          <Trans>{(currentAnimName && currentAnimName != initState.initAnimCalculator)?currentAnimName:'select_an_animator'}</Trans>
       </AnimationTitle>
 
   )
@@ -33,4 +33,5 @@ const AnimationTitle = styled.p`
   line-height: 21px;
   padding-top:24px;
   color:${p => p.theme.colors.text};
+  z-index:1;
 `

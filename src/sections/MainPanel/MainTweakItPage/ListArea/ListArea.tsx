@@ -22,21 +22,25 @@ const ListArea: React.FC = ({children}) => {
           animationList.map(function (data:any,index:number) {
             return (
               <ListTree 
-                key={data['name']+'_'+index} 
-                index={index}
-                info={data['name']} 
+                key={data['platform']+'_'+index} 
+                info={data['platform']} 
+                platform={data['platform']}
                 isUlElement={true}
-                name={data['name']}>
+                name={data['platform']}
+                index={index}>
               {
                 data['li'].map(function (animData:any,i:number) {
                   return <ListTree 
-                            key={data['name']+'_'+animData['name']+'_'+i} 
+                            key={data['platform']+'_'+data['name']+'_'+animData['name']+'_'+i} 
+                            info={data['platform']+'_'+data['name']+'_'+animData['name']} 
+                            platform={data['platform']}
                             index={i}
-                            info={data['name']+'_'+animData['name']} 
                             isUlElement={false} 
                             name={animData['name']} 
                             calculator={animData['calculator']}
-                            animation_data={animData['animation_data']}>
+                            animation_data={animData['animation_data']}
+                            visible={animData['visible']}
+                            clickable={animData['clickable']}>
                          </ListTree>
                 })
               }

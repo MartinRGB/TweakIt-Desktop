@@ -123,6 +123,7 @@ const Container = styled.div<{
 const InputContainer = styled.div<{
   isLayoutRow:boolean
 }>`
+  z-index:10;
   flex: 3;
   padding: 0 ${p => p.isLayoutRow?'24px':'0'};
 `
