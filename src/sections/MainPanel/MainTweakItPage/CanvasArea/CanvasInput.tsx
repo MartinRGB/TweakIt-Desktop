@@ -1,11 +1,11 @@
-import React ,{ useContext} from 'react';
+import React ,{memo,useContext} from 'react';
 import '@Context/i18nContext'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 
 import InputTree from './InputTree'
 import initState from '@Config/init_state.json'
 
-const CanvasInput: React.FC = ({}) => {
+const CanvasInput: React.FC = memo(({}) => {
   
   const { currentAnimName,currentSolverData ,currentAnimData,currentAnimCalculator} = useContext(
     AnimatorTypeContext
@@ -90,6 +90,6 @@ const CanvasInput: React.FC = ({}) => {
           </InputTree>}
   </div>
   )
-}
+})
 
 export default CanvasInput

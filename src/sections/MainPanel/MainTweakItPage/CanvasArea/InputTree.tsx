@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom'
 import React, { memo, useState, useRef, useEffect, useContext } from 'react'
 import { useSpring, animated, interpolate } from 'react-spring'
+import animationConfig from '@Config/animation.json'
 import ResizeObserver from 'resize-observer-polyfill'
 //import styled from 'styled-components'
 import { IInputTree } from "@Types";
@@ -14,7 +15,7 @@ import { css } from "@emotion/core";
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
 
-import animationConfig from '@Config/animation.json'
+
 
 import Icons from '@Assets/icons'
 
@@ -273,7 +274,7 @@ const InputContainer = styled.div<
   height: 16px;
   display:  ${p => (p.visible)?'flex':'none'};
   flex-direction: row;
-  margin-bottom:  ${p => p.isLast?'0px':'24px'};
+  margin-bottom:  ${p => p.isLast?'0px':'16px'};
 `
 
 const Frame = styled('div')`

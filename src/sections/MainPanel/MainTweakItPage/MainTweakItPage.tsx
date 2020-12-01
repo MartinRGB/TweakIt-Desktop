@@ -1,4 +1,4 @@
-import React ,{ useContext, useEffect} from 'react';
+import React ,{ memo,useContext, useEffect} from 'react';
 
 
 import { useColorMode,jsx } from 'theme-ui'
@@ -15,7 +15,7 @@ import ListSelectStateProvider from '@Context/ListSelectStateContext'
 import AnimatorTypeProvider from '@Context/AnimatorTypeContext'
 import GraphUpdateProvider from '@Context/GraphUpdateContext'
 
-const MainTweakItPage: React.FC = ({children}) => {
+const MainTweakItPage: React.FC = memo(({children}) => {
 
   //const { t, i18n } = useTranslation()
   //const [colorMode] = useColorMode();
@@ -38,7 +38,7 @@ const MainTweakItPage: React.FC = ({children}) => {
       </AnimatorTypeProvider>
     </Container>
   )
-}
+})
 
 export default MainTweakItPage
 

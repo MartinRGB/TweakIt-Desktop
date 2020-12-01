@@ -448,7 +448,7 @@ export class FlingAnimationCalculator {
     private array:any;
     private friction?:number;
     private velocity?:number;
-    private duration:any;
+    private duration?:any;
     private transition:any;
 
     constructor(velocity?:number, friction?:number) {
@@ -526,13 +526,6 @@ export class FlingAnimationCalculator {
         return this.array[4];
     }
 
-    public getFinalDuration(){
-        if(this.array === undefined){
-            this.array = this.flingCalculator(this.velocity,this.friction);
-        }
-        return this.array[3];
-    }
-
     public getStepArray(){
         if(this.array === undefined){
             this.array = this.flingCalculator(this.velocity,this.friction);
@@ -562,7 +555,10 @@ export class FlingAnimationCalculator {
     }
 
     public getDuration(){
-        return this.duration;
+        if(this.array === undefined){
+            this.array = this.flingCalculator(this.velocity,this.friction);
+        }
+        return this.array[3];
     }
 
 }

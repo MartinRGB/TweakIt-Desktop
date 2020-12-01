@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,useState}from 'react'
+import React, {memo,useContext, useEffect,useState}from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const TitleButtonToggle: React.FC<IButton> = ({ style,children , onClick, active}) => {
+const TitleButtonToggle: React.FC<IButton> = memo(({ style,children , onClick, active}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -41,7 +41,7 @@ const TitleButtonToggle: React.FC<IButton> = ({ style,children , onClick, active
           {children}
         </Button>
     </animated.div>);
-}
+})
 
 const AnimatedContainerCSS = css`
   height:20px;

@@ -1,4 +1,4 @@
-import React, {useContext,useEffect}from 'react'
+import React, {memo,useContext,useEffect}from 'react'
 import styled from '@emotion/styled';
 import { ISVG } from "@Types";
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext'
@@ -7,7 +7,7 @@ import Solver from '@Components/Solver';
 import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTemplate_50,SVGTransitionTemplate_100,SVGTransitionTemplate_50} from '@Components/SVG/SVGUtil'
 import { ListSelectStateContext } from '@Context/ListSelectStateContext'
 
-const SVGFakeGraph: React.FC<ISVG> = ({ 
+const SVGFakeGraph: React.FC<ISVG> = memo(({ 
   pathStyle,
   svgStyle,
   svgWidth,
@@ -84,7 +84,7 @@ const SVGFakeGraph: React.FC<ISVG> = ({
                 />
             </CustomGraphG>
           </CustomSVG>)
-}
+})
 
 const CustomSVG = styled.svg`
 // width: 400px;

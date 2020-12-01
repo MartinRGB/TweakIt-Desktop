@@ -6,55 +6,9 @@ import {
     LookupTableCalculator,
     HorizontalLineCalculator} from '@Components/Solver/Calculator/BaseCalculator'
 
-// import {    
-//     LinearInterpolator,
-//     CustomFunctionInterpolator,
-//     AccelerateInterpolator,
-//     DecelerateInterpolator,
-//     AccelerateDecelerateInterpolator,
-//     AnticipateInterpolator,
-//     OvershootInterpolator,
-//     AnticipateOvershootInterpolator,
-//     BounceInterpolator,
-//     CycleInterpolator,
-//     ViscosFluidInterpolator,
-//     CustomSpringInterpolator,
-//     CustomMocosSpringInterpolator,
-//     CustomBounceInterpolator,
-//     CustomDampingInterpolator} from '@Components/Solver/Calculator/InterpolatorExtend'
-
-// import {    
-//     CustomBezier,
-//     CustomDoubleBezier,
-//     Linear,
-//     EaseIn,
-//     EaseOut,
-//     EaseInOut,
-//     Ease,
-//     FastOutSlowIn,
-//     LinearOutSlowIn,
-//     FastOutLinear} from '@Components/Solver/Calculator/BezierCurveExtend'
-
-// import {    
-//     AndroidSpring,
-//     FramerDHOSpring,
-//     FramerRK4Spring,
-//     OrigamiPOPSpring,
-//     iOSUIViewSpring,
-//     iOSCASpring,
-//     ProtopieSpring,
-//     PrincipleSpring
-//     } from '@Components/Solver/Calculator/SpringAnimationExtend'
-
-// import {
-//     AndroidFling
-// } from '@Components/Solver/Calculator/FlingAnimationExtend'
-
 import {
     CreateSolverByString
 } from '@Components/Solver/CreateSolverByString'
-
-// class FastOutExtraSlowIn extends DoubleCubicBezierCalculator{constructor(){super(0.30, 0.00, 0.80, 0.15,0.05, 0.70, 0.10, 1.00,0.1666,0.5);}}
 
 import Android from'@Components/Solver/Calculator/platform/Android'
 import iOS from'@Components/Solver/Calculator/platform/iOS'

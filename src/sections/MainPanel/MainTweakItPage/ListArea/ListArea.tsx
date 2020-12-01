@@ -1,4 +1,4 @@
-import React ,{ useContext, useEffect,useState} from 'react';
+import React ,{memo,useContext, useEffect,useState} from 'react';
 
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
@@ -11,7 +11,7 @@ import ListTree from './ListTree'
 
 import animationList from '@Config/animator_list.json'
 
-const ListArea: React.FC = ({children}) => {
+const ListArea: React.FC = memo(({children}) => {
   
   return (
     <Container>
@@ -50,7 +50,7 @@ const ListArea: React.FC = ({children}) => {
       }
     </Container>
   )
-}
+})
 
 
 export default ListArea

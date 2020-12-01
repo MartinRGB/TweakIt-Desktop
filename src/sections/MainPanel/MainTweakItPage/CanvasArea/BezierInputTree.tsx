@@ -349,8 +349,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
               height:`${boxHeight}px`,
               margin: `0 auto`,
               position: `absolute`,
-              left: `${svgHeight*(1 - svgScale) + boxWidthO*(startPointX)}px`,
-              bottom: `${svgHeight*(1-svgScale) + boxHeightO*(startPointY)  }px`,
+              left: `${(svgWidth-boxWidthO)/2 +boxWidthO*(startPointX)}px`,  //svgWidth*(1 - svgScale)
+              bottom: `${(svgHeight-boxHeightO)/2 +boxHeightO*(startPointY)}px`, //svgHeight*(1-svgScale)
             }
           }
         >
@@ -514,8 +514,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
           border:'none',
           fontSize:'12px',
           position:'absolute',
-          bottom:`${isDoubleBezier?`${isDoubleLast?'':'42px'}`:'42px'}`,
-          top:`${isDoubleBezier?`${isDoubleLast?'42px':''}`:''}`,
+          bottom:`${isDoubleBezier?`${isDoubleLast?'':`${(svgHeight-boxHeightO)/2 - 14*1.5}px`}`:`${(svgHeight-boxHeightO)/2 - 14*1.5}px`}`,
+          top:`${isDoubleBezier?`${isDoubleLast?`${(svgHeight-boxHeightO)/2 - 14*1.5}px`:''}`:''}`,
           left:`${isDoubleBezier?`${isDoubleLast?'':'0px'}`:''}`,
           right:`${isDoubleBezier?`${isDoubleLast?'0px':''}`:''}`,
           // left: `50%`,

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,useState}from 'react'
+import React, {memo,useContext, useEffect,useState}from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
@@ -12,7 +12,7 @@ import animationConfig from '@Config/animation.json';
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
 
-const DescText: React.FC<IDescText> = ({ style,children}) => {
+const DescText: React.FC<IDescText> = memo(({ style,children}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -24,7 +24,7 @@ const DescText: React.FC<IDescText> = ({ style,children}) => {
 
   return (
     <Text style={style} ><Trans>{children}</Trans></Text>);
-}
+})
 
 const Text  = styled.span<{
   isEditable:boolean

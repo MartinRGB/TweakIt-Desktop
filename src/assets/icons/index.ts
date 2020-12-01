@@ -15,6 +15,8 @@ import Fluent from '@Assets/icons/svg/Fluent.Icon';
 import Smartisan from '@Assets/icons/svg/Smartisan.Icon';
 import CollapsedArrowAlertNative from '@Assets/icons/svg/CollapsedArrowAlertNative.Icon';
 import Data from '@Assets/icons/svg/Data.Icon';
+import Copy from '@Assets/icons/svg/Copy.Icon';
+import Done from '@Assets/icons/svg/Done.Icon';
 
 export default {
   DarkMode,
@@ -31,5 +33,7 @@ export default {
   Fluent,
   Smartisan,
   CollapsedArrowAlertNative,
-  Data
+  Data,
+  Copy,
+  Done
 };

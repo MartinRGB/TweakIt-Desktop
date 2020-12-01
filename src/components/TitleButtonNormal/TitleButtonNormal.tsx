@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{memo} from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const TitleButtonNormal: React.FC<IButton> = ({ style,children , onClick}) => {
+const TitleButtonNormal: React.FC<IButton> = memo(({ style,children , onClick}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -38,7 +38,7 @@ const TitleButtonNormal: React.FC<IButton> = ({ style,children , onClick}) => {
       </Button>
   </animated.div>);
 
-}
+})
 
 const AnimatedContainerCSS = css`
   height:20px;

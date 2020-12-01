@@ -1,4 +1,4 @@
-import React ,{ useContext, useEffect} from 'react';
+import React ,{memo,useContext, useEffect} from 'react';
 
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
@@ -8,7 +8,7 @@ import {css} from "@emotion/core";
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
 
-const SelectArea: React.FC = ({children}) => {
+const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
 
   const [colorMode] = useColorMode();
@@ -17,7 +17,7 @@ const SelectArea: React.FC = ({children}) => {
   return (
     <Container></Container>
   )
-}
+})
 
 export default SelectArea
 

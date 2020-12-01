@@ -1,4 +1,4 @@
-import React, {useContext,useEffect}from 'react'
+import React, {memo,useContext,useEffect}from 'react'
 import styled from '@emotion/styled';
 import { ISVG } from "@Types";
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext'
@@ -6,7 +6,7 @@ import { GraphUpdateContext } from '@Context/GraphUpdateContext'
 import Solver from '@Components/Solver';
 import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTemplate_50,SVGTransitionTemplate_100,SVGTransitionTemplate_50} from '@Components/SVG/SVGUtil'
 
-const SVGGraph: React.FC<ISVG> = ({ 
+const SVGGraph: React.FC<ISVG> = memo(({ 
   pathStyle,
   svgStyle,
   svgWidth,
@@ -145,7 +145,7 @@ const SVGGraph: React.FC<ISVG> = ({
             </CustomGraphG>
         </CustomSVG>)
   ;
-}
+})
 
 const CustomSVG = styled.svg`
 // width: 400px;

@@ -1,4 +1,4 @@
-import React ,{ useContext, useEffect,useState,forwardRef, useRef, useImperativeHandle } from 'react';
+import React ,{memo,useContext, useEffect,useState,forwardRef, useRef, useImperativeHandle } from 'react';
 
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
@@ -12,13 +12,13 @@ import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import { GraphUpdateContext } from '@Context/GraphUpdateContext';
 import MainButtonNormal from '@Components/MainButtonNormal';
 import Solver from '@Components/Solver';
-import DataDrivenAnimator from './DataDrivenAnimator'
+import DataDrivenAnimator from '@Components/Animator/DataDrivenAnimator'
 
 export interface IAnimationBox{
   property:string;
 }
 
-const AnimationBox = forwardRef(({...IAnimationBox}, ref) =>{
+const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
 
   const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimPlatform,currentAnimName} = useContext(
     AnimatorTypeContext
@@ -81,7 +81,6 @@ const AnimationBox = forwardRef(({...IAnimationBox}, ref) =>{
         startAnimate()
       }
       else{
-        console.log('end')
         endAnimate()
       }
     }
@@ -111,7 +110,7 @@ const AnimationBox = forwardRef(({...IAnimationBox}, ref) =>{
         </Box>
       </BoxContainer>
   )
-})
+}))
 
 export default AnimationBox
 
@@ -127,7 +126,7 @@ const Box = styled.div`
   width:45px;
   height:45px;
   background: linear-gradient(180deg, #77FBAD 0%, #47BBAC 100%);
-  opacity: 0.5;
+  opacity: 0.8;
   border-radius: 8px;
   margin: 0 auto;
 `

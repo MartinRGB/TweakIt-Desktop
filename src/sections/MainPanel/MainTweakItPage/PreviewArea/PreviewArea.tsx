@@ -1,4 +1,4 @@
-import React ,{ useContext, useEffect,useState,useRef} from 'react';
+import React ,{memo,useContext, useEffect,useState,useRef} from 'react';
 
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
@@ -15,7 +15,7 @@ import Solver from '@Components/Solver';
 import DataDrivenAnimator from './DataDrivenAnimator'
 import AnimationBox from './AnimationBox'
 
-const PreviewArea: React.FC = ({children}) => {
+const PreviewArea: React.FC = memo(({children}) => {
 
   const [animProperty,setAnimProerty] = useState<string>('scale')
   const [isReverse,setIsReverse] = useState<boolean>(false)
@@ -61,7 +61,7 @@ const PreviewArea: React.FC = ({children}) => {
       </BtnContainer>
     </Container>
   )
-}
+})
 
 export default PreviewArea
 

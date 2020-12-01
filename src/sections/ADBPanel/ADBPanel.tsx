@@ -1,4 +1,4 @@
-import React,{ useContext, useEffect, useState} from 'react';
+import React,{ memo,useContext, useEffect, useState} from 'react';
 import styled from '@emotion/styled'
 import {css} from "@emotion/core";
 import { jsx,useColorMode} from 'theme-ui'
@@ -11,7 +11,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '@Config/animation.json';
 import ReactPlaceholder from 'react-placeholder';
 
-const ADBPanel: React.FC = ({ children }) => {
+const ADBPanel: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();
   const isDark = colorMode === `dark`;
@@ -63,7 +63,7 @@ const ADBPanel: React.FC = ({ children }) => {
       </Container>
     </animated.div>
   );
-}
+})
 
 export default ADBPanel
 

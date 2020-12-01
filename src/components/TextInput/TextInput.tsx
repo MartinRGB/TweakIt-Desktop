@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,useState}from 'react'
+import React, {memo,useContext, useEffect,useState}from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const TextInput: React.FC<IInput> = ({ id,style,value,min,max,step,isEditable,onChange,onKeyUp,onKeyDown,onBlur,onFocus}) => {
+const TextInput: React.FC<IInput> = memo(({ id,style,value,min,max,step,isEditable,onChange,onKeyUp,onKeyDown,onBlur,onFocus}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -36,7 +36,7 @@ const TextInput: React.FC<IInput> = ({ id,style,value,min,max,step,isEditable,on
     onFocus={onFocus}
   />)
   ;
-}
+})
 
 const Input = styled.input<{
   isEditable:boolean;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from 'react';
+import React, {memo,useContext, useEffect} from 'react';
 import styled from '@emotion/styled'
 //import {css} from '@emotion/core'
 import { useColorMode,jsx,css} from 'theme-ui'
@@ -14,7 +14,7 @@ import { ADBExpandStateContext } from '@Context/ADBExpandContext';
 
 import initState from '@Config/init_state.json'
 
-const TitleBar: React.FC = ({ children }) => {
+const TitleBar: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();
 
@@ -59,7 +59,7 @@ const TitleBar: React.FC = ({ children }) => {
       </ButtonLayout>
     </Container>
   );
-}
+})
 
 export default TitleBar
 

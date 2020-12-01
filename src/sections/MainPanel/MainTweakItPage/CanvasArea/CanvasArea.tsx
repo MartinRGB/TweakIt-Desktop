@@ -1,4 +1,4 @@
-import React ,{ useEffect, useState,useRef,useLayoutEffect} from 'react';
+import React ,{memo, useEffect, useState,useRef,useLayoutEffect} from 'react';
 
 import styled from '@emotion/styled';
 
@@ -7,7 +7,7 @@ import CanvasInput from './CanvasInput'
 import CanvasSVG from './CanvasSVG'
 import initState from '@Config/init_state.json'
 
-const CanvasArea: React.FC = ({children}) => {
+const CanvasArea: React.FC = memo(({children}) => {
   
   const svgWidth = initState.svgWidth;
   const svgHeight = initState.svgHeight;
@@ -75,7 +75,7 @@ const CanvasArea: React.FC = ({children}) => {
       </InputContainer>
     </Container>
   )
-}
+})
 
 export default CanvasArea
 

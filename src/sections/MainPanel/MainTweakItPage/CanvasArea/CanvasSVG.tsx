@@ -1,4 +1,4 @@
-import React ,{ useContext,useEffect, useState,useRef,useLayoutEffect} from 'react';
+import React ,{memo,useContext,useEffect, useState,useRef,useLayoutEffect} from 'react';
 
 import styled from '@emotion/styled';
 
@@ -23,7 +23,7 @@ export interface ISVGContainer {
   children:any;
 }
 
-const CanvasSVG: React.FC<ISVGContainer> = ({
+const CanvasSVG: React.FC<ISVGContainer> = memo(({
   isLayoutRow, 
   svgWidth,
   svgHeight,
@@ -230,7 +230,7 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
             
             ></SVGBlurContainer> */}
     </Container>)
-}
+})
 
 export default CanvasSVG
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,useState}from 'react'
+import React, {memo,useContext, useEffect,useState}from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const RangeInput: React.FC<IInput> = ({  style,value,min,max,step,onChange,isEditable}) => {
+const RangeInput: React.FC<IInput> = memo(({  style,value,min,max,step,onChange,isEditable}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -30,7 +30,7 @@ const RangeInput: React.FC<IInput> = ({  style,value,min,max,step,onChange,isEdi
     onChange={onChange}
   />)
   ;
-}
+})
 
 const Input = styled.input<{
   isEditable:boolean

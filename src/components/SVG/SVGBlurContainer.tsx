@@ -1,11 +1,11 @@
-import React, {useContext,useEffect,useState}from 'react'
+import React, {useContext,memo,useEffect,useState}from 'react'
 import styled from '@emotion/styled';
 import { ISVG } from "@Types";
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext'
 
 import { ListSelectStateContext } from '@Context/ListSelectStateContext'
 
-const SVGBlurContainer: React.FC<ISVG> = ({ 
+const SVGBlurContainer: React.FC<ISVG> = memo(({ 
   pathStyle,
   svgStyle,
   svgWidth,
@@ -60,7 +60,7 @@ const SVGBlurContainer: React.FC<ISVG> = ({
 
       </BlurDiv>
   </Container>)
-}
+})
 
 const Container = styled.div`
     width:100%;

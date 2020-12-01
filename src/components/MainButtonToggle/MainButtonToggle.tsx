@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{memo}from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const MainButtonToggle: React.FC<IButton> = ({ style,children , onClick,active}) => {
+const MainButtonToggle: React.FC<IButton> = memo(({ style,children , onClick,active}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -36,7 +36,7 @@ return (
       </Button>
   </animated.div>);
 
-}
+})
 
 const AnimatedContainerCSS = css`
   height:16px;

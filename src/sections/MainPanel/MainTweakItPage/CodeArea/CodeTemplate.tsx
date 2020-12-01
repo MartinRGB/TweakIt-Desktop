@@ -1,4 +1,4 @@
-import React ,{ useContext, useEffect,useState,useRef} from 'react';
+import React ,{memo,useContext, useEffect,useState,useRef} from 'react';
 
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
@@ -20,15 +20,15 @@ import SpringFactorEvaluator from './SpringFactorEvaluator'
 export interface ICodeSnippet{
   name?:string;
   isExpanded?:boolean;
+  style?:any;
 }
 
 
-const CodeTemplate: React.FC<ICodeSnippet> = ({name,isExpanded}) => {
+const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
 
   const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimPlatform,currentAnimName,interpolatorName,iOSName,webName,flutterName,smartisanName} = useContext(
     AnimatorTypeContext
   );
-
 
 
   // Or useRef() Performance Optim Here
@@ -42,6 +42,8 @@ const CodeTemplate: React.FC<ICodeSnippet> = ({name,isExpanded}) => {
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
     //var evaluator = new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['damping']));
     //console.log(evaluator)
+
+    console.log(new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['dampingratio']),cIF(mSolver['damping']),cIF(mSolver['duration']),0,1).factor)
     return(
       <CodeDiv>
       <Comment>// Android Spring Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/androidx/dynamicanimation/animation/SpringAnimation.html">[API]</Link><Break/>
@@ -139,10 +141,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = ({name,isExpanded}) => {
   }
 
   const FlutterSpringAnimationComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🥃🥃🥃 <Trans>Work In Progress</Trans> 🥃🥃🥃</Comment>
-      </CodeDiv>)
+    return (WorkInProgressBlock())
   }
 
   const SmartisanSpringAnimationComponents = () =>{
@@ -163,9 +162,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = ({name,isExpanded}) => {
         animator.setDuration(<Number>{smartisanName}.PROPERTY_ANIMATION_DURATION</Number>)
       </CodeDiv>
       :
-      <CodeDiv>
-        <Comment>🍷🍷🍷 <Trans>Check Android Sections</Trans> 🍷🍷🍷</Comment>
-      </CodeDiv>
+      CheckAndroidBlock()
     )
   }
 
@@ -182,32 +179,19 @@ const CodeTemplate: React.FC<ICodeSnippet> = ({name,isExpanded}) => {
   }
   
   const WebFlingAnimationComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>)
+    return (NoReferenceBlock())
   }
   
   const iOSFlingAnimationComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>)
+    return (NoReferenceBlock())
   }
   
   const FlutterFlingAnimationComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🥃🥃🥃 <Trans>Work In Progress</Trans> 🥃🥃🥃</Comment>
-      </CodeDiv>)
+    return (WorkInProgressBlock())
   }
 
   const SmartisanFlingAnimationComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍷🍷🍷 <Trans>Check Android Sections</Trans> 🍷🍷🍷</Comment>
-      </CodeDiv>
-      )
+    return (CheckAndroidBlock())
   }
   
 
@@ -221,48 +205,39 @@ const CodeTemplate: React.FC<ICodeSnippet> = ({name,isExpanded}) => {
     var duration = currentSolverData[currentSolverData.length-1]*1000
     return (
       (currentAnimPlatform === 'Android')?
-      <CodeDiv>
-        <Comment>// Android Interpolator Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/android/view/animation/Interpolator">[API]</Link><Break/>
-        [<Class>Animator</Class>].setInterpolator(new <Class>{currentAnimName}Interpolator</Class>(<Number>{paraStr}</Number>));<Break/>
-        [<Class>Animator</Class>].setDuration(<Number>{duration}</Number>);
-      </CodeDiv>:<Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
+        <CodeDiv>
+          <Comment>// Android Interpolator Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/android/view/animation/Interpolator">[API]</Link><Break/>
+          [<Class>Animator</Class>].setInterpolator(new <Class>{currentAnimName}Interpolator</Class>(<Number>{paraStr}</Number>));<Break/>
+          [<Class>Animator</Class>].setDuration(<Number>{duration}</Number>);
+        </CodeDiv>
+        :
+        NoReferenceBlock()
     )
   }
   
   const WebInterpolatorComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>)
+    return (NoReferenceBlock())
   }
   
   const iOSInterpolatorComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>)
+    return (NoReferenceBlock())
   }
   
   const FlutterInterpolatorComponents = () =>{
     return (
       (flutterName)?
-      <CodeDiv>
-        <Comment>// Flutter Curves</Comment> <Link target="_blank" href="https://api.flutter.dev/flutter/animation/Curves-class.html">[API]</Link><Break/>
-        <Keyword>const</Keyword> <Class>Curve</Class> curve = <Class>Curves</Class>.<Number>{firstLetterLower(flutterName)}</Number><Break/>
-        <Break/>
-      </CodeDiv>
-      :
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>)
+        <CodeDiv>
+          <Comment>// Flutter Curves</Comment> <Link target="_blank" href="https://api.flutter.dev/flutter/animation/Curves-class.html">[API]</Link><Break/>
+          <Keyword>const</Keyword> <Class>Curve</Class> curve = <Class>Curves</Class>.<Number>{firstLetterLower(flutterName)}</Number><Break/>
+          <Break/>
+        </CodeDiv>
+        :
+        NoReferenceBlock()
+      )
   }
 
   const SmartisanInterpolatorComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍷🍷🍷 <Trans>Check Android Sections</Trans> 🍷🍷🍷</Comment>
-      </CodeDiv>
-      )
+    return (CheckAndroidBlock())
   }
   
   const AndroidCubicBezierComponents = () =>{
@@ -400,9 +375,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = ({name,isExpanded}) => {
         animator.setDuration(<Number>{duration}</Number>)
       </CodeDiv>
       :
-      <CodeDiv>
-        <Comment>🍷🍷🍷 <Trans>Check Android Sections</Trans> 🍷🍷🍷</Comment>
-      </CodeDiv>
+      CheckAndroidBlock()
       )
   }
   
@@ -418,38 +391,24 @@ const CodeTemplate: React.FC<ICodeSnippet> = ({name,isExpanded}) => {
         [<Class>Animator</Class>].setDuration(<Number>{duration}</Number>);
       </CodeDiv>
       :
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>
+      NoReferenceBlock()
     )
   }
   
   const iOSDoubleCubicBezierComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>)
+    return (NoReferenceBlock())
   }
   
   const WebDoubleCubicBezierComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>)
+    return (NoReferenceBlock())
   }
   
   const FlutterDoubleCubicBezierComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>)
+    return (NoReferenceBlock())
   }
 
   const SmartisanDoubleCubicBezierComponents = () =>{
-    return (
-      <CodeDiv>
-        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-      </CodeDiv>)
+    return (NoReferenceBlock())
   }
 
   const UniversalDataComponents = () =>{
@@ -462,18 +421,84 @@ const CodeTemplate: React.FC<ICodeSnippet> = ({name,isExpanded}) => {
     )
   }
 
+  const NoReferenceBlock = () =>{
+    return (
+      <CodeDiv>
+        <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
+      </CodeDiv>)
+  }
 
-  return (
-    (name && calculator && isExpanded && (triggredIndex === -1 && bezierTriggeredIndex === -1))?((name != "Data")?
-      eval(`${name}${calculator}Components()`)
-      :
-      UniversalDataComponents())
-    :
+  const WorkInProgressBlock = () =>{
+    return (
+      <CodeDiv>
+        <Comment>🥃🥃🥃 <Trans>Work In Progress</Trans> 🥃🥃🥃</Comment>
+      </CodeDiv>)
+  }
+
+  const CheckAndroidBlock = () =>{
+    return (
     <CodeDiv>
-      <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
-    </CodeDiv>
+      <Comment>🍷🍷🍷 <Trans>Check Android Sections</Trans> 🍷🍷🍷</Comment>
+    </CodeDiv>)
+  }
+
+  const DataLoadingBlock = () =>{
+    return (
+    <CodeDiv>
+      <Comment>⌛⌛⌛ <Trans>Loading...</Trans> ⌛⌛⌛</Comment>
+    </CodeDiv>)
+  }
+
+  const finalResult = () => {
+
+    if(name && calculator && isExpanded){
+      if((triggredIndex === -1 && bezierTriggeredIndex === -1)){
+        ((name != "Data")?eval(`${name}${calculator}Components()`):UniversalDataComponents())
+      }
+      else{
+        DataLoadingBlock()
+      }
+    }
+    else{
+      NoReferenceBlock();
+    }
+  }
+
+  return (<div style={{...style}}>
+    {
+      // (name && calculator && isExpanded && (triggredIndex === -1 && bezierTriggeredIndex === -1))?((name != "Data")?
+      //   eval(`${name}${calculator}Components()`)
+      //   :
+      //   UniversalDataComponents())
+      // :
+      // NoReferenceBlock()
+
+      // (name && calculator && isExpanded)?
+      //     (triggredIndex === -1 && bezierTriggeredIndex === -1)?
+      //         ((name != "Data")?
+      //             eval(`${name}${calculator}Components()`)
+      //             :
+      //             UniversalDataComponents())
+      //         :
+      //         DataLoadingBlock()
+      //     :
+      //     NoReferenceBlock()
+
+      (name && calculator && isExpanded)?
+          (triggredIndex === -1 && bezierTriggeredIndex === -1)?
+              ((name != "Data")?
+                  eval(`${name}${calculator}Components()`)
+                  :
+                  UniversalDataComponents())
+              :
+              DataLoadingBlock()
+          :
+          NoReferenceBlock()
+      
+    }
+    </div>
   )
-}
+})
 
 export default CodeTemplate
 

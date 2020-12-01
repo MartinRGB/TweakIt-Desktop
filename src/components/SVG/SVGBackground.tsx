@@ -1,9 +1,9 @@
-import React from 'react'
+import React ,{memo} from 'react'
 import styled from '@emotion/styled';
 import { ISVG } from "@Types";
 
 
-const SVGBackground: React.FC<ISVG> = ({ 
+const SVGBackground: React.FC<ISVG> = memo(({ 
   pathStyle,
   svgStyle,
   svgWidth,
@@ -89,7 +89,7 @@ const SVGBackground: React.FC<ISVG> = ({
             </g>
         </CustomSVG>)
   ;
-}
+})
 
 const CustomSVG = styled.svg`
 // width: 400px;
