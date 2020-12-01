@@ -143,13 +143,14 @@ export class OrigamiPOPSpring extends SpringAnimationCalculator {
 }
 
 export class iOSUIViewSpring extends SpringAnimationCalculator {
-  constructor (dampingratio?:number, duration?:number) {
+  constructor (dampingratio?:number, velocity?:number,duration?:number) {
     super()
 
     // this.stiffness = this.tensionFromOrigamiValue(stiffness);
     // this.damping = this.frictionFromOrigamiValue(damping);
     this.dampingratio = dampingratio?dampingratio:0.5
     this.duration = duration?duration:0.5
+    this.velocity = velocity?velocity:0;
     this.fixedGraph = false
 
     // Output
@@ -172,7 +173,6 @@ export class iOSUIViewSpring extends SpringAnimationCalculator {
     this.speed = this.computeSpeed(this.getParaS(this.bouncyTension,0.5,200),0.,20.);
     let b = this.getParaB(this.bouncyFriction,this.b3Nobounce(this.bouncyTension), 0.01);
     this.bounciness = 20*1.7*b/0.8;
-
 
     //this.array = this.springCalculator(this.stiffness, this.dampingratio, 0.0, this.duration, this.fixedGraph)
   }

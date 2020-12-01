@@ -534,6 +534,12 @@
                         "max": 0.99,
                         "editable": true
                     },
+                    "Velocity": {
+                        "default": 0,
+                        "min": 0,
+                        "max": 1000,
+                        "editable": true
+                    },
                     "Duration": {
                         "default": 0.5,
                         "min": 0.01,
