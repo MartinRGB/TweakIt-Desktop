@@ -43,6 +43,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
     //var evaluator = new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['damping']));
     //console.log(evaluator)
 
+    // TODO in Worker Or By State
     console.log(new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['dampingratio']),cIF(mSolver['damping']),cIF(mSolver['duration']),0,1).factor)
     return(
       <CodeDiv>

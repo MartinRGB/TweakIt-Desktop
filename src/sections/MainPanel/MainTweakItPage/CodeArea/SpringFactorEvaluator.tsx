@@ -46,12 +46,13 @@ export default class SpringFactorEvaluator{
 
         this.factor = this.findCloseNum(this.springMaxValue,this.epsilon)
 
-        // if(this.dampingratio <0.75){
-        //     this.factor = this.findCloseNum(this.springMaxValue,this.epsilon)
-        // }
-        // else{
-        //     this.factor = (this.dampingratio - 0.75)*4. + 1.5
-        // }
+        if(this.dampingratio <0.75){
+            this.factor = this.findCloseNum(this.springMaxValue,this.epsilon)
+        }
+        else{
+            var progress = ((this.dampingratio - 0.75)/0.25)
+            this.factor = (1 - Math.pow(1-progress,2 * 2))*4
+        }
 
 
         
