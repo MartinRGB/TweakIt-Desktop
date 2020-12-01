@@ -104,5 +104,6 @@ const TitleBox = styled.div`
     font-style: normal;
     font-weight: 500;
     letter-spacing: 10px;
+    user-select: none;
     color:${p => p.theme.colors.primary};
 `;

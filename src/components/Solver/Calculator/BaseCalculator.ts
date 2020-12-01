@@ -10,6 +10,63 @@ export const setCalculatorSampleScale = (num:number) => {
     sampleScale = num;
 }
 
+export class HorizontalLineCalculator{
+
+    array:any;
+
+    constructor(){
+        //this.array = this.calculator();
+    }
+
+    calculator(){
+        // var transitionArray = [[0,0]];
+        var transitionArray = [],stepArray = [],valueArray = [];
+
+        for (var i = 1/(samplePointNumber*sampleScale);i < 1+1/(samplePointNumber*sampleScale);i += 1/(samplePointNumber*sampleScale))
+        {
+                // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
+    
+                var valX = i;
+                var valY = 0.001;
+                //console.log(valY)
+                transitionArray.push([valX,valY]);
+    
+                stepArray.push(valX);
+                valueArray.push(valY);
+        }
+
+        return [stepArray,valueArray,transitionArray];
+    }
+
+    public getStepArray(){
+        if(this.array === undefined){
+            this.array = this.calculator();
+        }
+        return getFixedStepArray(this.array[0])
+    }
+
+    public getValueArray(){
+        if(this.array === undefined){
+            this.array = this.calculator();
+        }
+        return getFixedValueArrayUnLitmited(this.array[1])
+    }
+
+    public getFullArray() {
+        if(this.array === undefined){
+            this.array = this.calculator();
+        }
+        return this.array[2];
+    }
+
+    public getMergedFullArray(){
+        if(this.array === undefined){
+            this.array = this.calculator();
+        }
+        return this.array[2].toString().split(',').map(Number);
+    }
+}
+
 export class SpringAnimationCalculator{
 
     array:any;
@@ -289,19 +346,31 @@ export class SpringAnimationCalculator{
     }
 
     public getStepArray(){
+        if(this.array === undefined){
+            this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+        }
         return getFixedStepArray(this.array[0])
         //return this.array[0]
     }
 
     public getValueArray(){
+        if(this.array === undefined){
+            this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+        }
         return getFixedValueArray(this.array[1])
     }
 
     public getFullArray() {
+        if(this.array === undefined){
+            this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+        }
         return this.array[2];
     }
 
     public getMergedFullArray(){
+        if(this.array === undefined){
+            this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+        }
         return this.array[2].toString().split(',').map(Number);
     }
 
@@ -321,7 +390,7 @@ export class InterpolatorCalculator {
     constructor() { //,duration:number
         //this.factor = factor;
         //this.duration = duration;
-        this.array = this.interpolatorCalculator((t:number) =>{return t;});
+        //this.array = this.interpolatorCalculator((t:number) =>{return t;});
     }
 
     interpolatorCalculator(funs:(a:number) =>void) {  
@@ -342,18 +411,34 @@ export class InterpolatorCalculator {
     }
 
     public getStepArray(){
+
+        if(this.array === undefined){
+            this.array = this.interpolatorCalculator((t:number) =>{return this.def?this.def(t):t});
+        }
         return getFixedStepArray(this.array[0])
     }
 
     public getValueArray(){
+
+        if(this.array === undefined){
+            this.array = this.interpolatorCalculator((t:number) =>{return this.def?this.def(t):t});
+        }
         return getFixedValueArray(this.array[1])
     }
 
     public getFullArray() {
+
+        if(this.array === undefined){
+            this.array = this.interpolatorCalculator((t:number) =>{return this.def?this.def(t):t});
+        }
         return this.array[2];
     }
 
     public getMergedFullArray(){
+
+        if(this.array === undefined){
+            this.array = this.interpolatorCalculator((t:number) =>{return this.def?this.def(t):t});
+        }
         return this.array[2].toString().split(',').map(Number);
     }
 }
@@ -361,17 +446,17 @@ export class InterpolatorCalculator {
 
 export class FlingAnimationCalculator {
     private array:any;
-    private friction:number;
-    private velocity:number;
+    private friction?:number;
+    private velocity?:number;
     private duration:any;
     private transition:any;
 
-    constructor(velocity:number, friction:number) {
+    constructor(velocity?:number, friction?:number) {
         this.friction = friction*-4.2;
         this.velocity = velocity;
-        this.array = this.flingCalculator(this.velocity,this.friction);
-        this.duration = this.array[3];
-        this.transition = this.array[4];
+        //this.array = this.flingCalculator(this.velocity,this.friction);
+        //this.duration = this.array[3];
+        //this.transition = this.array[4];
     }
 
     flingCalculator(velocity:number,friction:number){
@@ -435,26 +520,44 @@ export class FlingAnimationCalculator {
     }
 
     public getFinalTransition(){
-        return this.transition;
+        if(this.array === undefined){
+            this.array = this.flingCalculator(this.velocity,this.friction);
+        }
+        return this.array[4];
     }
 
     public getFinalDuration(){
-        return this.duration;
+        if(this.array === undefined){
+            this.array = this.flingCalculator(this.velocity,this.friction);
+        }
+        return this.array[3];
     }
 
     public getStepArray(){
+        if(this.array === undefined){
+            this.array = this.flingCalculator(this.velocity,this.friction);
+        }
         return getFixedStepArray(this.array[0])
     }
 
     public getValueArray(){
+        if(this.array === undefined){
+            this.array = this.flingCalculator(this.velocity,this.friction);
+        }
         return getFixedValueArray(this.array[1])
     }
 
     public getFullArray() {
+        if(this.array === undefined){
+            this.array = this.flingCalculator(this.velocity,this.friction);
+        }
         return this.array[2];
     }
 
     public getMergedFullArray(){
+        if(this.array === undefined){
+            this.array = this.flingCalculator(this.velocity,this.friction);
+        }
         return this.array[2].toString().split(',').map(Number);
     }
 
@@ -464,65 +567,6 @@ export class FlingAnimationCalculator {
 
 }
 
-export class LookupTableCalculator{
-
-    private mValues:any;
-    private mLength:number;
-    private mStepSize:number;
-    private outputLength:number;
-
-    constructor(value:any,outLength:number){
-        this.mValues = value;
-        this.mLength = value.length;
-        this.mStepSize = 1 / (this.mLength - 1)
-        this.outputLength = outLength;
-
-        // #####  Map another array's length to 60 #####
-        //this.data = this.getAnimationArray(this.mValues,this.mLength,this.mStepSize);
-
-    }
-
-    public getAnimationArray(){ //values:any,length:number,stepSize:number
-
-        var mArray = [];
-
-        for (var i=1/this.outputLength;i<1;i += 1/this.outputLength){
-            // mArray.push(this.getInterpolation(i,values,length,stepSize))
-            mArray.push(this.getInterpolation(i,this.mValues,this.mLength,this.mStepSize))
-        }
-        //mArray.push(1.0);
-
-        mArray.push(mArray[mArray.length-1])
-        //console.log(mArray)
-
-        return mArray;
-    }
-
-
-    getInterpolation(input:any,values:any,length:any,step:any) {
-        if (input >= 1.0) {
-            return 1.0;
-        }
-        if (input <= 0) {
-            return 0;
-        }
-
-        // Calculate index - We use min with length - 2 to avoid IndexOutOfBoundsException when
-        // we lerp (linearly interpolate) in the return statement
-        var position = (Math.min((input * (length - 1)), length - 2));
-        // Calculate values to account for small offsets as the lookup table has discrete values
-        var quantized = position * step;
-        var diff = input - quantized;
-        var weight = diff / step;
-
-        var roundVal = values[Math.round(position)];
-        var roundNextVal = values[Math.round(position) + 1];
-
-        // Linearly interpolate between the table values
-        //return values[Math.round(position)] + weight * (values[Math.round(position) + 1] - values[position]);
-        return roundVal + weight * (roundNextVal - roundVal);
-    }
-}
 
 export class CubicBezierCalculator {
     private epsilon:number;
@@ -543,7 +587,7 @@ export class CubicBezierCalculator {
       
       this.epsilon = 0.001; //1e-6
       this.UnitBezier(p1x,p1y,p2x,p2y);
-      this.array = this.bezierCalculator(); //p1x,p1y,p2x,p2y
+    //   this.array = this.bezierCalculator(); //p1x,p1y,p2x,p2y
       this.bezier = [p1x,p1y,p2x,p2y];
       this.editable = true;
     //   this.duration = duration;
@@ -666,106 +710,33 @@ export class CubicBezierCalculator {
     //     return this.array[1];
     // }
     public getStepArray(){
+        if(this.array === undefined){
+            this.array = this.bezierCalculator();
+        }
         return getFixedValueArray(this.array[0])
     }
 
     public getValueArray(){
+        if(this.array === undefined){
+            this.array = this.bezierCalculator();
+        }
         return getFixedValueArray(this.array[1])
     }
 
     public getFullArray() {
-        return this.array[2];
-    }
-
-    public getMergedFullArray(){
-        return this.array[2].toString().split(',').map(Number);
-    }
-}
-
-export class HorizontalLineCalculator{
-
-    array:any;
-
-    constructor(){
-        this.array = this.calculator();
-    }
-
-    calculator(){
-        // var transitionArray = [[0,0]];
-        var transitionArray = [],stepArray = [],valueArray = [];
-
-        for (var i = 1/(samplePointNumber*sampleScale);i < 1+1/(samplePointNumber*sampleScale);i += 1/(samplePointNumber*sampleScale))
-        {
-                // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
-    
-                var valX = i;
-                var valY = 0.001;
-                //console.log(valY)
-                transitionArray.push([valX,valY]);
-    
-                stepArray.push(valX);
-                valueArray.push(valY);
+        if(this.array === undefined){
+            this.array = this.bezierCalculator();
         }
-
-        return [stepArray,valueArray,transitionArray];
-    }
-
-    public getStepArray(){
-        return getFixedStepArray(this.array[0])
-    }
-
-    public getValueArray(){
-        return getFixedValueArrayUnLitmited(this.array[1])
-    }
-
-    public getFullArray() {
         return this.array[2];
     }
 
     public getMergedFullArray(){
+        if(this.array === undefined){
+            this.array = this.bezierCalculator();
+        }
         return this.array[2].toString().split(',').map(Number);
     }
 }
-
-
-const getFixedStepArray = (array:any) => {
-    var fixedStepArray = new LookupTableCalculator(array,samplePointNumber).getAnimationArray();
-
-    var maxStep = Math.max(...fixedStepArray);
-
-    fixedStepArray.map(function (val:any,index:number) {
-        fixedStepArray[index] /= maxStep;
-    })
-
-    return fixedStepArray;
-}
-
-const getFixedValueArray = (array:any) => {
-    var fixedValueArray = new LookupTableCalculator(array,samplePointNumber).getAnimationArray();
-
-    if(fixedValueArray[fixedValueArray.length - 1] != 1){
-        fixedValueArray[fixedValueArray.length - 1] = 1.00
-    }
-
-    //var maxValue = Math.max(...fixedValueArray);
-
-    // if(maxValue > 1.){
-    //     fixedValueArray.map(function (val:any,index:number) {
-    //         fixedValueArray[index] /= maxValue;
-    //     })
-    // }
-
-    return fixedValueArray;
-}
-
-
-
-const getFixedValueArrayUnLitmited = (array:any) => {
-    var fixedValueArray = new LookupTableCalculator(array,samplePointNumber).getAnimationArray();
-
-    return fixedValueArray;
-}
-
 
 export class DoubleCubicBezierCalculator {
     private epsilon:number;
@@ -805,7 +776,7 @@ export class DoubleCubicBezierCalculator {
       this.p4y = p4y;
       this.bpX = bpX;
       this.bpY = bpY;
-      this.array = this.bezierCalculator(); //p1x,p1y,p2x,p2y
+      //this.array = this.bezierCalculator(); //p1x,p1y,p2x,p2y
       this.editable = true;
 
        //this.duration = duration;
@@ -888,16 +859,51 @@ export class DoubleCubicBezierCalculator {
         //var transitionArray = [[0,0]];
         var transitionArray = [],stepArray = [],valueArray:any = [];
 
+        //TODO Performance Issue
+        // this.UnitBezier(this.p1x,this.p1y,this.p2x,this.p2y);
+        // for (
+        //     var i = 0;
+        //     i < 1.+0/(samplePointNumber*sampleScale);
+        //     i += 1/(samplePointNumber*sampleScale)
+        //     ){
+        //     // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
+
+        //     var valX = i*this.bpX;
+        //     var valY = this.solve(i,this.epsilon)*this.bpY;
+        //     //console.log(valY)
+        //     transitionArray.push([valX,valY]);
+
+        //     stepArray.push(valX);
+        //     valueArray.push(valY);
+        // }
+
+        // this.UnitBezier(this.p3x,this.p3y,this.p4x,this.p4y);
+
+        // for (
+        //     var i = 0;
+        //     i < 1.+0/(samplePointNumber*sampleScale);
+        //     i += 1/(samplePointNumber*sampleScale)
+        //     ){
+        //     // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
+
+        //     var valX:number = this.bpX + i*(1-this.bpX);
+        //     var valY:number = this.bpY + this.solve(i,this.epsilon)*(1-this.bpY);
+        //     //console.log(valY)
+        //     transitionArray.push([valX,valY]);
+
+        //     stepArray.push(valX);
+        //     valueArray.push(valY);
+        // }
         this.UnitBezier(this.p1x,this.p1y,this.p2x,this.p2y);
         for (
             var i = 0;
-            i < 1.+0/(samplePointNumber*sampleScale);
+            i < this.bpX;
             i += 1/(samplePointNumber*sampleScale)
             ){
             // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
 
-            var valX = i*this.bpX;
-            var valY = this.solve(i,this.epsilon)*this.bpY;
+            var valX = i;
+            var valY = this.solve(i/this.bpX,this.epsilon)*this.bpY;
             //console.log(valY)
             transitionArray.push([valX,valY]);
 
@@ -908,14 +914,14 @@ export class DoubleCubicBezierCalculator {
         this.UnitBezier(this.p3x,this.p3y,this.p4x,this.p4y);
 
         for (
-            var i = 0;
-            i < 1.+0/(samplePointNumber*sampleScale);
+            var i = this.bpX + 1/(samplePointNumber*sampleScale);
+            i < 1.;
             i += 1/(samplePointNumber*sampleScale)
             ){
             // transitionArray.push([Number(i),Number(this.solve(i,this.epsilon))]);
 
-            var valX:number = this.bpX + i*(1-this.bpX);
-            var valY:number = this.bpY + this.solve(i,this.epsilon)*(1-this.bpY);
+            var valX:number = i;
+            var valY:number = this.solve((i-this.bpX)/(1-this.bpX),this.epsilon)*(1.-this.bpY) + this.bpY;
             //console.log(valY)
             transitionArray.push([valX,valY]);
 
@@ -934,18 +940,129 @@ export class DoubleCubicBezierCalculator {
     }
 
     public getStepArray(){
+        if(this.array === undefined){
+            this.array = this.bezierCalculator();
+        }
         return getFixedValueArray(this.array[0])
     }
 
     public getValueArray(){
+        if(this.array === undefined){
+            this.array = this.bezierCalculator();
+        }
         return getFixedValueArray(this.array[1])
     }
 
     public getFullArray() {
+        if(this.array === undefined){
+            this.array = this.bezierCalculator();
+        }
         return this.array[2];
     }
 
     public getMergedFullArray(){
+        if(this.array === undefined){
+            this.array = this.bezierCalculator();
+        }
         return this.array[2].toString().split(',').map(Number);
     }
+}
+
+export class LookupTableCalculator{
+
+    private mValues:any;
+    private mLength:number;
+    private mStepSize:number;
+    private outputLength:number;
+
+    constructor(value:any,outLength:number){
+        this.mValues = value;
+        this.mLength = value.length;
+        this.mStepSize = 1 / (this.mLength - 1)
+        this.outputLength = outLength;
+
+        // #####  Map another array's length to 60 #####
+        //this.data = this.getAnimationArray(this.mValues,this.mLength,this.mStepSize);
+
+    }
+
+    public getAnimationArray(){ //values:any,length:number,stepSize:number
+
+        var mArray = [];
+
+        for (var i=1/this.outputLength;i<1;i += 1/this.outputLength){
+            // mArray.push(this.getInterpolation(i,values,length,stepSize))
+            mArray.push(this.getInterpolation(i,this.mValues,this.mLength,this.mStepSize))
+        }
+        //mArray.push(1.0);
+
+        mArray.push(mArray[mArray.length-1])
+        //console.log(mArray)
+
+        return mArray;
+    }
+
+
+    getInterpolation(input:any,values:any,length:any,step:any) {
+        if (input >= 1.0) {
+            return 1.0;
+        }
+        if (input <= 0) {
+            return 0;
+        }
+
+        // Calculate index - We use min with length - 2 to avoid IndexOutOfBoundsException when
+        // we lerp (linearly interpolate) in the return statement
+        var position = (Math.min((input * (length - 1)), length - 2));
+        // Calculate values to account for small offsets as the lookup table has discrete values
+        var quantized = position * step;
+        var diff = input - quantized;
+        var weight = diff / step;
+
+        var roundVal = values[Math.round(position)];
+        var roundNextVal = values[Math.round(position) + 1];
+
+        // Linearly interpolate between the table values
+        //return values[Math.round(position)] + weight * (values[Math.round(position) + 1] - values[position]);
+        return roundVal + weight * (roundNextVal - roundVal);
+    }
+}
+
+
+const getFixedStepArray = (array:any) => {
+    var fixedStepArray = new LookupTableCalculator(array,samplePointNumber).getAnimationArray();
+
+    var maxStep = Math.max(...fixedStepArray);
+
+    fixedStepArray.map(function (val:any,index:number) {
+        fixedStepArray[index] /= maxStep;
+    })
+
+    return fixedStepArray;
+}
+
+const getFixedValueArray = (array:any) => {
+    var fixedValueArray = new LookupTableCalculator(array,samplePointNumber).getAnimationArray();
+
+    if(fixedValueArray[fixedValueArray.length - 1] != 1){
+        fixedValueArray[fixedValueArray.length - 1] = 1.00
+    }
+
+    //var maxValue = Math.max(...fixedValueArray);
+
+    // if(maxValue > 1.){
+    //     fixedValueArray.map(function (val:any,index:number) {
+    //         fixedValueArray[index] /= maxValue;
+    //     })
+    // }
+
+    return fixedValueArray;
+}
+
+
+
+const getFixedValueArrayUnLitmited = (array:any) => {
+    var fixedValueArray = new LookupTableCalculator(array,samplePointNumber).getAnimationArray();
+
+    return fixedValueArray;
 }

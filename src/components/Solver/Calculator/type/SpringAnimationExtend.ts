@@ -13,8 +13,14 @@ export class AndroidSpring extends SpringAnimationCalculator {
     this.damping = this.computeDamping(this.stiffness, this.dampingratio, this.mass)
     this.tension = this.stiffness
     this.friction = this.damping
-    this.duration = this.computeDuration(this.tension, this.friction, this.mass, 2.0)
-    this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+    this.bouncyTension = this.bouncyTesnionConversion(this.tension);
+    this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
+    this.speed = this.computeSpeed(this.getParaS(this.bouncyTension,0.5,200),0.,20.);
+    let b = this.getParaB(this.bouncyFriction,this.b3Nobounce(this.bouncyTension), 0.01);
+    this.bounciness = 20*1.7*b/0.8;
+
+    this.duration = this.computeDuration(this.tension, this.friction, this.mass, 1.0)
+    //this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
   }
 }
 
@@ -41,7 +47,13 @@ export class FramerDHOSpring extends SpringAnimationCalculator {
       this.duration = this.computeDuration(this.stiffness, this.computeDamping(this.stiffness,this.dampingratio,this.mass), this.mass, 1.0)
     }
 
-    this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+    this.bouncyTension = this.bouncyTesnionConversion(this.tension);
+    this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
+    this.speed = this.computeSpeed(this.getParaS(this.bouncyTension,0.5,200),0.,20.);
+    let b = this.getParaB(this.bouncyFriction,this.b3Nobounce(this.bouncyTension), 0.01);
+    this.bounciness = 20*1.7*b/0.8;
+
+    //this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
   
   }
 }
@@ -76,7 +88,13 @@ export class FramerRK4Spring extends SpringAnimationCalculator {
       this.duration = this.computeDuration(this.stiffness, this.computeDamping(this.stiffness,this.dampingratio,this.mass), this.mass, 1.0)
     }
 
-    this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+    this.bouncyTension = this.bouncyTesnionConversion(this.tension);
+    this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
+    this.speed = this.computeSpeed(this.getParaS(this.bouncyTension,0.5,200),0.,20.);
+    let b = this.getParaB(this.bouncyFriction,this.b3Nobounce(this.bouncyTension), 0.01);
+    this.bounciness = 20*1.7*b/0.8;
+
+    //this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
   }
 }
 
@@ -89,9 +107,9 @@ export class OrigamiPOPSpring extends SpringAnimationCalculator {
     this.bounciness = bounciness?bounciness:5
     this.speed = speed?speed:10
     this.velocity = 0.0
-    let b = this.normalize(bounciness / 1.7, 0, 20.0)
+    let b = this.normalize(this.bounciness / 1.7, 0, 20.0)
     b = this.projectNormal(b, 0.0, 0.8)
-    const s = this.normalize(speed / 1.7, 0, 20.0)
+    const s = this.normalize(this.speed / 1.7, 0, 20.0)
     this.bouncyTension = this.projectNormal(s, 0.5, 200)
     this.bouncyFriction = this.quadraticOutInterpolation(b, this.b3Nobounce(this.bouncyTension), 0.01)
 
@@ -112,7 +130,7 @@ export class OrigamiPOPSpring extends SpringAnimationCalculator {
       this.duration = this.computeDuration(this.stiffness, this.computeDamping(this.stiffness,this.dampingratio,this.mass), this.mass, 1.0)
     }
 
-    this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+    //this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
   }
 
   tensionConversion (oValue:number) {
@@ -146,19 +164,17 @@ export class iOSUIViewSpring extends SpringAnimationCalculator {
     // Method -II
     this.tension = this.computeTension(this.dampingratio, this.duration, this.mass)
     this.stiffness = this.tension
-    // this.friction = this.computeFriction(this.dampingratio,this.tension,this.mass);
-    // this.damping = this.friction;
+    this.friction = this.computeFriction(this.dampingratio,this.tension,this.mass);
+    this.damping = this.friction;
 
-    // Useless
-    // this.bouncyTension = this.bouncyTesnionConversion(this.tension);
-    // this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
+    this.bouncyTension = this.bouncyTesnionConversion(this.tension);
+    this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
+    this.speed = this.computeSpeed(this.getParaS(this.bouncyTension,0.5,200),0.,20.);
+    let b = this.getParaB(this.bouncyFriction,this.b3Nobounce(this.bouncyTension), 0.01);
+    this.bounciness = 20*1.7*b/0.8;
 
-    // this.s = this.getParaS(this.bouncyTension,0.5,200);
-    // this.speed = this.computeSpeed(this.getParaS(this.bouncyTension,0.5,200),0.,20.);
-    // this.b = this.getParaB(this.bouncyFriction,this.b3Nobounce(this.bouncyTension), 0.01);
-    // this.bounciness = 20*1.7*this.b/0.8;
 
-    this.array = this.springCalculator(this.stiffness, this.dampingratio, 0.0, this.duration, this.fixedGraph)
+    //this.array = this.springCalculator(this.stiffness, this.dampingratio, 0.0, this.duration, this.fixedGraph)
   }
 
   // Method -I
@@ -213,7 +229,16 @@ export class SOSPowerSpring extends SpringAnimationCalculator {
     this.damping = this.computeDamping(this.stiffness, this.dampingratio, this.mass)
     this.tension = this.stiffness
     this.friction = this.damping
+    this.bouncyTension = this.bouncyTesnionConversion(this.tension);
+    this.bouncyFriction = this.bouncyFrictionConversion(this.friction);
+    this.speed = this.computeSpeed(this.getParaS(this.bouncyTension,0.5,200),0.,20.);
+    let b = this.getParaB(this.bouncyFriction,this.b3Nobounce(this.bouncyTension), 0.01);
+    this.bounciness = 20*1.7*b/0.8;
+    
+    this.damping = this.computeDamping(this.stiffness, this.dampingratio, this.mass)
+    this.tension = this.stiffness
+    this.friction = this.damping
     this.duration = this.computeDuration(this.tension, this.friction, this.mass, 2.0)
-    this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
+    //this.array = this.springCalculator(this.stiffness, this.dampingratio, this.velocity, this.duration, this.fixedGraph)
   }
 }

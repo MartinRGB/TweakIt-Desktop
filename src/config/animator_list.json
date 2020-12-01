@@ -58,6 +58,7 @@
                 "flutterName": "Linear",
                 "webName":"Linear",
                 "iOSName":"Linear",
+                "smartisanName":"LINEAR",
                 "visible": true,
                 "clickable": true,
                 "calculator": "InterpolatorCalculator",
@@ -264,60 +265,70 @@
                         "default": 0.300,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "P1Y": {
                         "default": 0.000,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "P2X": {
                         "default": 0.800,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "P2Y": {
                         "default": 0.150,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "P3X": {
                         "default": 0.050,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "P3Y": {
                         "default": 0.700,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "P4X": {
                         "default": 0.100,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "P4Y": {
                         "default": 1.000,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "BreakPointX": {
                         "default": 0.166,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "BreakPointY": {
                         "default": 0.500,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": false
                     },
                     "Duration": {
@@ -576,6 +587,7 @@
                 "flutterName":"Linear",
                 "webName":"Linear",
                 "iOSName":"Linear",
+                "smartisanName":"LINEAR",
                 "calculator": "CubicBezierCalculator",
                 "animation_data": {
                     "coords":{
@@ -596,6 +608,8 @@
                 "name": "EaseIn",
                 "webName":"EaseIn",
                 "flutterName":"EaseIn",
+                "iOSName":"EaseIn",
+                "smartisanName":"EASE_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -618,6 +632,8 @@
                 "name": "EaseOut",
                 "webName":"EaseOut",
                 "flutterName":"EaseOut",
+                "iOSName":"EaseOut",
+                "smartisanName":"EASE_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -640,6 +656,8 @@
                 "name": "EaseInOut",
                 "webName":"EaseInOut",
                 "flutterName":"EaseInOut",
+                "iOSName":"EaseInOut",
+                "smartisanName":"EASE_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -669,6 +687,7 @@
                 "iOSName": "Linear",
                 "webName":"Linear",
                 "flutterName":"Linear",
+                "smartisanName":"LINEAR",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -753,17 +772,17 @@
         "platform": "Flutter",
         "li": [
             {
-                "name": "Spring Simulation",
+                "name": "Spring Simulation(🚧W.I.P🚧)",
                 "visible": true,
                 "clickable": false
             },
             {
-                "name": "Friction Simulation",
+                "name": "Friction Simulation(🚧W.I.P🚧)",
                 "visible": true,
                 "clickable": false
             },
             {
-                "name": "Gravity Simulation",
+                "name": "Gravity Simulation(🚧W.I.P🚧)",
                 "visible": true,
                 "clickable": false
             },
@@ -777,6 +796,7 @@
                 "flutterName":"Linear",
                 "webName":"Linear",
                 "iOSName":"Linear",
+                "smartisanName":"LINEAR",
                 "visible": true,
                 "clickable": true,
                 "calculator": "InterpolatorCalculator",
@@ -787,6 +807,7 @@
             {
                 "name": "Decelerate",
                 "interpolatorName":"Decelerate",
+                "flutterName":"Decelerate",
                 "visible": true,
                 "clickable": true,
                 "calculator": "InterpolatorCalculator",
@@ -797,6 +818,8 @@
             {
                 "name": "Ease",
                 "webName":"Ease",
+                "flutterName":"Ease",
+                "smartisanName":"EASE",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -807,6 +830,7 @@
             },
             {
                 "name": "FastLinearToSlowEaseIn",
+                "flutterName":"FastLinearToSlowEaseIn",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -818,6 +842,7 @@
             ,{
                 "name": "FastOutSlowIn",
                 "interpolatorName":"FastOutSlowIn",
+                "flutterName":"StandardEasing",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -828,6 +853,7 @@
             }
             ,{
                 "name": "SlowMiddle",
+                "flutterName":"SlowMiddle",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -843,6 +869,7 @@
             ,{
                 "name": "StandardEasing",
                 "interpolatorName":"FastOutSlowIn",
+                "flutterName":"StandardEasing",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -854,6 +881,7 @@
             ,{
                 "name": "AccelerateEasing",
                 "interpolatorName":"FastOutLinear",
+                "flutterName":"AccelerateEasing",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -865,6 +893,7 @@
             ,{
                 "name": "DecelerateEasing",
                 "interpolatorName":"LinearOutSlowIn",
+                "flutterName":"DecelerateEasing",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -881,6 +910,8 @@
                 "name": "EaseIn",
                 "webName":"EaseIn",
                 "iOSName":"EaseIn",
+                "flutterName":"EaseIn",
+                "smartisanName":"EASE_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -891,6 +922,7 @@
             }
             ,{
                 "name": "EaseInToLinear",
+                "flutterName":"EaseInToLinear",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -901,6 +933,7 @@
             }
             ,{
                 "name": "EaseInSine",
+                "flutterName":"EaseInSine",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -911,6 +944,7 @@
             }
             ,{
                 "name": "EaseInQuad",
+                "flutterName":"EaseInQuad",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -921,6 +955,7 @@
             }
             ,{
                 "name": "EaseInCubic",
+                "flutterName":"EaseInCubic",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -931,6 +966,7 @@
             }
             ,{
                 "name": "EaseInQuart",
+                "flutterName":"EaseInQuart",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -941,6 +977,7 @@
             }
             ,{
                 "name": "EaseInQuint",
+                "flutterName":"EaseInQuint",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -951,6 +988,7 @@
             }
             ,{
                 "name": "EaseInExpo",
+                "flutterName":"EaseInExpo",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -961,6 +999,7 @@
             }
             ,{
                 "name": "EaseInCirc",
+                "flutterName":"EaseInCirc",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -971,6 +1010,7 @@
             }
             ,{
                 "name": "EaseInBack",
+                "flutterName":"EaseInBack",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -981,6 +1021,7 @@
             }
             ,{
                 "name": "BounceIn",
+                "flutterName":"BounceIn",
                 "visible": true,
                 "clickable": true,
                 "calculator": "InterpolatorCalculator",
@@ -990,6 +1031,7 @@
             }
             ,{
                 "name": "ElasticIn",
+                "flutterName":"ElasticIn",
                 "visible": true,
                 "clickable": true,
                 "calculator": "InterpolatorCalculator",
@@ -1001,6 +1043,8 @@
                 "name": "EaseOut",
                 "webName":"EaseOut",
                 "iOSName":"EaseOut",
+                "flutterName":"EaseOut",
+                "smartisanName":"EASE_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1011,6 +1055,7 @@
             }
             ,{
                 "name": "LinearToEaseOut",
+                "flutterName":"LinearToEaseOut",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1021,6 +1066,7 @@
             }
             ,{
                 "name": "EaseOutSine",
+                "flutterName":"EaseOutSine",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1031,6 +1077,7 @@
             }
             ,{
                 "name": "EaseOutQuad",
+                "flutterName":"EaseOutQuad",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1041,6 +1088,7 @@
             }
             ,{
                 "name": "EaseOutCubic",
+                "flutterName":"EaseOutCubic",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1051,6 +1099,7 @@
             }
             ,{
                 "name": "EaseOutQuart",
+                "flutterName":"EaseOutQuart",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1061,6 +1110,7 @@
             }
             ,{
                 "name": "EaseOutQuint",
+                "flutterName":"EaseOutQuint",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1071,6 +1121,7 @@
             }
             ,{
                 "name": "EaseOutExpo",
+                "flutterName":"EaseOutExpo",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1081,6 +1132,7 @@
             }
             ,{
                 "name": "EaseOutCirc",
+                "flutterName":"EaseOutCirc",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1091,6 +1143,7 @@
             }
             ,{
                 "name": "EaseOutBack",
+                "flutterName":"EaseOutBack",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1101,6 +1154,7 @@
             }
             ,{
                 "name": "BounceOut",
+                "flutterName":"BounceOut",
                 "visible": true,
                 "clickable": true,
                 "calculator": "InterpolatorCalculator",
@@ -1110,6 +1164,7 @@
             }
             ,{
                 "name": "ElasticOut",
+                "flutterName":"ElasticOut",
                 "visible": true,
                 "clickable": true,
                 "calculator": "InterpolatorCalculator",
@@ -1121,6 +1176,8 @@
                 "name": "EaseInOut",
                 "webName":"EaseInOut",
                 "iOSName":"EaseInOut",
+                "flutterName":"EaseInOut",
+                "smartisanName":"EASE_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1131,6 +1188,7 @@
             }
             ,{
                 "name": "EaseInOutSine",
+                "flutterName":"EaseInOutSine",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1141,6 +1199,7 @@
             }
             ,{
                 "name": "EaseInOutQuad",
+                "flutterName":"EaseInOutQuad",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1151,6 +1210,7 @@
             }
             ,{
                 "name": "EaseInOutCubic",
+                "flutterName":"EaseInOutCubic",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1161,6 +1221,7 @@
             }
             ,{
                 "name": "EaseInOutQuart",
+                "flutterName":"EaseInOutQuart",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1171,6 +1232,7 @@
             }
             ,{
                 "name": "EaseInOutQuint",
+                "flutterName":"EaseInOutQuint",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1181,6 +1243,7 @@
             }
             ,{
                 "name": "EaseInOutExpo",
+                "flutterName":"EaseInOutExpo",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1191,6 +1254,7 @@
             }
             ,{
                 "name": "EaseInOutCirc",
+                "flutterName":"EaseInOutCirc",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1201,6 +1265,7 @@
             }
             ,{
                 "name": "EaseInOutBack",
+                "flutterName":"EaseInOutBack",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1211,6 +1276,7 @@
             }
             ,{
                 "name": "BounceInOut",
+                "flutterName":"BounceInOut",
                 "visible": true,
                 "clickable": true,
                 "calculator": "InterpolatorCalculator",
@@ -1220,6 +1286,7 @@
             }
             ,{
                 "name": "ElasticInOut",
+                "flutterName":"ElasticInOut",
                 "visible": true,
                 "clickable": true,
                 "calculator": "InterpolatorCalculator",
@@ -1239,6 +1306,7 @@
                 "iOSName": "Linear",
                 "flutterName":"Linear",
                 "webName":"Linear",
+                "smartisanName":"LINEAR",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1260,6 +1328,7 @@
             {
                 "name": "Ease",
                 "flutterName":"Ease",
+                "smartisanName":"EASE",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1282,6 +1351,7 @@
                 "name": "EaseIn",
                 "iOSName": "EaseIn",
                 "flutterName":"EaseIn",
+                "smartisanName":"EASE_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1304,6 +1374,7 @@
                 "name": "EaseOut",
                 "iOSName": "EaseOut",
                 "flutterName":"EaseOut",
+                "smartisanName":"EASE_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1326,6 +1397,7 @@
                 "name": "EaseInOut",
                 "iOSName": "EaseInOut",
                 "flutterName":"EaseInOut",
+                "smartisanName":"EASE_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1351,6 +1423,7 @@
         "li": [
             {
                 "name": "Power1",
+                "smartisanName": "CurvePower1",
                 "visible": true,
                 "clickable": true,
                 "calculator": "SpringAnimationCalculator",
@@ -1361,6 +1434,7 @@
             }
             ,{
                 "name": "Power2",
+                "smartisanName": "CurvePower2",
                 "visible": true,
                 "clickable": true,
                 "calculator": "SpringAnimationCalculator",
@@ -1371,6 +1445,7 @@
             }
             ,{
                 "name": "Power3",
+                "smartisanName": "CurvePower3",
                 "visible": true,
                 "clickable": true,
                 "calculator": "SpringAnimationCalculator",
@@ -1381,6 +1456,7 @@
             }
             ,{
                 "name": "Power4",
+                "smartisanName": "CurvePower4",
                 "visible": true,
                 "clickable": true,
                 "calculator": "SpringAnimationCalculator",
@@ -1391,6 +1467,7 @@
             }
             ,{
                 "name": "Power5",
+                "smartisanName": "CurvePower5",
                 "visible": true,
                 "clickable": true,
                 "calculator": "SpringAnimationCalculator",
@@ -1401,6 +1478,7 @@
             }
             ,{
                 "name": "Power6",
+                "smartisanName": "CurvePower6",
                 "visible": true,
                 "clickable": true,
                 "calculator": "SpringAnimationCalculator",
@@ -1411,6 +1489,7 @@
             }
             ,{
                 "name": "Power7",
+                "smartisanName": "CurvePower7",
                 "visible": true,
                 "clickable": true,
                 "calculator": "SpringAnimationCalculator",
@@ -1421,6 +1500,7 @@
             }
             ,{
                 "name": "Power8",
+                "smartisanName": "CurvePower8",
                 "visible": true,
                 "clickable": true,
                 "calculator": "SpringAnimationCalculator",
@@ -1438,6 +1518,7 @@
                 "webName":"Linear",
                 "flutterName":"Linear",
                 "iOSName":"Linear",
+                "smartisanName": "LINEAR",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1448,6 +1529,7 @@
             }
             ,{
                 "name": "Standard",
+                "smartisanName": "STANDARD",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1460,6 +1542,7 @@
                 "name": "Ease",
                 "webName":"Ease",
                 "flutterName":"Ease",
+                "smartisanName": "EASE",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1473,6 +1556,7 @@
                 "webName":"EaseIn",
                 "flutterName":"EaseIn",
                 "iOSName":"EaseIn",
+                "smartisanName": "EASE_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1486,6 +1570,7 @@
                 "webName":"EaseOut",
                 "flutterName":"EaseOut",
                 "iOSName":"EaseOut",
+                "smartisanName": "EASE_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1499,6 +1584,7 @@
                 "webName":"EaseInOut",
                 "flutterName":"EaseInOut",
                 "iOSName":"EaseInOut",
+                "smartisanName": "EASE_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1509,6 +1595,7 @@
             }
             ,{
                 "name": "SineIn",
+                "smartisanName": "SINE_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1519,6 +1606,7 @@
             }
             ,{
                 "name": "SineOut",
+                "smartisanName": "SINE_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1529,6 +1617,7 @@
             }
             ,{
                 "name": "SineInOut",
+                "smartisanName": "SINE_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1539,6 +1628,7 @@
             }
             ,{
                 "name": "QuadIn",
+                "smartisanName": "QUAD_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1549,6 +1639,7 @@
             }
             ,{
                 "name": "QuadOut",
+                "smartisanName": "QUAD_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1559,6 +1650,7 @@
             }
             ,{
                 "name": "QuadInOut",
+                "smartisanName": "QUAD_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1569,6 +1661,7 @@
             }
             ,{
                 "name": "CubicIn",
+                "smartisanName": "CUBIC_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1579,6 +1672,7 @@
             }
             ,{
                 "name": "CubicOut",
+                "smartisanName": "CUBIC_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1589,6 +1683,7 @@
             }
             ,{
                 "name": "CubicInOut",
+                "smartisanName": "CUBIC_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1599,6 +1694,7 @@
             }
             ,{
                 "name": "QuartIn",
+                "smartisanName": "QUART_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1609,6 +1705,7 @@
             }
             ,{
                 "name": "QuartOut",
+                "smartisanName": "QUART_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1619,6 +1716,7 @@
             }
             ,{
                 "name": "QuartInOut",
+                "smartisanName": "QUART_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1629,6 +1727,7 @@
             }
             ,{
                 "name": "QuintIn",
+                "smartisanName": "QUINT_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1639,6 +1738,7 @@
             }
             ,{
                 "name": "QuintOut",
+                "smartisanName": "QUINT_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1649,6 +1749,7 @@
             }
             ,{
                 "name": "QuintInOut",
+                "smartisanName": "QUINT_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1659,6 +1760,7 @@
             }
             ,{
                 "name": "ExpoIn",
+                "smartisanName": "EXPO_IN",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1669,6 +1771,7 @@
             }
             ,{
                 "name": "ExpoOut",
+                "smartisanName": "EXPO_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1679,6 +1782,7 @@
             }
             ,{
                 "name": "ExpoInOut",
+                "smartisanName": "EXPO_IN_OUT",
                 "visible": true,
                 "clickable": true,
                 "calculator": "CubicBezierCalculator",
@@ -1723,41 +1827,48 @@
                         "default": 0.500,
                         "min": -0.50,
                         "max": 1.50,
+                        "visible":false,
                         "editable": true
                     },
                     "P1Y": {
                         "default": 0.000,
                         "min": -0.50,
                         "max": 1.50,
+                        "visible":false,
                         "editable": true
                     },
                     "P2X": {
                         "default": 0.000,
                         "min": -0.50,
                         "max": 1.50,
+                        "visible":false,
                         "editable": true
                     },
                     "P2Y": {
                         "default": 1.000,
                         "min": -0.50,
                         "max": 1.50,
+                        "visible":false,
                         "editable": true
                     },
                     "P3X": {
                         "default": 0.000,
                         "min": -0.50,
                         "max": 1.50,
+                        "visible":false,
                         "editable": true
                     },
                     "P3Y": {
                         "default": 0.000,
                         "min": -0.50,
                         "max": 1.50,
+                        "visible":false,
                         "editable": true
                     },
                     "P4X": {
                         "default": 1.000,
                         "min": -0.50,
+                        "visible":false,
                         "max": 1.50,
                         "editable": true
                     },
@@ -1765,18 +1876,21 @@
                         "default": 0.000,
                         "min": -0.50,
                         "max": 1.50,
+                        "visible":false,
                         "editable": true
                     },
                     "BreakPointX": {
                         "default": 0.500,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": true
                     },
                     "BreakPointY": {
                         "default": 0.500,
                         "min": 0.00,
                         "max": 1.00,
+                        "visible":false,
                         "editable": true
                     },
                     "Duration": {

@@ -32,6 +32,7 @@ const AnimationTitle = styled.p`
   font-size: 12px;
   line-height: 21px;
   padding-top:24px;
+  user-select: none;
   color:${p => p.theme.colors.text};
   z-index:1;
 `

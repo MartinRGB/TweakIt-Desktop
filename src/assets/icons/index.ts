@@ -14,6 +14,7 @@ import Flutter from '@Assets/icons/svg/Flutter.Icon';
 import Fluent from '@Assets/icons/svg/Fluent.Icon';
 import Smartisan from '@Assets/icons/svg/Smartisan.Icon';
 import CollapsedArrowAlertNative from '@Assets/icons/svg/CollapsedArrowAlertNative.Icon';
+import Data from '@Assets/icons/svg/Data.Icon';
 
 export default {
   DarkMode,
@@ -30,4 +31,5 @@ export default {
   Fluent,
   Smartisan,
   CollapsedArrowAlertNative,
+  Data
 };

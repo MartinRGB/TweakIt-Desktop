@@ -38,6 +38,7 @@ const Text  = styled.span<{
   opacity:0.5;
   text-align: left;
   display: inline-block;
+  user-select: none;
 `;
 
 

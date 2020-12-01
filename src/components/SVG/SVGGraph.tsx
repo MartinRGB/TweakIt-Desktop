@@ -35,8 +35,8 @@ const SVGGraph: React.FC<ISVG> = ({
   Solver.setCalculatorSampleScale(svgPointScale?svgPointScale:3)
 
 
-  console.log(currentAnimCalculator)
-  console.log(currentSolverData)
+  //console.log(currentAnimCalculator)
+  //console.log(currentSolverData)
 
   const currStepData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getStepArray();
   const currValueData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getValueArray();

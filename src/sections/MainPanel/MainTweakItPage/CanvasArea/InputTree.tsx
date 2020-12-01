@@ -20,7 +20,6 @@ import Icons from '@Assets/icons'
 
 import RangeInput from '@Components/RangeInput'
 import TextInput from '@Components/TextInput'
-import BezierTextInput from '@Components/BezierTextInput'
 import DescText from '@Components/DescText'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import { GraphUpdateContext } from '@Context/GraphUpdateContext'
@@ -35,6 +34,7 @@ const InputTree: React.FC<IInputTree> = memo(({
   defaultVal,
   min,
   max,
+  visible,
 }) => {
 
   const {setDurationData,previousDataRange,currentDataRange,setCurrentSolverDataByIndex,currentSolverData,previousDataMin,currentAnimCalculator,previousSolverData} = useContext(
@@ -45,10 +45,14 @@ const InputTree: React.FC<IInputTree> = memo(({
     GraphUpdateContext
   );
 
-  const { t, i18n } = useTranslation()
-  const [colorMode] = useColorMode();
 
-
+  var inputVis;
+  if(visible != undefined){
+    inputVis = visible;
+  }
+  else{
+    inputVis = true;
+  }
 
   const [rangeValue, setRangeValue] = useState<any>(defaultVal);
   // TODO
@@ -61,10 +65,11 @@ const InputTree: React.FC<IInputTree> = memo(({
   // console.log('default Value ----' + defaultVal)
   // console.log('prev DataRange  ---- ' + previousDataRange)
   // console.log('curr DataRange ----' + currentDataRange)
-  const prevSolverData = (previousSolverData[index] === undefined)?min:(previousSolverData[index]);
+  const prevSolverData = (previousSolverData[index] === undefined)?min:(Array.isArray(previousSolverData[index])?previousSolverData[index][0]:previousSolverData[index]);
   const currSolverData = (currentSolverData[index]  === undefined)?defaultVal:currentSolverData[index];
-  const prevSolverRange = (previousDataRange[index] === undefined)?1:(previousDataRange[index]);
-  const prevSolverMin = (previousDataMin[index] === undefined)?0:(previousDataMin[index]);
+  const prevSolverRange = (previousDataRange[index] === undefined)?1:(Array.isArray(previousDataRange[index])?previousDataRange[index][0]:previousDataRange[index]);
+  const prevSolverMin = (previousDataMin[index] === undefined)?0:(Array.isArray(previousDataMin[index])?previousDataMin[index][0]:previousDataMin[index])
+  // Not Work for fling
   const transedPrevSolverData = min + (prevSolverData - prevSolverMin)/prevSolverRange*(max-min);
   const [previousRangeValue,setPreviousRangeValue] = useState<number>(min + transedPrevSolverData);
   const [targetRangeValue,setTargetRangeValue] = useState<number>(currSolverData);
@@ -190,6 +195,7 @@ const InputTree: React.FC<IInputTree> = memo(({
   return (
     <Frame>
       <InputContainer
+        visible={inputVis}
         isLast={isLast}
       > 
         <DescText
@@ -256,6 +262,7 @@ export default InputTree;
 const InputContainer = styled.div<
   {
     isLast:boolean;
+    visible:boolean;
   }
 >`
   width: 100%;
@@ -264,7 +271,7 @@ const InputContainer = styled.div<
   padding-left: 28px;
   padding-right: 28px;
   height: 16px;
-  display: flex;
+  display:  ${p => (p.visible)?'flex':'none'};
   flex-direction: row;
   margin-bottom:  ${p => p.isLast?'0px':'24px'};
 `

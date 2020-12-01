@@ -56,6 +56,8 @@ const Input = styled.input<{
   outline: none;
   cursor: ${p => p.isEditable?'text':'not-allowed'};
   opacity: ${p => p.isEditable?'1':'0.3'}
+
+  
 `;
 
 

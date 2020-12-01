@@ -3,6 +3,8 @@ import React from "react";
 export interface IButton {
   children?: React.ReactNode;
   onClick?: any;
+  onMouseDown?: any;
+  onMouseUp?:any;
   active?: boolean;
   style?:any;
 }
@@ -32,6 +34,7 @@ export interface IListTree {
   visible?:boolean;
   platform:string;
   clickable?:boolean;
+  ease_name?:any;
 }
 
 export interface IInputTree {
@@ -41,6 +44,7 @@ export interface IInputTree {
   isEditable?:boolean;
   name: string;
   calculator?:string
+  visible?:boolean;
   defaultVal: any;
   min: any;
   max: any;

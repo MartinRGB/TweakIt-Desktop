@@ -9,8 +9,8 @@ import {InterpolatorCalculator} from '@Components/Solver/Calculator/BaseCalculat
 export class CustomFunctionInterpolator extends InterpolatorCalculator{
     constructor(funs?:(x:number) =>void) {
         super();
-        var def:any = funs?funs:(x:number)=>{return x}
-        this.array = this.interpolatorCalculator((t:number) =>{return def(t);});
+        var definedFucntion:any = funs?funs:(x:number)=>{return x}
+        this.def = (t:number) =>{return definedFucntion(t);}
     }
 }
 
@@ -18,7 +18,7 @@ export class LinearInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return t;});
+        this.def = (t:number) =>{return t;}
     }
 }
 
@@ -26,7 +26,7 @@ export class AccelerateInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return Math.pow(t,2*c);});
+        this.def = (t:number) =>{return Math.pow(t,2*c);}
     }
 }
 
@@ -35,14 +35,14 @@ export class DecelerateInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return 1 - Math.pow(1-t,2 * c);});
+        this.def = (t:number) =>{return 1 - Math.pow(1-t,2 * c);}
     }
 }
 
 export class AccelerateDecelerateInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
-        this.array = this.interpolatorCalculator((t:number) =>{return Math.cos((t + 1)*Math.PI)/2 + 0.5;});
+        this.def = (t:number) =>{return Math.cos((t + 1)*Math.PI)/2 + 0.5;}
     }
 }
 
@@ -50,7 +50,7 @@ export class AnticipateInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return (c+1)*Math.pow(t,3) - c * Math.pow(t,2);});
+        this.def = (t:number) =>{return (c+1)*Math.pow(t,3) - c * Math.pow(t,2);}
     }
 }
 
@@ -58,7 +58,7 @@ export class OvershootInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return (c + 1) * Math.pow(t - 1,3) + c * Math.pow(t - 1,2) + 1;});
+        this.def = (t:number) =>{return (c + 1) * Math.pow(t - 1,3) + c * Math.pow(t - 1,2) + 1;}
     }
 }
 
@@ -66,7 +66,7 @@ export class AnticipateOvershootInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return this.getAOSI(t,c);});
+        this.def = (t:number) =>{return this.getAOSI(t,c);}
     }
 
     getAOSI(t:number,f:number) {
@@ -86,7 +86,7 @@ export class BounceInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return this.getBounce(t);});
+        this.def = (t:number) =>{return this.getBounce(t);}
     }
 
     bounce(t:number){
@@ -106,7 +106,7 @@ export class CycleInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return Math.sin(2*Math.PI * c * t);});
+        this.def = (t:number) =>{return Math.sin(2*Math.PI * c * t);}
     }
 }
 
@@ -114,7 +114,7 @@ export class CustomSpringInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:0.5
-        this.array = this.interpolatorCalculator((t:number) =>{
+        this.def = (t:number) =>{
         
             if(t == 0.0 || t == 1.0){
                 return t;
@@ -124,7 +124,7 @@ export class CustomSpringInterpolator extends InterpolatorCalculator{
                 return value;
             }
         
-        });
+        }
     }
 }
 
@@ -158,7 +158,7 @@ export class CustomMocosSpringInterpolator extends InterpolatorCalculator{
 
         this.CustomMocosSpringCalculate(this.tension,this.friction,this.velocity)
 
-        this.array = this.interpolatorCalculator((t:number) =>{
+        this.def = (t:number) =>{
         
             var _this = this;
             if (t >= 1) {
@@ -169,7 +169,7 @@ export class CustomMocosSpringInterpolator extends InterpolatorCalculator{
                     (_this.mA * Math.exp(-_this.mVDiv2 * t) * Math.sin(_this.mGamma * t + _this.mB) + 1) :
                     (_this.mA * Math.exp((_this.mGamma - _this.mVDiv2) * t) + _this.mB * Math.exp(-(_this.mGamma + _this.mVDiv2) * t) + 1));
         
-        });
+        }
     }
 
     CustomMocosSpringCalculate(tension:any, damping:any, velocity:any) {
@@ -254,9 +254,9 @@ export class CustomBounceInterpolator extends InterpolatorCalculator {
         // this.friction = 0;
 
         this.CustomPhysicsCalculate(this.tension,this.friction)
-        //this.array = this.interpolatorCalculator();
+        //this.def = );
 
-        this.array = this.interpolatorCalculator((t:number) =>{
+        this.def = (t:number) =>{
             if (t == 0.0 || t == 1.0){
                 return t;
             }else{
@@ -265,7 +265,7 @@ export class CustomBounceInterpolator extends InterpolatorCalculator {
                 //var result = funs(value)
                 return -Math.abs(value)+1;
             }
-        });
+        }
 
     }
 
@@ -341,9 +341,9 @@ export class CustomDampingInterpolator extends InterpolatorCalculator {
         // this.friction = 0;
 
         this.CustomPhysicsCalculate(this.tension,this.friction)
-        //this.array = this.interpolatorCalculator();
+        //this.def = );
 
-        this.array = this.interpolatorCalculator((t:number) =>{
+        this.def = (t:number) =>{
             if (t == 0.0 || t == 1.0){
                 return t;
             }else{
@@ -352,7 +352,7 @@ export class CustomDampingInterpolator extends InterpolatorCalculator {
                 //var result = funs(value)
                 return -(value)+1;
             }
-        });
+        }
 
     }
 
@@ -386,7 +386,7 @@ export class ViscosFluidInterpolator extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         var c:number = a?a:2
-        this.array = this.interpolatorCalculator((t:number) =>{return this.getViscosFluid(t,c);});
+        this.def = (t:number) =>{return this.getViscosFluid(t,c);}
     }
 
     viscousFluid(x:number,c:number) {
@@ -417,7 +417,7 @@ export class ViscosFluidInterpolator extends InterpolatorCalculator{
 export class FlutterLinear extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
-        this.array = this.interpolatorCalculator((t:number) =>{return t});
+        this.def = (t:number) =>{return t}
     }
 }
 
@@ -425,10 +425,10 @@ export class FlutterLinear extends InterpolatorCalculator{
 export class FlutterDecelerate extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
-        this.array = this.interpolatorCalculator((t:number) =>{
+        this.def = (t:number) =>{
             t = 1.0 - t;
             return 1.0 - t * t;
-        });
+        }
     }
 }
 
@@ -437,11 +437,11 @@ export class FlutterElasticIn extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         this.period = 0.4;
-        this.array = this.interpolatorCalculator((t:number) =>{
+        this.def = (t:number) =>{
             var s:number = this.period / 4.0;
             t = t - 1.0;
             return -Math.pow(2.0, 10.0 * t) * Math.sin((t - s) * (Math.PI * 2.0) / this.period);
-        });
+        }
     }
 }
 
@@ -450,10 +450,10 @@ export class FlutterElasticOut extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         this.period = 0.4;
-        this.array = this.interpolatorCalculator((t:number) =>{
+        this.def = (t:number) =>{
             var s:number = this.period / 4.0;
             return Math.pow(2.0, -10 * t) * Math.sin((t - s) * (Math.PI * 2.0) / this.period) + 1.0;
-        });
+        }
     }
 }
 
@@ -462,21 +462,21 @@ export class FlutterElasticInOut extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
         this.period = 0.4;
-        this.array = this.interpolatorCalculator((t:number) =>{
+        this.def = (t:number) =>{
             var s:number = this.period / 4.0;
             t = 2.0 * t - 1.0;
             if (t < 0.0)
               return -0.5 * Math.pow(2.0, 10.0 * t) * Math.sin((t - s) * (Math.PI * 2.0) / this.period);
             else
               return Math.pow(2.0, -10.0 * t) * Math.sin((t - s) * (Math.PI * 2.0) / this.period) * 0.5 + 1.0;
-        });
+        }
     }
 }
 
 export class FlutterBounceIn extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
-        this.array = this.interpolatorCalculator((t:number) =>{return 1.0 - this._bounce(1.0 - t)});
+        this.def = (t:number) =>{return 1.0 - this._bounce(1.0 - t)}
     }
 
     _bounce(t:number) {
@@ -497,7 +497,7 @@ export class FlutterBounceIn extends InterpolatorCalculator{
 export class FlutterBounceOut extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
-        this.array = this.interpolatorCalculator((t:number) =>{return this._bounce(t)});
+        this.def = (t:number) =>{return this._bounce(t)}
     }
 
     _bounce(t:number) {
@@ -518,12 +518,12 @@ export class FlutterBounceOut extends InterpolatorCalculator{
 export class FlutterBounceInOut extends InterpolatorCalculator{
     constructor(a?:number) {
         super();
-        this.array = this.interpolatorCalculator((t:number) =>{
+        this.def = (t:number) =>{
             if (t < 0.5)
                 return (1.0 - this._bounce(1.0 - t * 2.0)) * 0.5;
             else
                 return this._bounce(t * 2.0 - 1.0) * 0.5 + 0.5;
-        });
+        }
     }
 
     _bounce(t:number) {

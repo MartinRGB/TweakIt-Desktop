@@ -114,10 +114,10 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
 
             {(isBezierCalculator)?(            
               currentAnimData.map(function (data:any,index:number) {
-                console.log(data)
+                //console.log(data)
 
               if(index != currentAnimData.length - 1){
-                console.log(currentSolverData[index])
+                //console.log(currentSolverData[index])
                 return (
                 <BezierInputTree 
                   name={''}
@@ -224,11 +224,11 @@ const CanvasSVG: React.FC<ISVGContainer> = ({
             })):''} */}
 
 
-            <SVGBlurContainer
+            {/* <SVGBlurContainer
              svgWidth={svgWidth}
              svgHeight={svgHeight}
             
-            ></SVGBlurContainer>
+            ></SVGBlurContainer> */}
     </Container>)
 }
 

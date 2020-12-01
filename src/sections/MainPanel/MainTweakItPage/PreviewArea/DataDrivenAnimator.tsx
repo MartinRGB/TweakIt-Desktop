@@ -6,7 +6,8 @@ export default class DataDrivenPropertyAnimator{
   private to:any;
   private duration:number;
   private animationFrame:number;
-  private progress:number;
+  private timeProgress:number;
+  private valueProgress:number;
   private startCallback:any;
   private endCallback:any;
   private frameCallback:any;
@@ -20,7 +21,8 @@ export default class DataDrivenPropertyAnimator{
       this.to = 1;
       this.duration = 1;
       this.animationFrame = 0;
-      this.progress = 0;
+      this.timeProgress = 0;
+      this.valueProgress = 0;
       this.startCallback = null;
       this.endCallback = null;
       this.frameCallback = null;
@@ -52,11 +54,13 @@ export default class DataDrivenPropertyAnimator{
               return
           }
 
-          _this.progress = (count/60)/_this.duration;
+          // timeProgresss
+          _this.timeProgress = (count/60)/_this.duration;
 
-          var interpolation = _this.getInterpolation(_this.progress,_this.data,_this.dataLength,_this.stepSize);
+          var interpolation = _this.getInterpolation(_this.timeProgress,_this.data,_this.dataLength,_this.stepSize);
   
-          _this.setProgress(interpolation);
+          // valueProgress
+          _this.setValueProgress(_this.from + interpolation*(_this.to-_this.from));
 
   
           count++
@@ -94,8 +98,8 @@ export default class DataDrivenPropertyAnimator{
       var _this = this;
 
       _this.stop(_this.animationFrame)
-      _this.progress = 0;
-      _this.setProgress(_this.progress)
+      _this.timeProgress = 0;
+      _this.setValueProgress(_this.timeProgress)
 
   }
 
@@ -136,12 +140,12 @@ export default class DataDrivenPropertyAnimator{
 
   // ############ 0~1 Progress based interpolation ############
 
-  public setProgress(progress:number){
-      this.progress = progress;
+  public setValueProgress(progress:number){
+      this.valueProgress = progress;
   }
 
-  public getProgress(){
-    return this.progress
+  public getValueProgress(){
+    return this.valueProgress;
   }
 
   // ############ Lookuptable Interpolation Method ############

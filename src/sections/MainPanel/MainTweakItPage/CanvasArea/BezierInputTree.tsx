@@ -89,9 +89,6 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
   const boxPaddingH = 40*(endPointY - startPointY);
   const circleRadius = 8;
 
-  const { t, i18n } = useTranslation()
-  const [colorMode] = useColorMode();
-
   const [prev1,setPrev1] = useState<any>(currentSolverData[index][0]);
   const [target1,setTarget1] = useState<any>(currentSolverData[index][0]);
   const [isStart1,setStart1] = useState<boolean>(false);

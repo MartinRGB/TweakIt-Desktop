@@ -13,9 +13,6 @@ import animationList from '@Config/animator_list.json'
 
 const ListArea: React.FC = ({children}) => {
   
-  const { t ,i18n} = useTranslation()
-  const [colorMode] = useColorMode();
-
   return (
     <Container>
       {
@@ -39,6 +36,7 @@ const ListArea: React.FC = ({children}) => {
                             name={animData['name']} 
                             calculator={animData['calculator']}
                             animation_data={animData['animation_data']}
+                            ease_name={[animData['interpolatorName'],animData['iOSName'],animData['webName'],animData['flutterName'],animData['smartisanName']]}
                             visible={animData['visible']}
                             clickable={animData['clickable']}>
                          </ListTree>

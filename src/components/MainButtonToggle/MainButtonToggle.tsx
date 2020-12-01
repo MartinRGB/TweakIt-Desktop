@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const MainButtonNormal: React.FC<IButton> = ({ style,children , onClick,onMouseDown,onMouseUp}) => {
+const MainButtonToggle: React.FC<IButton> = ({ style,children , onClick,active}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -19,8 +19,7 @@ const MainButtonNormal: React.FC<IButton> = ({ style,children , onClick,onMouseD
      config:animationConfig.button_pressed
   })
 
-
-  return (
+return (
   <animated.div 
     css={AnimatedContainerCSS}
     {...bind()} 
@@ -32,9 +31,7 @@ const MainButtonNormal: React.FC<IButton> = ({ style,children , onClick,onMouseD
       <Button
         style={style}
         onClick={onClick}
-        onMouseDown={onMouseDown}
-        onMouseUp={onMouseUp}
-        >
+        active={active}>
         {children}
       </Button>
   </animated.div>);
@@ -48,13 +45,17 @@ const AnimatedContainerCSS = css`
 `;
 
 // twmacro
-const Button = styled.button`
+const Button = styled.button<
+{ 
+  active:boolean;
+}
+>`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
   width: 40px;
   height: 16px;
   border-radius:4px;
   padding: 0;
-  background: ${p => p.theme.colors.normal_button_bg};
+  background: ${p => (p.active? p.theme.colors.toggle_button_bg:p.theme.colors.normal_button_bg)};
   outline:none;
   // margin-left:8px;
   margin: 0 auto;
@@ -75,7 +76,7 @@ const Button = styled.button`
     top: 0px;
     left:3px;
     
-    fill: ${p => p.theme.colors.text};
+    fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
 
   &:active {
@@ -84,27 +85,19 @@ const Button = styled.button`
   }
 
   &:active  > div{
-    color: ${p => p.theme.colors.background};
+    color: ${p => (p.active? p.theme.colors.text:p.theme.colors.background)};
   }
 
   &:active  > span{
-    color: ${p => p.theme.colors.background};
+    color: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
   }
 
   &:active > svg{
-    fill: ${p => p.theme.colors.background};
+    fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
   }
 
 `;
 
-// const CustomSpan = styled.span`
-// text-align: center;
-// font-family: ${props => props.theme.fonts.numberInput};
-// font-style: normal;
-// font-weight: bold;
-// font-size: 11px;
-// line-height: 14px;
-// `
 
 
-export default MainButtonNormal
+export default MainButtonToggle

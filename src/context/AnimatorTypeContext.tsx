@@ -37,6 +37,16 @@ export var AnimatorTypeContext = createContext({
   setSelectTransition:(tag: boolean) => {},
   durationData:0,
   setDurationData:(tag: number) => {},
+  interpolatorName:'',
+  flutterName:'',
+  webName:'',
+  iOSName:'',
+  smartisanName:'',
+  setInterpolatorName:(tag: string) => {},
+  setFlutterName:(tag: string) => {},
+  setWebName:(tag: string) => {},
+  setiOSName:(tag: string) => {},
+  setSmartisanName:(tag: string) => {},
 });
 
 var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
@@ -59,6 +69,28 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
   const [mSelectTransition, setSelectTransition] = useState<boolean>(true);
   const [mDuration, setDuration] = useState<number>(0);
   
+  const [mInterpolatorName, setInterpolatorName] = useState<string>('');
+  const [mFlutterName, setFlutterName] = useState<string>('');
+  const [mWebName, setWebName] = useState<string>('');
+  const [miOSName, setiOSName] = useState<string>('');
+  const [mSmartisanName, setSmartisanName] = useState<string>('');
+
+  function setInterpolatorNameAndSave(tag:string){
+    setInterpolatorName(tag)
+  }
+  function setFlutterNameAndSave(tag:string){
+    setFlutterName(tag)
+  }
+  function setWebNameAndSave(tag:string){
+    setWebName(tag)
+  }
+  function setiOSNameAndSave(tag:string){
+    setiOSName(tag)
+  }
+
+  function setSmartisanNameAndSave(tag:string){
+    setSmartisanName(tag)
+  }
 
   function setCurrAnimPlatformAndSave(tag:string){
     setCurrAnimPlatform(tag)
@@ -214,6 +246,16 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
         setSelectTransition:setSelectTransitionAndSave,
         durationData:mDuration,
         setDurationData:setDurationAndSave,
+        interpolatorName:mInterpolatorName,
+        flutterName:mFlutterName,
+        webName:mWebName,
+        iOSName:miOSName,
+        smartisanName:mSmartisanName,
+        setInterpolatorName:setInterpolatorNameAndSave,
+        setFlutterName:setFlutterNameAndSave,
+        setWebName:setWebNameAndSave,
+        setiOSName:setiOSNameAndSave,
+        setSmartisanName:setSmartisanNameAndSave,
       }}>
       {children}
     </AnimatorTypeContext.Provider>

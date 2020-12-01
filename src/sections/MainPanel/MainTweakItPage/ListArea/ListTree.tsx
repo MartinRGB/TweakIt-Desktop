@@ -33,24 +33,22 @@ const ListTree: React.FC<IListTree> = memo(({
   isUlElement, 
   index, 
   animation_data,
+  ease_name,
   calculator,
   visible,}) => {
-
-  const { t, i18n } = useTranslation()
 
   const UlVerticalPadding: number = 3;
 
   const { currentAnimationItem, selectAnimationItem } = useContext(
     ListSelectStateContext
   );
-  const [colorMode] = useColorMode();
 
   const [isOpen, setOpen] = useState(defaultOpen)
 
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
-  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex} = useContext(
+  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex,setInterpolatorName,setFlutterName,setiOSName,setWebName,setSmartisanName} = useContext(
     AnimatorTypeContext
   );
 
@@ -63,12 +61,10 @@ const ListTree: React.FC<IListTree> = memo(({
   // TODO
   var PlatformIcon;
 
-  //console.log('rerender')
-  console.log(platform)
-
   if(isUlElement){
     PlatformIcon = Icons[(platform.replace(/\s/g, "")!)];
   }
+
 
   return (
     <Frame>
@@ -122,6 +118,12 @@ const ListTree: React.FC<IListTree> = memo(({
                   setCurrentAnimPlatform(platform);
                   setCurrentAnimName(name)
                   setCurrentAnimCalculator(calculator)
+
+                  setInterpolatorName(ease_name[0])
+                  setiOSName(ease_name[1])
+                  setWebName(ease_name[2])
+                  setFlutterName(ease_name[3])
+                  setSmartisanName(ease_name[4])
 
                   if(animation_data){
                     setCurrentAnimData(Object.entries(animation_data))

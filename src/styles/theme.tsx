@@ -2,7 +2,7 @@ export default {
   fonts: {
     body: 'system-ui, sans-serif',
     heading: '"Avenir Next", sans-serif',
-    monospace: 'Menlo, monospace',
+    monospace: 'monospace',
     headText:  '"Avenir Next", sans-serif',
     normalText:'Montserrat,-apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif',
     numberInput:'DIN Alternate'
@@ -41,6 +41,7 @@ export default {
     main_bottom_bg_blur:'#FFFFFF',
     adb_background:'#EDEFEE',
     adb_border:'#DBDBDB',
+    selection:'#0adf073d',
     modes:{
       dark:{
         text: '#fff',

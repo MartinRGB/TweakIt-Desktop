@@ -17,6 +17,9 @@ import GraphUpdateProvider from '@Context/GraphUpdateContext'
 
 const MainTweakItPage: React.FC = ({children}) => {
 
+  //const { t, i18n } = useTranslation()
+  //const [colorMode] = useColorMode();
+
   return (
     <Container>
       <AnimatorTypeProvider>
@@ -43,6 +46,7 @@ const Container = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
+
 `
 
 const TopContainer = styled.div`

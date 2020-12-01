@@ -1,53 +1,55 @@
 import React ,{ useContext, useEffect,useState} from 'react';
 
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
-import {CodeStyle} from "@Styles/CodeStyle"
-
-import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
-import Highlight from 'react-highlight'
+import MainButtonToggle from '@Components/MainButtonToggle'
 import TitleButtonNormal from '@Components/TitleButtonNormal'
 import Icons from '@Assets/icons'
+import CodeTemplate from './CodeTemplate';
 
 const CodeArea: React.FC = ({children}) => {
-  const { t ,i18n} = useTranslation()
+  //const [colorMode] = useColorMode();
 
-  const [colorMode] = useColorMode();
+  const [isExpanded,setCodeIsExpand] = useState<boolean>(true);
 
-  const [isExpanded,setCodeIsExpand] = useState<boolean>(false);
-  console.log(colorMode)
+  const [activeName,setActiveName] = useState<string>('')
 
-  const [isEditable,setIsEditable] = useState<boolean>(false)
+  //,"Flutter","Smartisan"
+  const IconStr = ["Android","iOS","Web","Flutter","Smartisan","Data"];
 
-  const iconStr = [Icons.iOS,Icons.Android,Icons.Web,Icons.Flutter,Icons.Smartisan];
-
-  //FPlatformIcon = Icons[(IconStr[index].replace(/\s/g, "")!)];
+  var PlatformIcon;
 
   return (
     <Container
       isExpanded ={isExpanded}
       >
-        <CodeStyle></CodeStyle>
       <BlurContainer>
         <TopNav>
           <TopLeftContainer>
               {
-                    iconStr.map(function (data:any,index:number) {
+                    IconStr.map(function (data:any,index:number) {
+                      //var currIcon = Icons[(iCon[index].replace(/\s/g, "")!)];
+                      PlatformIcon = Icons[(IconStr[index].replace(/\s/g, "")!)];
                       return (
-                        <TitleButtonNormal
+                        <MainButtonToggle
                         style={{
-                          width:`100px`,
+                          width:`100%`,
                           borderRadius:`2px`,
+                          display: `inline-flex`,
+                          paddingLeft: `4px`,
+                          paddingRight: `6px`,
+                          alignItems: `center`,
+                          marginRight: `8px`
                         }}
                         onClick={()=>{
+                          setActiveName(IconStr[index])
                         }}
+                        active={activeName === IconStr[index] && isExpanded}
+                        key={'CodeButton' + '_' +index}
                       >
-                        <Icons.Android
-                        ></Icons.Android><span>Android Clear</span>
-                      </TitleButtonNormal>
+                        <PlatformIcon
+                        ></PlatformIcon><CustomSpan>{IconStr[index]}</CustomSpan>
+                      </MainButtonToggle>
                       )
                   
                 })
@@ -61,6 +63,7 @@ const CodeArea: React.FC = ({children}) => {
               }}
               onClick={()=>{
                 setCodeIsExpand(!isExpanded)
+                setActiveName('')
               }}
             >
               <Icons.CollapsedArrowAlertNative
@@ -73,37 +76,9 @@ const CodeArea: React.FC = ({children}) => {
           </TopRightContainer>
         </TopNav>
       </BlurContainer>
-      <ScrollContainer
-      contentEditable={true}
-      >
-    <Highlight  language="javascript">
-{
-`
-function $initHighlight(block, cls) {
-  try {
-    if (cls.search(/\bno\-highlight\b/) != -1)
-      return process(block, true, 0x0F) +
-              class="233";
-  } catch (e) {
-    /* handle exception */
-  }
-  for (var i = 0 / 2; i < classes.length; i++) {
-    if (checkCondition(classes[i]) === undefined)
-      console.log('undefined');
-  }
-
-  return (
-    <div>
-      <web-component>{block}</web-component>
-    </div>
-  )
-}
-
-export  $initHighlight;
-
-`}
-    </Highlight>
-    </ScrollContainer>
+      <ScrollContainer>
+        <CodeTemplate name={activeName} isExpanded={isExpanded}></CodeTemplate>
+      </ScrollContainer>
     </Container>
   )
 }
@@ -150,7 +125,7 @@ const Container = styled.div<{
   isExpanded:boolean;
 }>`
     //height: 100%;
-    height:${p => p.isExpanded?'350px':'40px'};
+    height:${p => p.isExpanded?'250px':'40px'};
     transition:all 0.3s cubic-bezier(0.13, 0.79, 0.25, 1) 0s;
     // min-height:50px;
     //background:blue;
@@ -174,20 +149,38 @@ const ScrollContainer = styled.div`
     outline: none;
     /* width */
     ::-webkit-scrollbar {
-      width: 6px;
+      width: 8px;
     }
 
-    ::-webkit-scrollbar-track {
-      box-shadow: inset 0 0 14px 14px transparent;
-      border: solid 4px transparent;
-    }
+    font-family:${p => p.theme.fonts.monospace};
+    font-size:12px;
+
+    // ::-webkit-scrollbar-track {
+    //   box-shadow: inset 0 0 14px 14px transparent;
+    //   border: solid 4px transparent;
+    // }
     
     ::-webkit-scrollbar-thumb {
       // box-shadow: inset 0 0 14px 14px #bbbbbe;
       // border: solid 4px transparent;
       background:${p => p.theme.colors.adb_border};
-      border-radius: 100px;
+      //border-radius: 100px;
+      border-bottom: 14px ${p => p.theme.colors.main_bottom_bg} solid;
+      background-clip: padding-box;
+      transition:all 0.3s;
     }
 
+    ::-webkit-scrollbar-thumb:hover {
+      background:${p => p.theme.colors.text}
+    }
+`
 
+const CustomSpan = styled.span`
+text-align: center;
+font-family: ${props => props.theme.fonts.numberInput};
+font-style: normal;
+font-weight: bold;
+font-size: 11px;
+line-height: 14px;
+margin-left:16px;
 `

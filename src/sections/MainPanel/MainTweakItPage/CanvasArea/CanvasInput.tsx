@@ -30,6 +30,7 @@ const CanvasInput: React.FC = ({}) => {
                       isEditable={data[1].editable}
                       min={data[1].min}
                       max={data[1].max}
+                      visible={data[1].visible}
                       key={currentAnimName+'duration'}
                     >
                   </InputTree>
@@ -69,6 +70,7 @@ const CanvasInput: React.FC = ({}) => {
                     isEditable={data[1].editable}
                     min={data[1].min}
                     max={data[1].max}
+                    visible={data[1].visible}
                     key={currentAnimName+index}
                   >
                 </InputTree>
