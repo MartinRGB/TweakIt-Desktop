@@ -19,6 +19,7 @@ import '@Context/i18nContext'
 import { useTranslation, Trans} from 'react-i18next'
 
 import ADBExpandStateProvider from "@Context/ADBExpandContext";
+import ADBConnectProvider from "@Context/ADBConnectContext";
 
 import animatorList from '@Config/animator_list.json';
 
@@ -41,17 +42,21 @@ const App = () => {
   const { t ,i18n} = useTranslation()
   //console.log(animatorList)
   return (
-    <>
+    <div>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
+        <ADBConnectProvider>
         <ADBExpandStateProvider>
           <TitleBar>TWEAKIT</TitleBar>
           <ADBPanel></ADBPanel>
           <MainPanel></MainPanel>
         </ADBExpandStateProvider>
+        </ADBConnectProvider>
       </ThemeProvider>
-    </>
+    </div>
   )
 }
+
+const BodyDiv = styled.div``
 
 render(<App />, mainElement)

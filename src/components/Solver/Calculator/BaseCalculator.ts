@@ -85,6 +85,7 @@ export class SpringAnimationCalculator{
     bounciness?:number;
     speed?:number;
     factor?:number;
+    b?:number;
 
     constructor(stiffness?:number,dampingratio?:number,velocity?:number,mass?:number) {
         this.stiffness = stiffness;
@@ -160,15 +161,16 @@ export class SpringAnimationCalculator{
     }
 
     getParaS(n:number,start:number,end:number){
-        return (n - start)/(end - start);
+        return Math.abs((n - start)/(end - start));
     }
 
-    getParaB(final:number, start:number, end:number) {
+    //this.bouncyFriction, this.b3Nobounce(0), 0.01
+    getParaB(final:number, start:number, end:number,) {
         var a = 1;
 		var b = -2;
-		var c = (final - start)/(end-start);
- 
-		var root_part = Math.sqrt(b * b - 4 * a * c);
+        var c = (final - start)/(end-start);
+
+        var root_part = Math.sqrt(b * b - 4 * a * c);
 		var denom = 2 * a;
  
 		var root1 = ( -b + root_part ) / denom;
@@ -180,7 +182,7 @@ export class SpringAnimationCalculator{
     }
 
     computeSpeed(value:number,startValue:number,endValue:number){
-        return (value * (endValue - startValue) + startValue)*1.7 ;
+        return (value * (endValue - startValue) + startValue)*1.7;
     }
 
     normalize(value:number, startValue:number, endValue:number) {

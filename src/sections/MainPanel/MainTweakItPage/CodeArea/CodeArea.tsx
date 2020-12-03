@@ -102,6 +102,11 @@ const CodeArea: React.FC = memo(({children}) => {
           </TopLeftContainer>
           <TopRightContainer>
             <MainButtonNormal
+              parentStyle={{
+                height:`16px`,
+                flex:`1`,
+                display:`flex`,
+              }}
               style={{
                 width:`24px`,
                 height:`16px`,
@@ -124,6 +129,11 @@ const CodeArea: React.FC = memo(({children}) => {
             </MainButtonNormal>
 
             <MainButtonNormal
+                        parentStyle={{
+                          height:`16px`,
+                          flex:`1`,
+                          display:`flex`,
+                        }}
                         style={{
                           width:`52px`,
                           borderRadius:`2px`,

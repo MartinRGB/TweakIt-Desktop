@@ -17,6 +17,9 @@ import CollapsedArrowAlertNative from '@Assets/icons/svg/CollapsedArrowAlertNati
 import Data from '@Assets/icons/svg/Data.Icon';
 import Copy from '@Assets/icons/svg/Copy.Icon';
 import Done from '@Assets/icons/svg/Done.Icon';
+import SelectArrow from '@Assets/icons/svg/SelectArrow.Icon';
+import CheckMark from '@Assets/icons/svg/CheckMark.Icon';
+
 
 export default {
   DarkMode,
@@ -35,5 +38,7 @@ export default {
   CollapsedArrowAlertNative,
   Data,
   Copy,
-  Done
+  Done,
+  SelectArrow,
+  CheckMark
 };

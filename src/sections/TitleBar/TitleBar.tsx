@@ -1,4 +1,4 @@
-import React, {memo,useContext, useEffect} from 'react';
+import React, {memo,useContext, useEffect,useRef,useState,useLayoutEffect} from 'react';
 import styled from '@emotion/styled'
 //import {css} from '@emotion/core'
 import { useColorMode,jsx,css} from 'theme-ui'
@@ -34,17 +34,40 @@ const TitleBar: React.FC = memo(({ children }) => {
     setADBExpandState(!adbIsExpand);
   }
 
+  const sizeRef = useRef(null);
+  const [isShowBtn, setIsShowBtn] = useState<boolean>(false);
+  function updateSize() {
+    let height = sizeRef.current.offsetHeight;
+    let width  = sizeRef.current.offsetWidth;
+    if(width >= 400){
+      setIsShowBtn(true)
+    }
+    else{
+      setIsShowBtn(false)
+    }
+  }
 
-  useEffect(() => {
-    setColorMode(initState.isDarkMode === true ? 'dark' : 'default')
+  useLayoutEffect(() => {
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => 
+      window.removeEventListener("resize", updateSize);
   }, []);
 
+  useEffect(() => {
+    if(sizeRef.current){updateSize()}
+    setColorMode(initState.isDarkMode === true ? 'dark' : 'default')
+  }, [sizeRef]);
+
   return (
-    <Container >
+    <Container 
+      ref = {sizeRef}
+      >
       <ContainerBackground></ContainerBackground>
       <TitleBox>
         {children}
       </TitleBox>
+      {isShowBtn?
       <ButtonLayout>
         <TitleButtonToggle active={adbIsExpand} onClick={clickADB}>
           <Icons.ADB/>
@@ -57,6 +80,13 @@ const TitleBar: React.FC = memo(({ children }) => {
         </TitleButtonNormal>
 
       </ButtonLayout>
+      :
+      <ButtonLayout>
+        <TitleButtonToggle active={adbIsExpand} onClick={clickADB}>
+          <Icons.ADB/>
+        </TitleButtonToggle>
+      </ButtonLayout>
+      }
     </Container>
   );
 })

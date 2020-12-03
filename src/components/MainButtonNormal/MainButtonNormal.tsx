@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const MainButtonNormal: React.FC<IButton> = memo(({ style,children , onClick,onMouseDown,onMouseUp}) => {
+const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , onClick,onMouseDown,onMouseUp}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -26,6 +26,7 @@ const MainButtonNormal: React.FC<IButton> = memo(({ style,children , onClick,onM
     {...bind()} 
     style={
       { 
+      ...parentStyle,
       transform: interpolate([size], (s) => `scale(${s})`)
       }
     }>
@@ -42,9 +43,10 @@ const MainButtonNormal: React.FC<IButton> = memo(({ style,children , onClick,onM
 })
 
 const AnimatedContainerCSS = css`
-  height:16px;
-  flex:1;
-  display:flex;
+  // height:16px;
+  // flex:1;
+  // display:flex;
+
 `;
 
 // twmacro
@@ -59,6 +61,7 @@ const Button = styled.button`
   // margin-left:8px;
   margin: 0 auto;
   user-select: none;
+  cursor:pointer;
   border: 0.5px solid rgba(255, 255, 255, 0.06);
   > div{
     color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};

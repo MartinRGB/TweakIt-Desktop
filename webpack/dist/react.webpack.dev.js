@@ -1,22 +1,22 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const rootPath = path.resolve(__dirname, '..')
+"use strict";
 
+var path = require('path');
+
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+var TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+
+var rootPath = path.resolve(__dirname, '..');
 module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
+    plugins: [new TsconfigPathsPlugin({
+      //configFile: "./tsconfig.json",
+      //logLevel: "info",
+      extensions: ['.tsx', '.ts', '.js', '.json', '.png', '.jpg'] //mainFields: ["browser", "main"],
+      // baseUrl: "/foo"
 
-    plugins: [
-      new TsconfigPathsPlugin({
-        //configFile: "./tsconfig.json",
-        //logLevel: "info",
-        extensions: ['.tsx', '.ts', '.js', '.json', '.png', '.jpg'],
-        //mainFields: ["browser", "main"],
-        // baseUrl: "/foo"
-      }),
-    ],
-
+    })],
     // alias: {
     //   "i18n": path.resolve(__dirname, "../src/components/i18n/*"),
     //   "components": path.resolve(__dirname, "../src/components/*"),
@@ -26,33 +26,31 @@ module.exports = {
     //   "styles": path.resolve(__dirname, "../src/styles/*"),
     //   "types": path.resolve(__dirname, "../src/types/*"),
     // },
-    
     mainFields: ['main', 'module', 'browser']
   },
   entry: path.resolve(rootPath, 'src', 'App.tsx'),
   target: 'electron-renderer',
   devtool: 'source-map',
   module: {
-    rules: [
-      {
-        test: /\.(js|ts|tsx)$/,
-        exclude: [path.resolve(__dirname, '../node_modules/'),path.resolve(__dirname, '../src/worker/')],  //   /node_modules/
-        use: {
-          loader: 'babel-loader'
-        }
-      },
-      {
-        test: /\.(jpg|png)$/,
-        use: {
-          loader: 'url-loader',
-        },
-      },
-      {
-        test: /\.worker\.js$/,
-        //include: [path.resolve(__dirname, '../src/worker')],
-        use: { loader: "worker-loader" },
+    rules: [{
+      test: /\.(js|ts|tsx)$/,
+      exclude: [path.resolve(__dirname, '../node_modules/'), path.resolve(__dirname, '../src/worker/')],
+      //   /node_modules/
+      use: {
+        loader: 'babel-loader'
       }
-    ]
+    }, {
+      test: /\.(jpg|png)$/,
+      use: {
+        loader: 'url-loader'
+      }
+    }, {
+      test: /\.worker\.js$/,
+      //include: [path.resolve(__dirname, '../src/worker')],
+      use: {
+        loader: "worker-loader"
+      }
+    }]
   },
   devServer: {
     contentBase: path.join(rootPath, 'dist/renderer'),
@@ -67,13 +65,9 @@ module.exports = {
     filename: 'js/[name].js',
     publicPath: './'
   },
-  plugins: [
-    new HtmlWebpackPlugin()
-  ]
-}
-// const path = require("path");
+  plugins: [new HtmlWebpackPlugin()]
+}; // const path = require("path");
 // const HtmlWebpackPlugin = require("html-webpack-plugin");
-
 // module.exports = {
 //   resolve: {
 //     extensions: [".tsx", ".ts", ".js"],

@@ -7,6 +7,7 @@ export interface IButton {
   onMouseUp?:any;
   active?: boolean;
   style?:any;
+  parentStyle?:any;
 }
 
 export interface ICallToActionButton {

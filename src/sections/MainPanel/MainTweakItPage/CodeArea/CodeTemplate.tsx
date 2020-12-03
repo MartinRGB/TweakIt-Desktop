@@ -14,7 +14,9 @@ import Icons from '@Assets/icons'
 import Solver from '@Components/Solver'
 import { GraphUpdateContext } from '@Context/GraphUpdateContext'
 import WebWorker from "react-webworker"
-import SpringFactorEvaluator from './SpringFactorEvaluator'
+//import SpringFactorEvaluator from './SpringFactorEvaluator'
+//import SpringFactorEvaluator from './SpringFactorEvaluator.js'
+import SpringFactorEvaluatorWorker from "./SpringFactorEvaluator.worker.js";
 
 
 export interface ICodeSnippet{
@@ -37,14 +39,32 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
   );
 
   const calculator = currentAnimCalculator.replace("Calculator","");
+  const [factorValue,setFactorValue] = useState<number>(0)
+  const [canWokerWork,setWorkerWork] = useState<boolean>(true)
+
+
 
   const AndroidSpringAnimationComponents = () =>{
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
-    //var evaluator = new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['damping']));
-    //console.log(evaluator)
+
+
+   
 
     // TODO in Worker Or By State
-    console.log(new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['dampingratio']),cIF(mSolver['damping']),cIF(mSolver['duration']),0,1).factor)
+    //var evaluator = new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['damping']));
+    //console.log(evaluator)
+    // console.log(new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['dampingratio']),cIF(mSolver['damping']),cIF(mSolver['duration']),0,1))
+
+    if(triggredIndex === -1){
+      const worker = new SpringFactorEvaluatorWorker();
+      worker.postMessage([cIF(mSolver['stiffness']),cIF(mSolver['dampingratio'])]);
+      worker.onmessage = function (e:any) {
+        setFactorValue(e.data[1]);
+        worker.terminate()
+      };
+    }
+
+
     return(
       <CodeDiv>
       <Comment>// Android Spring Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/androidx/dynamicanimation/animation/SpringAnimation.html">[API]</Link><Break/>
@@ -60,7 +80,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
       mSpring.setSpringConfig(mConfig);<Break/>
       <Break/>
       <Comment>// Custom Android Spring Interpolator</Comment> <Link target="_blank" href="https://github.com/MartinRGB/Animer_Web/blob/master/CustomInterpolator/CustomSpringInterpolator.java">[API]</Link><Break/>
-      <Class>CustomSpringInterpolator</Class> customSpringInterpolator = <Keyword>new</Keyword> <Class>CustomSpringInterpolator</Class>(<Number>wip</Number>);<Break/>
+    <Class>CustomSpringInterpolator</Class> customSpringInterpolator = <Keyword>new</Keyword> <Class>CustomSpringInterpolator</Class>(<Number>{factorValue}</Number>);<Break/>
       <Class>[ObjectAnimator]</Class>.setInterpolator(customSpringInterpolator)<Break/>
       <Class>[ObjectAnimator]</Class>.setDuration(<Number>{cIF(mSolver['duration'])*1000}</Number>);<Break/>
       <Break/>
@@ -72,8 +92,8 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
       <Break/>
       <Comment>// Custom DHO Framer Physics Animator in Android</Comment> <Link target="_blank" href="https://github.com/unixzii/android-SpringAnimator">[API]</Link><Break/>
       <Class>DhoSpringAnimator</Class> animator = <Keyword>new</Keyword> <Class>DhoSpringAnimator</Class>();<Break/>
-  animator.setStiffness(<Number>{cIF(mSolver['stiffness'])}</Number>);<Break/>
-      animator.setDamping(<Number>{cIF(mSolver['damping'])}</Number>);<Break/>
+  animator.setStiffness(<Number>{cIF(mSolver['tension'])}</Number>);<Break/>
+      animator.setDamping(<Number>{cIF(mSolver['friction'])}</Number>);<Break/>
       animator.setMass(<Number>{cIF(mSolver['mass'])}</Number>);<Break/>
       animator.setVelocity(<Number>{cIF(mSolver['velocity'])?cIF(mSolver['velocity']):0}</Number>);
     </CodeDiv>
@@ -100,8 +120,8 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
         <Break/>
         <Comment>// iOS CASpringAnimation</Comment>  <Link target="_blank" href="https://developer.apple.com/documentation/quartzcore/caspringanimation">[API]</Link><Break/>
         <Keyword>let</Keyword> spring = <Class>CASpringAnimation</Class>(keyPath:[<Property>property</Property>])<Break/>
-        spring.stiffness = <Number>{cIF(mSolver['stiffness'])}</Number><Break/>
-        spring.damping = <Number>{cIF(mSolver['damping'])}</Number><Break/>
+        spring.stiffness = <Number>{cIF(mSolver['tension'])}</Number><Break/>
+        spring.damping = <Number>{cIF(mSolver['friction'])}</Number><Break/>
         spring.mass = <Number>{cIF(mSolver['mass'])}</Number><Break/>
         spring.initialVelocity = <Number>{cIF(mSolver['velocity'])?cIF(mSolver['velocity']):0}</Number><Break/>
         <Break/>
@@ -132,8 +152,8 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
         spring({`{`}<Break/>
         {`  `}from: [<Property>parameter</Property>],<Break/>
         {`  `}to: [<Property>parameter</Property>],<Break/>
-        {`  `}stiffness: <Number>{cIF(mSolver['stiffness'])}</Number>,<Break/>
-        {`  `}damping: <Number>{cIF(mSolver['damping'])}</Number>,<Break/>
+        {`  `}stiffness: <Number>{cIF(mSolver['tension'])}</Number>,<Break/>
+        {`  `}damping: <Number>{cIF(mSolver['friction'])}</Number>,<Break/>
         {`  `}mass: <Number>{cIF(mSolver['mass'])}</Number>,<Break/>
         {`  `}velocity: <Number>{cIF(mSolver['velocity'])?cIF(mSolver['velocity']):0}</Number><Break/>
         {`}`})
@@ -474,25 +494,30 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
       // :
       // NoReferenceBlock()
 
-      // (name && calculator && isExpanded)?
-      //     (triggredIndex === -1 && bezierTriggeredIndex === -1)?
-      //         ((name != "Data")?
-      //             eval(`${name}${calculator}Components()`)
-      //             :
-      //             UniversalDataComponents())
-      //         :
-      //         DataLoadingBlock()
-      //     :
-      //     NoReferenceBlock()
+
+      // <WebWorker url={new Worker("./SpringFactorEvaluator.js")}>
+      //   {({ data, error, postMessage }) => {
+      //     return(
+      //     <div>
+      //       <div>
+      //           <strong>Received some data:</strong>
+      //           <pre>{data}</pre>
+      //       </div>
+      //       <button onClick={() => postMessage([1500,0.5,21,0.33,0,1])}>Hello</button>
+      //     </div>)
+      //   }}
+      // </WebWorker>
+
+
 
       (name && calculator && isExpanded)?
-          (triggredIndex === -1 && bezierTriggeredIndex === -1)?
+          //(triggredIndex === -1 && bezierTriggeredIndex === -1)?
               ((name != "Data")?
                   eval(`${name}${calculator}Components()`)
                   :
                   UniversalDataComponents())
-              :
-              DataLoadingBlock()
+              // :
+              // DataLoadingBlock()
           :
           NoReferenceBlock()
       

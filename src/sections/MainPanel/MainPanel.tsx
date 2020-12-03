@@ -1,4 +1,4 @@
-import React,{ useContext, useEffect, useState} from 'react';
+import React,{ useContext, useEffect, useState,memo} from 'react';
 import styled from '@emotion/styled'
 import {css} from "@emotion/core";
 import { jsx,useColorMode} from 'theme-ui'
@@ -15,7 +15,7 @@ import animationConfig from '@Config/animation.json';
 import MainTweakItPage from '@Sections/MainPanel/MainTweakItPage';
 
 
-const MainPanel: React.FC = ({ children }) => {
+const MainPanel: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();
   const isDark = colorMode === `dark`;
@@ -36,7 +36,6 @@ const MainPanel: React.FC = ({ children }) => {
     widthProps: adbIsExpand ? 320 : 0,
     config: animationConfig.panel_slide
   })
-
   
   //calc(100% - 320px)':'calc(100%)
   return (
@@ -57,7 +56,7 @@ const MainPanel: React.FC = ({ children }) => {
       </Container>
     </animated.div>
   );
-}
+})
 
 export default MainPanel
 
@@ -71,11 +70,7 @@ const AnimatedContainerCSS = css`
   z-index:8;
 `;
 
-const Container = styled.div<
-{
-  active:boolean;
-}
->`
+const Container = styled.div`
     width: 100%;
     height: 100%;
     background: ${p => p.theme.colors.background};

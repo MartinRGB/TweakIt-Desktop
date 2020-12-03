@@ -249,7 +249,8 @@ const InputTree: React.FC<IInputTree> = memo(({
           step={0.01} 
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
             isEditable?handleRangeChange(e):''
-          }}/>
+          }}
+          />
       </InputContainer>
     </Frame>
   )

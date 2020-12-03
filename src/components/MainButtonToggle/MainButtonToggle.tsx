@@ -60,6 +60,7 @@ const Button = styled.button<
   // margin-left:8px;
   margin: 0 auto;
   user-select: none;
+  cursor:pointer;
   border: 0.5px solid rgba(255, 255, 255, 0.06);
   > div{
     color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};

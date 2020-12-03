@@ -103,7 +103,6 @@ const ListTree: React.FC<IListTree> = memo(({
               {
                 if((currentAnimationItem != info) && clickable){
 
-
                   // TODO Work for GraphTransition,but not For Input
                   setPreviousAnimPlatform(currentAnimPlatform);
                   setPreviousAnimName(currentAnimName);

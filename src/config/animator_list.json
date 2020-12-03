@@ -10,14 +10,14 @@
                 "animation_data": {
                     "Stiffness": {
                         "default": 1500,
-                        "min": 20,
+                        "min": 1,
                         "max": 5000,
                         "editable": true
                     },
                     "DampingRatio": {
                         "default": 0.5,
-                        "min": 0.05,
-                        "max": 0.99,
+                        "min": 0.01,
+                        "max": 0.999,
                         "editable": true
                     },
                     "Velocity": {
@@ -565,12 +565,6 @@
                         "default": 10,
                         "min": 0,
                         "max": 100,
-                        "editable": true
-                    },
-                    "Mass": {
-                        "default": 1,
-                        "min": 0,
-                        "max": 10,
                         "editable": true
                     },
                     "Velocity": {
@@ -1921,14 +1915,14 @@
                 "animation_data": {
                     "Bounciness": {
                         "default": 5,
-                        "min": 0,
-                        "max": 100,
+                        "min": -200,
+                        "max": 200,
                         "editable": true
                     },
                     "Speed": {
                         "default": 10,
-                        "min": 0,
-                        "max": 100,
+                        "min": 0.01,
+                        "max": 200,
                         "editable": true
                     }
                 }
@@ -1977,12 +1971,6 @@
                         "default": 2,
                         "min": 0,
                         "max": 100,
-                        "editable": true
-                    },
-                    "Mass": {
-                        "default": 1,
-                        "min": 0,
-                        "max": 10,
                         "editable": true
                     },
                     "Velocity": {
