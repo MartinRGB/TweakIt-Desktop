@@ -8,6 +8,7 @@ import MainButtonNormal from '@Components/MainButtonNormal'
 import TitleButtonNormal from '@Components/TitleButtonNormal'
 import Icons from '@Assets/icons'
 import CodeTemplate from './CodeTemplate';
+import TerminalTemplate from './TerminalTemplate';
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import animationConfig from '@Config/animation.json'
 import DataDrivenAnimator from '@Components/Animator/DataDrivenAnimator'
@@ -18,7 +19,9 @@ import SpringFactorEvaluator from './SpringFactorEvaluator'
 const CodeArea: React.FC = memo(({children}) => {
   //const [colorMode] = useColorMode();
 
+  useTranslation();
   const [isExpanded,setCodeIsExpand] = useState<boolean>(true);
+  const [isShowCodeBloc,setIsShowCodeBloc] = useState<boolean>(false);
 
   const [activeName,setActiveName] = useState<string>('')
   //,"Flutter","Smartisan"
@@ -26,7 +29,6 @@ const CodeArea: React.FC = memo(({children}) => {
 
 
   const [copyState,setCopyState] = useState<boolean>(false)
-  const [cssProgress,setCSSProgress] = useState<number>(0);
 
   var PlatformIcon;
   //const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -63,50 +65,49 @@ const CodeArea: React.FC = memo(({children}) => {
       isExpanded ={isExpanded}
       >
       <CopyToast ref={toastRef}></CopyToast>
-      <BlurContainer>
-        <TopNav>
-          <TopLeftContainer>
-              {
-                    IconStr.map(function (data:any,index:number) {
-                      //var currIcon = Icons[(iCon[index].replace(/\s/g, "")!)];
-                      PlatformIcon = Icons[(IconStr[index].replace(/\s/g, "")!)];
-                      return (
-                        <MainButtonToggle
-                        buttonCSS={css`
-                          > button {
-                            width:100%;
-                            border-radius:2px;
-                            display: nline-flex;
-                            padding-left: 4px;
-                            padding-right: 6px;
-                            align-items: center;
-                            margin-right: 8px;
-                            height: 16px;
-                            > svg{
-                              top: 0px;
-                              left:3px;
-                            }
+      <TopNav>
+        <TopLeftContainer>
+            {
+                  IconStr.map(function (data:any,index:number) {
+                    //var currIcon = Icons[(iCon[index].replace(/\s/g, "")!)];
+                    PlatformIcon = Icons[(IconStr[index].replace(/\s/g, "")!)];
+                    return (
+                      <MainButtonToggle
+                      buttonCSS={css`
+                        > button {
+                          width:100%;
+                          border-radius:2px;
+                          display: nline-flex;
+                          padding-left: 4px;
+                          padding-right: 6px;
+                          align-items: center;
+                          margin-right: 8px;
+                          height: 16px;
+                          > svg{
+                            top: 0px;
+                            left:3px;
                           }
-                        `}
-                        onClick={()=>{
-                          setActiveName(IconStr[index])
-                        }}
-                        active={activeName === IconStr[index] && isExpanded}
-                        key={'CodeButton' + '_' +index}
-                      >
-                        <PlatformIcon style={{
-                          position: `absolute`,
-                          top: `0px`,
-                          left:`3px`
-                        }}
-                        ></PlatformIcon><CustomSpan>{IconStr[index]}</CustomSpan>
-                      </MainButtonToggle>
-                      )
-                  
-                })
-              }
-          </TopLeftContainer>
-          <TopRightContainer>
+                        }
+                      `}
+                      onClick={()=>{
+                        setActiveName(IconStr[index])
+                        setIsShowCodeBloc(false)
+                      }}
+                      active={activeName === IconStr[index] && isExpanded && !isShowCodeBloc}
+                      key={'CodeButton' + '_' +index}
+                    >
+                      <PlatformIcon style={{
+                        position: `absolute`,
+                        top: `0px`,
+                        left:`3px`
+                      }}
+                      ></PlatformIcon><CustomSpan>{IconStr[index]}</CustomSpan>
+                    </MainButtonToggle>
+                    )
+
+                
+              })
+            }
             <MainButtonNormal
               parentStyle={{
                 height:`16px`,
@@ -114,90 +115,142 @@ const CodeArea: React.FC = memo(({children}) => {
                 display:`flex`,
               }}
               style={{
-
+                width:`52px`,
+                borderRadius:`2px`,
+                display: `inline-flex`,
+                paddingLeft: `4px`,
+                paddingRight: `6px`,
+                alignItems: `center`,
+                marginRight: `8px`,
+                marginLeft:`4px`,
               }}
+
               buttonCSS = {
                 css`
                   height:16px;
                   flex:1
                   display:flex;
-                  >button{
-                    width:24px;
+                  > button{
+                    width:52px;
                     height:16px;
                     border-radius:2px;
+                    display: inline-flex;
+                    padding-left: 4px;
+                    padding-right: 6px;
+                    align-items: center;
+                    margin-right:8px;
                   }
                 `
               }
               onClick={()=>{
-                setCodeIsExpand(!isExpanded)
-                setActiveName('')
-              }}
-            >
-              <Icons.CollapsedArrowAlertNative
+                if(!copyState && isExpanded){
+                  selectCodeContentAndCopy();
+                  setCopyState(true)
+                  }
+                }}
+              >
+              <Icons.Copy
                 style={{
-                  transform:`rotate(${isExpanded?'0deg':'180deg'})`,
-                  transition:`all 0.6s cubic-bezier(0.13, 0.79, 0.25, 1) 0s`,
                   position: `absolute`,
                   top: `0px`,
-                  left:`4px`
+                  left:`7px`
                 }}
-              ></Icons.CollapsedArrowAlertNative>
+              ></Icons.Copy><CustomSpan style={{}}><Trans>Copy</Trans></CustomSpan>
             </MainButtonNormal>
+        </TopLeftContainer>
+        <TopRightContainer>
+          <MainButtonToggle
+            parentStyle={{
+              height:`16px`,
+              flex:`1`,
+              display:`flex`,
+              marginLeft:`8px`,
+            }}
+            style={{
 
-            <MainButtonNormal
-                        parentStyle={{
-                          height:`16px`,
-                          flex:`1`,
-                          display:`flex`,
-                        }}
-                        style={{
-                          width:`52px`,
-                          borderRadius:`2px`,
-                          display: `inline-flex`,
-                          paddingLeft: `4px`,
-                          paddingRight: `6px`,
-                          alignItems: `center`,
-                          marginRight: `8px`
-                        }}
+            }}
+            buttonCSS = {
+              css`
+                height:16px;
+                flex:1
+                display:flex;
+                >button{
+                  width:24px;
+                  height:16px;
+                  border-radius:2px;
+                }
+              `
+            }
+            onClick={()=>{
+              setCodeIsExpand(!isExpanded)
+              setActiveName('')
+              if(!isExpanded){
+                setIsShowCodeBloc(false)
+              }
+            }}
+            active={isExpanded}
+          >
+            <Icons.CollapsedArrowAlertNative
+              style={{
+                transform:`rotate(${isExpanded?'0deg':'180deg'})`,
+                transition:`all 0.6s cubic-bezier(0.13, 0.79, 0.25, 1) 0s`,
+                position: `absolute`,
+                top: `0px`,
+                left:`4px`
+              }}
+            ></Icons.CollapsedArrowAlertNative>
+          </MainButtonToggle>
 
-                        buttonCSS = {
-                          css`
-                            height:16px;
-                            flex:1
-                            display:flex;
-                            >button{
-                              width:52px;
-                              height:16px;
-                              border-radius:2px;
-                              display: inline-flex;
-                              padding-left: 4px;
-                              padding-right: 6px;
-                              align-items: center;
-                              margin-right:8px;
-                            }
-                          `
-                        }
-                        onClick={()=>{
-                          if(!copyState){
-                            selectCodeContentAndCopy();
-                            setCopyState(true)
-                          }
-                        }}
-                      >
-                        <Icons.Copy
-                          style={{
-                            position: `absolute`,
-                            top: `0px`,
-                            left:`3px`
-                          }}
-                        ></Icons.Copy><CustomSpan style={{}}><Trans>Copy</Trans></CustomSpan>
-            </MainButtonNormal>
-          </TopRightContainer>
-        </TopNav>
-      </BlurContainer>
+          <MainButtonToggle
+            active={isShowCodeBloc && isExpanded}
+            parentStyle={{
+              height:`16px`,
+              flex:`1`,
+              display:`flex`,
+              marginLeft:`8px`,
+            }}
+            style={{
+
+            }}
+            buttonCSS = {
+              css`
+                height:16px;
+                flex:1
+                display:flex;
+                >button{
+                  width:100%;
+                  border-radius:2px;
+                  display: nline-flex;
+                  padding-left: 4px;
+                  padding-right: 6px;
+                  align-items: center;
+                  height: 16px;
+                }
+              `
+            }
+            onClick={()=>{
+                setIsShowCodeBloc(true)
+                setActiveName('')
+            }}
+          >
+            <Icons.Terminal
+              style={{
+                position: `absolute`,
+                top: `0px`,
+                left:`3px`
+              }}
+            ></Icons.Terminal><CustomSpan>Console</CustomSpan>
+          </MainButtonToggle>
+
+        </TopRightContainer>
+      </TopNav>
       <ScrollContainer onKeyDown={(e)=>ContentOnKeyDown(e)} id="code_content" contentEditable={true} suppressContentEditableWarning={true}>
-      <CodeTemplate 
-       name={activeName} isExpanded={isExpanded}></CodeTemplate>
+        {
+          isShowCodeBloc?
+          <TerminalTemplate></TerminalTemplate>
+          :
+          <CodeTemplate name={activeName} isActive={isExpanded && !isShowCodeBloc}></CodeTemplate>
+        }
       </ScrollContainer>
     </Container>
   )
@@ -205,44 +258,6 @@ const CodeArea: React.FC = memo(({children}) => {
 
 export default CodeArea
 
-const ToastArrow = styled.div`
-    width: 5px;
-    height: 5px;
-    background: ${p => p.theme.colors.toast_background_bottom};
-    position: absolute;
-    left: 50%;
-    top: 20px;
-    transform: translate3d(-50%,-50%, 0px) rotate(45deg);
-    z-index: -10;
-`
-
-const ToastDiv = styled.div`
-    position: absolute;
-    top: 15px;
-    z-index: 2;
-    width: 52px;
-    text-align: center;
-    left: 100px;
-    background: linear-gradient(180deg,${p => p.theme.colors.toast_background_top} 0%,${p => p.theme.colors.toast_background_bottom} 100%);
-    color: ${p => p.theme.colors.background};
-    padding: 2px 4px;
-    border-radius: 4px;
-    text-align: center;
-    font-family: ${p => p.theme.fonts.numberInput};
-    font-style: normal;
-    font-weight: bold;
-    font-size: 11px;
-    line-height: 15px;
-    display: flex;
-    flex-direction: row;
-    width: 61px;
-    left:37px;
-    box-shadow: 0px 1px 6px ${p => p.theme.colors.text_input_text};
-    > svg{
-      fill:${p => p.theme.colors.background};
-    }
-
-`
 
 const TopRightContainer = styled.div`
   display: flex;
@@ -262,21 +277,13 @@ const TopLeftContainer = styled.div`
   padding-left:14px;
 `
 
-const BlurContainer = styled.div`
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 40px;
-  //mask: linear-gradient(180deg, ${p => p.theme.colors.main_top_bg_blur}, transparent);
-  // backdrop-filter: saturate(180%) blur(5px);
-  // -webkit-mask: linear-gradient(to bottom,#000000 80%,#00000080 100%);
-  z-index:1
-`
-
 const TopNav = styled.div`
     height:100%;
     width:100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 40px;
 
 `
 
@@ -335,11 +342,11 @@ const ScrollContainer = styled.div`
 `
 
 const CustomSpan = styled.span`
-text-align: center;
-font-family: ${props => props.theme.fonts.numberInput};
-font-style: normal;
-font-weight: bold;
-font-size: 11px;
-line-height: 14px;
-margin-left:16px;
+    text-align: center;
+    font-family: ${props => props.theme.fonts.numberInput};
+    font-style: normal;
+    font-weight: bold;
+    font-size: 11px;
+    line-height: 14px;
+    margin-left:16px;
 `

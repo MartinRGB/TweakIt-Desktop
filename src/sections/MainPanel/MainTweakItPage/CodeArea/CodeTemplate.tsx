@@ -21,12 +21,12 @@ import SpringFactorEvaluatorWorker from "./SpringFactorEvaluator.worker.js";
 
 export interface ICodeSnippet{
   name?:string;
-  isExpanded?:boolean;
+  isActive?:boolean;
   style?:any;
 }
 
 
-const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
+const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
 
   const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimPlatform,currentAnimName,interpolatorName,iOSName,webName,flutterName,smartisanName} = useContext(
     AnimatorTypeContext
@@ -472,7 +472,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
 
   const finalResult = () => {
 
-    if(name && calculator && isExpanded){
+    if(name && calculator && isActive){
       if((triggredIndex === -1 && bezierTriggeredIndex === -1)){
         ((name != "Data")?eval(`${name}${calculator}Components()`):UniversalDataComponents())
       }
@@ -487,7 +487,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
 
   return (<div style={{...style}}>
     {
-      // (name && calculator && isExpanded && (triggredIndex === -1 && bezierTriggeredIndex === -1))?((name != "Data")?
+      // (name && calculator && isActive && (triggredIndex === -1 && bezierTriggeredIndex === -1))?((name != "Data")?
       //   eval(`${name}${calculator}Components()`)
       //   :
       //   UniversalDataComponents())
@@ -510,7 +510,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isExpanded,style}) => {
 
 
 
-      (name && calculator && isExpanded)?
+      (name && calculator && isActive)?
           //(triggredIndex === -1 && bezierTriggeredIndex === -1)?
               ((name != "Data")?
                   eval(`${name}${calculator}Components()`)

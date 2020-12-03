@@ -19,7 +19,7 @@ import Copy from '@Assets/icons/svg/Copy.Icon';
 import Done from '@Assets/icons/svg/Done.Icon';
 import SelectArrow from '@Assets/icons/svg/SelectArrow.Icon';
 import CheckMark from '@Assets/icons/svg/CheckMark.Icon';
-
+import Terminal from '@Assets/icons/svg/Terminal.Icon';
 
 export default {
   DarkMode,
@@ -40,5 +40,6 @@ export default {
   Copy,
   Done,
   SelectArrow,
-  CheckMark
+  CheckMark,
+  Terminal
 };

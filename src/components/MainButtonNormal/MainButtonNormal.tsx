@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import {css} from "@emotion/core";
 import { IButton } from "@Types";
 
+import { useTranslation, Trans, Translation } from 'react-i18next'
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
@@ -37,7 +38,7 @@ const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children ,
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}
         >
-        {children}
+        <Trans>{children}</Trans>
       </Button>
   </animated.div>);
 
