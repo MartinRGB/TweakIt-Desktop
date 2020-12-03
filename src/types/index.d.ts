@@ -8,6 +8,7 @@ export interface IButton {
   active?: boolean;
   style?:any;
   parentStyle?:any;
+  buttonCSS?:any;
 }
 
 export interface ICallToActionButton {

@@ -58,7 +58,6 @@ const CodeArea: React.FC = memo(({children}) => {
     e.preventDefault();
   }
 
-  console.log('rerender')
   return (
     <Container
       isExpanded ={isExpanded}
@@ -73,15 +72,22 @@ const CodeArea: React.FC = memo(({children}) => {
                       PlatformIcon = Icons[(IconStr[index].replace(/\s/g, "")!)];
                       return (
                         <MainButtonToggle
-                        style={{
-                          width:`100%`,
-                          borderRadius:`2px`,
-                          display: `inline-flex`,
-                          paddingLeft: `4px`,
-                          paddingRight: `6px`,
-                          alignItems: `center`,
-                          marginRight: `8px`
-                        }}
+                        buttonCSS={css`
+                          > button {
+                            width:100%;
+                            border-radius:2px;
+                            display: nline-flex;
+                            padding-left: 4px;
+                            padding-right: 6px;
+                            align-items: center;
+                            margin-right: 8px;
+                            height: 16px;
+                            > svg{
+                              top: 0px;
+                              left:3px;
+                            }
+                          }
+                        `}
                         onClick={()=>{
                           setActiveName(IconStr[index])
                         }}
@@ -108,10 +114,20 @@ const CodeArea: React.FC = memo(({children}) => {
                 display:`flex`,
               }}
               style={{
-                width:`24px`,
-                height:`16px`,
-                borderRadius:`2px`,
+
               }}
+              buttonCSS = {
+                css`
+                  height:16px;
+                  flex:1
+                  display:flex;
+                  >button{
+                    width:24px;
+                    height:16px;
+                    border-radius:2px;
+                  }
+                `
+              }
               onClick={()=>{
                 setCodeIsExpand(!isExpanded)
                 setActiveName('')
@@ -143,6 +159,24 @@ const CodeArea: React.FC = memo(({children}) => {
                           alignItems: `center`,
                           marginRight: `8px`
                         }}
+
+                        buttonCSS = {
+                          css`
+                            height:16px;
+                            flex:1
+                            display:flex;
+                            >button{
+                              width:52px;
+                              height:16px;
+                              border-radius:2px;
+                              display: inline-flex;
+                              padding-left: 4px;
+                              padding-right: 6px;
+                              align-items: center;
+                              margin-right:8px;
+                            }
+                          `
+                        }
                         onClick={()=>{
                           if(!copyState){
                             selectCodeContentAndCopy();

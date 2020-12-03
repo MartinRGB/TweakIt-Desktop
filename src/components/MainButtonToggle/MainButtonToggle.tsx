@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const MainButtonToggle: React.FC<IButton> = memo(({ style,children , onClick,active}) => {
+const MainButtonToggle: React.FC<IButton> = memo(({ buttonCSS,parentStyle,style,children , onClick,active}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -21,11 +21,15 @@ const MainButtonToggle: React.FC<IButton> = memo(({ style,children , onClick,act
 
 return (
   <animated.div 
-    css={AnimatedContainerCSS}
+    css={buttonCSS}
     {...bind()} 
     style={
       { 
-      transform: interpolate([size], (s) => `scale(${s})`)
+        ...parentStyle,
+        height:`16px`,
+        flex:`1`,
+        display:`flex`,
+        transform: interpolate([size], (s) => `scale(${s})`)
       }
     }>
       <Button
@@ -38,12 +42,6 @@ return (
 
 })
 
-const AnimatedContainerCSS = css`
-  height:16px;
-  flex:1;
-  display:flex;
-`;
-
 // twmacro
 const Button = styled.button<
 { 
@@ -51,51 +49,44 @@ const Button = styled.button<
 }
 >`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
-  width: 40px;
-  height: 16px;
-  border-radius:4px;
-  padding: 0;
+
   background: ${p => (p.active? p.theme.colors.toggle_button_bg:p.theme.colors.normal_button_bg)};
-  outline:none;
-  // margin-left:8px;
-  margin: 0 auto;
-  user-select: none;
-  cursor:pointer;
-  border: 0.5px solid rgba(255, 255, 255, 0.06);
   > div{
     color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
-
   > span{
     color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
-
-  >  svg{
-
-    // height: 20px;
+  > svg{
     position: absolute;
-    top: 0px;
-    left:3px;
-    
     fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
-
   &:active {
     border-style: double;
     background: ${p => p.theme.colors.normal_button_active};
   }
-
   &:active  > div{
     color: ${p => (p.active? p.theme.colors.text:p.theme.colors.background)};
   }
-
   &:active  > span{
     color: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
   }
-
   &:active > svg{
     fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
   }
+
+  border-radius:4px;
+  padding: 0;
+  outline:none;
+  margin: 0 auto;
+  user-select: none;
+  cursor:pointer;
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+
+  &:active {
+    border-style: double;
+  }
+
 
 `;
 

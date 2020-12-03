@@ -1,4 +1,4 @@
-import React ,{memo,useState, useEffect} from 'react';
+import React ,{memo,useState, useEffect,useRef} from 'react';
 
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
@@ -9,31 +9,77 @@ import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
 import DescText from '@Components/DescText'
 import MainButtonNormal from '@Components/MainButtonNormal'
-import childProcess from 'child_process';
+//import childProcess from 'child_process';
 import Icons from '@Assets/icons'
 import animationConfig from '@Config/animation.json';
+import TitleButtonNormal from '@Components/TitleButtonNormal'
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-];
+import Terminal from 'terminal-in-react';
+import theme from 'src/styles/theme.ts';
+const { app } = window.require('electron').remote;
+const childProcess = require('child_process');
+const exec = childProcess.exec;
+const fs = require("fs");
+var appPath = app.getAppPath().replace(/ /g,"\\ ");
+var localNodePath = appPath + '/node_modules/'
+var localAssetsPath = appPath + '/assets/';
+var localADBPath = localAssetsPath + 'adb/';
+var localScrcpyBinPath = localAssetsPath + 'scrcpy/1.16/bin/';
+var ADBPath = '/usr/local/bin/adb'
+var ScrcpyBinPath = '/usr/local/bin/scrcpy'
+
+
+const execCMD2 = (cmd:any,log?:any,successCallback?:(e:any) => void) =>{
+    
+
+  exec(cmd, function(error:any, stdout:any, stderr:any){
+    if(error) {
+      console.error('error: ' + error);
+        return;
+    }
+    console.log(log + ':\n' + stdout);
+    if(successCallback){
+      successCallback(stdout);
+    }
+  });
+  
+}
+
+window.execCMD = (str:string) => execCMD2(str)
+
+
+const getUserHome = () =>{
+  return process.env.HOME || process.env.USERPROFILE;
+}
+
+console.log(localADBPath)
+console.log(localADBPath)
+console.log(localScrcpyBinPath)
+
+const injectTempEnv = () =>{
+  process.env.PATH =  '/usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:' + 
+  localNodePath + '.bin' + ':' + 
+  localADBPath.substring(0, localADBPath.length - 1) + ':' + 
+  localScrcpyBinPath.substring(0, localScrcpyBinPath.length - 1) + ':' +
+  '/usr/bin:' +
+  '/bin:' +
+  '/usr/local/sbin:' +
+  '/usr/local/bin:' +
+  '/usr/sbin:' +
+  '/sbin:' + 
+  '/opt/puppetlabs/bin:' +
+  '/usr/local/munki:' + 
+  '/Library/Apple/usr/bin:';
+}
+
+injectTempEnv()
+
+console.log(process.env.PATH)
+
 
 const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
   const [colorMode] = useColorMode();
-
-  const exec = childProcess.exec;
-  const execCMD = (cmd:any,log:any,callback:any) =>{
-    exec(cmd, function(error, stdout, stderr){
-        if(error) {
-            console.error('error: ' + error);
-            return;
-        }
-        console.log(log + ':\n' + stdout);
-        callback;
-    });
-  }
 
 
   const getMessageFromDevice = () =>{
@@ -156,8 +202,157 @@ const SelectArea: React.FC = memo(({children}) => {
 
   // ################### Custom DropDown ###################
   
+
+  const [log,setLog] = useState<any>();
+  const execCMD = (cmd:any,log?:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void) =>{
+    
+
+    var promise = new Promise((resolve, reject) =>{
+      exec(cmd, function(error:any, stdout:any, stderr:any){
+        if(error) {
+            reject(error);
+            return;
+        }
+        resolve(stdout);
+      });
+    });
+
+    promise.then(function(value) {
+      console.log(log + ':\n' + value);
+      if(successCallback){
+        successCallback(value);
+      }
+      // success                       
+    }).catch(function(error) {
+      console.error('error: ' + error);
+      if(errorCallback){
+        errorCallback(error);
+      }
+      // failure                       
+    });
+    
+  }
+
+const [textVal,setTextVal] = useState<number>('')
+const [prevVal,setPrevTextVal] = useState<number>()
+
+  const addADB = () =>{
+    execCMD2('ls','curr',(value:any)=>{
+      setTextVal(textVal+value)
+    })
+    //console.log('2323')
+  }
+
+  const myRef= useRef();
+
   return (
     <Container>
+
+
+<button onClick={(e)=>addADB()}> + adb 内容</button>
+      <div
+        style={{
+          background:`${theme.colors.background}`,
+          width:`100vw`,
+          height:`50vh`,
+          position:`absolute`,
+          left:`0px`,
+          bottom:`0px`,
+          overflowY: `scroll`,
+        }}
+      >
+        <p
+          style={{
+            position: `absolute`,
+            color:`grey`, //${theme.colors.primary}
+            left: `0`,
+            fontFamily:`${theme.fonts.monospace}`,
+            fontSize:`11px`,
+            top: `0`,
+            wordBreak: `break-all`,
+            whiteSpace: `pre-wrap`,
+            background: `transparent`,
+          }}
+        >
+        {textVal}
+        </p>
+
+      </div>
+
+        {/* <Terminal
+          color='green'
+          allowTabs={false}
+          hideTopBar={true}
+          showActions={false}
+          watchConsoleLogging={true}
+          backgroundColor='black'
+          barColor='black'
+          style={            
+            { 
+            width:`100%`,
+            fontWeight: "normal", 
+            "fontSize": "1em",
+            fontFamily:`${theme.fonts.monospace}`,
+            position: `absolute`,
+            bottom: `0px`,
+            left: `0px`,
+            }
+          }
+          commands={{
+            'ls':(cmd,print) => {
+              // do something async
+              execCMD('ls','current dir is',
+                      (value:any)=>{
+                          console.log(value)
+                          print(`-PassedThrough '${'ls'}', result is:`);
+                          print(`${value}`);
+                      },
+                      (error:any)=>{
+                          print(`error: :${error}`);
+                      }
+              )
+            },
+            'adb-devices':(cmd,print) => {
+              // do something async
+              execCMD('adb devices',
+                      (value:any)=>{
+                          console.log(value)
+                          print(`-PassedThrough '${'adb devices'}', result is:`);
+                          print(`${value}`);
+                      },
+                      (error:any)=>{
+                          print(`error: :${error}`);
+                      }
+              )
+            },
+
+          }}
+          
+          // commandPassThrough={(cmd, print) => {
+          //   // do something async
+          //   var origCMD = cmd.toString().replace(/\,/g, " ");
+          //   if(origCMD === 'ls'){
+          //     execCMD('ls','current dir is',
+          //     (value:any)=>{
+          //       console.log(value)
+          //       print(`-PassedThrough ${origCMD}, result is:`);
+          //       print(`${value}`);
+          //     },
+          //     (error:any)=>{
+          //       print(`error: :${error}`);
+          //     }
+          //     )
+          //   }
+          //   else{
+          //     print(`-PassedThrough ${origCMD}: command not found`);
+          //   }
+          // }}
+          descriptions={{
+            'ls': 'show current dir',
+            'adb devices': 'show current connected Android devices'
+          }}
+          msg='ADB Command Line'
+        /> */}
       <TopLeftContainer>
         <TitleSpan><Trans>Select Animation In Tweakit-Android</Trans></TitleSpan>
 
@@ -243,32 +438,38 @@ const SelectArea: React.FC = memo(({children}) => {
 
 
         <MainButtonNormal 
-          parentStyle={{
-            marginLeft:`12px`,
-            marginRight:`12px`,
-            height:`20px`,
-            marginTop: `-6px`
-          }}
-          style={{
-            display:`inline-block`,
-            height:`20px`
-          }}
+          buttonCSS = {
+            css`
+              margin-left:12px;
+              margin-right:12px;
+              height:20px;
+              margin-top:-6px;
+              > button{
+                display:inline-block;
+                height:20px;
+                width:40px;
+              }
+            `
+          }
           onClick={getMessageFromDevice}
           // onMouseDown={()=>{setScale();animationBoxRef.current.startAnimation(true)}} 
           // onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
           >
             <CustomSpan><Trans>Get</Trans></CustomSpan>
         </MainButtonNormal>
-        <MainButtonNormal 
-          parentStyle={{
-            marginRight:`12px`,
-            height:`20px`,
-            marginTop: `-6px`
-          }}
-          style={{
-            display:`inline-block`,
-            height:`20px`
-          }}
+        <MainButtonNormal
+          buttonCSS = {
+            css`
+              margin-right:12px;
+              height:20px;
+              margin-top:-6px;
+              > button{
+                display:inline-block;
+                height:20px;
+                width:40px;
+              }
+            `
+          }
           onClick={postMessageToDevice}
           // onMouseDown={()=>{setScale();animationBoxRef.current.startAnimation(true)}} 
           // onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
@@ -348,6 +549,20 @@ const DropDownTransitionDiv = styled.div`
 const DropDownListBackground = styled.div`
   width:100%;
   height:100%;
+
+  &:hover {
+    //background: ${p => p.theme.colors.primary};
+    opacity:1;
+  }
+
+  &:hover > span {
+    //color: ${p => p.theme.colors.background};
+    //filter:drop-shadow(2px 4px 6px black);
+  }
+
+  &:hover > svg {
+    //fill: ${p => p.theme.colors.background};
+  }
 `
 
 const DropDownListSpan = styled.span`
@@ -362,7 +577,7 @@ const DropDownListSpan = styled.span`
   user-select:none;
   transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
   transform-origin: left center;
-  opacity:0.7;
+  opacity:0.6;
 `
 
 const CustomSelectWrapper = styled.div`

@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , onClick,onMouseDown,onMouseUp}) => {
+const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , onClick,onMouseDown,onMouseUp,buttonCSS}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -22,7 +22,8 @@ const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children ,
 
   return (
   <animated.div 
-    css={AnimatedContainerCSS}
+  
+    css={buttonCSS}
     {...bind()} 
     style={
       { 
@@ -46,49 +47,40 @@ const AnimatedContainerCSS = css`
   // height:16px;
   // flex:1;
   // display:flex;
-
 `;
 
 // twmacro
 const Button = styled.button`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
-  width: 40px;
-  height: 16px;
   border-radius:4px;
   padding: 0;
-  background: ${p => p.theme.colors.normal_button_bg};
   outline:none;
-  // margin-left:8px;
   margin: 0 auto;
   user-select: none;
   cursor:pointer;
   border: 0.5px solid rgba(255, 255, 255, 0.06);
+
+
+  background: ${p => p.theme.colors.normal_button_bg};
   > div{
     color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
-
   > span{
     color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
-
-  >  svg{
-    
+  > svg{
     fill: ${p => p.theme.colors.text};
   }
-
   &:active {
     border-style: double;
     background: ${p => p.theme.colors.normal_button_active};
   }
-
   &:active  > div{
     color: ${p => p.theme.colors.background};
   }
-
   &:active  > span{
     color: ${p => p.theme.colors.background};
   }
-
   &:active > svg{
     fill: ${p => p.theme.colors.background};
   }

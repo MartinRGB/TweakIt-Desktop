@@ -36,11 +36,16 @@ const PreviewArea: React.FC = memo(({children}) => {
       </AnimationBox>
       <BtnContainer>
         <MainButtonNormal 
-          parentStyle={{
-            height:`16px`,
-            flex:`1`,
-            display:`flex`,
-          }}
+          buttonCSS={css`
+            height:16px;
+            width:40px;
+            margin-left:8px;
+            flex:1;
+            display:flex;
+            > button{
+              width:40px;
+            }
+          `}
           //onMouseDown={()=>{}} 
           //onMouseUp={()=>{}} 
           onMouseDown={()=>{setScale();animationBoxRef.current.startAnimation(true)}} 
@@ -49,11 +54,16 @@ const PreviewArea: React.FC = memo(({children}) => {
             <CustomSpan><Trans>Scale</Trans></CustomSpan>
         </MainButtonNormal>
         <MainButtonNormal 
-          parentStyle={{
-            height:`16px`,
-            flex:`1`,
-            display:`flex`,
-          }}
+          buttonCSS={css`
+            height:16px;
+            width:40px;
+            margin-left:8px;
+            flex:1;
+            display:flex;
+            > button{
+              width:40px;
+            }
+          `}
           onMouseDown={()=>{setTrans();animationBoxRef.current.startAnimation(true)}} 
           onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
           //onClick={() =>{setTrans();animationBoxRef.current.startAnimation()}}
@@ -61,11 +71,16 @@ const PreviewArea: React.FC = memo(({children}) => {
             <CustomSpan><Trans>Trans</Trans></CustomSpan>
         </MainButtonNormal>
         <MainButtonNormal 
-          parentStyle={{
-            height:`16px`,
-            flex:`1`,
-            display:`flex`,
-          }}
+          buttonCSS={css`
+            height:16px;
+            width:40px;
+            margin-left:8px;
+            flex:1;
+            display:flex;
+            > button{
+              width:40px;
+            }
+          `}
           //onMouseDown={()=>{}} 
           //onMouseUp={()=>{}} 
           onMouseDown={()=>{setRot();animationBoxRef.current.startAnimation(true)}} 

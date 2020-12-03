@@ -1,7 +1,8 @@
 import React, {memo,useContext, useEffect,useRef,useState,useLayoutEffect} from 'react';
 import styled from '@emotion/styled'
 //import {css} from '@emotion/core'
-import { useColorMode,jsx,css} from 'theme-ui'
+import { useColorMode,jsx,useThemeUI} from 'theme-ui'
+import {css} from "@emotion/core";
 import TitleButtonNormal from '@Components/TitleButtonNormal'
 import TitleButtonToggle from '@Components/TitleButtonToggle'
 import Icons from '@Assets/icons';
@@ -17,6 +18,7 @@ import initState from '@Config/init_state.json'
 const TitleBar: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();
+  const { theme} = useThemeUI()
 
   const { adbIsExpand, setADBExpandState} = useContext(
     ADBExpandStateContext,
@@ -69,13 +71,92 @@ const TitleBar: React.FC = memo(({ children }) => {
       </TitleBox>
       {isShowBtn?
       <ButtonLayout>
-        <TitleButtonToggle active={adbIsExpand} onClick={clickADB}>
+        <TitleButtonToggle active={adbIsExpand}
+          buttonCSS={css`
+            margin-left:20px;
+            margin-right:13px;
+            width:24px;
+            height:20px;
+            > button{
+              width:24px;
+              height:20px;
+              background:${adbIsExpand?theme.colors.toggle_button_bg:theme.colors.normal_button_bg};
+            }
+            > button > svg {
+              height:20px;
+              top: -1px;
+              text-align: center;
+              left: 4px;
+              fill: ${adbIsExpand?theme.colors.background:theme.colors.text};
+            }
+            &:active > button{
+              background:${theme.colors.toggle_button_active};
+            }
+          
+          `}
+        onClick={clickADB}>
           <Icons.ADB/>
         </TitleButtonToggle>
-        <TitleButtonNormal onClick={clickDark}>
+        <TitleButtonNormal 
+          buttonCSS={css`
+            height:20px;
+            width:24px;
+            margin-left:8px;
+
+            > button{
+              height:20px;
+              width:24px;
+              background: ${theme.colors.normal_button_bg};
+
+            }
+
+            > button > div > svg{
+              height: 20px;
+              top: -1px;
+              left: 3px;
+              fill: ${theme.colors.text};
+            }
+
+            &:active > button{
+              background: ${theme.colors.normal_button_active};
+            }
+
+            &:active  > button > div > svg{
+              fill: ${theme.colors.background};
+            }
+          `} 
+          onClick={clickDark}>
           <Icons.DarkMode/>
         </TitleButtonNormal>
-        <TitleButtonNormal onClick={clickLan}>
+        <TitleButtonNormal 
+        
+          buttonCSS={css`
+            height:20px;
+            width:24px;
+            margin-left:8px;
+
+            > button{
+              height:20px;
+              width:24px;
+              background: ${theme.colors.normal_button_bg};
+            }
+
+            > button > div > svg{
+              height: 20px;
+              top: -1px;
+              left: 3px;
+              fill: ${theme.colors.text};
+            }
+
+            &:active > button{
+              background: ${theme.colors.normal_button_active};
+            }
+
+            &:active  > button > div > svg{
+              fill: ${theme.colors.background};
+            }
+          `} 
+          onClick={clickLan}>
           <Icons.Languages/>
         </TitleButtonNormal>
 
