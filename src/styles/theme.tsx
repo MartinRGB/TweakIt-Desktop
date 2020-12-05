@@ -44,6 +44,7 @@ export default {
     adb_background:'#EDEFEE',
     adb_border:'#DBDBDB',
     selection:'#0adf073d',
+    code_block_background:'#9999991a',
     modes:{
       dark:{
         text: '#fff',
@@ -71,6 +72,7 @@ export default {
         main_bottom_bg:'#030303',
         adb_background:'#131614',
         adb_border:'#242424',
+        code_block_background:'#99999933',
       },
       splash:{
         title_background_top: '#46484900',

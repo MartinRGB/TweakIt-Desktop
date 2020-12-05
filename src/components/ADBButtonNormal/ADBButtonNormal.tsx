@@ -1,4 +1,4 @@
-import React,{memo} from 'react'
+import React,{memo,useContext} from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
@@ -10,15 +10,33 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , onClick,onMouseDown,onMouseUp,buttonCSS}) => {
+import {execCMD,execCMDPromise,simpleRunCMD} from '@Helpers/ADBCommand/ADBCommand'
+import {CodeBlockStateContext} from '@Context/CodeBlockContext'
+
+
+const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , onClick,onMouseDown,onMouseUp,buttonCSS,triggerAnim,cmd}) => {
   const [colorMode, setColorMode] = useColorMode()
+
+  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim,setTriggerControlAnim} = useContext(
+    CodeBlockStateContext,
+  );
 
   const [bind, { delta, down }] = useGesture()
   const {size} = useSpring({
-     size: (down) ? 1.1: 1,
+     size: (down || triggerAnim) ? 1.1: 1,
      immediate: name => down && name === 'x',
-     config:animationConfig.button_pressed
+     config:animationConfig.button_pressed,
+     onRest: () =>{
+      console.log(triggerAnim)
+      if(triggerAnim){
+        setTriggerControlAnim(false)
+      }
+     }
   })
+
+  const dealADBCommand = () =>{
+    simpleRunCMD(cmd,codeBlockIsShow)
+  }
 
 
   return (
@@ -29,12 +47,16 @@ const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children ,
     style={
       { 
       ...parentStyle,
-      transform: interpolate([size], (s) => `scale(${s})`)
+      transform: interpolate([size], (s) => `scale(${s})`),
+      filter: interpolate([size], (s) => `invert(${(s-1)*10})`)
       }
     }>
       <Button
         style={style}
-        onClick={onClick}
+        onClick={()=>{
+          dealADBCommand();
+          onClick();
+        }}
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}
         >
@@ -43,12 +65,6 @@ const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children ,
   </animated.div>);
 
 })
-
-const AnimatedContainerCSS = css`
-  // height:16px;
-  // flex:1;
-  // display:flex;
-`;
 
 // twmacro
 const Button = styled.button`
@@ -88,14 +104,4 @@ const Button = styled.button`
 
 `;
 
-// const CustomSpan = styled.span`
-// text-align: center;
-// font-family: ${props => props.theme.fonts.numberInput};
-// font-style: normal;
-// font-weight: bold;
-// font-size: 11px;
-// line-height: 14px;
-// `
-
-
-export default MainButtonNormal
+export default ADBButtonNormal

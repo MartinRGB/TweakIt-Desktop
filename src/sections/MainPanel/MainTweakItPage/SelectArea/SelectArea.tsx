@@ -7,173 +7,36 @@ import {css} from "@emotion/core";
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
 import MainButtonNormal from '@Components/MainButtonNormal'
+import ADBButtonNormal from '@Components/ADBButtonNormal'
 //import childProcess from 'child_process';
 import Icons from '@Assets/icons'
 import animationConfig from '@Config/animation.json';
+import adbConfig from '@Config/adb_cmd_list';
 
 import theme from 'src/styles/theme.ts';
 import DropDownMenu from '@Components/DropDownMenu'
 import {ADBConnectStateContext} from '@Context/ADBConnectContext'
+import {execCMD,execCMDPromise,simpleRunCMD} from '@Helpers/ADBCommand/ADBCommand'
+import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 
-
-
-
-const { app } = window.require('electron').remote;
-const childProcess = require('child_process');
-const exec = childProcess.exec;
-const fs = require("fs");
-
-var appPath = app.getAppPath().replace(/ /g,"\\ ");
-var localNodePath = appPath + '/node_modules/'
-var localAssetsPath = appPath + '/assets/';
-var localADBPath = localAssetsPath + 'adb/';
-var localScrcpyBinPath = localAssetsPath + 'scrcpy/1.16/bin/';
-var ADBPath = '~/Library/Android/sdk/platform-tools'; ///usr/local/bin
-var ScrcpyBinPath = '/usr/local/Cellar/scrcpy/1.12.1/bin';
-
-const getUserHome = () =>{
-  return process.env.HOME || process.env.USERPROFILE;
-}
-
-
-const injectTempEnv = () =>{
-  process.env.PATH =  '/usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:' + 
-  localNodePath + '.bin' + ':' + 
-  ADBPath.substring(0, localADBPath.length - 1) + ':' + 
-  ScrcpyBinPath.substring(0, localScrcpyBinPath.length - 1) + ':' +
-  '/usr/bin:' +
-  '/bin:' +
-  '/usr/local/sbin:' +
-  '/usr/local/bin:' +
-  '/usr/sbin:' +
-  '/sbin:' + 
-  '/opt/puppetlabs/bin:' +
-  '/usr/local/munki:' + 
-  '/Library/Apple/usr/bin:';
-}
-
-injectTempEnv()
-
-
-const execCMDPromise = (cmd:any,log?:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void) =>{
-    
-  exec(cmd, function(error:any, stdout:any, stderr:any){
-    if(error) {
-        console.error('error: ' + error);
-        if(errorCallback){
-          errorCallback(error);
-        }
-        return;
-    }
-    console.log(log + ':\n' + stdout);
-    if(successCallback){
-      successCallback(stdout);
-    }
-  });
-  
-}
-
-const execCMD = (cmd:any,log?:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void) =>{
-  var promise = new Promise((resolve, reject) =>{
-    exec(cmd, function(error:any, stdout:any, stderr:any){
-      if(error) {
-          reject(error);
-          return;
-      }
-      resolve(stdout);
-    });
-  });
-
-  promise.then(function(value) {
-    console.log(log + ':\n' + value);
-    if(successCallback){
-      successCallback(value);
-    }
-    // success                       
-  }).catch(function(error) {
-    console.error('error: ' + error);
-    if(errorCallback){
-      errorCallback(error);
-    }
-    // failure                       
-  });
-}
 
 const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
   const [colorMode] = useColorMode();
 
-  const {setADBTerminalText,adbTerminalText,adbInfoTimes,setADBInfoTimes,setADBTagStartText,setADBCommandText,setADBTagEndText,setADBCommandIsSuccess,setADBResultText} =  useContext(ADBConnectStateContext)
+  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim} = useContext(
+    CodeBlockStateContext,
+  );
 
-  const cmdWithConsole = (cmd:any) =>{
-    execCMD(cmd,`input command is ${cmd}`,
-    (value:any)=>{
-      setADBTerminalText(
-        adbTerminalText + '\n' +
-        `=================== Result Start At ${new Date().toString()} ===================`+ '\n' +
-        '\n' +
-        `Command '${cmd}' result is: `+ '\n' + 
-        '\n' +
-        value + '\n' +
-        `=================== Result End At ${new Date().toString()} ===================` + '\n'
-      )
-      console.log(value)
-      setADBInfoTimes(adbInfoTimes+1)
-      setADBTagStartText( 
-      `=================== Result Start At ${new Date().toString()} ===================`+ '\n' +
-      '\n'
-      )
-      setADBCommandText(
-      `Command '${cmd}' result is: `+ '\n' + '\n'
-      )
-      setADBCommandIsSuccess(
-        true
-      )
-      setADBResultText(
-      value + '\n'
-      )
-      setADBTagEndText(
-      `=================== Result End At ${new Date().toString()} ===================` + '\n'
-      )
-    },
-    (value:any)=>{
-      setADBTerminalText(
-        adbTerminalText + '\n' +
-        `=================== Result Start At ${new Date().toString()} ===================`+ '\n' +
-        '\n' +
-        `Command '${cmd}' not found: `+ '\n' + 
-        '\n' +
-        value + '\n' +
-        `=================== Result End At ${new Date().toString()} ===================` + '\n'
-      )
-      setADBInfoTimes(adbInfoTimes+1)
-      setADBTagStartText( 
-      `=================== Result Start At ${new Date().toString()} ===================`+ '\n' +
-      '\n'
-      )
-      setADBCommandText(
-      `Command '${cmd}' not found: `+ '\n' + '\n'
-      )
-      setADBCommandIsSuccess(
-        false
-      )
-      setADBResultText(
-      value + '\n'
-      )
-      setADBTagEndText(
-      `=================== Result End At ${new Date().toString()} ===================` + '\n'
-      )
-      console.log(value)
-   
-
-    })
+  const getMessageFromDevice = () =>{
+    //simpleRunCMD(adbConfig.adb_get_device,codeBlockIsShow)
   }
 
-  window.execCMD = (str:string) => cmdWithConsole(str)
+  const postMessageToDevice = () =>{
+    
+    //simpleRunCMD(adbConfig.adb_help,codeBlockIsShow)
 
-  const getMessageFromDevice = () =>{}
-
-  const postMessageToDevice = () =>{}
+  }
 
   const optionsData = [
     { value: "Spring", label: "Spring" },
@@ -212,7 +75,11 @@ const SelectArea: React.FC = memo(({children}) => {
 
         <DropDownMenu optionsData={optionsData} menuWidth={240} isRichAnimation={true}></DropDownMenu>
      
-        <MainButtonNormal 
+        <ADBButtonNormal 
+          triggerAnim={
+            ((adbInputCMD === adbConfig.adb_get_device) && canTriggerControlAnim && codeBlockIsShow)
+          }
+          cmd={adbConfig.adb_get_device}
           buttonCSS = {
             css`
               margin-left:12px;
@@ -231,8 +98,12 @@ const SelectArea: React.FC = memo(({children}) => {
           // onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
           >
             <CustomSpan><Trans>Get</Trans></CustomSpan>
-        </MainButtonNormal>
-        <MainButtonNormal
+        </ADBButtonNormal>
+        <ADBButtonNormal
+          triggerAnim={
+            ((adbInputCMD === adbConfig.adb_help) && canTriggerControlAnim && codeBlockIsShow)
+          }
+          cmd={adbConfig.adb_help}
           buttonCSS = {
             css`
               margin-right:12px;
@@ -250,7 +121,7 @@ const SelectArea: React.FC = memo(({children}) => {
           // onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
           >
             <CustomSpan><Trans>Build</Trans></CustomSpan>
-        </MainButtonNormal>
+        </ADBButtonNormal>
 
 
       </TopLeftContainer>

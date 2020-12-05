@@ -163,7 +163,30 @@ const TitleBar: React.FC = memo(({ children }) => {
       </ButtonLayout>
       :
       <ButtonLayout>
-        <TitleButtonToggle active={adbIsExpand} onClick={clickADB}>
+        <TitleButtonToggle 
+            buttonCSS={css`
+            margin-left:20px;
+            margin-right:13px;
+            width:24px;
+            height:20px;
+            > button{
+              width:24px;
+              height:20px;
+              background:${adbIsExpand?theme.colors.toggle_button_bg:theme.colors.normal_button_bg};
+            }
+            > button > svg {
+              height:20px;
+              top: -1px;
+              text-align: center;
+              left: 4px;
+              fill: ${adbIsExpand?theme.colors.background:theme.colors.text};
+            }
+            &:active > button{
+              background:${theme.colors.toggle_button_active};
+            }
+          
+          `}
+          active={adbIsExpand} onClick={clickADB}>
           <Icons.ADB/>
         </TitleButtonToggle>
       </ButtonLayout>

@@ -11,8 +11,8 @@ import initState from '@Config/init_state.json'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import { GraphUpdateContext } from '@Context/GraphUpdateContext';
 import MainButtonNormal from '@Components/MainButtonNormal';
-import Solver from '@Components/Solver';
-import DataDrivenAnimator from '@Components/Animator/DataDrivenAnimator'
+import Solver from '@Helpers/Solver';
+import DataDrivenAnimator from '@Helpers/Animator/DataDrivenAnimator'
 import Icons from '@Assets/icons'
 
 const CopyToast = memo(forwardRef((props,ref) =>{

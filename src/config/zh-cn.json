@@ -31,5 +31,11 @@
   "No reference":"无参考",
   "Check Android Sections":"请查看安卓代码块",
   "Copy":"复制",
-  "Select Animation In Tweakit-Android":"选择 Tweakit-Android 中的动画"
+  "Select Animation In Tweakit-Android":"选择 Tweakit-Android 中的动画",
+  "Console Log Here":"控制台日志",
+  "Clear all result":"清除终端结果",
+  "List files":"环境根目录一览",
+  "List all ADB commands":"ADB 命令一览",
+  "List all Brew commands":"Brew 命令一览",
+  "List all Node commands":"Node 命令一览"
 }

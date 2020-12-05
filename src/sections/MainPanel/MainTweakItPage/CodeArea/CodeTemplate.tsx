@@ -11,13 +11,13 @@ import MainButtonToggle from '@Components/MainButtonToggle'
 import TitleButtonNormal from '@Components/TitleButtonNormal'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import Icons from '@Assets/icons'
-import Solver from '@Components/Solver'
+import Solver from '@Helpers/Solver'
 import { GraphUpdateContext } from '@Context/GraphUpdateContext'
 import WebWorker from "react-webworker"
 //import SpringFactorEvaluator from './SpringFactorEvaluator'
 //import SpringFactorEvaluator from './SpringFactorEvaluator.js'
 import SpringFactorEvaluatorWorker from "./SpringFactorEvaluator.worker.js";
-
+import CodeTexts from '@Components/CodeTexts'
 
 export interface ICodeSnippet{
   name?:string;
@@ -43,18 +43,20 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
   const [canWokerWork,setWorkerWork] = useState<boolean>(true)
 
 
+  const Comment = CodeTexts.Grey;
+  const Class = CodeTexts.Red;
+  const Number = CodeTexts.Green;
+  const Keyword = CodeTexts.Purple;
+  const Property = CodeTexts.Orange;
+  const Link = CodeTexts.Link;
+  
+  const Break = CodeTexts.Break;
 
   const AndroidSpringAnimationComponents = () =>{
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
 
 
-   
-
-    // TODO in Worker Or By State
-    //var evaluator = new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['damping']));
-    //console.log(evaluator)
-    // console.log(new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['dampingratio']),cIF(mSolver['damping']),cIF(mSolver['duration']),0,1))
-
+    // TODO WorkerPerformance
     if(triggredIndex === -1){
       const worker = new SpringFactorEvaluatorWorker();
       worker.postMessage([cIF(mSolver['stiffness']),cIF(mSolver['dampingratio'])]);
@@ -509,7 +511,6 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
       // </WebWorker>
 
 
-
       (name && calculator && isActive)?
           //(triggredIndex === -1 && bezierTriggeredIndex === -1)?
               ((name != "Data")?
@@ -538,7 +539,6 @@ const firstLetterLower = (str:string) => {
   return str.charAt(0).toLowerCase()+str.slice(1);
 };
 
-
 const CodeDiv = styled.div`
   white-space:pre-wrap;
   overflow-wrap: break-word;
@@ -548,59 +548,4 @@ const CodeDiv = styled.div`
     background: ${p => p.theme.colors.selection};
   }
   margin-bottom: 14px;
-`
-
-const Comment =styled.p`
-  color:#9D9DB2; //grey
-  display: inline-block;
-  ::selection {
-    background: ${p => p.theme.colors.selection};
-  }
-`
-
-const Link =styled.a`
-  color:#0DB5FF; //blue
-  display: inline-block;
-  text-decoration: none;
-  ::selection {
-    background: ${p => p.theme.colors.selection};
-  }
-`
-const Class =styled.p`
-  color:#F50579; //blue
-  display: inline-block;
-  ::selection {
-    background: ${p => p.theme.colors.selection};
-  }
-`
-
-const Number = styled.p`
-  color:#0adf07; //green
-  display: inline-block;
-  word-break: break-all;
-  ::selection {
-    background: ${p => p.theme.colors.selection};
-  }
-`
-
-const Keyword = styled.p`
-  color:#6e41d1; //purple
-  display: inline-block;
-  ::selection {
-    background: ${p => p.theme.colors.selection};
-  }
-`
-
-const Property = styled.p`
-  color:#ff9f0f; //orange
-  display: inline-block;
-  ::selection {
-    background: ${p => p.theme.colors.selection};
-  }
-`
-
-const Break = styled.br`
-  ::selection {
-    background: ${p => p.theme.colors.selection};
-  }
 `

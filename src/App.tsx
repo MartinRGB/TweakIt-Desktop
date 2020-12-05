@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useEffect} from 'react'
 import { render } from 'react-dom'
 import { GlobalStyle } from '@Styles/GlobalStyle'
 import { css, keyframes } from '@emotion/core';
@@ -20,7 +20,8 @@ import { useTranslation, Trans} from 'react-i18next'
 
 import ADBExpandStateProvider from "@Context/ADBExpandContext";
 import ADBConnectProvider from "@Context/ADBConnectContext";
-
+import CodeBlockProvider from "@Context/CodeBlockContext";
+import {injectPathEnvironments} from '@Helpers/GlobalEnvironments/PathEnvironments'
 import animatorList from '@Config/animator_list.json';
 
 
@@ -37,14 +38,19 @@ const mainElement = document.createElement('div')
 mainElement.setAttribute('id', 'root')
 document.body.appendChild(mainElement)
 
-
 const App = () => {
   const { t ,i18n} = useTranslation()
   //console.log(animatorList)
+  useEffect(() => {
+    injectPathEnvironments()
+  }, [])
+
   return (
     <div>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
+
+        <CodeBlockProvider>
         <ADBConnectProvider>
         <ADBExpandStateProvider>
           <TitleBar>TWEAKIT</TitleBar>
@@ -52,6 +58,7 @@ const App = () => {
           <MainPanel></MainPanel>
         </ADBExpandStateProvider>
         </ADBConnectProvider>
+        </CodeBlockProvider>
       </ThemeProvider>
     </div>
   )

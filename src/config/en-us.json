@@ -31,5 +31,12 @@
   "No reference":"No Reference",
   "Check Android Sections":"Check Android Sections",
   "Copy":"Copy",
-  "Select Animation In Tweakit-Android":"Select Animation In Tweakit-Android"
+  "Select Animation In Tweakit-Android":"Select Animation In Tweakit-Android",
+  "Console Log Here":"Console Log Here",
+  "Clear all result":"Clear all result",
+  "List files":"List files",
+  "List all ADB commands":"List all ADB commands",
+  "List all Brew commands":"List all Brew commands",
+  "List all Node commands":"List all Node commands"
+
 }

@@ -2,8 +2,7 @@ import React, {memo,useContext,useEffect}from 'react'
 import styled from '@emotion/styled';
 import { ISVG } from "@Types";
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext'
-
-import Solver from '@Components/Solver';
+import Solver from '@Helpers/Solver';
 import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTemplate_50,SVGTransitionTemplate_100,SVGTransitionTemplate_50} from '@Components/SVG/SVGUtil'
 import { ListSelectStateContext } from '@Context/ListSelectStateContext'
 

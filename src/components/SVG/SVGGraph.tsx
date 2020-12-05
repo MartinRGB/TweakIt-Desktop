@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { ISVG } from "@Types";
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext'
 import { GraphUpdateContext } from '@Context/GraphUpdateContext'
-import Solver from '@Components/Solver';
+import Solver from '@Helpers/Solver';
 import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTemplate_50,SVGTransitionTemplate_100,SVGTransitionTemplate_50} from '@Components/SVG/SVGUtil'
 
 const SVGGraph: React.FC<ISVG> = memo(({ 

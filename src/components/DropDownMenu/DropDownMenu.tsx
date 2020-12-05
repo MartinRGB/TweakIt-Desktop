@@ -102,7 +102,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRic
   })
 
   return (        
-  <CustomSelectWrapper style={{width:`${menuWidth}px`}}>
+  <CustomSelectWrapper style={{width:`${menuWidth}px`,minWidth:`${menuWidth}px`}}>
     <CustomSelect
       onClick={onClickSelect}
     >

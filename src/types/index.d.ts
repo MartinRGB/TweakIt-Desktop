@@ -9,6 +9,18 @@ export interface IButton {
   style?:any;
   parentStyle?:any;
   buttonCSS?:any;
+  triggerAnim?:boolean;
+  cmd?:any;
+}
+
+declare global {
+  interface Window { 
+    exec: any;
+    fs:any;
+    appPath:any;
+    childProcess:any;
+    cmdConsole:any;
+  }
 }
 
 export interface ICallToActionButton {

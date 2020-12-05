@@ -27,6 +27,7 @@
       "@Sections/*": ["src/sections/*"],
       "@Styles/*": ["src/styles/*"],
       "@Types": ["src/types"],
+      "@Helpers/*": ["src/helpers/*"],
     }
   }
 }
