@@ -20,7 +20,9 @@ import Icons from '@Assets/icons'
 
 import { ListSelectStateContext } from '@Context/ListSelectStateContext';
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
-
+import Solver from 'src/helpers/Solver.ts';
+import initState from '@Config/init_state.json'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const ListTree: React.FC<IListTree> = memo(({
   clickable, 
@@ -43,18 +45,78 @@ const ListTree: React.FC<IListTree> = memo(({
     ListSelectStateContext
   );
 
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
+
   const [isOpen, setOpen] = useState(defaultOpen)
 
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
-  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex,setInterpolatorName,setFlutterName,setiOSName,setWebName,setSmartisanName} = useContext(
+  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setListDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,selectTransition,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex,setInterpolatorName,setFlutterName,setiOSName,setWebName,setSmartisanName} = useContext(
     AnimatorTypeContext
   );
 
+  //console.log('ListTree - Render')
+
+  useEffect(() => {
+    if(platform === currentAnimPlatform && name === currentAnimName && calculator === currentAnimCalculator){
+      setPrevAndCurrData();
+    }
+  }, [])
+
+  const setPrevAndCurrData = () =>{
+      // TODO Work for GraphTransition,but not For Input
+      setPreviousAnimPlatform(currentAnimPlatform);
+      setPreviousAnimName(currentAnimName);
+      setPreviousAnimCalculator(currentAnimCalculator);
+      setPreviousSolverData(currentSolverData);
+      Object.entries(currentAnimData).map(function (data:any,index:number) {
+        setPreviousDataMinByIndex(data[1][1].min,index)
+        setPreviousDataRangeByIndex(data[1][1].max - data[1][1].min,index)
+      })
+
+      selectAnimationItem(info)
+      setCurrentAnimPlatform(platform);
+      setCurrentAnimName(name)
+      setCurrentAnimCalculator(calculator)
+
+      setInterpolatorName(ease_name[0])
+      setiOSName(ease_name[1])
+      setWebName(ease_name[2])
+      setFlutterName(ease_name[3])
+      setSmartisanName(ease_name[4])
+
+      if(animation_data){
+        setCurrentAnimData(Object.entries(animation_data))
+      }
+      else{
+        setCurrentAnimData([])
+      }
+
+      // if(name === 'Duration'){
+      //   setDurationData(Math.min(max,Math.max(Number(value),min)),index);
+      // }
+
+      Object.entries(animation_data).map(function (data:any,index:number) {
+        if(data[0] === "Duration"){
+          setListDurationData(data[1].default)
+        }
+        else{
+          setListDurationData(-1)
+        }
+        setCurrentDataRangeByIndex(data[1].max - data[1].min,index)
+      })
+      // BUGS:Delete Comments will delete transition anim
+      // Object.entries(animation_data).map(function (data:any,index:number) {
+      //   setCurrentSolverDataByIndex(data[1].default,index)
+      // })
+
+      isGlobalAnimEnable?setSelectTransition(true):setSelectTransition(false)
+  }
+
 
   const { revealProgress } = useSpring({
-    revealProgress: isOpen ? 1 : 0,
+    revealProgress: isOpen ? 1 : (isGlobalAnimEnable?0:1),
     config: animationConfig.list_reveal
   }) 
 
@@ -77,7 +139,7 @@ const ListTree: React.FC<IListTree> = memo(({
               height: 18px;`
             }
             style={{
-              transform: interpolate([revealProgress], (r) => `rotate(${r * 90}deg) translate3d(0px,${r * 1.5}px,0px) scale3d(${1 - r * 0.1},${1 - r * 0.1},${1 - r * 0.1})`),
+              transform: isOpen?interpolate([revealProgress], (r) => `rotate(${r * 90}deg) translate3d(0px,${r * 1.5}px,0px) scale3d(${1 - r * 0.1},${1 - r * 0.1},${1 - r * 0.1})`):'',
               marginTop: `-2px`,
             }}>
             <Icons.CollapsedArrow />
@@ -101,57 +163,8 @@ const ListTree: React.FC<IListTree> = memo(({
             <LiTitle style={{ ...style }} isClickable={clickable} isSelected={currentAnimationItem === info } 
             onClick={() => 
               {
-                if((currentAnimationItem != info) && clickable){
-
-                  // TODO Work for GraphTransition,but not For Input
-                  setPreviousAnimPlatform(currentAnimPlatform);
-                  setPreviousAnimName(currentAnimName);
-                  setPreviousAnimCalculator(currentAnimCalculator);
-                  setPreviousSolverData(currentSolverData);
-                  Object.entries(currentAnimData).map(function (data:any,index:number) {
-                    setPreviousDataMinByIndex(data[1][1].min,index)
-                    setPreviousDataRangeByIndex(data[1][1].max - data[1][1].min,index)
-                  })
-
-                  selectAnimationItem(info)
-                  setCurrentAnimPlatform(platform);
-                  setCurrentAnimName(name)
-                  setCurrentAnimCalculator(calculator)
-
-                  setInterpolatorName(ease_name[0])
-                  setiOSName(ease_name[1])
-                  setWebName(ease_name[2])
-                  setFlutterName(ease_name[3])
-                  setSmartisanName(ease_name[4])
-
-                  if(animation_data){
-                    setCurrentAnimData(Object.entries(animation_data))
-                  }
-                  else{
-                    setCurrentAnimData([])
-                  }
-
-                  // if(name === 'Duration'){
-                  //   setDurationData(Math.min(max,Math.max(Number(value),min)),index);
-                  // }
-
-                  Object.entries(animation_data).map(function (data:any,index:number) {
-                    if(data[0] === "Duration"){
-                      setDurationData(data[1].default)
-                    }
-                    else{
-                      setDurationData(-1)
-                    }
-                    setCurrentDataRangeByIndex(data[1].max - data[1].min,index)
-                  })
-                  // BUGS:Delete Comments will delete transition anim
-                  // Object.entries(animation_data).map(function (data:any,index:number) {
-                  //   setCurrentSolverDataByIndex(data[1].default,index)
-                  // })
-
-
-                  setSelectTransition(true)
-
+                if((currentAnimationItem != info) && clickable && !selectTransition){
+                    setPrevAndCurrData();
                 }
               }
             }><Trans>{name}</Trans></LiTitle>

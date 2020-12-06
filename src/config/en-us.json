@@ -37,6 +37,10 @@
   "List files":"List files",
   "List all ADB commands":"List all ADB commands",
   "List all Brew commands":"List all Brew commands",
-  "List all Node commands":"List all Node commands"
+  "List all Node commands":"List all Node commands",
+  "Console":"Console",
+  "Theme":"Theme",
+  "Animation":"Animation",
+  "Language":"Language"
 
 }

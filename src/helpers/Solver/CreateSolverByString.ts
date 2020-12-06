@@ -2,13 +2,8 @@ import Solver from '@Helpers/Solver'
 import initState from '@Config/init_state.json'
 
 
-export const CreateSolverByString = (calculator:string,platform:string,name:string,data:any) =>{
+export const CreateSolverByString = (calculator:string,platform:string,name:string,data?:any) =>{
 
-
-    // console.log(calculator)
-    // console.log(platform)
-    // console.log(name)
-    //console.log(data)
 
     const mSolver = Solver;
 
@@ -46,14 +41,10 @@ export const CreateSolverByString = (calculator:string,platform:string,name:stri
         if (initParaStr.charAt(initParaStr.length - 1) == ',') {
             initParaStr = initParaStr.substr(0, initParaStr.length - 1);
         }
-        //console.log(initParaStr)
     }
-
-    //console.log(`new ${solverStr}.${trimEmptyStr(platform)}.${initClazzStr}(${initParaStr})`)
 
     if(platform){
         return eval(`new ${solverStr}.${trimEmptyStr(platform)}.${initClazzStr}(${initParaStr})`);
-        //return new Solver.HorizontalLineCalculator()
     }
     else{
         return eval(`new ${solverStr}.${'Default'}.${'HorizontalLine'}(${initParaStr})`);

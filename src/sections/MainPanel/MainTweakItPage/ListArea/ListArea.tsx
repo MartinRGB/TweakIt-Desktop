@@ -28,8 +28,8 @@ const ListArea: React.FC = memo(({children}) => {
               {
                 data['li'].map(function (animData:any,i:number) {
                   return <ListTree 
-                            key={data['platform']+'_'+data['name']+'_'+animData['name']+'_'+i} 
-                            info={data['platform']+'_'+data['name']+'_'+animData['name']} 
+                            key={data['platform']+'_'+animData['name']+'_'+i} 
+                            info={data['platform']+'_'+animData['name']} 
                             platform={data['platform']}
                             index={i}
                             isUlElement={false} 

@@ -3,23 +3,19 @@ import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
 import {css} from "@emotion/core";
-import { IButton } from "@Types";
+import { IDropDownMenu } from "@Types";
 
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 import Icons from '@Assets/icons'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 
-export interface IDropDownMenu{
-  optionsData?:any;
-  menuWidth?:number;
-  isRichAnimation:boolean;
-}
-
-const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRichAnimation}) => {
+const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuStyle,style,optionsData,menuWidth,isRichAnimation}) => {
 
   const [colorMode, setColorMode] = useColorMode()
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const [selectedText,setSelectedText] = useState<string>('select...')
   const [selectIndex,setSelectIndex] = useState<number>(-1)
   const [selectExpand,setSelectExpand] = useState<boolean>(false)
@@ -33,7 +29,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRic
   const menuListNum = optionsData.length;
   const listHeight = 20;
 
-  const onClickSelect = () =>{
+  const onClickSelect = (e:any) =>{
 
     if(onClickListExpandTimeOut){
       clearTimeout(onClickListExpandTimeOut)
@@ -43,12 +39,15 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRic
     }
 
     if(!selectExpand){
-      setSelectExpandAnimate(true)
+      isGlobalAnimEnable?setSelectExpandAnimate(true):setSelectAnimationProgress(1)
       setSelectExpand(true)
       setOpacityTransitionIn(true)
     }
     else{
-      setSelectExpandAnimate(false)
+      console.log('here')
+      isGlobalAnimEnable?setSelectExpandAnimate(false):setSelectAnimationProgress(0)
+      isGlobalAnimEnable?'':setSelectExpand(false)
+      isGlobalAnimEnable?'':setOpacityTransitionIn(false)
     }
 
   }
@@ -65,16 +64,26 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRic
       clearTimeout(onExpandAnimationEndTimeOut)
     }
 
-    console.log(value)
     setSelectIndex(index)
     setSelectedText(value)
 
     if(selectExpand){
 
-      onClickListExpandTimeOut = setTimeout(()=>{
-        setSelectExpandAnimate(false)
-        clearTimeout(onClickListExpandTimeOut)
-      },150)
+      if(isGlobalAnimEnable){
+        onClickListExpandTimeOut = setTimeout(()=>{
+          setSelectExpandAnimate(false)
+          clearTimeout(onClickListExpandTimeOut)
+        },150)
+      }
+      else{
+        onClickListExpandTimeOut = setTimeout(()=>{
+          setSelectAnimationProgress(0);
+          setSelectExpand(false)
+          setOpacityTransitionIn(false)
+          clearTimeout(onClickListExpandTimeOut)
+        },200)
+      }
+
     }
   }
 
@@ -87,10 +96,10 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRic
     onStart: () =>{
     },
     onFrame: () =>{
-      setSelectAnimationProgress(listProps.value);
+      if(isGlobalAnimEnable) setSelectAnimationProgress(listProps.value);
     },
     onRest: () =>{
-      if(!selectExpandAnimate){
+      if(!selectExpandAnimate && isGlobalAnimEnable){
         setOpacityTransitionIn(false)
         onExpandAnimationEndTimeOut = setTimeout(()=>{
           setSelectExpand(false)
@@ -102,9 +111,9 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRic
   })
 
   return (        
-  <CustomSelectWrapper style={{width:`${menuWidth}px`,minWidth:`${menuWidth}px`}}>
+  <CustomSelectWrapper style={{...style,width:`${menuWidth}`,minWidth:`${menuWidth}`}}>
     <CustomSelect
-      onClick={onClickSelect}
+      onClick={(e:any)=>{onClickSelect(e)}}
     >
       <CustomSelectedSpan>{selectedText}</CustomSelectedSpan>
       <Icons.SelectArrow></Icons.SelectArrow>
@@ -114,25 +123,26 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRic
       selectExpand?
       <DropDownMenuConatiner
       style={{
-        width:`${menuWidth}px`,
+        ...menuStyle,
         height: `${Math.max(0,(selectIndex === -1 || !isRichAnimation)?
                               (0 + selectAnimationProgress*(menuPadding*2+menuListNum*listHeight - 0))
                               :
                               (20 + selectAnimationProgress*(menuPadding*2+menuListNum*listHeight - 20))  )}px`,
         padding: `${menuPadding*selectAnimationProgress}px 0px`,
         borderWidth: `${selectAnimationProgress}px`,
-        display:`${selectExpand?'block':'none'}`,
         transform:`${isRichAnimation?`translate3d(0px,${(selectIndex === -1)?0:selectAnimationProgress*21 -21}px,0px)`:''}`
+
       }}
       >
         <DropDownBackground
           style={{
-            opacity:`${opacityTransitionIn?'1':'0'}`
+            opacity:`${opacityTransitionIn?'1':'0'}`,
+            transition:`${isGlobalAnimEnable?'all 0.1s':'none'}`
           }}
         ></DropDownBackground>
         <DropDownTransitionDiv
           style={{
-            transform:`${isRichAnimation?`translate3d(${19*selectAnimationProgress-19}px,${(selectIndex === -1)?0:-selectIndex*listHeight+selectAnimationProgress*(selectIndex*listHeight)}px,0px)`:''}`
+            transform:`${(isRichAnimation)?`translate3d(${19*selectAnimationProgress-19}px,${(selectIndex === -1)?0:-selectIndex*listHeight+selectAnimationProgress*(selectIndex*listHeight)}px,0px)`:''}`
           }}
         >
         {
@@ -145,15 +155,18 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRic
                   height:`${listHeight}px`
                 }}
                 key={index}
-                onClick = {()=>{onClickList(index,data.value)}}
-              >
+                onClick = {()=>{
+                  onClickIndex(index,data.value);
+                  onClickList(index,data.value)}}
+                >
                   <DropDownListBackground>
                     <Icons.CheckMark style={{
                       position: `absolute`,
                       top: `2px`,
                       left: `8px`,
-                      transform: `${(selectIndex === index)?'scale3d(1,1,1)':'scale(0,0,0)'}`,
-                      opacity: `${(selectIndex === index)?selectAnimationProgress:'0'}`,
+                      transform: `${(selectIndex === index)?`scale3d(1,1,1)`:'scale3d(0,0,0)'}`,
+                      opacity: `${(selectIndex === index)?`${selectAnimationProgress}`:'0'}`,
+                      transition:`${isGlobalAnimEnable?'all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s':'none'}`
                       }}>
                     </Icons.CheckMark>
 
@@ -161,6 +174,8 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({optionsData,menuWidth,isRic
                       style={{
                         opacity: `${(selectIndex === index)?'1':''}`,
                         transform: `${(selectIndex === index)?'scale3d(1.2,1.2,1)':''}`,
+                        transition:`${isGlobalAnimEnable?'all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s':'none'}`,
+                        
                       }}  
                     >{data.value}</DropDownListSpan> 
                 </DropDownListBackground>
@@ -186,7 +201,7 @@ const DropDownMenuConatiner = styled.div`
   top: 20px;
   left: -1px;
   height:0px;
-  border: 1px solid ${p => p.theme.colors.adb_border};
+  border: 1px solid ${p => p.theme.colors.menu_border};
   border-radius:4px;
   overflow:hidden;
   //width:240px;
@@ -201,7 +216,6 @@ const DropDownBackground = styled.div`
   backdrop-filter:blur(3px);
   position: absolute;
   top: 0px;
-  transition:all 0.1s;
 `
 
 const DropDownListContainer = styled.div<{
@@ -212,7 +226,7 @@ const DropDownListContainer = styled.div<{
   position: relative;
   z-index:0;
   cursor:pointer;
-  transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
+  //transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
   
   // &:hover > div{
   //   background:${p => p.theme.colors.primary};
@@ -235,7 +249,7 @@ const DropDownListContainer = styled.div<{
 
   > div > svg {
     fill: ${p => p.theme.colors.text};
-    transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
+    
   }
 `
 
@@ -271,7 +285,7 @@ const DropDownListSpan = styled.span`
   left: 28px;
   top: 0px;
   user-select:none;
-  transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
+  //transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
   transform-origin: left center;
   opacity:0.6;
 `
@@ -281,7 +295,7 @@ const CustomSelectWrapper = styled.div`
     //width: 240px;
     // min-width:240px;
     position: relative;
-    border: 1px solid ${p => p.theme.colors.text_input_border};
+    border: 1px solid ${p => p.theme.colors.menu_border};
     border-radius: 4px;
     margin-right: 32px;
     background: ${p => p.theme.colors.normal_button_bg};
@@ -301,7 +315,7 @@ const CustomSelect = styled.button`
       position: absolute;
       right: 1px;
       top: 1px;
-      transition:all 0.15s;
+      //transition:all 0.15s;
       z-index:1;
     }
 
@@ -331,7 +345,6 @@ const CustomSelectedSpan = styled.span`
   left: 8px;
   top: -1px;
   user-select:none;
-  transition:all 0.15s;
 `
 
 export default DropDownMenu

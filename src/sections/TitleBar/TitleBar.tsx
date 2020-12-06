@@ -12,6 +12,7 @@ import '@Context/i18nContext'
 import { useTranslation, Trans} from 'react-i18next'
 
 import { ADBExpandStateContext } from '@Context/ADBExpandContext';
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 import initState from '@Config/init_state.json'
 
@@ -23,6 +24,11 @@ const TitleBar: React.FC = memo(({ children }) => {
   const { adbIsExpand, setADBExpandState} = useContext(
     ADBExpandStateContext,
   );
+  const { isGlobalAnimEnable, setGlobalAnimEnable} = useContext(
+    GlobalAnimationStateContext,
+  );
+
+  
 
   const { t ,i18n} = useTranslation()
 
@@ -35,13 +41,16 @@ const TitleBar: React.FC = memo(({ children }) => {
   const clickADB = () =>{
     setADBExpandState(!adbIsExpand);
   }
+  const clickAnimation = () =>{
+    setGlobalAnimEnable(!isGlobalAnimEnable);
+  }
 
   const sizeRef = useRef(null);
   const [isShowBtn, setIsShowBtn] = useState<boolean>(false);
   function updateSize() {
     let height = sizeRef.current.offsetHeight;
     let width  = sizeRef.current.offsetWidth;
-    if(width >= 400){
+    if(width >= 500){
       setIsShowBtn(true)
     }
     else{
@@ -73,89 +82,153 @@ const TitleBar: React.FC = memo(({ children }) => {
       <ButtonLayout>
         <TitleButtonToggle active={adbIsExpand}
           buttonCSS={css`
-            margin-left:20px;
+            margin-left:8px;
             margin-right:13px;
-            width:24px;
-            height:20px;
-            > button{
-              width:24px;
-              height:20px;
+            height:38px;
+            display: inline-flex;
+            flex-direction: column;
+            -webkit-app-region: no-drag;
+            > div > button{
+              width:40px;
+              height:22px;
+              position: relative;
               background:${adbIsExpand?theme.colors.toggle_button_bg:theme.colors.normal_button_bg};
             }
-            > button > svg {
+            > div > button > svg {
               height:20px;
-              top: -1px;
               text-align: center;
-              left: 4px;
+              top: 0px;
+              left: 1px;
               fill: ${adbIsExpand?theme.colors.background:theme.colors.text};
             }
-            &:active > button{
+            &:active > div > button{
               background:${theme.colors.toggle_button_active};
             }
+
+            &:active > div > button > svg{
+              fill: ${adbIsExpand?theme.colors.text:theme.colors.background};
+              opacity:0.8;
+            }
+            
           
           `}
-        onClick={clickADB}>
+          buttonSib={'ADB'}
+          
+          onClick={clickADB}>
           <Icons.ADB/>
+        </TitleButtonToggle>
+        <TitleButtonToggle active={isGlobalAnimEnable}
+          buttonCSS={css`
+            margin-left:8px;
+            margin-right:0px;
+            height:38px;
+            display: inline-flex;
+            flex-direction: column;
+            -webkit-app-region: no-drag;
+            > div > button{
+              width:40px;
+              height:22px;
+              position: relative;
+              background:${isGlobalAnimEnable?theme.colors.toggle_button_bg:theme.colors.normal_button_bg};
+            }
+            > div > button > svg {
+              height:20px;
+              text-align: center;
+              top: 0px;
+              left: 0px;
+              fill: ${isGlobalAnimEnable?theme.colors.background:theme.colors.text};
+            }
+            &:active > div > button{
+              background:${theme.colors.toggle_button_active};
+            }
+            &:active > div > button > svg{
+              fill: ${adbIsExpand?theme.colors.text:theme.colors.background};
+              opacity:0.8;
+            }
+        
+          
+          `}
+          buttonSib={'Animation'}
+        onClick={clickAnimation}>
+          <Icons.Animation style={{transform: `scale3d(1.25,1.25,1)`}}/>
         </TitleButtonToggle>
         <TitleButtonNormal 
           buttonCSS={css`
-            height:20px;
-            width:24px;
+            height:38px;
             margin-left:8px;
-
-            > button{
-              height:20px;
-              width:24px;
+            display: inline-flex;
+            flex-direction: column;
+            -webkit-app-region: no-drag;
+            >div > button{
+              width:40px;
+              height:22px;
+              position:relative;
+              display: block;
               background: ${theme.colors.normal_button_bg};
 
             }
 
-            > button > div > svg{
+            > div > button > div > svg{
               height: 20px;
-              top: -1px;
-              left: 3px;
+              top: 0px;
+              left: 0px;
               fill: ${theme.colors.text};
             }
 
-            &:active > button{
+            &:active > div > button{
               background: ${theme.colors.normal_button_active};
             }
 
-            &:active  > button > div > svg{
+            &:active > div > button > div > svg{
               fill: ${theme.colors.background};
             }
+
+            &:active > div > button{
+              background:${theme.colors.toggle_button_active};
+            }
           `} 
+          buttonSib={'Theme'}
           onClick={clickDark}>
           <Icons.DarkMode/>
         </TitleButtonNormal>
         <TitleButtonNormal 
         
           buttonCSS={css`
-            height:20px;
-            width:24px;
-            margin-left:8px;
+          height:38px;
+          margin-left:8px;
+          display: inline-flex;
+          flex-direction: column;
+          -webkit-app-region: no-drag;
+          >div > button{
+            width:40px;
+            height:22px;
+            position:relative;
+            display: block;
+            background: ${theme.colors.normal_button_bg};
 
-            > button{
-              height:20px;
-              width:24px;
-              background: ${theme.colors.normal_button_bg};
-            }
+          }
 
-            > button > div > svg{
-              height: 20px;
-              top: -1px;
-              left: 3px;
-              fill: ${theme.colors.text};
-            }
+          > div > button > div > svg{
+            height: 20px;
+            top: 0px;
+            left: 0px;
+            fill: ${theme.colors.text};
+          }
 
-            &:active > button{
-              background: ${theme.colors.normal_button_active};
-            }
+          &:active > div > button{
+            background: ${theme.colors.normal_button_active};
+          }
 
-            &:active  > button > div > svg{
-              fill: ${theme.colors.background};
-            }
+          &:active > div > button > div > svg{
+            fill: ${theme.colors.background};
+          }
+
+          &:active > div > button{
+            background:${theme.colors.toggle_button_active};
+          }
+
           `} 
+          buttonSib={'Language'}
           onClick={clickLan}>
           <Icons.Languages/>
         </TitleButtonNormal>
@@ -165,28 +238,40 @@ const TitleBar: React.FC = memo(({ children }) => {
       <ButtonLayout>
         <TitleButtonToggle 
             buttonCSS={css`
-            margin-left:20px;
+            margin-left:8px;
             margin-right:13px;
-            width:24px;
-            height:20px;
-            > button{
-              width:24px;
-              height:20px;
+            height:38px;
+            display: inline-flex;
+            flex-direction: column;
+            -webkit-app-region: no-drag;
+            > div > button{
+              width:40px;
+              height:22px;
+              position: relative;
               background:${adbIsExpand?theme.colors.toggle_button_bg:theme.colors.normal_button_bg};
             }
-            > button > svg {
+            > div > button > svg {
               height:20px;
-              top: -1px;
               text-align: center;
-              left: 4px;
+              top: 0px;
+              left: 1px;
               fill: ${adbIsExpand?theme.colors.background:theme.colors.text};
             }
-            &:active > button{
+            &:active > div > button{
               background:${theme.colors.toggle_button_active};
             }
+
+            &:active > div > button > svg{
+              fill: ${adbIsExpand?theme.colors.text:theme.colors.background};
+              opacity:0.8;
+            }
+            
           
           `}
-          active={adbIsExpand} onClick={clickADB}>
+          buttonSib={'ADB'}
+          active={adbIsExpand} 
+          onClick={clickADB}
+          >
           <Icons.ADB/>
         </TitleButtonToggle>
       </ButtonLayout>
@@ -219,7 +304,7 @@ const ContainerBackground = styled.div`
 
 const Container = styled.div`
     width: 100%;
-    height: 38px;
+    height: 52px;
     position:relative;
     // background: linear-gradient(180deg, ${p => p.theme.colors.title_background_top} 0%, ${p => p.theme.colors.title_background_bottom} 100%);
     box-shadow: 0px 2px 14px ${p => p.theme.colors.title_box_shadow};

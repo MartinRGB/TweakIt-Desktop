@@ -2,12 +2,12 @@ import React, { createContext, useState } from "react";
 import initState from "@Config/init_state.json";
 
 export var ADBExpandStateContext = createContext({
-  adbIsExpand: initState.isExpand,
+  adbIsExpand: initState.isADBPannelExpand,
   setADBExpandState: (tag: boolean) => {}
 });
 
 var ADBExpandStateProvider: React.FC<{}> = ({ children }) => {
-  const [expandState, setADBExpandState] = useState<boolean>(initState.isExpand);
+  const [expandState, setADBExpandState] = useState<boolean>(initState.isADBPannelExpand);
 
   function setExpandStateAndSave(tag: boolean) {
     setADBExpandState(tag);

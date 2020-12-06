@@ -14,7 +14,7 @@ const CanvasTitle: React.FC = ({}) => {
 
   return (
       <AnimationTitle>
-          <Trans>{(currentAnimName && currentAnimName != initState.initAnimCalculator)?currentAnimName:'select_an_animator'}</Trans>
+          <Trans>{(currentAnimName)?currentAnimName:'select_an_animator'}</Trans>
       </AnimationTitle>
 
   )

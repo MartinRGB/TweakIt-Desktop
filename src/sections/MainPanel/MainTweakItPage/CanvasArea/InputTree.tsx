@@ -24,6 +24,8 @@ import TextInput from '@Components/TextInput'
 import DescText from '@Components/DescText'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import { GraphUpdateContext } from '@Context/GraphUpdateContext'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+import {DurationDataContext} from'@Context/DurationDataContext'
 
 const InputTree: React.FC<IInputTree> = memo(({ 
   style,
@@ -38,15 +40,19 @@ const InputTree: React.FC<IInputTree> = memo(({
   visible,
 }) => {
 
-  const {setDurationData,previousDataRange,currentDataRange,setCurrentSolverDataByIndex,currentSolverData,previousDataMin,currentAnimCalculator,previousSolverData} = useContext(
+  //setDurationData,
+  const {listDurationData,previousDataRange,currentDataRange,setCurrentSolverDataByIndex,currentSolverData,previousDataMin,currentAnimCalculator,previousSolverData} = useContext(
     AnimatorTypeContext
   );
 
-  const {setGraphShouldUpdate,triggredIndex,setTriggeredIndex} = useContext(
+  const {shouldGraphUpdate,setGraphShouldUpdate,triggredIndex,setTriggeredIndex} = useContext(
     GraphUpdateContext
   );
+  const {setDurationData} = useContext(DurationDataContext)
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
 
+  
   var inputVis;
   if(visible != undefined){
     inputVis = visible;
@@ -84,6 +90,12 @@ const InputTree: React.FC<IInputTree> = memo(({
   //console.log('input tree rerender')
  
   useEffect(() => {
+
+    // pass init duration data to animationBox
+    if(name === 'Duration'){
+      setDurationData(Math.min(max,Math.max(Number(defaultVal),min)));
+    }
+
     setTriggeredIndex(-1)
     // Maybe Cause Bug
     setCurrentSolverDataByIndex(defaultVal,index);
@@ -98,35 +110,39 @@ const InputTree: React.FC<IInputTree> = memo(({
     config: animationConfig.slider_drag,
     onFrame: () =>{
 
-      var value = sliderProgress.value.toFixed(2);
-      setRangeValue(Math.min(max,Math.max(Number(value),min)))
+      if(isGlobalAnimEnable){
+        var value = sliderProgress.value.toFixed(2);
+        setRangeValue(Math.min(max,Math.max(Number(value),min)))
 
-      if(triggredIndex === index){
-   
-        setCurrentSolverDataByIndex(Math.min(max,Math.max(Number(value),min)),index);
-        var fps_60 = Math.round((new Date().getTime() - sliderProgress.startTime)/16);
-        if(fps_60 %2 ==0){
-          setGraphShouldUpdate(false)
-          //console.log('odd' + fps_60);
-        }
-        else{
-          setGraphShouldUpdate(true)
-          //console.log('even' + fps_60);
-        }
+        if(triggredIndex === index){
+    
+          setCurrentSolverDataByIndex(Math.min(max,Math.max(Number(value),min)),index);
+          var fps_60 = Math.round((new Date().getTime() - sliderProgress.startTime)/16);
+          if(fps_60 %2 ==0){
+            setGraphShouldUpdate(false)
+            //console.log('odd' + fps_60);
+          }
+          else{
+            setGraphShouldUpdate(true)
+            //console.log('even' + fps_60);
+          }
 
-        // THIS IS KEY BUG ,sth still need update duration the animation should put here
-        if(rangeValue === targetRangeValue){
-          setTriggeredIndex(-1)
-          if(name === 'Duration'){
-            setDurationData(Math.min(max,Math.max(Number(value),min)));
+          // THIS IS KEY BUG ,sth still need update duration the animation should put here
+          if(rangeValue === targetRangeValue){
+            setTriggeredIndex(-1)
+            // if(name === 'Duration'){
+            //   setDurationData(Math.min(max,Math.max(Number(value),min)));
+            // }
           }
         }
       }
 
     },
     onRest: () => {
-      setPreviousRangeValue(rangeValue)
-      setRangeAnimTriggered(false)
+      if(isGlobalAnimEnable){
+        setPreviousRangeValue(rangeValue)
+        setRangeAnimTriggered(false)
+      }
     }
   })
 
@@ -134,18 +150,42 @@ const InputTree: React.FC<IInputTree> = memo(({
 
 
   const handleRangeChange = (e:any) => {
-    setPreviousRangeValue(rangeValue);
-    setTargetRangeValue(Math.min(max,Math.max(e.target.value,min)))
-    setTriggeredIndex(index)
-    setRangeAnimTriggered(true)
 
-    //if(currentAnimCalculator != 'CubicBezierCalculator'){
-    setGraphShouldUpdate(true)
-    //}
-    //console.log('rangeChange')
+    if(isGlobalAnimEnable){
+      setPreviousRangeValue(rangeValue);
+      setTargetRangeValue(Math.min(max,Math.max(e.target.value,min)))
+      setTriggeredIndex(index)
+      setRangeAnimTriggered(true)
+      setGraphShouldUpdate(true)
+      if(rangeValue === targetRangeValue){
+        if(name === 'Duration'){
+          setDurationData(Math.min(max,Math.max(Number(e.target.value),min)));
+        }
+      }
+    }
+    else{
+      setPreviousRangeValue(rangeValue);
+      setTargetRangeValue(Math.min(max,Math.max(Number(e.target.value),min)))
+      setTriggeredIndex(index)
+      setRangeValue(Math.min(max,Math.max(Number(e.target.value),min)))
+      setCurrentSolverDataByIndex(Math.min(max,Math.max(Number(e.target.value),min)),index);
+      setGraphShouldUpdate(!shouldGraphUpdate)
 
+      if(rangeValue === targetRangeValue){
+        if(name === 'Duration'){
+          setDurationData(Math.min(max,Math.max(Number(e.target.value),min)));
+        }
+      }
+      
+      setPreviousRangeValue(rangeValue)
+    }
+    
     //update text
     setTextValue(Math.min(max,Math.max(e.target.value,min)))
+  }
+
+  const handleRangeBlur = (e:any) =>{
+      setTriggeredIndex(-1)
   }
 
   const handleTextChange = (e:any) => {
@@ -168,12 +208,33 @@ const InputTree: React.FC<IInputTree> = memo(({
       
     }
 
-    setPreviousRangeValue(rangeValue);
-    setTargetRangeValue(Math.min(max,Math.max(Number(lmtVal),min)))
-    setTriggeredIndex(index)
-    setRangeAnimTriggered(true)
-    setGraphShouldUpdate(true)
-    //console.log('textChange')
+    if(isGlobalAnimEnable){
+      setPreviousRangeValue(rangeValue);
+      setTargetRangeValue(Math.min(max,Math.max(Number(lmtVal),min)))
+      setTriggeredIndex(index)
+      setRangeAnimTriggered(true)
+      setGraphShouldUpdate(true)
+      if(rangeValue === targetRangeValue){
+        if(name === 'Duration'){
+          setDurationData(Math.min(max,Math.max(Number(lmtVal),min)));
+        }
+      }
+    }
+    else{
+      setPreviousRangeValue(rangeValue);
+      setTargetRangeValue(Math.min(max,Math.max(Number(lmtVal),min)))
+      setTriggeredIndex(index)
+      setRangeValue(Math.min(max,Math.max(Number(lmtVal),min)))
+      setCurrentSolverDataByIndex(Math.min(max,Math.max(Number(lmtVal),min)),index);
+      setGraphShouldUpdate(!shouldGraphUpdate)
+      setTriggeredIndex(-1)
+      if(rangeValue === targetRangeValue){
+        if(name === 'Duration'){
+          setDurationData(Math.min(max,Math.max(Number(lmtVal),min)));
+        }
+      }
+      setPreviousRangeValue(rangeValue)
+    }
 
     setTextBlur(false)
     setTextValue(lmtVal)
@@ -248,8 +309,20 @@ const InputTree: React.FC<IInputTree> = memo(({
           max={max} 
           step={0.01} 
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
+            e.preventDefault();
             isEditable?handleRangeChange(e):''
           }}
+
+          onKeyUp={(e: React.FormEvent<HTMLInputElement>) => {
+            e.preventDefault();
+            isEditable?handleRangeBlur(e):''
+          }}
+          onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+
+            e.preventDefault();
+            isEditable?handleRangeBlur(e):''
+          }}
+
           />
       </InputContainer>
     </Frame>

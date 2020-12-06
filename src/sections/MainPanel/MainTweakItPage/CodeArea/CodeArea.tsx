@@ -7,6 +7,7 @@ import MainButtonToggle from '@Components/MainButtonToggle'
 import MainButtonNormal from '@Components/MainButtonNormal'
 import TitleButtonNormal from '@Components/TitleButtonNormal'
 import Icons from '@Assets/icons'
+
 import CodeTemplate from './CodeTemplate';
 import TerminalTemplate from './TerminalTemplate';
 import { useTranslation, Trans, Translation } from 'react-i18next'
@@ -15,13 +16,15 @@ import CopyToast from './CopyToast';
 import SpringFactorEvaluator from './SpringFactorEvaluator'
 import CodeScrollContainer from '@Components/CodeScrollContainer'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
+import initState from "@Config/init_state.json";
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const CodeArea: React.FC = memo(({children}) => {
   //const [colorMode] = useColorMode();
 
   useTranslation();
-  const [isExpanded,setCodeIsExpand] = useState<boolean>(true);
-  //const [codeBlockIsShow,setCodeBlockIsShow] = useState<boolean>(false);
+  const [isExpanded,setCodeIsExpand] = useState<boolean>(initState.isBottomPannelExpanded);
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {codeBlockIsShow, setCodeBlockIsShow} = useContext(
     CodeBlockStateContext,
   );
@@ -61,8 +64,11 @@ const CodeArea: React.FC = memo(({children}) => {
   return (
     <Container
       isExpanded ={isExpanded}
+      style={{
+        transition:`${isGlobalAnimEnable?'all 0.3s cubic-bezier(0.13, 0.79, 0.25, 1) 0s':'none'}`,
+      }}
       >
-      <CopyToast ref={toastRef}></CopyToast>
+      {isExpanded?<CopyToast ref={toastRef}></CopyToast>:''}
       <TopNav>
         <TopLeftContainer>
             {
@@ -75,15 +81,26 @@ const CodeArea: React.FC = memo(({children}) => {
                         > button {
                           width:100%;
                           border-radius:2px;
-                          display: inline-flex;
+                          //display: inline-flex;
                           padding-left: 4px;
                           padding-right: 6px;
                           align-items: center;
                           margin-right: 8px;
                           height: 16px;
+                          display: flex;
+                          flex-direction: row;
                           > svg{
-                            top: 0px;
-                            left:3px;
+                            position:relative;
+                            top: -1px;
+                            left:0px;
+                          }
+                          > span{
+                            font-size: 11px;
+                            line-height: 16px;
+                            word-break: keep-all;
+                            position: relative;
+                            top: -1px;
+                            margin-left: 1px;
                           }
                         }
                       `}
@@ -95,12 +112,7 @@ const CodeArea: React.FC = memo(({children}) => {
                       active={activeName === IconStr[index] && isExpanded && !codeBlockIsShow}
                       key={'CodeButton' + '_' +index}
                     >
-                      <PlatformIcon style={{
-                        position: `absolute`,
-                        top: `0px`,
-                        left:`3px`
-                      }}
-                      ></PlatformIcon><CustomSpan>{IconStr[index]}</CustomSpan>
+                      <PlatformIcon></PlatformIcon><CustomSpan>{IconStr[index]}</CustomSpan>
                     </MainButtonToggle>
                     )
 
@@ -108,38 +120,34 @@ const CodeArea: React.FC = memo(({children}) => {
               })
             }
             <MainButtonNormal
-              parentStyle={{
-                height:`16px`,
-                flex:`1`,
-                display:`flex`,
-              }}
-              style={{
-                width:`52px`,
-                borderRadius:`2px`,
-                display: `inline-flex`,
-                paddingLeft: `4px`,
-                paddingRight: `6px`,
-                alignItems: `center`,
-                marginRight: `8px`,
-                marginLeft:`4px`,
-              }}
-
               buttonCSS = {
                 css`
-                  height:16px;
-                  flex:1
-                  display:flex;
-                  > button{
-                    width:52px;
-                    height:16px;
-                    border-radius:2px;
-                    display: inline-flex;
-                    padding-left: 4px;
-                    padding-right: 6px;
-                    align-items: center;
-                    margin-right:8px;
+                > button {
+                  width:100%;
+                  border-radius:2px;
+                  //display: inline-flex;
+                  padding-left: 4px;
+                  padding-right: 6px;
+                  align-items: center;
+                  margin-right: 8px;
+                  height: 16px;
+                  display: flex;
+                  flex-direction: row;
+                  > svg{
+                    position:relative;
+                    top: -1px;
+                    left:0px;
                   }
-                `
+                  > span{
+                    font-size: 11px;
+                    line-height: 16px;
+                    word-break: keep-all;
+                    position: relative;
+                    top: -1px;
+                    margin-left: 1px;
+                  }
+                }
+              `
               }
               onClick={()=>{
                 if(!copyState && isExpanded){
@@ -148,13 +156,7 @@ const CodeArea: React.FC = memo(({children}) => {
                   }
                 }}
               >
-              <Icons.Copy
-                style={{
-                  position: `absolute`,
-                  top: `0px`,
-                  left:`7px`
-                }}
-              ></Icons.Copy><CustomSpan style={{}}><Trans>Copy</Trans></CustomSpan>
+              <Icons.Copy></Icons.Copy><CustomSpan style={{}}><Trans>Copy</Trans></CustomSpan>
             </MainButtonNormal>
         </TopLeftContainer>
         <TopRightContainer>
@@ -192,7 +194,7 @@ const CodeArea: React.FC = memo(({children}) => {
             <Icons.CollapsedArrowAlertNative
               style={{
                 transform:`rotate(${isExpanded?'0deg':'180deg'})`,
-                transition:`all 0.6s cubic-bezier(0.13, 0.79, 0.25, 1) 0s`,
+                transition:`${isGlobalAnimEnable?'all 0.6s cubic-bezier(0.13, 0.79, 0.25, 1) 0s':'none'}`,
                 position: `absolute`,
                 top: `0px`,
                 left:`4px`
@@ -202,44 +204,43 @@ const CodeArea: React.FC = memo(({children}) => {
 
           <MainButtonToggle
             active={codeBlockIsShow && isExpanded}
-            parentStyle={{
-              height:`16px`,
-              flex:`1`,
-              display:`flex`,
-              marginLeft:`8px`,
-            }}
-            style={{
+            buttonCSS={css`
+              > button {
+                width:100%;
+                border-radius:2px;
+                //display: inline-flex;
+                padding-left: 4px;
+                padding-right: 6px;
+                align-items: center;
+                margin-right: 8px;
+                height: 16px;
+                display: flex;
+                flex-direction: row;
+                > svg{
+                  position:relative;
+                  top: -1px;
+                  left:0px;
+                }
+                > span{
+                  font-size: 11px;
+                  line-height: 16px;
+                  word-break: keep-all;
+                  position: relative;
+                  top: -1px;
+                  margin-left: 1px;
+                }
+              }
+            `}
+            onClick={()=>{
+                if(isExpanded){
+                  setCodeBlockIsShow(true)
+                  scrollRef.current.selectCodeContentRangeAndCopy(false)
+                  setActiveName('')
+                }
 
             }}
-            buttonCSS = {
-              css`
-                height:16px;
-                flex:1
-                display:flex;
-                >button{
-                  width:100%;
-                  border-radius:2px;
-                  display: inline-flex;
-                  padding-left: 4px;
-                  padding-right: 6px;
-                  align-items: center;
-                  height: 16px;
-                }
-              `
-            }
-            onClick={()=>{
-                setCodeBlockIsShow(true)
-                scrollRef.current.selectCodeContentRangeAndCopy(false)
-                setActiveName('')
-            }}
           >
-            <Icons.Terminal
-              style={{
-                position: `absolute`,
-                top: `0px`,
-                left:`3px`
-              }}
-            ></Icons.Terminal><CustomSpan>Console</CustomSpan>
+            <Icons.Terminal></Icons.Terminal><CustomSpan><Trans>Console</Trans></CustomSpan>
           </MainButtonToggle>
 
         </TopRightContainer>
@@ -294,8 +295,7 @@ const Container = styled.div<{
     // min-height:50px;
     //background:blue;
 
-    height:${p => p.isExpanded?'500px':'40px'}; //280px
-    transition:all 0.3s cubic-bezier(0.13, 0.79, 0.25, 1) 0s;
+    height:${p => p.isExpanded?'340px':'40px'}; //280px
     display: flex;
     flex-direction: column;
     box-shadow:0px -1px 0px ${p => p.theme.colors.adb_border};
@@ -311,5 +311,4 @@ const CustomSpan = styled.span`
     font-weight: bold;
     font-size: 11px;
     line-height: 14px;
-    margin-left:16px;
 `

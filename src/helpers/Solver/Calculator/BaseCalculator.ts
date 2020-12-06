@@ -447,11 +447,11 @@ export class InterpolatorCalculator {
 
 
 export class FlingAnimationCalculator {
-    private array:any;
-    private friction?:number;
-    private velocity?:number;
-    private duration?:any;
-    private transition:any;
+    array:any;
+    friction?:number;
+    velocity?:number;
+    duration?:any;
+    transition:any;
 
     constructor(velocity?:number, friction?:number) {
         this.friction = friction*-4.2;

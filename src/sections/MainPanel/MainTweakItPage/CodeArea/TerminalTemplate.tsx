@@ -7,16 +7,7 @@ import {css} from "@emotion/core";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
-import MainButtonToggle from '@Components/MainButtonToggle'
-import TitleButtonNormal from '@Components/TitleButtonNormal'
-import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
-import Icons from '@Assets/icons'
 import Solver from '@Helpers/Solver'
-import { GraphUpdateContext } from '@Context/GraphUpdateContext'
-import WebWorker from "react-webworker"
-//import SpringFactorEvaluator from './SpringFactorEvaluator'
-//import SpringFactorEvaluator from './SpringFactorEvaluator.js'
-import SpringFactorEvaluatorWorker from "./SpringFactorEvaluator.worker.js";
 import {ADBConnectStateContext} from '@Context/ADBConnectContext'
 import theme from 'src/styles/theme.ts';
 import CodeTexts from '@Components/CodeTexts'
@@ -28,7 +19,7 @@ import DataDrivenAnimator from '@Helpers/Animator/DataDrivenAnimator'
 import TerminalCore from './TerminalCore'
 
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
-
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 export interface ITerminalSnippet{
   style?:any;
   scrollRef?:any;
@@ -37,9 +28,10 @@ export interface ITerminalSnippet{
 const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) => {
 
   const [colorMode] = useColorMode();
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {cleanAllData,adbInfoTimes,adbTagStartText,adbCommandText,adbCommandIsSuccess,adbResultText,adbTagEndText,setADBInfoTimes,setADBTagStartText,setADBCommandText,setADBTagEndText,setADBCommandIsSuccess,setADBResultText} =  useContext(ADBConnectStateContext)
 
-  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,setADBInputCMD,setTriggerControlAnim} = useContext(
+  const {adbInputCMD,setADBInputCMD,setTriggerControlAnim} = useContext(
     CodeBlockStateContext,
   );
 
@@ -74,7 +66,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
 
   const solver:any = new Solver.Android.Spring(450,0.8,0)
   const animation = new DataDrivenAnimator(solver.getValueArray())
-  const [transitionInProgress,setTransitionInProgress] = useState<number>(0);
+  const [transitionInProgress,setTransitionInProgress] = useState<number>(1);
   const startTransitionInAnimation = () => {
     animation.setFromToDuration(0,1,solver.duration*1000);
     animation.setOnFrameCallback(()=>{
@@ -89,7 +81,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
   const solverScroll:any = new Solver.Android.Spring(450,0.95,0)
   const animationScroll = new DataDrivenAnimator(solverScroll.getValueArray())
   const startScrollAnimation = (height:any) => {
-    animationScroll.setFromToDuration(1,0,Math.min(2000,solver.duration*(height/1000)*2*1000));
+    animationScroll.setFromToDuration(1,0,Math.min(1000,solver.duration*(height/1000)*2*1000));
     animationScroll.setOnFrameCallback(()=>{
       containerRef.current.style.height = `${(height - (initHeight - paddingValue*2 - 20))*animationScroll.getValueProgress() + (initHeight - paddingValue*2 - 20)}px`;
     })
@@ -101,6 +93,9 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
   }
 
   const cmdResultToConsole = (cmd:any) =>{
+    // add this for console
+    setADBInputCMD(cmd);
+    
     execCMDPromise(cmd,`input command is ${cmd}`,
     (value:any)=>{
       setADBInfoTimes(adbInfoTimes+1)
@@ -120,7 +115,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
       [`=================== Result End At ${new Date().toString()} ===================`]
       )
       setInputValue('');
-      startTransitionInAnimation();
+      if(isGlobalAnimEnable) startTransitionInAnimation();
     },
     (value:any)=>{
       setADBInfoTimes(adbInfoTimes+1)
@@ -140,7 +135,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
       [`=================== Result  End  At ${new Date().toString()} ===================`]
       )
       setInputValue('');
-      startTransitionInAnimation();
+      if(isGlobalAnimEnable) startTransitionInAnimation();
     })
   }
 
@@ -160,18 +155,19 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
         
       }
       else if(e.target.value === 'clear'){
-
-        //console.log(containerRef.current.offsetHeight)
         setInputValue('');
-        startScrollAnimation(containerRef.current.offsetHeight);
-        //cleanAllData()
+        if(isGlobalAnimEnable){
+          startScrollAnimation(containerRef.current.offsetHeight)
+        }
+        else{
+          cleanAllData()
+        }
       }
       else{
         setADBInputCMD(e.target.value);
         setTriggerControlAnim(true)
         setInputValue('loading...');
         cmdResultToConsole(adbInputCMD)
-        //var triggerTimeOut = setTimeout(()=>{setTriggerControlAnim(false);clearTimeout(triggerTimeOut)},200);
       }
     }
   }
@@ -193,12 +189,6 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
 
   return (
     <TerminalContainer style={{...style}} ref={containerRef}>
-      {/* {isInit?
-        <TerminalCore ></TerminalCore>
-        :
-        <Comment>🍺🍺🍺 <Trans>Console Log Here</Trans> 🍺🍺🍺</Comment>
-      } */}
-
     <Comment>🍺🍺🍺 <Trans>Console Log Here</Trans> 🍺🍺🍺</Comment>
     <CommandInfoContainer>
       <CommandInfo >clear</CommandInfo> <CommandInfoNote><Trans>Clear all result</Trans></CommandInfoNote><Break/>
@@ -211,15 +201,17 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
       adbResultText.map(function (data:any,index:number) {
 
         return (
-          <CommandContainer  isCurrent={(index === adbInfoTimes)} key={index}>
+          <CommandContainer style={{
+            transition: `${isGlobalAnimEnable?'all 0.6s cubic-bezier(0.13,0.79,0.25,1)':'none'}`,
+          }} isCurrent={(index === adbInfoTimes)} key={index}>
             <InsideContainer 
               padding={paddingValue}
               style={{
                 transformOrigin: `top`,
-                transform:`${(index === adbInfoTimes)?`scale3d(1,1,1) translate3d(${140 - 140*transitionInProgress}px,0px,0)`:`scale3d(1,1,1)`}`,
-                opacity:`${(index === adbInfoTimes)?`${transitionInProgress}`:'1'}`,
+                transform:`${(index === adbInfoTimes && isGlobalAnimEnable)?`scale3d(1,1,1) translate3d(${140 - 140*transitionInProgress}px,0px,0)`:`scale3d(1,1,1)`}`,
+                opacity:`${(index === adbInfoTimes && isGlobalAnimEnable)?`${transitionInProgress}`:'1'}`,
               }}
-              isCurrent={(index === adbInfoTimes)}>
+              >
               <Comment>{adbTagStartText[index]}</Comment><Break/><Break/>
               {adbCommandIsSuccess[index]?
               <CommandSuccess>{adbCommandText[index]}</CommandSuccess>
@@ -288,7 +280,6 @@ const CommandContainer = styled.div<{
 `
 
 const InsideContainer =  styled.div<{
-  isCurrent:boolean;
   padding:number;
 }>`
   padding-top: ${p=>p.padding}px;

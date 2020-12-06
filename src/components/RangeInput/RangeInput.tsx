@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const RangeInput: React.FC<IInput> = memo(({  style,value,min,max,step,onChange,isEditable}) => {
+const RangeInput: React.FC<IInput> = memo(({  style,value,min,max,step,onChange,onBlur,onKeyUp,isEditable}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -28,6 +28,8 @@ const RangeInput: React.FC<IInput> = memo(({  style,value,min,max,step,onChange,
     step={step} 
     isEditable={isEditable}
     onChange={onChange}
+    onBlur={onBlur}
+    onMouseUp={onKeyUp}
   />)
   ;
 })

@@ -16,7 +16,7 @@ const CanvasInput: React.FC = memo(({}) => {
   
   return (
     <div>
-    {(currentAnimName != initState.initAnimName)?(
+    {(currentAnimName != '')?(
           isBezierCalculator?
             currentAnimData.map(function (data:any,index:number) {
               if(index === currentAnimData.length - 1){

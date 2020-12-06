@@ -21,6 +21,8 @@ import TextInput from '@Components/TextInput'
 import DescText from '@Components/DescText'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import { GraphUpdateContext } from '@Context/GraphUpdateContext'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+
 import Draggable from 'react-draggable';
 
 export interface IBezierInputTree{
@@ -78,6 +80,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
   const {setBezierTriggeredIndex,bezierTriggeredIndex,setGraphShouldUpdate,shouldGraphupdate} = useContext(
     GraphUpdateContext
   );
+
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   const boxWidthO = svgWidth*(svgWidth/(svgWidth+viewBoxWFixed))*svgScale;
   const boxHeightO = svgHeight*(svgHeight/(svgHeight+viewBoxHFixed))*svgScale;
@@ -225,23 +229,41 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
       var dotLocation = charLocation(",",lmtVal.toString());
       var cursorLocation = shouldFoward?position:position-1;
   
-      setPrev1(Number(lmtVal.toString().split(",")[0]))
-      setTarget1(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[0]),0)))
-      setPrev2(Number(lmtVal.toString().split(",")[1]))
-      setTarget2(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[1]),0)))
-      setPrev3(Number(lmtVal.toString().split(",")[2]))
-      setTarget3(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[2]),0)))
-      setPrev4(Number(lmtVal.toString().split(",")[3]))
-      setTarget4(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[3]),0)))
+      if(isGlobalAnimEnable){
+          
+        setPrev1(Number(lmtVal.toString().split(",")[0]))
+        setTarget1(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[0]),0)))
+        setPrev2(Number(lmtVal.toString().split(",")[1]))
+        setTarget2(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[1]),0)))
+        setPrev3(Number(lmtVal.toString().split(",")[2]))
+        setTarget3(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[2]),0)))
+        setPrev4(Number(lmtVal.toString().split(",")[3]))
+        setTarget4(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[3]),0)))
 
-      setBezierTriggeredIndex(10)
-      setGraphShouldUpdate(true)
-      setTextPreviousValue(lmtVal);
-      setStartAnimation(true)
-      setStart1(true)
-      setStart2(true)
-      setStart3(true)
-      setStart4(true)
+        setBezierTriggeredIndex(10)
+        setGraphShouldUpdate(true)
+        setTextPreviousValue(lmtVal);
+        setStartAnimation(true)
+        setStart1(true)
+        setStart2(true)
+        setStart3(true)
+        setStart4(true)
+
+      }
+      else{
+        setPrev1(Number(lmtVal.toString().split(",")[0]))
+        setTarget1(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[0]),0)))
+        setPrev2(Number(lmtVal.toString().split(",")[1]))
+        setTarget2(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[1]),0)))
+        setPrev3(Number(lmtVal.toString().split(",")[2]))
+        setTarget3(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[2]),0)))
+        setPrev4(Number(lmtVal.toString().split(",")[3]))
+        setTarget4(Math.min(1,Math.max(Number(lmtVal.toString().split(",")[3]),0)))
+        setCurrentSolverDataByIndex([Number(lmtVal.toString().split(",")[0]),Number(lmtVal.toString().split(",")[1]),Number(lmtVal.toString().split(",")[2]),Number(lmtVal.toString().split(",")[3])],index)
+        setBezierTriggeredIndex(-1)
+        setStartAnimation(false)
+        setGraphShouldUpdate(!shouldGraphupdate)
+      }
     }
 
     setTextBlur(false)
@@ -385,7 +407,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
           style={{
             width:`${boxWidth}px`,
             height:`${boxHeight}px`,
-            transform:`translate3d(-50%,-50%,0) scale3d(1,1,1)`
+            transform:`translate3d(-50%,-50%,0) scale3d(1,1,1)`,
+            zIndex: `1`
           }}>
 
           <Draggable

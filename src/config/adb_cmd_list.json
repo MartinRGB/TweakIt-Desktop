@@ -1,6 +1,9 @@
 {
     "adb_get_device":"adb devices",
-    "adb_help":"adb --help"
+    "adb_help":"adb --help",
+    "adb_test":"adb --test",
+    "adb_a":"adb --a",
+    "adb_b":"adb --b"
 }
   
   

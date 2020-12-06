@@ -65,7 +65,7 @@ const AnimatedContainerCSS = css`
   // height: calc(100vh - 38px);
   // position: absolute;  
   // height: 100%;
-  height: calc(100vh - 38px);
+  height: calc(100vh - 52px);
   z-index:8;
 `;
 

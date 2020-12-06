@@ -8,7 +8,7 @@ import SVGFakeGraph from '@Components/SVG/SVGFakeGraph'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import BezierInputTree from './BezierInputTree'
 import SVGBlurContainer from '@Components/SVG/SVGBlurContainer'
-
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 export interface ISVGContainer {
   isLayoutRow:boolean;
   svgWidth: number;
@@ -41,7 +41,7 @@ const CanvasSVG: React.FC<ISVGContainer> = memo(({
   const { currentAnimName,currentSolverData ,currentAnimData,currentAnimCalculator} = useContext(
     AnimatorTypeContext
   ); 
-
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const isBezierCalculator = (currentAnimCalculator === 'CubicBezierCalculator')
   const isDoubleBezierCalculator = (currentAnimCalculator === 'DoubleCubicBezierCalculator')
 

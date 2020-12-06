@@ -10,13 +10,15 @@ import { ADBExpandStateContext } from '@Context/ADBExpandContext';
 import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '@Config/animation.json';
 import ReactPlaceholder from 'react-placeholder';
-
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+import ADBTopArea from './ADBTopArea'
 
 const ADBPanel: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();
   const isDark = colorMode === `dark`;
   const { t ,i18n} = useTranslation()
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const clickLan = () =>{
     i18n.changeLanguage(i18n.language === 'enUs' ? 'zhCn' : 'enUs');
   }
@@ -32,7 +34,7 @@ const ADBPanel: React.FC = memo(({ children }) => {
   // const [isExpand, set] = useState(false)
   // React Spring Property
   const {rightProps} = useSpring({
-    rightProps: adbIsExpand ? 0 : -320,
+    rightProps: adbIsExpand ? 1 : 0,
     config: animationConfig.panel_slide,
   })
 
@@ -49,17 +51,17 @@ const ADBPanel: React.FC = memo(({ children }) => {
       // animated dynamic style
       style={{
         // transform: interpolate([x], (x) => `translate3d(${x}px,0,0)`),
-        right: interpolate([rightProps], (rightProps => `${rightProps}px`))
+        right: isGlobalAnimEnable?interpolate([rightProps], (rightProps => `${-320 + rightProps*320}px`)):`${adbIsExpand?'0px':'-320px'}`
       }}
     >
       <Container
         active={adbIsExpand}
       >
+        <ADBTopArea></ADBTopArea>
         <ReactPlaceholder type='text' ready={false} rows={30} 
           css={PlaceHolderCSS}
           color='#929292'
           >
-
         </ReactPlaceholder>
       </Container>
     </animated.div>
@@ -67,6 +69,7 @@ const ADBPanel: React.FC = memo(({ children }) => {
 })
 
 export default ADBPanel
+
 
 const PlaceHolderCSS = css`
   width: 100%;
@@ -76,9 +79,6 @@ const PlaceHolderCSS = css`
   opacity:0.15;
   
 `;
-
-
-
 
 
 const AnimatedContainerCSS = css`

@@ -9,8 +9,36 @@ export interface IButton {
   style?:any;
   parentStyle?:any;
   buttonCSS?:any;
-  triggerAnim?:boolean;
+  cmdTriggerAnim?:boolean;
   cmd?:any;
+  buttonSib:any;
+}
+
+export interface IADBSegment {
+  children?: React.ReactNode;
+  onClick?: any;
+  onSegementClickIndex?:any;
+  onMouseDown?: any;
+  onMouseUp?:any;
+  active?: boolean;
+  style?:any;
+  parentStyle?:any;
+  buttonCSS?:any;
+  cmdTriggerAnim?:boolean;
+  cmdArray?:any;
+  iconArray?:any;
+  defaultActive?:any;
+}
+
+
+export interface IDropDownMenu{
+  optionsData?:any;
+  menuWidth?:any;
+  isRichAnimation:boolean;
+  menuStyle?:any;
+  style?:any;
+  onClickIndex?: any;
+  onClick?: any;
 }
 
 declare global {

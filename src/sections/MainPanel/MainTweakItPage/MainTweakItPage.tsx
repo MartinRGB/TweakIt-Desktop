@@ -14,7 +14,7 @@ import CodeArea from './CodeArea';
 import ListSelectStateProvider from '@Context/ListSelectStateContext'
 import AnimatorTypeProvider from '@Context/AnimatorTypeContext'
 import GraphUpdateProvider from '@Context/GraphUpdateContext'
-
+import DurationDataProvider from '@Context/DurationDataContext'
 const MainTweakItPage: React.FC = memo(({children}) => {
 
   //const { t, i18n } = useTranslation()
@@ -29,8 +29,10 @@ const MainTweakItPage: React.FC = memo(({children}) => {
           <SelectArea></SelectArea>
           <TopContainer>
             <ListArea></ListArea>
-            <CanvasArea></CanvasArea>
-            <PreviewArea></PreviewArea>
+            <DurationDataProvider>
+              <CanvasArea></CanvasArea>
+              <PreviewArea></PreviewArea>
+            </DurationDataProvider>
           </TopContainer>
           <CodeArea></CodeArea>
           </GraphUpdateProvider>

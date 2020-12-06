@@ -14,10 +14,10 @@ import MainButtonNormal from '@Components/MainButtonNormal';
 import Solver from '@Helpers/Solver';
 import DataDrivenAnimator from '@Helpers/Animator/DataDrivenAnimator'
 import Icons from '@Assets/icons'
-
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 const CopyToast = memo(forwardRef((props,ref) =>{
 
-
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const [cssAnimationProgress,setCSSAnimationProgress] = useState<number>(0)
 
 
@@ -27,7 +27,7 @@ const CopyToast = memo(forwardRef((props,ref) =>{
   const startAnimate = () => {
 
     //if(startAnimator && startAnimator.isAnimating())(startAnimator.stop())
-    if(animation && endAnimator.animation())(animation.stop())
+    if(animation && animation.isAnimating())(animation.stop())
 
     solver = new Solver.Android.Spring(400,0.78,0);
     animation = new DataDrivenAnimator(solver.getValueArray())
@@ -58,10 +58,10 @@ const CopyToast = memo(forwardRef((props,ref) =>{
 
     startAnimation(boo:boolean) {
       if(boo){
-        startAnimate()
+        isGlobalAnimEnable?startAnimate():setCSSAnimationProgress(1)
       }
       else{
-        endAnimate()
+        isGlobalAnimEnable?endAnimate():setCSSAnimationProgress(0)
       }
     }
   }));

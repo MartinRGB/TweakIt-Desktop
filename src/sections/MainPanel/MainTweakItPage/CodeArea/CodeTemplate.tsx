@@ -7,8 +7,6 @@ import {css} from "@emotion/core";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
-import MainButtonToggle from '@Components/MainButtonToggle'
-import TitleButtonNormal from '@Components/TitleButtonNormal'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import Icons from '@Assets/icons'
 import Solver from '@Helpers/Solver'
@@ -49,8 +47,8 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
   const Keyword = CodeTexts.Purple;
   const Property = CodeTexts.Orange;
   const Link = CodeTexts.Link;
-  
   const Break = CodeTexts.Break;
+
 
   const AndroidSpringAnimationComponents = () =>{
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
@@ -58,12 +56,12 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
 
     // TODO WorkerPerformance
     if(triggredIndex === -1){
-      const worker = new SpringFactorEvaluatorWorker();
-      worker.postMessage([cIF(mSolver['stiffness']),cIF(mSolver['dampingratio'])]);
-      worker.onmessage = function (e:any) {
-        setFactorValue(e.data[1]);
-        worker.terminate()
-      };
+        var worker = new SpringFactorEvaluatorWorker();
+        worker.postMessage([cIF(mSolver['stiffness']),cIF(mSolver['dampingratio'])]);
+        worker.onmessage = function (e:any) {
+          setFactorValue(e.data[1]);
+          worker.terminate()
+        };
     }
 
 

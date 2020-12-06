@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react";
 import initState from '@Config/init_state.json'
 
 export var AnimatorTypeContext = createContext({
-  currentAnimPlatform:'',
+  currentAnimPlatform:initState.initAnimPlatform,
   currentAnimName: initState.initAnimName,
   currentAnimCalculator: initState.initAnimCalculator,
   currentAnimData: [],
@@ -35,8 +35,8 @@ export var AnimatorTypeContext = createContext({
   setPreviousDataMinByIndex:(value:number,index:number) =>{},
   selectTransition:false,
   setSelectTransition:(tag: boolean) => {},
-  durationData:0,
-  setDurationData:(tag: number) => {},
+  listDurationData:-1,
+  setListDurationData:(tag: any) => {},
   interpolatorName:'',
   flutterName:'',
   webName:'',
@@ -51,7 +51,7 @@ export var AnimatorTypeContext = createContext({
 
 var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
 
-  const [mCurrAnimPlatform, setCurrAnimPlatform] = useState<string>('');
+  const [mCurrAnimPlatform, setCurrAnimPlatform] = useState<string>(initState.initAnimPlatform);
   const [mCurrAnimName, setCurrAnimName] = useState<string>(initState.initAnimName);
   const [mCurrAnimCalculator, setCurrAnimCalculator] = useState<string>(initState.initAnimCalculator);
   const [mCurrAnimData, setCurrAnimData] = useState<any>([]);
@@ -67,7 +67,7 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
   const [mPrevDataMin,setPrevMinData] = useState<any>([]);
 
   const [mSelectTransition, setSelectTransition] = useState<boolean>(true);
-  const [mDuration, setDuration] = useState<number>(0);
+  const [mDuration, setDuration] = useState<any>(-1);
   
   const [mInterpolatorName, setInterpolatorName] = useState<string>('');
   const [mFlutterName, setFlutterName] = useState<string>('');
@@ -203,7 +203,7 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
     setSelectTransition(tag);
   }
 
-  function setDurationAndSave(tag: number) {
+  function setDurationAndSave(tag: any) {
     setDuration(tag);
   }
 
@@ -244,8 +244,8 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
         setPreviousDataMinByIndex:setPrevDataMinByIndexAndSave,
         selectTransition:mSelectTransition,
         setSelectTransition:setSelectTransitionAndSave,
-        durationData:mDuration,
-        setDurationData:setDurationAndSave,
+        listDurationData:mDuration,
+        setListDurationData:setDurationAndSave,
         interpolatorName:mInterpolatorName,
         flutterName:mFlutterName,
         webName:mWebName,

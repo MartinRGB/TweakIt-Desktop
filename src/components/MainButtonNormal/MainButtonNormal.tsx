@@ -1,4 +1,4 @@
-import React,{memo} from 'react'
+import React,{memo,useContext} from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
@@ -9,13 +9,14 @@ import { useTranslation, Trans, Translation } from 'react-i18next'
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
-
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , onClick,onMouseDown,onMouseUp,buttonCSS}) => {
+  useTranslation();
   const [colorMode, setColorMode] = useColorMode()
-
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const [bind, { delta, down }] = useGesture()
   const {size} = useSpring({
-     size: (down) ? 1.1: 1,
+     size: (down) ? (isGlobalAnimEnable?1.1:1): 1,
      immediate: name => down && name === 'x',
      config:animationConfig.button_pressed
   })
@@ -29,6 +30,9 @@ const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children ,
     style={
       { 
       ...parentStyle,
+      height:`16px`,
+      flex:`1`,
+      display:`flex`,
       transform: interpolate([size], (s) => `scale(${s})`)
       }
     }>

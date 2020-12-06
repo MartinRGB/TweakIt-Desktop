@@ -21,8 +21,10 @@ import { useTranslation, Trans} from 'react-i18next'
 import ADBExpandStateProvider from "@Context/ADBExpandContext";
 import ADBConnectProvider from "@Context/ADBConnectContext";
 import CodeBlockProvider from "@Context/CodeBlockContext";
+import GlobalAnimationStateProvider from "@Context/GlobalAnimationContext";
 import {injectPathEnvironments} from '@Helpers/GlobalEnvironments/PathEnvironments'
 import animatorList from '@Config/animator_list.json';
+
 
 
 // twmacro
@@ -47,9 +49,9 @@ const App = () => {
 
   return (
     <div>
+      <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <GlobalStyle />
-
+        <GlobalAnimationStateProvider>
         <CodeBlockProvider>
         <ADBConnectProvider>
         <ADBExpandStateProvider>
@@ -59,6 +61,7 @@ const App = () => {
         </ADBExpandStateProvider>
         </ADBConnectProvider>
         </CodeBlockProvider>
+        </GlobalAnimationStateProvider>
       </ThemeProvider>
     </div>
   )

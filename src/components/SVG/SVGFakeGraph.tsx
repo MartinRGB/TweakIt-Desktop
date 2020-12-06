@@ -1,4 +1,4 @@
-import React, {memo,useContext,useEffect}from 'react'
+import React, {memo,useContext,useEffect,useState}from 'react'
 import styled from '@emotion/styled';
 import { ISVG } from "@Types";
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext'
@@ -24,26 +24,35 @@ const SVGFakeGraph: React.FC<ISVG> = memo(({
   }) => {
 
     useContext(ListSelectStateContext)
+    const [isInit, setIsInit] = useState<boolean>(false);
+    const [isAnimate, setIsAnimate] = useState<boolean>(false);
 
-    const { currentAnimPlatform,previousAnimPlatform,currentAnimName, currentAnimCalculator,currentSolverData,previousAnimName, previousAnimCalculator, previousSolverData,selectTransition,setSelectTransition} = useContext(
+
+    const { currentAnimPlatform,previousAnimPlatform,currentAnimData,currentAnimName, currentAnimCalculator,currentSolverData,previousAnimName, previousAnimCalculator, previousSolverData,selectTransition,setSelectTransition} = useContext(
       AnimatorTypeContext
     );
   
     Solver.setCalculatorSamplePointNumber(svgPointNumber?svgPointNumber:50)
     Solver.setCalculatorSampleScale(svgPointScale?svgPointScale:3);
   
-    const currStepData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getStepArray();
-    const currValueData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getValueArray();
 
     var mSVGData;
-    
-    var t = 0;
-    if(selectTransition){
 
-      const prevStepData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimPlatform,previousAnimName,previousSolverData).getStepArray();
-      const prevValueData = Solver.CreateSolverByString(previousAnimCalculator,previousAnimPlatform,previousAnimName,previousSolverData).getValueArray();
+    var previousSolver:any,currentSolver:any,prevStepData:any, prevValueData:any,currStepData:any,currValueData:any
+
+    useEffect(() => {
+
+    }, [])
+
+    const transitionWithPrevAndCurrData = (previousSolver:any,currentSolver:any) =>{
+      prevStepData = previousSolver.getStepArray();
+      prevValueData = previousSolver.getValueArray();
+
+      currStepData = currentSolver.getStepArray();
+      currValueData = currentSolver.getValueArray();
 
       const springValueData = new Solver.Android.Spring(800,0.5,0).getValueArray();
+      var t = 0;
       var animInterval = setInterval(()=>{
         t += 1;
         if(t >= currValueData.length){
@@ -51,12 +60,32 @@ const SVGFakeGraph: React.FC<ISVG> = memo(({
           mSVGData = `M0,0`
           document.getElementById('pathEl')?.setAttribute('d',mSVGData)
           clearInterval(animInterval)
+          setIsInit(true)
+          setIsAnimate(false)
         }
         else{
           mSVGData = SVGTransitionTemplate_50(prevStepData,prevValueData,currStepData,currValueData,svgWidth,svgHeight,springValueData[t]);
           document.getElementById('pathEl')?.setAttribute('d',mSVGData)
+          setIsAnimate(true)
         }
       } ,10)
+    }
+
+
+    // Init Transtion: Wait for data
+    if(currentSolverData.length === 0 && !isInit && !isAnimate){
+      console.log('init')
+      previousSolver = new Solver.Default.HorizontalLine();
+      currentSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
+      transitionWithPrevAndCurrData(previousSolver,currentSolver)
+    }
+    
+    // Select Transition
+    if(selectTransition && isInit && !isAnimate){
+      console.log('select')
+      previousSolver = Solver.CreateSolverByString(previousAnimCalculator,previousAnimPlatform,previousAnimName,previousSolverData);
+      currentSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
+      transitionWithPrevAndCurrData(previousSolver,currentSolver)
     }
 
   return (<CustomSVG

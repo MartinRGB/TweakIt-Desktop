@@ -37,5 +37,9 @@
   "List files":"环境根目录一览",
   "List all ADB commands":"ADB 命令一览",
   "List all Brew commands":"Brew 命令一览",
-  "List all Node commands":"Node 命令一览"
+  "List all Node commands":"Node 命令一览",
+  "Console":"控制台",
+  "Theme":"主题",
+  "Animation":"动画效果",
+  "Language":"语言"
 }

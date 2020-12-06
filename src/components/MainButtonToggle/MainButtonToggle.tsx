@@ -1,20 +1,23 @@
-import React,{memo}from 'react'
+import React,{memo,useContext}from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
 import {css} from "@emotion/core";
 import { IButton } from "@Types";
 
+import { useTranslation, Trans, Translation } from 'react-i18next'
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const MainButtonToggle: React.FC<IButton> = memo(({ buttonCSS,parentStyle,style,children , onClick,active}) => {
+  useTranslation();
   const [colorMode, setColorMode] = useColorMode()
-
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const [bind, { delta, down }] = useGesture()
   const {size} = useSpring({
-     size: down ? 1.1: 1,
+     size: down ? (isGlobalAnimEnable?1.1:1): 1,
      immediate: name => down && name === 'x',
      config:animationConfig.button_pressed
   })
@@ -36,7 +39,7 @@ return (
         style={style}
         onClick={onClick}
         active={active}>
-        {children}
+        <Trans>{children}</Trans>
       </Button>
   </animated.div>);
 

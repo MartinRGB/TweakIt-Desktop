@@ -15,6 +15,8 @@ const Grey: React.FC = memo(({children}) => {
 const Span =styled.p`
   color:#9D9DB2; //grey
   display: inline-block;
+  line-height:10px;
+  font-size: 10px;
   ::selection {
     background: ${p => p.theme.colors.selection};
   }

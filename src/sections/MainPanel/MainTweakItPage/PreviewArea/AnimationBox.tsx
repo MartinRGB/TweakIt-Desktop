@@ -12,6 +12,7 @@ import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import { GraphUpdateContext } from '@Context/GraphUpdateContext';
 import Solver from '@Helpers/Solver';
 import DataDrivenAnimator from '@Helpers/Animator/DataDrivenAnimator'
+import {DurationDataContext} from'@Context/DurationDataContext'
 
 export interface IAnimationBox{
   property:string;
@@ -19,11 +20,14 @@ export interface IAnimationBox{
 
 const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
 
-  const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimPlatform,currentAnimName} = useContext(
+  const {listDurationData,selectTransition,currentSolverData,currentAnimCalculator,currentAnimPlatform,currentAnimName} = useContext(
     AnimatorTypeContext
   );
 
+  const {durationData} = useContext(DurationDataContext)
+
   const [cssAnimationProgress,setCSSAnimationProgress] = useState<number>(0)
+  const [isStart,setIsStart] = useState<boolean>(false);
 
   const svgHeight = initState.svgHeight;
 
@@ -34,16 +38,16 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
 
   const startAnimate = () => {
 
-    //if(startAnimator && startAnimator.isAnimating())(startAnimator.stop())
-    if(endAnimator && endAnimator.isAnimating())(endAnimator.stop())
+    if(startAnimator && startAnimator.isAnimating()){startAnimator.stop()}
+    if(endAnimator && endAnimator.isAnimating()){endAnimator.stop()}
 
     currSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
     currSolverValueData = currSolver.getValueArray()
-    currDuration = (durationData != -1)?durationData:currSolver.duration;
+
+    currDuration = (durationData != -1 && listDurationData != -1)?durationData:currSolver.duration;
 
     // TODO Change to Progress Animation && Reset()
     // if(startAnimator && startAnimator.isAnimating())(startAnimator.reset())
-
     startAnimator = new DataDrivenAnimator(currSolverValueData);
     startAnimator.setFromToDuration(cssAnimationProgress,1,currDuration*1000)
     startAnimator.start();
@@ -57,11 +61,15 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
 
   const endAnimate = () =>{
 
-    if(startAnimator && startAnimator.isAnimating())(startAnimator.stop())
+    if(startAnimator && startAnimator.isAnimating()){startAnimator.stop()}
+    if(endAnimator && endAnimator.isAnimating()){endAnimator.stop()}
+
+    setIsStart(false);
 
     currSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
     currSolverValueData = currSolver.getValueArray()
-    currDuration = (durationData != -1)?durationData:currSolver.duration;
+    currDuration = (durationData != -1 && listDurationData != -1)?durationData:currSolver.duration;
+    console.log(currDuration)
 
     endAnimator = new DataDrivenAnimator(currSolverValueData);
     endAnimator.setFromToDuration(cssAnimationProgress,0,currDuration*1000)
@@ -77,10 +85,14 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
 
     startAnimation(boo:boolean) {
       if(boo){
-        startAnimate()
+        if(currentAnimCalculator){
+          startAnimate()
+        }
       }
       else{
-        endAnimate()
+        if(currentAnimCalculator){
+          endAnimate()
+        }
       }
     }
   }));

@@ -39,5 +39,11 @@
     "mass": 1, 
     "tension": 1000,
     "friction": 60
+  },
+  "adb_trigger_animtion":
+  {
+    "mass": 1, 
+    "tension": 600,
+    "friction": 45
   }
 }

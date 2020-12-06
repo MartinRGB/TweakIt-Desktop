@@ -41,8 +41,11 @@ export default {
     main_top_bg_blur:'#F9FBF900',
     main_bottom_bg:'#FFFFFF',
     main_bottom_bg_blur:'#FFFFFF',
+    adb_top_background:'#E9EBEA',
     adb_background:'#EDEFEE',
     adb_border:'#DBDBDB',
+    adb_control_background:'#C9CACA',
+    menu_border:'#d2d2d2',
     selection:'#0adf073d',
     code_block_background:'#9999991a',
     modes:{
@@ -70,8 +73,11 @@ export default {
         main_top_bg_blur:'#14161500',
         main_bottom_bg_blur:'#030303',
         main_bottom_bg:'#030303',
+        adb_top_background:'#181b19',
         adb_background:'#131614',
         adb_border:'#242424',
+        adb_control_background:'#1C221F',
+        menu_border:'#656565',
         code_block_background:'#99999933',
       },
       splash:{

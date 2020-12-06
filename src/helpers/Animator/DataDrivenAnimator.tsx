@@ -71,7 +71,7 @@ export default class DataDrivenPropertyAnimator{
           
           _this.animationFrame = requestAnimationFrame(animate)
 
-          _this.onFrame()
+           _this.onFrame()
           
       }
       

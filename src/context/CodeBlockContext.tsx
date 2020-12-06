@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react";
 import initState from "@Config/init_state.json";
 
 export var CodeBlockStateContext = createContext({
-  codeBlockIsShow: false,
+  codeBlockIsShow: initState.codeBlockIsShow,
   setCodeBlockIsShow: (tag: boolean) => {},
   adbInputCMD:'',
   setADBInputCMD:(tag: string) => {},
@@ -11,7 +11,7 @@ export var CodeBlockStateContext = createContext({
 });
 
 var CodeBlockStateProvider: React.FC<{}> = ({ children }) => {
-  const [cbIsShow, setCBIsShow] = useState<boolean>(false);
+  const [cbIsShow, setCBIsShow] = useState<boolean>(initState.codeBlockIsShow);
   const [adbCMD,setADBCMD] = useState<string>('')
   const [canTCAnim,setTCAnim] = useState<boolean>(false);
 

@@ -8,6 +8,7 @@ import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
 import MainButtonNormal from '@Components/MainButtonNormal'
 import ADBButtonNormal from '@Components/ADBButtonNormal'
+import ADBButtonToggle from '@Components/ADBButtonToggle'
 //import childProcess from 'child_process';
 import Icons from '@Assets/icons'
 import animationConfig from '@Config/animation.json';
@@ -28,15 +29,8 @@ const SelectArea: React.FC = memo(({children}) => {
     CodeBlockStateContext,
   );
 
-  const getMessageFromDevice = () =>{
-    //simpleRunCMD(adbConfig.adb_get_device,codeBlockIsShow)
-  }
-
-  const postMessageToDevice = () =>{
-    
-    //simpleRunCMD(adbConfig.adb_help,codeBlockIsShow)
-
-  }
+  const adbGetStr = adbConfig.adb_get_device;
+  const adbBuildStr = adbConfig.adb_help;
 
   const optionsData = [
     { value: "Spring", label: "Spring" },
@@ -64,65 +58,72 @@ const SelectArea: React.FC = memo(({children}) => {
     { value: "Autumn", label: "Autumn" },
     { value: "Winter", label: "Winter" },
   ];
+
+  const getMessageFromDevice = () =>{
+    console.log('get')
+  }
+
+  const postMessageToDevice = () =>{
+    console.log('build')
+  }
+
+  const onIndexClicked = (i:any,val:any) =>{
+    console.log(i)
+    console.log(val)
+  }
+
   
-
-
   return (
     <Container>
 
       <TopLeftContainer>
         <TitleSpan><Trans>Select Animation In Tweakit-Android</Trans></TitleSpan>
 
-        <DropDownMenu optionsData={optionsData} menuWidth={240} isRichAnimation={true}></DropDownMenu>
+        <DropDownMenu onClickIndex={(i,val)=>{onIndexClicked(i,val)}} menuStyle={{left:`-1px`,width:`240px`}}optionsData={optionsData} menuWidth={`240px`} isRichAnimation={true}></DropDownMenu>
      
         <ADBButtonNormal 
-          triggerAnim={
-            ((adbInputCMD === adbConfig.adb_get_device) && canTriggerControlAnim && codeBlockIsShow)
+          cmdTriggerAnim={
+            ((adbInputCMD === adbGetStr) && canTriggerControlAnim && codeBlockIsShow)
           }
-          cmd={adbConfig.adb_get_device}
+          cmd={adbGetStr}
           buttonCSS = {
             css`
               margin-left:12px;
               margin-right:12px;
-              height:20px;
-              margin-top:-6px;
               > button{
-                display:inline-block;
                 height:20px;
                 width:40px;
+              }
+              > button > span{
+                line-height:16px;
               }
             `
           }
           onClick={getMessageFromDevice}
-          // onMouseDown={()=>{setScale();animationBoxRef.current.startAnimation(true)}} 
-          // onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
           >
             <CustomSpan><Trans>Get</Trans></CustomSpan>
         </ADBButtonNormal>
         <ADBButtonNormal
-          triggerAnim={
-            ((adbInputCMD === adbConfig.adb_help) && canTriggerControlAnim && codeBlockIsShow)
+          cmdTriggerAnim={
+            ((adbInputCMD === adbBuildStr) && canTriggerControlAnim && codeBlockIsShow)
           }
-          cmd={adbConfig.adb_help}
+          cmd={adbBuildStr}
           buttonCSS = {
             css`
               margin-right:12px;
-              height:20px;
-              margin-top:-6px;
               > button{
-                display:inline-block;
                 height:20px;
                 width:40px;
+              }
+              > button > span{
+                line-height:16px;
               }
             `
           }
           onClick={postMessageToDevice}
-          // onMouseDown={()=>{setScale();animationBoxRef.current.startAnimation(true)}} 
-          // onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
           >
             <CustomSpan><Trans>Build</Trans></CustomSpan>
         </ADBButtonNormal>
-
 
       </TopLeftContainer>
     </Container>
@@ -175,3 +176,23 @@ const CustomSpan = styled.span`
   line-height: 14px;
   color:${p => p.theme.colors.primary};
 `
+
+//  <ADBButtonNormal
+//   cmdTriggerAnim={
+//     ((adbInputCMD === adbConfig.adb_test) && canTriggerControlAnim && codeBlockIsShow)
+//   }
+//   cmd={adbConfig.adb_test}
+//   buttonCSS = {
+//     css`
+//       margin-right:12px;
+//       > button{
+//         height:20px;
+//       }
+//     `
+//   }
+//   onClick={postMessageToDevice}
+//   // onMouseDown={()=>{setScale();animationBoxRef.current.startAnimation(true)}} 
+//   // onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
+//   >
+//     <Icons.USB></Icons.USB>
+// </ADBButtonNormal>
