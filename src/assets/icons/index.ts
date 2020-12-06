@@ -23,7 +23,9 @@ import Terminal from '@Assets/icons/svg/Terminal.Icon';
 import Animation from '@Assets/icons/svg/Animation.Icon';
 import Wifi from '@Assets/icons/svg/Wifi.Icon';
 import USB from '@Assets/icons/svg/USB.Icon';
-
+import Record from '@Assets/icons/svg/Record.Icon';
+import Screenshot from '@Assets/icons/svg/Screenshot.Icon';
+import Cast from '@Assets/icons/svg/Cast.Icon';
 
 export default {
   DarkMode,
@@ -48,5 +50,8 @@ export default {
   Terminal,
   Animation,
   Wifi,
-  USB
+  USB,
+  Record,
+  Screenshot,
+  Cast
 };

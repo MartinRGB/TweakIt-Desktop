@@ -15,7 +15,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   const [colorMode, setColorMode] = useColorMode();
 
   const defaultActivie = adbConfig.adb_b;
-  const segmentIconStr = ["USB","Wifi"];
+  const segmentIconStr = ["USB","Wifi",];
   const segmentCMDStr = [adbConfig.adb_b,adbConfig.adb_test];
 
 
