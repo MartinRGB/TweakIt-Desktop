@@ -10,9 +10,11 @@ import '@Context/i18nContext'
 import ListTree from './ListTree'
 
 import animationList from '@Config/animator_list.json'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const ListArea: React.FC = memo(({children}) => {
   
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   return (
     <Container>
       {
@@ -59,7 +61,7 @@ export default ListArea
 
 const Container = styled.div`
     height: 100%;
-    background:${p => p.theme.colors.main_top_bg};
+    //background:${p => p.theme.colors.main_top_bg};
     display: flex;
     flex-direction: column;
     //flex:1;
@@ -71,7 +73,7 @@ const Container = styled.div`
     //padding:24px 14px 24px 14px;
     // Or it will re-rendering cause performance issue
     min-width:250px;
-
+    
 
     /* width */
     ::-webkit-scrollbar {

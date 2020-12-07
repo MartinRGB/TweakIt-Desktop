@@ -1,7 +1,8 @@
-import React ,{memo} from 'react'
+import React ,{memo,useContext} from 'react'
 import styled from '@emotion/styled';
 import { ISVG } from "@Types";
 
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const SVGBackground: React.FC<ISVG> = memo(({ 
   pathStyle,
@@ -29,6 +30,7 @@ const SVGBackground: React.FC<ISVG> = memo(({
   // const viewBoxHFixed = svgHeight*0.5;
   // const extendLineScale = 1.25
   const mIsError = isError?isError:false;
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   //console.log("canvas background re render")
 
@@ -56,6 +58,7 @@ const SVGBackground: React.FC<ISVG> = memo(({
               }}
             >
               <CustomBGRect 
+                isAnimationEnable={isGlobalAnimEnable}
                 isError={mIsError}
                 x="0" 
                 y="0" 
@@ -66,22 +69,22 @@ const SVGBackground: React.FC<ISVG> = memo(({
                 }}
                 />
 
-              <CustomBorderline x1={-viewBoxWFixed/4*extendLineScale}
+              <CustomBorderline isAnimationEnable={isGlobalAnimEnable} x1={-viewBoxWFixed/4*extendLineScale}
                     y1={svgHeight}
                     x2={svgWidth+viewBoxWFixed/4*extendLineScale} 
                     y2={svgHeight}   
                     strokeWidth={svgStrokeWidth/2}/>
-              <CustomBorderline x1={-viewBoxWFixed/4*extendLineScale}
+              <CustomBorderline isAnimationEnable={isGlobalAnimEnable} x1={-viewBoxWFixed/4*extendLineScale}
                       y1='0'
                       x2={svgWidth+viewBoxWFixed/4*extendLineScale} 
                       y2='0'
                       strokeWidth={svgStrokeWidth/2}/>
-              <CustomBorderline x1='0'
+              <CustomBorderline isAnimationEnable={isGlobalAnimEnable} x1='0'
                     y1={-viewBoxHFixed/4*extendLineScale}
                     x2='0'
                     y2={svgHeight+viewBoxHFixed/4*extendLineScale} 
                     strokeWidth={svgStrokeWidth/2}/>
-              <CustomBorderline x1={svgWidth}
+              <CustomBorderline isAnimationEnable={isGlobalAnimEnable} x1={svgWidth}
                     y1={-viewBoxHFixed/4*extendLineScale}
                     x2={svgWidth}
                     y2={svgHeight+viewBoxHFixed/4*extendLineScale} 
@@ -103,26 +106,34 @@ const CustomSVG = styled.svg`
 
 `
 
-const CustomGraphG = styled.g`
+const CustomGraphG = styled.g<{
+  isAnimationEnable:boolean;
+}>`
   position: relative;
   stroke:${p => p.theme.colors.primary};
   stroke-linecap:round;
   stroke-linejoin:round;
   fill:none;
+  transition:${p=>p.isAnimationEnable?'stroke 0.3s':'none'};
 `
 
 const CustomBGRect = styled.rect<{
   isError?:boolean
+  isAnimationEnable:boolean;
 }>`
   position: relative;
   fill:${p => p.isError?'red':p.theme.colors.text_input_bg};
   //opacity:0.15;
+  transition:${p=>p.isAnimationEnable?'fill 0.3s':'none'};
 `
 
-const CustomBorderline = styled.line`
+const CustomBorderline = styled.line<{
+  isAnimationEnable:boolean;
+}>`
   position: relative;
   stroke-linecap:round;
   stroke-linejoin:round;
   stroke:${p => p.theme.colors.adb_border};
+  transition:${p=>p.isAnimationEnable?'stroke 0.3s':'none'};
 `
 export default SVGBackground

@@ -10,6 +10,7 @@ import Icons from '@Assets/icons'
 import adbConfig from '@Config/adb_cmd_list.json';
 import ADBButtonSegment from '@Components/ADBButtonSegment'
 import ADBExpandSelect from '@Components/ADBExpandSelect'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const ADBTopArea: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
@@ -19,6 +20,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   const segmentIconStr = ["USB","Wifi",];
   const segmentCMDStr = [adbConfig.adb_b,adbConfig.adb_test];
 
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   const castIconStr:any = "Cast";
   const screenshotIconStr = "Screenshot";
@@ -70,11 +72,9 @@ const ADBTopArea: React.FC = memo(({ children }) => {
     setConnectionMode(val)
   }
 
-  console.log(connectionMode)
-
 
   return (
-      <Container>
+      <Container isAnimationEnable={isGlobalAnimEnable}>
         <DropDownMenu onClickIndex={(i,val)=>{onIndexClicked(i,val)}} style={{zIndex:`1`}} menuStyle={{zIndex:`1`,left:`-1px`,width:`calc(100% + 3px)`}} optionsData={optionsData} menuWidth={`calc(100%)`} isRichAnimation={false}></DropDownMenu>
 
         <ADBButtonSegment
@@ -123,13 +123,16 @@ const ADBTopArea: React.FC = memo(({ children }) => {
 
 export default ADBTopArea
 
-const Container = styled.div`
+const Container = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   width:100%;
   height:90px;
   padding: 18px 38px;
   background:${p=>p.theme.colors.adb_top_background};
   border-bottom:1px solid ${p => p.theme.colors.adb_border};
   position: relative;
+  transition:${p=>p.isAnimationEnable?'background 0.3s,border-bottom 0.3s':'none'};
 `
 
 const ScreenContainer = styled.div`

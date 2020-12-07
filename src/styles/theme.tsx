@@ -31,6 +31,7 @@ export default {
     title_background_top: '#b4b4b4',
     title_background_bottom: '#C6C7C8',
     title_box_shadow: '#0000000f',
+    title_background_transition: '#00000000',
     normal_button_bg:'#D5D6D580', //80
     normal_button_active:'#3F3E3E',
     toggle_button_bg:'#6d6d6d',
@@ -72,6 +73,7 @@ export default {
         title_background_top: '#464849',
         title_background_bottom: '#38393A',
         title_box_shadow: '#ffffff1a',
+        title_background_transition: '#00000099',
         normal_button_bg:'#70717280', //80
         normal_button_active:'#CECDCD',
         toggle_button_bg:'#a0a0a0',

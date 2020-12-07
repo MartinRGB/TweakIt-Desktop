@@ -27,6 +27,10 @@ import { GraphUpdateContext } from '@Context/GraphUpdateContext'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import {DurationDataContext} from'@Context/DurationDataContext'
 
+import Solver from '@Helpers/Solver';
+import DataDrivenAnimator from '@Helpers/Animator/DataDrivenAnimator'
+
+
 const InputTree: React.FC<IInputTree> = memo(({ 
   style,
   isLast,
@@ -50,8 +54,6 @@ const InputTree: React.FC<IInputTree> = memo(({
   );
   const {setDurationData} = useContext(DurationDataContext)
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-
-
   
   var inputVis;
   if(visible != undefined){
@@ -101,6 +103,7 @@ const InputTree: React.FC<IInputTree> = memo(({
     setCurrentSolverDataByIndex(defaultVal,index);
   }, [])
 
+
   //console.log('rerender')
 
   // 2 Group Control -> 4 Time Spring
@@ -124,6 +127,7 @@ const InputTree: React.FC<IInputTree> = memo(({
           }
           else{
             setGraphShouldUpdate(true)
+
             //console.log('even' + fps_60);
           }
 
@@ -150,6 +154,8 @@ const InputTree: React.FC<IInputTree> = memo(({
 
 
   const handleRangeChange = (e:any) => {
+
+
 
     if(isGlobalAnimEnable){
       setPreviousRangeValue(rangeValue);
@@ -234,6 +240,7 @@ const InputTree: React.FC<IInputTree> = memo(({
         }
       }
       setPreviousRangeValue(rangeValue)
+
     }
 
     setTextBlur(false)

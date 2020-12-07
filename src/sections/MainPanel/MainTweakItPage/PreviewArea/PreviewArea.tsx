@@ -12,6 +12,7 @@ import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import { GraphUpdateContext } from '@Context/GraphUpdateContext';
 import MainButtonNormal from '@Components/MainButtonNormal';
 import AnimationBox from './AnimationBox'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const PreviewArea: React.FC = memo(({children}) => {
 
@@ -22,6 +23,7 @@ const PreviewArea: React.FC = memo(({children}) => {
   const setTrans = () =>{setAnimProerty('translationY')}
   const setRot = () =>{setAnimProerty('rotate')}
 
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const animationBoxRef = useRef();
 
   return (
@@ -117,7 +119,7 @@ const BtnContainer = styled.div`
 
 const Container = styled.div`
     height: 100%;
-    background:${p => p.theme.colors.main_top_bg};
+    //background:${p => p.theme.colors.main_top_bg};
     display: flex;
     flex-direction: column;
     //flex:1;

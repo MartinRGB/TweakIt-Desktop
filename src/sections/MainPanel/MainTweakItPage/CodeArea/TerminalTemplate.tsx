@@ -204,7 +204,8 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
   }
 
   return (
-    <TerminalContainer style={{...style}} ref={containerRef}>
+    <TerminalContainer 
+    contentEditable={true} suppressContentEditableWarning={true} style={{...style}} ref={containerRef}>
     <Comment>🍺🍺🍺 <Trans>Console Log Here</Trans> 🍺🍺🍺</Comment>
     <CommandInfoContainer>
       <CommandInfo >clear</CommandInfo> <CommandInfoNote><Trans>Clear all result</Trans></CommandInfoNote><Break/>
@@ -274,14 +275,13 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
 })
 
 
-
 export default TerminalTemplate
 
 const TerminalContainer = styled.div`
   white-space:pre-wrap;
   overflow-wrap: break-word;
   padding-right: 12px;
-  
+  outline:none;
   ::selection {
     background: ${p => p.theme.colors.selection};
   }
@@ -320,6 +320,10 @@ padding-top: 24px;
 padding-bottom: 10px;
 // display: grid;
 width: 438px;
+outline:none;
+::selection {
+  background: ${p => p.theme.colors.selection};
+}
 `
 
 const CommandInfo =styled.p`

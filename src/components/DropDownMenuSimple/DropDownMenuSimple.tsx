@@ -127,6 +127,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
     {
       selectExpand?
       <DropDownMenuConatiner
+      isAnimationEnable={isGlobalAnimEnable}
       style={{
         ...menuStyle,
         height: `${Math.max(0,(0 + selectAnimationProgress*(menuPadding*2+menuListNum*listHeight - 0)))}px`,
@@ -136,6 +137,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
       }}
       >
         <DropDownBackground
+          isAnimationEnable={isGlobalAnimEnable}
           style={{
             opacity:`${opacityTransitionIn?'1':'0'}`,
             transition:`${isGlobalAnimEnable?'all 0.1s':'none'}`
@@ -150,6 +152,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
 
             return (
               <DropDownListContainer
+                isAnimationEnable={isGlobalAnimEnable}
                 style={{
                   display:`${selectExpand?'block':'none'}`,
                   height:`${listHeight}px`
@@ -174,6 +177,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
                     </Icons.CheckMark>
 
                     <DropDownListSpan
+                      isAnimationEnable={isGlobalAnimEnable}
                       style={{
                         opacity: `${(selectIndex === index)?'1':''}`,
                         transform: `${(selectIndex === index)?'scale3d(1.2,1.2,1)':''}`,
@@ -199,12 +203,16 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
 }))
 
 
-const DropDownMenuConatiner = styled.div`
+const DropDownMenuConatiner = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   position:absolute;
   top: 20px;
   left: -1px;
   height:0px;
-  border: 1px solid ${p => p.theme.colors.menu_border};
+  border: 1px solid;
+  border-color:${p => p.theme.colors.menu_border};
+  transition:${p=>p.isAnimationEnable?'border-color 0.3s':'none'};
   border-radius:4px;
   overflow:hidden;
   //width:240px;
@@ -212,16 +220,20 @@ const DropDownMenuConatiner = styled.div`
   
 `
 
-const DropDownBackground = styled.div`
+const DropDownBackground = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   width:100%;
   height:100%;
   background:${p => p.theme.colors.normal_button_bg};
+  transition:${p=>p.isAnimationEnable?'background 0.3s':'none'};
   backdrop-filter:blur(3px);
   position: absolute;
   top: 0px;
 `
 
 const DropDownListContainer = styled.li<{
+  isAnimationEnable:boolean;
 }>`
   width:300px;
   margin-left: 0px;
@@ -230,7 +242,11 @@ const DropDownListContainer = styled.li<{
   z-index:0;
   cursor:pointer;
   //transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
-  
+
+  > div{
+    transition:${p=>p.isAnimationEnable?'background 0.15s':'none'};
+  }
+
   &:hover > div{
     background:${p => p.theme.colors.primary_middle_opacity};
   }
@@ -256,7 +272,7 @@ const DropDownListContainer = styled.li<{
 
   > div > svg {
     fill: ${p => p.theme.colors.text};
-    
+    transition:${p=>p.isAnimationEnable?'fill 0.3s':'none'};
   }
 `
 
@@ -282,7 +298,9 @@ const DropDownListBackground = styled.div`
   }
 `
 
-const DropDownListSpan = styled.span`
+const DropDownListSpan = styled.span<{
+  isAnimationEnable:boolean;
+}>`
   color:${p => p.theme.colors.text};
   font-family: ${p => p.theme.fonts.headText};
   font-size: 10px;
@@ -303,58 +321,6 @@ const CustomSelectWrapper = styled.div`
     right:-1px;
     z-index:1;
 `
-const CustomSelect = styled.button<{
-  isExpanded:boolean;
-  isAnimationEnable:boolean;
-}>`
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    background: ${p=>p.isExpanded?p.theme.colors.primary_middle_opacity:'transparent'};
-    transition:${p=>p.isAnimationEnable?'all 0.15s':'none'};
-    cursor:pointer;
-    outline:none;
-    border:none;
 
-    &:hover {
-      background:${p=>p.isExpanded?'':p.theme.colors.primary_middle_opacity};
-    }
-
-    >svg{
-      fill: ${p => p.theme.colors.text};
-      position: absolute;
-      right: 1px;
-      top: 1px;
-      //transition:all 0.15s;
-      z-index:1;
-    }
-
-    &:active  > span{
-      //color: ${p => p.theme.colors.background};
-    }
-  
-    &:active  > svg{
-      //fill: ${p => p.theme.colors.background};
-    }
-
-    &:active {
-      background: ${p=>p.theme.colors.primary_dark_1_opacity};
-      //opacity:0.8;
-    }
-`
-
-const CustomSelectedSpan = styled.span`
-  color:${p => p.theme.colors.text};
-  font-family: ${p => p.theme.fonts.headText};
-  font-size: 10px;
-  transform:scale3d(1.2,1.2,1);
-  transform-origin:left center;
-  font-weight: 500;
-  line-height: 20px;
-  position: absolute;
-  left: 8px;
-  top: -1px;
-  user-select:none;
-`
 
 export default DropDownMenuSimple

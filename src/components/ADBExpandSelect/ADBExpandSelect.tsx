@@ -30,7 +30,6 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
      if((cmdStr+currentScreen === adbInputCMD && canTriggerControlAnim && codeBlockIsShow)){
       
      }
-     console.log(cmdStr+currentScreen)
     }
   })
 
@@ -60,13 +59,13 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
     style={
       {...style,}
     }>
-    <ClipContainer>
+    <ClipContainer isAnimationEnable={isGlobalAnimEnable}>
     <LeftSide>
       <ADBButtonNormal 
         cmdTriggerAnim={
           ((adbInputCMD === cmdStr) && canTriggerControlAnim && codeBlockIsShow)
         }
-        cmd={cmdStr+currentScreen}
+        cmd={cmdStr} //+currentScreen
         buttonCSS = {
           css`
             
@@ -93,7 +92,7 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
         <NumContainer>{currentScreen}</NumContainer>
       </ADBButtonNormal>
     </LeftSide>
-    <Divide></Divide>
+    <Divide isAnimationEnable={isGlobalAnimEnable}></Divide>
     <ADBButtonNormal 
         buttonCSS = {
           css`
@@ -130,10 +129,13 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
 
 })
 
-const Divide = styled.div`
+const Divide = styled.div<{
+  isAnimationEnable:boolean;
+}>`
 height:22px;
 width:1px;
 background:${p=>p.theme.colors.menu_border};
+transition:${p=>p.isAnimationEnable?'background 0.3s':'none'};
 `
 
 
@@ -141,13 +143,17 @@ const Container = styled.div`
 height: 22px;
 position:relative;
 `
-const ClipContainer = styled.div`
+const ClipContainer = styled.div<{
+  isAnimationEnable:boolean;
+}>`
 display: inline-flex;
 flex-direction: row;
 height:22px;
 border-radius: 4px;
 position:relative;
-border: 1px solid ${p => p.theme.colors.menu_border};
+border: 1px solid;
+border-color:${p => p.theme.colors.menu_border};
+transition:${p=>p.isAnimationEnable?'border-color 0.3s':'none'};
 overflow:hidden;
 `
 

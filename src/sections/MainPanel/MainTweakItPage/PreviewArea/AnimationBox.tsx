@@ -29,12 +29,15 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
   const [cssAnimationProgress,setCSSAnimationProgress] = useState<number>(0)
   const [isStart,setIsStart] = useState<boolean>(false);
 
+  const [adbProgress,setADBProgress] = useState<number>(20);
+
   const svgHeight = initState.svgHeight;
 
   const property = IAnimationBox.property;
 
   var startAnimator:any,endAnimator:any;
   var currSolver:any,currSolverValueData:any,currDuration:any;
+
 
   const startAnimate = () => {
 
@@ -51,8 +54,21 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
     startAnimator = new DataDrivenAnimator(currSolverValueData);
     startAnimator.setFromToDuration(cssAnimationProgress,1,currDuration*1000)
     startAnimator.start();
+    startAnimator.setOnStartCallback(()=>{
+    })
     startAnimator.setOnFrameCallback(()=>{
       setCSSAnimationProgress(startAnimator.getValueProgress());
+
+
+      console.log(new Date().getTime() - prevTime);
+      console.log('progress' + startAnimator.getValueProgress()*1000);
+
+      // execCMD(`adb shell am broadcast -a com.martinrgb.animerexample -e "STIFFNESS" "${Math.max(1,startAnimator.getValueProgress()*1000)}"`)
+      // console.log(`adb shell am broadcast -a com.martinrgb.animerexample -e "STIFFNESS" "${Math.max(1,startAnimator.getValueProgress()*1000)}"`)
+      // exec(`adb shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${startAnimator.getValueProgress()*1000}}}]}"`);
+      // console.log(`adb shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${startAnimator.getValueProgress()*1000}}}]}"`)
+      prevTime = new Date().getTime();
+
     })
     startAnimator.setOnEndCallback(()=>{
     })
@@ -76,6 +92,10 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
     endAnimator.start();
     endAnimator.setOnFrameCallback(()=>{
       setCSSAnimationProgress(endAnimator.getValueProgress());
+      // execCMD(`adb shell am broadcast -a com.martinrgb.animerexample -e "STIFFNESS" "${Math.max(1,endAnimator.getValueProgress()*1000)}"`)
+      // console.log(`adb shell am broadcast -a com.martinrgb.animerexample -e "STIFFNESS" "${Math.max(1,endAnimator.getValueProgress()*1000)}"`)
+      // exec(`adb shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${endAnimator.getValueProgress()*500}}}]}"`);
+      // console.log(`adb shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${endAnimator.getValueProgress()*500}}}]}"`)
     })
     endAnimator.setOnEndCallback(()=>{
     })

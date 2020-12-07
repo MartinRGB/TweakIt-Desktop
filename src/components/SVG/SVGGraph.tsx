@@ -5,6 +5,7 @@ import { AnimatorTypeContext } from '@Context/AnimatorTypeContext'
 import { GraphUpdateContext } from '@Context/GraphUpdateContext'
 import Solver from '@Helpers/Solver';
 import {SVGTransitionTemplate,SVGTemplate,SVGTemplate_100,SVGTemplate_50,SVGTransitionTemplate_100,SVGTransitionTemplate_50} from '@Components/SVG/SVGUtil'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const SVGGraph: React.FC<ISVG> = memo(({ 
   pathStyle,
@@ -24,7 +25,7 @@ const SVGGraph: React.FC<ISVG> = memo(({
   }) => {
 
   useContext(GraphUpdateContext);
-
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   const { selectTransition,currentAnimName,currentAnimPlatform, currentAnimCalculator,currentSolverData} = useContext(
     AnimatorTypeContext
@@ -41,7 +42,7 @@ const SVGGraph: React.FC<ISVG> = memo(({
   const currStepData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getStepArray();
   const currValueData = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData).getValueArray();
   
-  const mIsError = !currValueData[0];
+  const mIsError = !(currValueData[0]); //!
   var mSVGData:any;
 
   if(selectTransition){
@@ -126,6 +127,7 @@ const SVGGraph: React.FC<ISVG> = memo(({
             viewBox ={`0 0 ${svgWidth*1 + viewBoxWFixed} ${svgHeight + viewBoxHFixed}`}>
 
             <CustomGraphG
+              isAnimationEnable={isGlobalAnimEnable}
               style={{
                 ...pathStyle,
                 transform:`translate3d(${svgWidth/2 - svgWidth/2*svgScale + viewBoxWFixed/2}px,${svgHeight - (svgHeight/2- svgHeight/2*svgScale) + viewBoxHFixed/2}px,0) scale3d(${svgScale},-${svgScale},1)`,
@@ -159,12 +161,16 @@ const CustomSVG = styled.svg`
 
 `
 
-const CustomGraphG = styled.g`
+const CustomGraphG = styled.g<{
+  isAnimationEnable:boolean;
+}>`
   position: relative;
   stroke:${p => p.theme.colors.primary};
   stroke-linecap:round;
   stroke-linejoin:round;
   fill:none;
+  transition: ${p => p.isAnimationEnable?'stroke 0.2s':''};
+  
 `
 
 const CustomErrorBG = styled.rect<{

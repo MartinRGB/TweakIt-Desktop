@@ -42,6 +42,7 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
   var SegmentIcon;
   return (
   <Container
+    isAnimationEnable={isGlobalAnimEnable}
     css={conatinerCSS}
     style={
       {...style,}
@@ -84,13 +85,17 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
 })
 
 
-const Container = styled.div`
+const Container = styled.div<{
+  isAnimationEnable:boolean;
+}>`
 display: inline-flex;
 flex-direction: row;
 
 border-radius: 4px;
 overflow:hidden;
-border: 1px solid ${p => p.theme.colors.menu_border}
+border: 1px solid;
+border-color:${p => p.theme.colors.menu_border};
+transition:${p=>p.isAnimationEnable?'border-color 0.3s':'none'};
 `
 
 export default ADBButtonSegment

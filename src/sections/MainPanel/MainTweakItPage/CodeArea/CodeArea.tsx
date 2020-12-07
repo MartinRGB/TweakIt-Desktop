@@ -65,7 +65,7 @@ const CodeArea: React.FC = memo(({children}) => {
     <Container
       isExpanded ={isExpanded}
       style={{
-        transition:`${isGlobalAnimEnable?'all 0.3s cubic-bezier(0.13, 0.79, 0.25, 1) 0s':'none'}`,
+        transition:`${isGlobalAnimEnable?'height 0.3s cubic-bezier(0.13, 0.79, 0.25, 1) 0s,background 0.3s ,box-shadow 0.3s ':'none'}`,
       }}
       >
       {isExpanded?<CopyToast ref={toastRef}></CopyToast>:''}

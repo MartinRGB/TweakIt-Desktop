@@ -15,11 +15,13 @@ import ListSelectStateProvider from '@Context/ListSelectStateContext'
 import AnimatorTypeProvider from '@Context/AnimatorTypeContext'
 import GraphUpdateProvider from '@Context/GraphUpdateContext'
 import DurationDataProvider from '@Context/DurationDataContext'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+
 const MainTweakItPage: React.FC = memo(({children}) => {
 
   //const { t, i18n } = useTranslation()
   //const [colorMode] = useColorMode();
-
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   return (
     <Container>
       <AnimatorTypeProvider>
@@ -27,7 +29,7 @@ const MainTweakItPage: React.FC = memo(({children}) => {
         <ListSelectStateProvider>
           <GraphUpdateProvider>
           <SelectArea></SelectArea>
-          <TopContainer>
+          <TopContainer isAnimationEnable={isGlobalAnimEnable}>
             <ListArea></ListArea>
             <DurationDataProvider>
               <CanvasArea></CanvasArea>
@@ -51,11 +53,15 @@ const Container = styled.div`
 
 `
 
-const TopContainer = styled.div`
+const TopContainer = styled.div<{
+  isAnimationEnable:boolean;
+}>`
     height: 100%;
     display: flex;
     flex-direction: row;
     overflow:hidden;
     //flex:7;
     //min-height:528px;
+    background:${p => p.theme.colors.main_top_bg};
+    transition:${p=>p.isAnimationEnable?'background 0.3s':'none'};
 `

@@ -385,6 +385,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
           <g
           >
             <CustomBorderline
+              isAnimationEnable={isGlobalAnimEnable}
               isEditable={isEditable}
               x1={boxPaddingW/2}
               y1={boxPaddingH/2}
@@ -393,6 +394,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
               strokeWidth={svgStrokeWidth/2}
             />
             <CustomBorderline
+              isAnimationEnable={isGlobalAnimEnable}
               isEditable={isEditable}
               x1={boxWidth*(1-transitionScale) + boxWidth*currentSolverData[index][2]*transitionScale+boxPaddingW/2}
               y1={boxHeight*(1-transitionScale) + boxHeight*currentSolverData[index][3]*transitionScale+boxPaddingH/2}
@@ -649,9 +651,11 @@ const CustomSVG = styled.svg<{
 `
 const CustomBorderline = styled.line<{
   isEditable:boolean;
+  isAnimationEnable:boolean;
 }>`
   position: relative;
   stroke-linecap:round;
   stroke-linejoin:round;
   stroke:${p => p.isEditable? p.theme.colors.range_input_line:p.theme.colors.range_input_thumb_unactive};
+  transition: ${p => p.isAnimationEnable?'stroke 0.2s':''};
 `

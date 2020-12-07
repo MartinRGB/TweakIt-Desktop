@@ -16,6 +16,8 @@ import WebWorker from "react-webworker"
 //import SpringFactorEvaluator from './SpringFactorEvaluator.js'
 import SpringFactorEvaluatorWorker from "./SpringFactorEvaluator.worker.js";
 import CodeTexts from '@Components/CodeTexts'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+
 
 export interface ICodeSnippet{
   name?:string;
@@ -29,7 +31,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
   const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimPlatform,currentAnimName,interpolatorName,iOSName,webName,flutterName,smartisanName} = useContext(
     AnimatorTypeContext
   );
-
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   // Or useRef() Performance Optim Here
   const {triggredIndex,bezierTriggeredIndex} = useContext(
@@ -66,7 +68,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
 
 
     return(
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
       <Comment>// Android Spring Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/androidx/dynamicanimation/animation/SpringAnimation.html">[API]</Link><Break/>
       <Class>SpringAnimation</Class> springAnimation = <Keyword>new</Keyword> <Class>SpringAnimation</Class>.([<Property>view</Property>],[<Property>property</Property>],[<Property>finalValue</Property>]);<Break/>
       <Class>SpringAnimation</Class>.getSpring().setStiffness(<Number>{cIF(mSolver['stiffness'])}</Number>);<Break/>
@@ -103,7 +105,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
   const iOSSpringAnimationComponents = () =>{
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
     return (
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// iOS UIViewAnimate</Comment>  <Link target="_blank" href="https://developer.apple.com/documentation/uikit/uiview/1622594-animate">[API]</Link><Break/>
         <Class>UIView</Class>.animate(<Break/>
         {`  `}withDuration: <Number>{cIF(mSolver['duration'])}</Number>,<Break/>
@@ -136,7 +138,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
   const WebSpringAnimationComponents = () =>{
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
     return (
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Facebook ReboundJS Spring Animation</Comment>  <Link target="_blank" href="https://github.com/facebook/rebound-js">[Repo]</Link><Break/>
         <Keyword>var</Keyword> springSystem = <Keyword>new</Keyword> <Class>rebound.SpringSystem</Class>();<Break/>
         <Keyword>var</Keyword> spring = <Class>springSystem.rebound.createSpringWithBouncinessAndSpeed</Class>(<Number>{cIF(mSolver['bounciness'])}</Number>,<Number>{cIF(mSolver['speed'])}</Number>);<Break/>
@@ -171,7 +173,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
     //console.log(evaluator)
     return(
       (smartisanName)?
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Android Spring Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/androidx/dynamicanimation/animation/SpringAnimation.html">[API]</Link><Break/>
         <Class>SpringAnimation</Class> springAnimation = <Keyword>new</Keyword> <Class>SpringAnimation</Class>.([<Property>view</Property>],[<Property>property</Property>],[<Property>finalValue</Property>]);<Break/>
         <Class>SpringAnimation</Class>.getSpring().setStiffness(<Number>{smartisanName}.SPRING_ANIMATION_STIFFNESS</Number>);<Break/>
@@ -190,7 +192,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
   const AndroidFlingAnimationComponents = () =>{
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
     return (
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Android Fling Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/androidx/dynamicanimation/animation/FlingAnimation.html">[API]</Link><Break/>
         <Class>FlingAnimation</Class> flingAnimation = <Keyword>new</Keyword>  <Class>FlingAnimation</Class>.([<Property>view</Property>],[<Property>property</Property>]);<Break/>
         flingAnimation.setStartVelocity(<Number>{cIF(mSolver['velocity'])}</Number>);<Break/>
@@ -226,7 +228,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
     var duration = currentSolverData[currentSolverData.length-1]*1000
     return (
       (currentAnimPlatform === 'Android')?
-        <CodeDiv>
+        <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
           <Comment>// Android Interpolator Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/android/view/animation/Interpolator">[API]</Link><Break/>
           [<Class>Animator</Class>].setInterpolator(new <Class>{currentAnimName}Interpolator</Class>(<Number>{paraStr}</Number>));<Break/>
           [<Class>Animator</Class>].setDuration(<Number>{duration}</Number>);
@@ -247,7 +249,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
   const FlutterInterpolatorComponents = () =>{
     return (
       (flutterName)?
-        <CodeDiv>
+        <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
           <Comment>// Flutter Curves</Comment> <Link target="_blank" href="https://api.flutter.dev/flutter/animation/Curves-class.html">[API]</Link><Break/>
           <Keyword>const</Keyword> <Class>Curve</Class> curve = <Class>Curves</Class>.<Number>{firstLetterLower(flutterName)}</Number><Break/>
           <Break/>
@@ -272,7 +274,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
 
     return (
       (interpolatorName)?
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Android {interpolatorName}Interpolator Animation (In Mateiral Components)</Comment><Break/>
         [<Class>Animator</Class>].setInterpolator(new <Class>{interpolatorName}Interpolator</Class>();<Break/>
         [<Class>Animator</Class>].setDuration(<Number>{duration}</Number>);<Break/>
@@ -282,7 +284,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
         [<Class>Animator</Class>].setDuration(<Number>{duration}</Number>);
       </CodeDiv>
       :
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Android PathInterpolator(Cubic Bezier) Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/android/view/animation/PathInterpolator">[API]</Link><Break/>
         [<Class>Animator</Class>].setInterpolator(new <Class>PathInterpolator</Class>(<Number>{p1x}</Number>,<Number>{p1y}</Number>,<Number>{p2x}</Number>,<Number>{p2y}</Number>));<Break/>
         [<Class>Animator</Class>].setDuration(<Number>{duration}</Number>);
@@ -298,7 +300,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
     var duration = currentSolverData[currentSolverData.length-1]
     return (
       (iOSName)?
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// iOS UIView Animation with UICubicTimingParameters</Comment> <Link target="_blank" href="https://developer.apple.com/documentation/uikit/uicubictimingparameters">[API]</Link><Break/>
         <Keyword>let</Keyword> cubicTimingParameters = <Class>UICubicTimingParameters</Class>(<Break/>
         {`  `}controlPoint1: <Class>CGPoint</Class>(x: <Number>{p1x}</Number>,y: <Number>{p1y}</Number>),<Break/>
@@ -321,7 +323,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
         ){`{`}<Comment>// code here</Comment>{`}`}
       </CodeDiv>
       :
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// iOS UIView Animation with UICubicTimingParameters</Comment> <Link target="_blank" href="https://developer.apple.com/documentation/uikit/uicubictimingparameters">[API]</Link><Break/>
         <Keyword>let</Keyword> cubicTimingParameters = <Class>UICubicTimingParameters</Class>(<Break/>
         {`  `}controlPoint1: <Class>CGPoint</Class>(x: <Number>{p1x}</Number>,y: <Number>{p1y}</Number>),<Break/>
@@ -349,13 +351,13 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
 
     return (
       (webName)?
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// CSS TimingFunctions</Comment> <Link target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function">[API]</Link><Break/>
         <Keyword>transition-timing-function</Keyword>: <Class>{firstLetterLower(webName)}</Class> or <Class>cubic-bezier</Class>(<Number>{p1x}</Number>,<Number>{p1y}</Number>,<Number>{p2x}</Number>,<Number>{p2y}</Number>);<Break/>
         <Keyword>transition-duration</Keyword>: <Number>{duration}s</Number>;
     </CodeDiv>
       :
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// CSS TimingFunctions</Comment> <Link target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function">[API]</Link><Break/>
         <Keyword>transition-timing-function</Keyword>: <Class>cubic-bezier</Class>(<Number>{p1x}</Number>,<Number>{p1y}</Number>,<Number>{p2x}</Number>,<Number>{p2y}</Number>);<Break/>
         <Keyword>transition-duration</Keyword>: <Number>{duration}s</Number>;
@@ -370,7 +372,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
     var p2y = currentSolverData[0][3];
     return (
       (flutterName)?
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Flutter Curves</Comment> <Link target="_blank" href="https://api.flutter.dev/flutter/animation/Curves-class.html">[API]</Link><Break/>
         <Keyword>const</Keyword> <Class>Curve</Class> curve = <Class>Curves</Class>.<Number>{firstLetterLower(flutterName)}</Number><Break/>
         <Break/>
@@ -378,7 +380,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
         <Keyword>const</Keyword> <Class>Curve</Class> curve = <Class>Cubic</Class>(<Number>{p1x}</Number>,<Number>{p1y}</Number>,<Number>{p2x}</Number>,<Number>{p2y}</Number>)
       </CodeDiv>
       :
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Flutter Cubic</Comment> <Link target="_blank" href="https://api.flutter.dev/flutter/animation/Cubic-class.html">[API]</Link><Break/>
         <Keyword>const</Keyword> <Class>Curve</Class> curve = <Class>Cubic</Class>(<Number>{p1x}</Number>,<Number>{p1y}</Number>,<Number>{p2x}</Number>,<Number>{p2y}</Number>)
       </CodeDiv>
@@ -389,7 +391,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
     var duration = currentSolverData[currentSolverData.length-1]*1000
     return (
       (smartisanName)?
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Universal Easing Presets</Comment><Break/>
         <Class>Interpolator</Class> interpolator = <Class>CubicBezierPreset</Class>.getBezierInterpolator(<Number>CubicBezierPreset.CurveType.{smartisanName}</Number>);<Break/>
         animator.setInterpolator(interpolator)<Break/>
@@ -406,7 +408,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
 
     return (
       (interpolatorName)?
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Android {interpolatorName}Interpolator Animation (In Mateiral Components)</Comment><Break/>
         [<Class>Animator</Class>].setInterpolator(new <Class>{interpolatorName}Interpolator</Class>();<Break/>
         [<Class>Animator</Class>].setDuration(<Number>{duration}</Number>);
@@ -435,7 +437,7 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
   const UniversalDataComponents = () =>{
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
     return (
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>// Data Length is </Comment><Keyword>{mSolver.getValueArray().length}</Keyword>
         <Number>{mSolver.getValueArray().toString()}</Number>
       </CodeDiv>
@@ -444,28 +446,28 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
 
   const NoReferenceBlock = () =>{
     return (
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>🍸🍸🍸 <Trans>No reference</Trans> 🍸🍸🍸</Comment>
       </CodeDiv>)
   }
 
   const WorkInProgressBlock = () =>{
     return (
-      <CodeDiv>
+      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
         <Comment>🥃🥃🥃 <Trans>Work In Progress</Trans> 🥃🥃🥃</Comment>
       </CodeDiv>)
   }
 
   const CheckAndroidBlock = () =>{
     return (
-    <CodeDiv>
+    <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
       <Comment>🍷🍷🍷 <Trans>Check Android Sections</Trans> 🍷🍷🍷</Comment>
     </CodeDiv>)
   }
 
   const DataLoadingBlock = () =>{
     return (
-    <CodeDiv>
+    <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
       <Comment>⌛⌛⌛ <Trans>Loading...</Trans> ⌛⌛⌛</Comment>
     </CodeDiv>)
   }
@@ -537,11 +539,15 @@ const firstLetterLower = (str:string) => {
   return str.charAt(0).toLowerCase()+str.slice(1);
 };
 
-const CodeDiv = styled.div`
+const CodeDiv = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   white-space:pre-wrap;
   overflow-wrap: break-word;
   padding-right: 12px;
+  color:${p => p.theme.colors.text};
   
+  transition:${p=>p.isAnimationEnable?'color 0.3s':'none'};
   ::selection {
     background: ${p => p.theme.colors.selection};
   }

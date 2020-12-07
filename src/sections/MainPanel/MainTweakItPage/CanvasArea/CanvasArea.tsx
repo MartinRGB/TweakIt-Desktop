@@ -1,4 +1,4 @@
-import React ,{memo, useEffect, useState,useRef,useLayoutEffect} from 'react';
+import React ,{memo, useEffect, useState,useRef,useLayoutEffect,useContext} from 'react';
 
 import styled from '@emotion/styled';
 
@@ -6,6 +6,7 @@ import CanvasTitle from './CanvasTitle'
 import CanvasInput from './CanvasInput'
 import CanvasSVG from './CanvasSVG'
 import initState from '@Config/init_state.json'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const CanvasArea: React.FC = memo(({children}) => {
   
@@ -19,7 +20,7 @@ const CanvasArea: React.FC = memo(({children}) => {
   const viewBoxWFixed = svgWidth * initState.viewBoxFixedScale;
   const extendLineScale = initState.extendLineScale;
 
-
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   // ############ Reszie ############
   const sizeRef = useRef(null);
   const [isLayoutRow, setIsLayoutRow] = useState<boolean>(false);
@@ -49,9 +50,11 @@ const CanvasArea: React.FC = memo(({children}) => {
     <Container
       ref = {sizeRef}
       isLayoutRow = {isLayoutRow}
+      isAnimationEnable = {isGlobalAnimEnable}
       >
 
       <GraphContainer
+        isAnimationEnable = {isGlobalAnimEnable}
         isLayoutRow={isLayoutRow}>
           <CanvasTitle></CanvasTitle>
           <CanvasSVG
@@ -81,20 +84,23 @@ export default CanvasArea
 
 
 const GraphContainer = styled.div<{
-  isLayoutRow:boolean
+  isLayoutRow:boolean;
+  isAnimationEnable:boolean;
 }>`
   flex: 2;
   height:100%;
   position:relative;
+  transition:${p=>p.isAnimationEnable?'box-shadow 0.3s':'none'};
   box-shadow: ${p => p.isLayoutRow?`1px 0px 0px ${p.theme.colors.adb_border},-1px 0px 0px ${p.theme.colors.adb_border}`:'none'}
   
 `
 
 const Container = styled.div<{
-  isLayoutRow:boolean
+  isLayoutRow:boolean;
+  isAnimationEnable:boolean;
 }>`
     height: 100%;
-    background:${p => p.theme.colors.main_top_bg};
+    //background:${p => p.theme.colors.main_top_bg};
     display: flex;
     //padding:24px 0px;
     position: relative;
@@ -104,6 +110,7 @@ const Container = styled.div<{
     min-width:250px;
     // max-width:680px;
     z-index:1;
+    transition:${p=>p.isAnimationEnable?'box-shadow 0.3s':'none'};
     box-shadow: 1px 0px 0px ${p => p.theme.colors.adb_border},-1px 0px 0px ${p => p.theme.colors.adb_border};
 `
 

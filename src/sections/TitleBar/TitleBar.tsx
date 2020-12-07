@@ -27,7 +27,6 @@ const TitleBar: React.FC = memo(({ children }) => {
   const { isGlobalAnimEnable, setGlobalAnimEnable} = useContext(
     GlobalAnimationStateContext,
   );
-
   
 
   const { t ,i18n} = useTranslation()
@@ -74,8 +73,9 @@ const TitleBar: React.FC = memo(({ children }) => {
     <Container 
       ref = {sizeRef}
       >
-      <ContainerBackground></ContainerBackground>
-      <TitleBox>
+      <ContainerBackground isAnimationEnable={isGlobalAnimEnable}></ContainerBackground>
+      <ContainerTransitionBackground isAnimationEnable={isGlobalAnimEnable}></ContainerTransitionBackground>
+      <TitleBox isAnimationEnable={isGlobalAnimEnable}>
         {children}
       </TitleBox>
       {isShowBtn?
@@ -203,13 +203,16 @@ const ButtonLayout = styled.div`
   float: right;
 `
 
-const ContainerBackground = styled.div`
+const ContainerBackground = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   width: 100%;
   height: 100%;
   position:absolute;
   top:0;
   left:0;
-  background: linear-gradient(180deg, ${p => p.theme.colors.title_background_top} 0%, ${p => p.theme.colors.title_background_bottom} 100%);
+  //background: linear-gradient(180deg, ${p => p.theme.colors.title_background_top} 0%, ${p => p.theme.colors.title_background_bottom} 100%);
+  background: linear-gradient(180deg, #b4b4b4, #C6C7C8);
   -webkit-app-region: drag;
   // z-index:10;
 `
@@ -219,14 +222,16 @@ const Container = styled.div`
     width: 100%;
     height: 52px;
     position:relative;
-    // background: linear-gradient(180deg, ${p => p.theme.colors.title_background_top} 0%, ${p => p.theme.colors.title_background_bottom} 100%);
+    // background: linear-gradient(180deg, #9e9e9e} 0%, #C6C7C8 100%);
     box-shadow: 0px 2px 14px ${p => p.theme.colors.title_box_shadow};
     // -webkit-app-region: drag;
     z-index:10;
 `;
 //${props => props.theme.fonts.numberInput};
 
-const TitleBox = styled.div`
+const TitleBox = styled.div<{
+  isAnimationEnable:boolean;
+}>`
     text-align: center;
     line-height:38px;
     font-size:13px;
@@ -238,4 +243,20 @@ const TitleBox = styled.div`
     letter-spacing: 10px;
     user-select: none;
     color:${p => p.theme.colors.primary};
+
+    transition: ${p => p.isAnimationEnable?'color 0.2s':''};
 `;
+
+const ContainerTransitionBackground = styled.div<{
+  isAnimationEnable:boolean;
+}>`
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  top:0;
+  left:0;
+  transition:${p=>p.isAnimationEnable?'background 0.3s':'none'};
+  background:  ${p => p.theme.colors.title_background_transition};
+  -webkit-app-region: drag;
+  
+`

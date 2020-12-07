@@ -282,7 +282,7 @@ const UlElement = styled.div<{
   &:hover{
     opacity:0.9;
     > div > svg {
-      left:${p=>p.isOpen?'0px':'8px'};
+      left:${p=>p.isOpen?'0px':'4px'};
     }
     :before{
       background:${p=>p.theme.colors.primary_middle_opacity};

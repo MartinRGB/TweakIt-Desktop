@@ -11,10 +11,12 @@ import animationConfig from '@Config/animation.json';
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const DescText: React.FC<IDescText> = memo(({ style,children}) => {
   const [colorMode, setColorMode] = useColorMode()
 
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const [bind, { delta, down }] = useGesture()
   const {size} = useSpring({
     size: down ? 1.1: 1,
@@ -23,11 +25,12 @@ const DescText: React.FC<IDescText> = memo(({ style,children}) => {
  })
 
   return (
-    <Text style={style} ><Trans>{children}</Trans></Text>);
+    <Text isAnimationEnable={isGlobalAnimEnable} style={style} ><Trans>{children}</Trans></Text>);
 })
 
 const Text  = styled.span<{
   isEditable:boolean
+  isAnimationEnable:boolean;
 }>`
   font-family: ${props => props.theme.fonts.normalText};
   font-style: normal;
@@ -35,6 +38,7 @@ const Text  = styled.span<{
   font-size: 10px;
   align-items: center;
   color:${props => props.theme.colors.text};
+  transition:${p=>p.isAnimationEnable?'color 0.3s':'none'};
   opacity:0.5;
   text-align: left;
   display: inline-block;

@@ -16,8 +16,8 @@ export const injectPathEnvironments = () =>{
   window.appPath = appPath;
   process.env.PATH =  '/usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:' + 
   localNodePath + '.bin' + ':' + 
-  ADBPath.substring(0, localADBPath.length - 1) + ':' + 
-  ScrcpyBinPath.substring(0, localScrcpyBinPath.length - 1) + ':' +
+  localADBPath.substring(0, localADBPath.length - 1) + ':' + 
+  localScrcpyBinPath.substring(0, localScrcpyBinPath.length - 1) + ':' +
   '/usr/bin:' +
   '/bin:' +
   '/usr/local/sbin:' +

@@ -111,19 +111,20 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
   })
 
   return (        
-  <CustomSelectWrapper style={{...style,width:`${menuWidth}`,minWidth:`${menuWidth}`}}>
+  <CustomSelectWrapper isAnimationEnable={isGlobalAnimEnable} style={{...style,width:`${menuWidth}`,minWidth:`${menuWidth}`}}>
     <CustomSelect
       onClick={(e:any)=>{onClickSelect(e)}}
       isExpanded={selectExpand}
       isAnimationEnable={isGlobalAnimEnable}
     >
-      <CustomSelectedSpan>{selectedText}</CustomSelectedSpan>
+      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{selectedText}</CustomSelectedSpan>
       <Icons.SelectArrow></Icons.SelectArrow>
     </CustomSelect>
 
     {
       selectExpand?
       <DropDownMenuConatiner
+      isAnimationEnable={isGlobalAnimEnable}
       style={{
         ...menuStyle,
         height: `${Math.max(0,(selectIndex === -1 || !isRichAnimation)?
@@ -137,6 +138,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
       }}
       >
         <DropDownBackground
+          isAnimationEnable={isGlobalAnimEnable}
           style={{
             opacity:`${opacityTransitionIn?'1':'0'}`,
             transition:`${isGlobalAnimEnable?'all 0.1s':'none'}`
@@ -152,6 +154,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
 
             return (
               <DropDownListContainer
+                isAnimationEnable={isGlobalAnimEnable}
                 style={{
                   display:`${selectExpand?'block':'none'}`,
                   height:`${listHeight}px`
@@ -162,6 +165,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
                   onClickList(index,data.value)}}
                 >
                   <DropDownListBackground
+                    isAnimationEnable={isGlobalAnimEnable}
                     style={{
                     }}
                     >
@@ -176,6 +180,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
                     </Icons.CheckMark>
 
                     <DropDownListSpan
+                      isAnimationEnable={isGlobalAnimEnable}
                       style={{
                         opacity: `${(selectIndex === index)?'1':''}`,
                         transform: `${(selectIndex === index)?'scale3d(1.2,1.2,1)':''}`,
@@ -201,12 +206,16 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
 })
 
 
-const DropDownMenuConatiner = styled.div`
+const DropDownMenuConatiner = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   position:absolute;
   top: 20px;
   left: -1px;
   height:0px;
-  border: 1px solid ${p => p.theme.colors.menu_border};
+  border: 1px solid ;
+  border-color:${p => p.theme.colors.menu_border};
+  transition:${p=>p.isAnimationEnable?'border-color 0.3s':'none'};
   border-radius:4px;
   overflow:hidden;
   //width:240px;
@@ -214,16 +223,20 @@ const DropDownMenuConatiner = styled.div`
   
 `
 
-const DropDownBackground = styled.div`
+const DropDownBackground = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   width:100%;
   height:100%;
   background:${p => p.theme.colors.normal_button_bg};
+  transition:${p=>p.isAnimationEnable?'background 0.3s':'none'};
   backdrop-filter:blur(3px);
   position: absolute;
   top: 0px;
 `
 
 const DropDownListContainer = styled.li<{
+  isAnimationEnable:boolean;
 }>`
   width:300px;
   margin-left: 0px;
@@ -233,6 +246,10 @@ const DropDownListContainer = styled.li<{
   cursor:pointer;
   //transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
   
+  > div{
+    transition:${p=>p.isAnimationEnable?'background 0.15s':'none'};
+  }
+
   &:hover > div{
     background:${p => p.theme.colors.primary_middle_opacity};
   }
@@ -258,14 +275,16 @@ const DropDownListContainer = styled.li<{
 
   > div > svg {
     fill: ${p => p.theme.colors.text};
-    
+    transition:${p=>p.isAnimationEnable?'fill 0.3s':'none'};
   }
 `
 
 const DropDownTransitionDiv = styled.div`
 `
 
-const DropDownListBackground = styled.div`
+const DropDownListBackground = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   width:100%;
   height:100%;
 
@@ -284,8 +303,11 @@ const DropDownListBackground = styled.div`
   }
 `
 
-const DropDownListSpan = styled.span`
+const DropDownListSpan = styled.span<{
+  isAnimationEnable:boolean;
+}>`
   color:${p => p.theme.colors.text};
+  transition:${p=>p.isAnimationEnable?'color 0.3s':'none'};
   font-family: ${p => p.theme.fonts.headText};
   font-size: 10px;
   font-weight: 500;
@@ -299,12 +321,16 @@ const DropDownListSpan = styled.span`
   opacity:0.6;
 `
 
-const CustomSelectWrapper = styled.div`
+const CustomSelectWrapper = styled.div<{
+  isAnimationEnable:boolean;
+}>`
     height: 20px;
     //width: 240px;
     // min-width:240px;
     position: relative;
-    border: 1px solid ${p => p.theme.colors.menu_border};
+    border: 1px solid;
+    border-color:${p => p.theme.colors.menu_border};
+    transition:${p=>p.isAnimationEnable?'border-color 0.3s,background 0.3s':'none'};
     border-radius: 4px;
     margin-right: 32px;
     background: ${p => p.theme.colors.normal_button_bg};
@@ -349,9 +375,12 @@ const CustomSelect = styled.button<{
     }
 `
 
-const CustomSelectedSpan = styled.span`
+const CustomSelectedSpan = styled.span<{
+  isAnimationEnable:boolean;
+}>`
   color:${p => p.theme.colors.text};
   font-family: ${p => p.theme.fonts.headText};
+  transition:${p=>p.isAnimationEnable?'color 0.3s':'none'};
   font-size: 10px;
   transform:scale3d(1.2,1.2,1);
   transform-origin:left center;

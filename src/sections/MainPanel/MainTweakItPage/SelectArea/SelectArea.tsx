@@ -19,7 +19,7 @@ import DropDownMenu from '@Components/DropDownMenu'
 import {ADBConnectStateContext} from '@Context/ADBConnectContext'
 import {execCMD,execCMDPromise,simpleRunCMD} from '@Helpers/ADBCommand/ADBCommand'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
-
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
@@ -28,6 +28,7 @@ const SelectArea: React.FC = memo(({children}) => {
   const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim} = useContext(
     CodeBlockStateContext,
   );
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   const adbGetStr = adbConfig.adb_get_device;
   const adbBuildStr = adbConfig.adb_help;
@@ -74,7 +75,7 @@ const SelectArea: React.FC = memo(({children}) => {
 
   
   return (
-    <Container>
+    <Container isAnimationEnable={isGlobalAnimEnable}>
 
       <TopLeftContainer>
         <TitleSpan><Trans>Select Animation In Tweakit-Android</Trans></TitleSpan>
@@ -134,13 +135,16 @@ const SelectArea: React.FC = memo(({children}) => {
 
 export default SelectArea
 
-const Container = styled.div`
+const Container = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   width:100%;
   height: 56px;
   min-height:56px;
   display: flex;
   flex-direction: column;
   z-index:2;
+  transition:${p=>p.isAnimationEnable?'background 0.3s,box-shadow 0.3s':'none'};
   background:${p => p.theme.colors.main_top_bg};
   box-shadow: 0px 1px 0px ${p => p.theme.colors.adb_border};
 `

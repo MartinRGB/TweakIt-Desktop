@@ -5,15 +5,17 @@ import { Trans } from 'react-i18next'
 import '@Context/i18nContext'
 import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import initState from '@Config/init_state.json'
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 const CanvasTitle: React.FC = ({}) => {
   
   const { currentAnimName} = useContext(
     AnimatorTypeContext
   ); 
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   return (
-      <AnimationTitle>
+      <AnimationTitle isAnimationEnable={isGlobalAnimEnable}>
           <Trans>{(currentAnimName)?currentAnimName:'select_an_animator'}</Trans>
       </AnimationTitle>
 
@@ -23,7 +25,9 @@ const CanvasTitle: React.FC = ({}) => {
 export default CanvasTitle
 
 
-const AnimationTitle = styled.p`
+const AnimationTitle = styled.p<{
+  isAnimationEnable:boolean;
+}>`
   text-align:center;
   opacity:0.5;
   font-family: ${props => props.theme.fonts.headText};
@@ -35,4 +39,5 @@ const AnimationTitle = styled.p`
   user-select: none;
   color:${p => p.theme.colors.text};
   z-index:1;
+  transition: ${p => p.isAnimationEnable?'color 0.2s':''};
 `

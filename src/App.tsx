@@ -26,7 +26,6 @@ import {injectPathEnvironments} from '@Helpers/GlobalEnvironments/PathEnvironmen
 import animatorList from '@Config/animator_list.json';
 
 
-
 // twmacro
 const Button = styled.button`
   ${tw`mt-4 p-2 text-white bg-blue-600`}
@@ -46,7 +45,6 @@ const App = () => {
   useEffect(() => {
     injectPathEnvironments()
   }, [])
-
   return (
     <div>
       <GlobalStyle />
@@ -55,9 +53,9 @@ const App = () => {
         <CodeBlockProvider>
         <ADBConnectProvider>
         <ADBExpandStateProvider>
-          <TitleBar>TWEAKIT</TitleBar>
-          <ADBPanel></ADBPanel>
-          <MainPanel></MainPanel>
+            <TitleBar>TWEAKIT</TitleBar>
+            <ADBPanel></ADBPanel>
+            <MainPanel></MainPanel>
         </ADBExpandStateProvider>
         </ADBConnectProvider>
         </CodeBlockProvider>
@@ -67,6 +65,6 @@ const App = () => {
   )
 }
 
-const BodyDiv = styled.div``
+
 
 render(<App />, mainElement)

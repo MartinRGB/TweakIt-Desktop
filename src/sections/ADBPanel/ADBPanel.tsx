@@ -56,13 +56,14 @@ const ADBPanel: React.FC = memo(({ children }) => {
     >
       <Container
         active={adbIsExpand}
+        isAnimationEnable={isGlobalAnimEnable}
       >
         <ADBTopArea></ADBTopArea>
-        <ReactPlaceholder type='text' ready={false} rows={30} 
+        {/* <ReactPlaceholder type='text' ready={false} rows={30} 
           css={PlaceHolderCSS}
           color='#929292'
           >
-        </ReactPlaceholder>
+        </ReactPlaceholder> */}
       </Container>
     </animated.div>
   );
@@ -91,6 +92,7 @@ const AnimatedContainerCSS = css`
 const Container = styled.div<
 {
   active:boolean;
+  isAnimationEnable:boolean;
 }
 >`
     // width: 320px;
@@ -103,4 +105,5 @@ const Container = styled.div<
     height: 100%;
     background: ${p => p.theme.colors.adb_background};
     box-shadow: -1px 0px 0px ${p => p.theme.colors.adb_border};
+    transition:${p=>p.isAnimationEnable?'box-shadow 0.3s,background 0.3s':'none'};
 `;

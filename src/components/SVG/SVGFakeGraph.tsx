@@ -51,7 +51,7 @@ const SVGFakeGraph: React.FC<ISVG> = memo(({
       currStepData = currentSolver.getStepArray();
       currValueData = currentSolver.getValueArray();
 
-      const springValueData = new Solver.Android.Spring(800,0.5,0).getValueArray();
+      const springValueData = new Solver.Android.Spring(400,0.64,0).getValueArray();
       var t = 0;
       var animInterval = setInterval(()=>{
         t += 1;
@@ -74,7 +74,6 @@ const SVGFakeGraph: React.FC<ISVG> = memo(({
 
     // Init Transtion: Wait for data
     if(currentSolverData.length === 0 && !isInit && !isAnimate){
-      console.log('init')
       previousSolver = new Solver.Default.HorizontalLine();
       currentSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
       transitionWithPrevAndCurrData(previousSolver,currentSolver)
