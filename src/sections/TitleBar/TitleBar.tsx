@@ -49,7 +49,7 @@ const TitleBar: React.FC = memo(({ children }) => {
   function updateSize() {
     let height = sizeRef.current.offsetHeight;
     let width  = sizeRef.current.offsetWidth;
-    if(width >= 500){
+    if(width >= 550){
       setIsShowBtn(true)
     }
     else{

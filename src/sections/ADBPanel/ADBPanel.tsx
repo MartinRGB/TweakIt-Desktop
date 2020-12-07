@@ -29,6 +29,8 @@ const ADBPanel: React.FC = memo(({ children }) => {
   const { adbIsExpand, setADBExpandState} = useContext(
     ADBExpandStateContext,
   );
+
+  const [animationExpand,setAnimationExpand] = useState<boolean>(adbIsExpand)
   
   // React Spring State
   // const [isExpand, set] = useState(false)
@@ -36,36 +38,66 @@ const ADBPanel: React.FC = memo(({ children }) => {
   const {rightProps} = useSpring({
     rightProps: adbIsExpand ? 1 : 0,
     config: animationConfig.panel_slide,
+    onStart:()=>{
+      if(adbIsExpand){
+        setAnimationExpand(true)
+      }
+    },
+    onRest:()=>{
+      if(!adbIsExpand){
+        setAnimationExpand(false)
+      }
+    } 
   })
 
-  return (
+  const renderFunction = () =>{
+    return(animationExpand?
     <animated.div
-      // static base style
-      // css={{
-      //   position: "fixed",
-      //   width: "33vw",
-      //   height: "100vw",
-      //   backgroundColor: "magenta"
-      // }}
       css={AnimatedContainerCSS}
-      // animated dynamic style
       style={{
-        // transform: interpolate([x], (x) => `translate3d(${x}px,0,0)`),
         right: isGlobalAnimEnable?interpolate([rightProps], (rightProps => `${-320 + rightProps*320}px`)):`${adbIsExpand?'0px':'-320px'}`
       }}
     >
       <Container
-        active={adbIsExpand}
+        active={animationExpand}
         isAnimationEnable={isGlobalAnimEnable}
       >
         <ADBTopArea></ADBTopArea>
-        {/* <ReactPlaceholder type='text' ready={false} rows={30} 
-          css={PlaceHolderCSS}
-          color='#929292'
-          >
-        </ReactPlaceholder> */}
       </Container>
-    </animated.div>
+    </animated.div>:''
+    )
+    
+  }
+
+  return (
+    renderFunction()
+    // <animated.div
+    //   // static base style
+    //   // css={{
+    //   //   position: "fixed",
+    //   //   width: "33vw",
+    //   //   height: "100vw",
+    //   //   backgroundColor: "magenta"
+    //   // }}
+    //   css={AnimatedContainerCSS}
+    //   // animated dynamic style
+    //   style={{
+    //     // transform: interpolate([x], (x) => `translate3d(${x}px,0,0)`),
+    //     right: isGlobalAnimEnable?interpolate([rightProps], (rightProps => `${-320 + rightProps*320}px`)):`${adbIsExpand?'0px':'-320px'}`
+    //   }}
+    // >
+    //   <Container
+    //     active={adbIsExpand}
+    //     isAnimationEnable={isGlobalAnimEnable}
+    //   >
+    //     <ADBTopArea></ADBTopArea>
+    //     {/* <ReactPlaceholder type='text' ready={false} rows={30} 
+    //       css={PlaceHolderCSS}
+    //       color='#929292'
+    //       >
+    //     </ReactPlaceholder> */}
+    //   </Container>
+    // </animated.div>
   );
 })
 
@@ -100,7 +132,7 @@ const Container = styled.div<
     // position:absolute;
     // transition:all 0.3s;
     // transition-timing-function: cubic-bezier(0,0,0.2,1);
-    //right:${p => (p.active? '0px':'-320px')};
+    // right:${p => (p.active? '0px':'-320px')};
     width: 100%;
     height: 100%;
     background: ${p => p.theme.colors.adb_background};

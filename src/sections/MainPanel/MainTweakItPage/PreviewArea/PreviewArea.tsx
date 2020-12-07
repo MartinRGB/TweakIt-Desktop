@@ -124,6 +124,7 @@ const Container = styled.div`
     flex-direction: column;
     //flex:1;
     width:250px;
+    min-height:400px;
 `
 
 const CustomSpan = styled.span`

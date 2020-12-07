@@ -18,6 +18,7 @@ import CodeScrollContainer from '@Components/CodeScrollContainer'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import initState from "@Config/init_state.json";
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+import { Resizable } from 're-resizable'
 
 const CodeArea: React.FC = memo(({children}) => {
   //const [colorMode] = useColorMode();
@@ -61,14 +62,50 @@ const CodeArea: React.FC = memo(({children}) => {
     e.preventDefault();
   }
 
+  const [isOnDrag,setIsOnDrag] = useState<boolean>(false);
+
+  const onResizeStart = () =>{
+    setIsOnDrag(true)
+  }
+
+  const onResizeMove = (e:any,d:any,r:any,v:any) =>{
+  }
+
+  const onResizeStop = () =>{
+    
+    
+  }
+
   return (
+
+    <Resizable
+      enable={ {top:isExpanded, right:false, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
+      maxHeight={isExpanded?(isOnDrag?'100vh':'260px'):'40px'}
+      minHeight={isExpanded?'260px':'40px'}
+      maxWidth={`100%`}
+      minWidth={`100%`}
+      defaultSize={{
+        height:260,
+      }}
+      style={{
+        zIndex:`2`,
+        transition:`${isGlobalAnimEnable?`max-height 0.3s cubic-bezier(0.13, 0.79, 0.25, 1),min-height 0.3s cubic-bezier(0.13, 0.79, 0.25, 1)`:''}`
+      }}
+      onResizeStart={onResizeStart}
+      onResizeStop={onResizeStop}
+      onResize={(event,direction,refToElement,delta)=>{onResizeMove(event,direction,refToElement,delta)}}
+      
+    >
     <Container
       isExpanded ={isExpanded}
+      isOnDrag = {isOnDrag}
       style={{
-        transition:`${isGlobalAnimEnable?'height 0.3s cubic-bezier(0.13, 0.79, 0.25, 1) 0s,background 0.3s ,box-shadow 0.3s ':'none'}`,
+        // 0s,
+        transition:`${isGlobalAnimEnable?'height 0.3s cubic-bezier(0.13, 0.79, 0.25, 1),background 0.3s ,box-shadow 0.3s ':'none'}`,
       }}
       >
-      {isExpanded?<CopyToast ref={toastRef}></CopyToast>:''}
+      {isExpanded?
+      <CopyToast ref={toastRef}></CopyToast>:''}
       <TopNav>
         <TopLeftContainer>
             {
@@ -158,6 +195,9 @@ const CodeArea: React.FC = memo(({children}) => {
               `
             }
             onClick={()=>{
+              if(isExpanded){
+                setIsOnDrag(false)
+              }
               setCodeIsExpand(!isExpanded)
               setActiveName('')
               if(!isExpanded){
@@ -216,11 +256,11 @@ const CodeArea: React.FC = memo(({children}) => {
         }
       </CodeScrollContainer>
     </Container>
+    </Resizable>
   )
 })
 
 export default CodeArea
-
 
 const TopRightContainer = styled.div`
   display: flex;
@@ -251,18 +291,20 @@ const TopNav = styled.div`
 
 const Container = styled.div<{
   isExpanded:boolean;
+  isOnDrag:boolean;
 }>`
     //height: 100%;
     // min-height:50px;
     //background:blue;
-
-    height:${p => p.isExpanded?'340px':'40px'}; //280px
+    height:100%;
+    //min-height:340px;
+    //height:${p => p.isExpanded?'260px':'40px'}; //280px
     display: flex;
     flex-direction: column;
     box-shadow:0px -1px 0px ${p => p.theme.colors.adb_border};
     background:${p => p.theme.colors.main_bottom_bg};
     z-index:1;
-    position:relative;
+    //position:relative;
     //flex:4;
 `
 const CustomSpan = styled.span`

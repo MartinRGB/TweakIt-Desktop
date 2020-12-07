@@ -6,7 +6,7 @@
   
   "codeBlockIsShow":true,
   "isBottomPannelExpanded":true,
-  "isADBPannelExpand":true,
+  "isADBPannelExpand":false,
 
   "initAnimPlatform":"",
   "initAnimName":"",

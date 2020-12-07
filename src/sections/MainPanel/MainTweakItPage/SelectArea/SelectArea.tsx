@@ -143,7 +143,7 @@ const Container = styled.div<{
   min-height:56px;
   display: flex;
   flex-direction: column;
-  z-index:2;
+  z-index:3;
   transition:${p=>p.isAnimationEnable?'background 0.3s,box-shadow 0.3s':'none'};
   background:${p => p.theme.colors.main_top_bg};
   box-shadow: 0px 1px 0px ${p => p.theme.colors.adb_border};

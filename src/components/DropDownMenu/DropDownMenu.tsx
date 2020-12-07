@@ -220,6 +220,7 @@ const DropDownMenuConatiner = styled.div<{
   overflow:hidden;
   //width:240px;
   //transition:all 0.3s;
+  z-index:3;
   
 `
 
