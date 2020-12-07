@@ -3,7 +3,11 @@
     "adb_help":"adb --help",
     "adb_test":"adb --test",
     "adb_a":"adb --a",
-    "adb_b":"adb --b"
+    "adb_b":"adb --b",
+    "adb_1":"adb -1",
+    "adb_2":"adb -2",
+    "adb_3":"adb -3"
+
 }
   
   

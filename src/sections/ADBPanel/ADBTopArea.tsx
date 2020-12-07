@@ -7,8 +7,9 @@ import { jsx,useColorMode} from 'theme-ui'
 import '@Context/i18nContext'
 import DropDownMenu from '@Components/DropDownMenu'
 import Icons from '@Assets/icons'
-import adbConfig from '@Config/adb_cmd_list';
+import adbConfig from '@Config/adb_cmd_list.json';
 import ADBButtonSegment from '@Components/ADBButtonSegment'
+import ADBExpandSelect from '@Components/ADBExpandSelect'
 
 const ADBTopArea: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
@@ -19,8 +20,13 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   const segmentCMDStr = [adbConfig.adb_b,adbConfig.adb_test];
 
 
+  const castIconStr:any = "Cast";
+  const screenshotIconStr = "Screenshot";
+  const recordIconStr = "Record";
+  const castCMDStr:any = adbConfig.adb_1;
+  const screenshotCMDStr = adbConfig.adb_2;
+  const recordCMDStr= adbConfig.adb_3;
 
-  const [connectionMode,setConnectionMode] = useState<string>(defaultActivie)
 
   const optionsData = [
     { value: "Spring", label: "Spring" },
@@ -49,7 +55,9 @@ const ADBTopArea: React.FC = memo(({ children }) => {
     { value: "Winter", label: "Winter" },
   ];
 
-
+  
+  const [connectionMode,setConnectionMode] = useState<string>(defaultActivie)
+  
   const onIndexClicked = (i:any,val:any) =>{
     console.log(i)
     console.log(val)
@@ -81,6 +89,34 @@ const ADBTopArea: React.FC = memo(({ children }) => {
         >
 
         </ADBButtonSegment>
+
+        <ScreenContainer>
+          <ADBExpandSelect
+            style={{
+              marginRight:`6px`,
+            }}
+            iconStr={castIconStr}
+            cmdStr={castCMDStr}
+          >
+
+          </ADBExpandSelect>
+          <ADBExpandSelect
+            style={{
+              marginRight:`6px`,
+            }}
+            iconStr={screenshotIconStr}
+            cmdStr={screenshotCMDStr}
+          >
+
+          </ADBExpandSelect>
+          <ADBExpandSelect
+            iconStr={recordIconStr}
+            cmdStr={recordCMDStr}
+          >
+
+          </ADBExpandSelect>
+        </ScreenContainer>
+
       </Container>
   );
 })
@@ -94,4 +130,13 @@ const Container = styled.div`
   background:${p=>p.theme.colors.adb_top_background};
   border-bottom:1px solid ${p => p.theme.colors.adb_border};
   position: relative;
+`
+
+const ScreenContainer = styled.div`
+bottom: 18px;
+position: absolute;
+right:0px;
+display:flex;
+flex-direction:row;
+right:38px;
 `

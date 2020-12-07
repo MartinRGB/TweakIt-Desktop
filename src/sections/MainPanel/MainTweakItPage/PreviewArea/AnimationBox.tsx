@@ -97,7 +97,6 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
     }
   }));
 
-
   return (
       <BoxContainer
         style={{

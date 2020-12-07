@@ -44,9 +44,9 @@ const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , 
     {...bind()}
     style={
       { 
-      ...parentStyle,
       transform: `${(isScaleUp || cmdTriggerAnim)? `scale3d(1.1,1.1,1)`:`scale3d(1,1,1)`}`,
       transition: `${isGlobalAnimEnable?'transform 0.35s cubic-bezier(0.3, 2.5, 0.5, 1) 0s':''}`,
+      ...parentStyle,
       }
     }>
       <Button
@@ -57,7 +57,7 @@ const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , 
         active={(isScaleUp || cmdTriggerAnim)}
         isAnimationEnable={isGlobalAnimEnable}
         onClick={()=>{
-          dealADBCommand();
+          cmd?dealADBCommand():'';
           onClick();
         }}
         onMouseDown={()=>{
@@ -99,7 +99,8 @@ const Button = styled.button<{
   padding-left: 4px;
   padding-right: 4px;
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: row;
 
   background: ${p => (p.active? p.theme.colors.normal_button_active:p.theme.colors.normal_button_bg)};
   transition:${p => p.isAnimationEnable?'all 0.2s':''};

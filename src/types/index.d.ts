@@ -14,6 +14,23 @@ export interface IButton {
   buttonSib:any;
 }
 
+export interface IADBExpandSelect {
+  children?: React.ReactNode;
+  onClick?: any;
+  onArrowClick? any;
+  onSegementClickIndex?:any;
+  onMouseDown?: any;
+  onMouseUp?:any;
+  active?: boolean;
+  style?:any;
+  parentStyle?:any;
+  conatinerCSS?:any;
+  cmdTriggerAnim?:boolean;
+  cmdStr?:any;
+  iconStr?:any;
+  onADBExpandSelect?:any;
+}
+
 export interface IADBSegment {
   children?: React.ReactNode;
   onClick?: any;
@@ -23,7 +40,7 @@ export interface IADBSegment {
   active?: boolean;
   style?:any;
   parentStyle?:any;
-  buttonCSS?:any;
+  conatinerCSS?:any;
   cmdTriggerAnim?:boolean;
   cmdArray?:any;
   iconArray?:any;

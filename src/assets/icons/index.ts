@@ -26,6 +26,7 @@ import USB from '@Assets/icons/svg/USB.Icon';
 import Record from '@Assets/icons/svg/Record.Icon';
 import Screenshot from '@Assets/icons/svg/Screenshot.Icon';
 import Cast from '@Assets/icons/svg/Cast.Icon';
+import DownSelect from '@Assets/icons/svg/DownSelect.Icon';
 
 export default {
   DarkMode,
@@ -53,5 +54,6 @@ export default {
   USB,
   Record,
   Screenshot,
-  Cast
+  Cast,
+  DownSelect
 };

@@ -95,6 +95,7 @@ const SelectArea: React.FC = memo(({children}) => {
                 width:40px;
               }
               > button > span{
+                width: 100%;
                 line-height:16px;
               }
             `
@@ -116,6 +117,7 @@ const SelectArea: React.FC = memo(({children}) => {
                 width:40px;
               }
               > button > span{
+                width: 100%;
                 line-height:16px;
               }
             `

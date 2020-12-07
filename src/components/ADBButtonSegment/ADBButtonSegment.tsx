@@ -17,7 +17,7 @@ import Icons from '@Assets/icons'
 import ADBButtonToggle from '@Components/ADBButtonToggle'
 
 
-const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick,onMouseDown,onMouseUp,buttonCSS,cmdTriggerAnim,cmdArray,iconArray,active,onSegementClickIndex}) => {
+const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick,onMouseDown,onMouseUp,conatinerCSS,cmdTriggerAnim,cmdArray,iconArray,active,onSegementClickIndex}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,setADBInputCMD,canTriggerControlAnim,setTriggerControlAnim} = useContext(CodeBlockStateContext,);
@@ -42,7 +42,7 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
   var SegmentIcon;
   return (
   <Container
-    css={buttonCSS}
+    css={conatinerCSS}
     style={
       {...style,}
     }>
@@ -83,45 +83,6 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
 
 })
 
-{/* <ADBButtonToggle
-cmdTriggerAnim={
-  ((adbInputCMD === adbConfig.adb_test) && canTriggerControlAnim && codeBlockIsShow)
-}
-cmd={adbConfig.adb_test}
-buttonCSS = {
-  css`
-    > button{
-      height:20px;
-      border-radius:0px;
-    }
-  `
-}
-onClick={postMessageToDevice}
-// onMouseDown={()=>{setScale();animationBoxRef.current.startAnimation(true)}} 
-// onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
->
-  <Icons.USB></Icons.USB>
-</ADBButtonToggle>
-<ADBButtonToggle
-cmdTriggerAnim={
-  ((adbInputCMD === adbConfig.adb_test) && canTriggerControlAnim && codeBlockIsShow)
-}
-cmd={adbConfig.adb_test}
-buttonCSS = {
-  css`
-    margin-right:12px;
-    > button{
-      height:20px;
-      border-radius:0px;
-    }
-  `
-}
-onClick={postMessageToDevice}
-// onMouseDown={()=>{setScale();animationBoxRef.current.startAnimation(true)}} 
-// onMouseUp={()=>{animationBoxRef.current.startAnimation(false)}} 
->
-  <Icons.Wifi></Icons.Wifi>
-</ADBButtonToggle> */}
 
 const Container = styled.div`
 display: inline-flex;

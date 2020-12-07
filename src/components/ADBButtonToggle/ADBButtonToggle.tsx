@@ -52,20 +52,30 @@ const ADBButtonToggle: React.FC<IButton> = memo(({ parentStyle,style,children, o
         style={{
           ...style,
         }}
-        active={(active || cmdTriggerAnim)}
+        isActive={(active || cmdTriggerAnim)}
+        isMouseActive={isScaleUp}
         isAnimationEnable={isGlobalAnimEnable}
-        onClick={()=>{
+        onClick={(e)=>{
+          e.preventDefault;
           dealADBCommand();
           onClick();
         }}
-        // onMouseDown={()=>{
-        //   SetIsScaleUp(true)
-        //   onMouseDown
-        // }}
-        // onMouseUp={()=>{
-        //   SetIsScaleUp(false)
-        //   onMouseUp
-        // }}
+        onMouseDown={()=>{
+          SetIsScaleUp(true)
+          onMouseDown
+        }}
+        onMouseUp={()=>{
+          SetIsScaleUp(false)
+          onMouseUp
+        }}
+        onMouseOut={()=>{
+          SetIsScaleUp(false)
+          onMouseUp
+        }}
+        onMouseLeave={()=>{
+          SetIsScaleUp(false)
+          onMouseUp
+        }}
         >
         <Trans>{children}</Trans>
       </Button>
@@ -75,8 +85,9 @@ const ADBButtonToggle: React.FC<IButton> = memo(({ parentStyle,style,children, o
 
 // twmacro
 const Button = styled.button<{
-  active:boolean;
+  isActive:boolean;
   isAnimationEnable:boolean;
+  isMouseActive:boolean;
 }>`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
   border-radius:4px;
@@ -91,19 +102,18 @@ const Button = styled.button<{
   position: relative;
   display: block;
   
-  
-  background: ${p => (p.active? p.theme.colors.toggle_button_bg:p.theme.colors.normal_button_bg)};
+  background: ${p => p.isActive? p.theme.colors.toggle_button_bg:p.theme.colors.normal_button_bg};
   transition:${p => p.isAnimationEnable?'all 0.2s':''};
   > svg{
     text-align: center;
     vertical-align: middle;
     position: relative;
-    fill:${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+    fill:${p => (p.isActive? p.theme.colors.background:p.theme.colors.text)};
     transition:${p => p.isAnimationEnable?'all 0.2s':''};
   }
 
   > span{
-    color:${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+    color:${p => (p.isActive? p.theme.colors.background:p.theme.colors.text)};
     transition:${p => p.isAnimationEnable?'all 0.2s':''};
   }
 
@@ -112,13 +122,12 @@ const Button = styled.button<{
     line-height: 16px;
     word-break: keep-all;
     position: relative;
-    color:${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+    color:${p => (p.isActive? p.theme.colors.background:p.theme.colors.text)};
     transition:${p => p.isAnimationEnable?'all 0.2s':''};
   }
 
   &:active {
     border-style: double;
-    background: ${p => p.theme.colors.normal_button_active};
     > div{
       color: ${p => p.theme.colors.background};
     }
@@ -132,11 +141,13 @@ const Button = styled.button<{
 
 
   &:hover {
-    background: ${p => p.active?'':p.theme.colors.toggle_button_hover_light_bg};
+    background: ${p => p.isMouseActive?p.theme.colors.normal_button_active:(p.isActive?p.theme.colors.toggle_button_bg:p.theme.colors.toggle_button_hover_bg)};
     > span{
+      color: ${p =>  p.isMouseActive?p.theme.colors.background:''};
       opacity:0.9;
     }
     > svg{
+      fill: ${p => p.isMouseActive?p.theme.colors.background:''};
       opacity:0.9;
     }
   }
