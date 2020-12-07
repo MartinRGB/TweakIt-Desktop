@@ -41,6 +41,7 @@ const MainButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children ,
         onClick={onClick}
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}
+        isAnimationEnable={isGlobalAnimEnable}
         >
         <Trans>{children}</Trans>
       </Button>
@@ -55,7 +56,9 @@ const AnimatedContainerCSS = css`
 `;
 
 // twmacro
-const Button = styled.button`
+const Button = styled.button<{
+  isAnimationEnable:boolean;
+}>`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
   border-radius:4px;
   padding: 0;
@@ -65,41 +68,55 @@ const Button = styled.button`
   cursor:pointer;
   border: 0.5px solid rgba(255, 255, 255, 0.06);
 
+  width:100%;
+  border-radius:2px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
 
   background: ${p => p.theme.colors.normal_button_bg};
+  transition:${p => p.isAnimationEnable?'all 0.2s':''};
+  
   > div{
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
     color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
   > span{
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
+    font-size: 11px;
+    line-height: 16px;
+    word-break: keep-all;
+    position: relative;
     color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
   > svg{
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
+    position:relative;
     fill: ${p => p.theme.colors.text};
+  }
+  &:hover {
+    background: ${p => p.theme.colors.toggle_button_hover_bg};
+    > span{
+      opacity:0.9;
+    }
+    > svg{
+      opacity:0.9;
+    }
   }
   &:active {
     border-style: double;
     background: ${p => p.theme.colors.normal_button_active};
-  }
-  &:active  > div{
-    color: ${p => p.theme.colors.background};
-  }
-  &:active  > span{
-    color: ${p => p.theme.colors.background};
-  }
-  &:active > svg{
-    fill: ${p => p.theme.colors.background};
-  }
+    > div{
+      color: ${p => p.theme.colors.background};
+    }
+    > span{
+      color: ${p => p.theme.colors.background};
+    }
+    > svg{
+      fill: ${p => p.theme.colors.background};
+    }
 
 `;
-
-// const CustomSpan = styled.span`
-// text-align: center;
-// font-family: ${props => props.theme.fonts.numberInput};
-// font-style: normal;
-// font-weight: bold;
-// font-size: 11px;
-// line-height: 14px;
-// `
 
 
 export default MainButtonNormal

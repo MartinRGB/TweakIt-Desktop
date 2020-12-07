@@ -91,7 +91,7 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
   const boxHeight = svgHeight*(svgHeight/(svgHeight+viewBoxHFixed))*svgScale*(endPointY - startPointY);
   const boxPaddingW = 40*(endPointX - startPointX);
   const boxPaddingH = 40*(endPointY - startPointY);
-  const circleRadius = 8;
+  const circleRadius = 14;
 
   const [prev1,setPrev1] = useState<any>(currentSolverData[index][0]);
   const [target1,setTarget1] = useState<any>(currentSolverData[index][0]);
@@ -427,7 +427,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
                 className="handle"
                 canShow={!selectTransition}
                 isEditable={isEditable}
-                radius={circleRadius}
+                radius={transitionScale*circleRadius}
+                isAnimationEnable={isGlobalAnimEnable}
                 onMouseDown={()=>{
                   //addDragEvent(document.getElementById('draggable_1'),true)
                 }}
@@ -435,8 +436,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
                   // left:`${boxWidth*currentSolverData[0]*transitionScale}px`,
                   // top:`${boxHeight - boxHeight*currentSolverData[1]*transitionScale}px`,
                   // transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`
-                  width:`${transitionScale*circleRadius}px`,
-                  height:`${transitionScale*circleRadius}px`,
+                  //width:`${transitionScale*circleRadius}px`,
+                  //height:`${transitionScale*circleRadius}px`,
                   left:`${-circleRadius/2*transitionScale}px`,
                   top:`${-circleRadius/2*transitionScale}px`
                 }}
@@ -459,8 +460,9 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
               <DraggableCircle
                 className="handle"
                 canShow={!selectTransition}
-                radius={circleRadius}
+                radius={transitionScale*circleRadius}
                 isEditable={isEditable}
+                isAnimationEnable={isGlobalAnimEnable}
                 onMouseDown={()=>{
                   //addDragEvent(document.getElementById('draggable_1'),true)
                 }}
@@ -468,8 +470,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
                   // left:`${boxWidth*currentSolverData[0]*transitionScale}px`,
                   // top:`${boxHeight - boxHeight*currentSolverData[1]*transitionScale}px`,
                   // transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`
-                  width:`${transitionScale*circleRadius}px`,
-                  height:`${transitionScale*circleRadius}px`,
+                  //width:`${transitionScale*circleRadius}px`,
+                  //height:`${transitionScale*circleRadius}px`,
                   left:`${-circleRadius/2*transitionScale}px`,
                   top:`${-circleRadius/2*transitionScale}px`
                 }}
@@ -491,7 +493,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
               <DraggableCircle
                 canShow={!selectTransition}
                 isEditable={isEditable}
-                radius={circleRadius}
+                radius={transitionScale*circleRadius}
+                isAnimationEnable={isGlobalAnimEnable}
                 onMouseDown={()=>{
                   //addDragEvent(document.getElementById('draggable_1'),true)
                 }}
@@ -499,15 +502,16 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
                   left:`${boxWidth*currentSolverData[index][0]*transitionScale}px`,
                   top:`${boxHeight - boxHeight*currentSolverData[index][1]*transitionScale}px`,
                   transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`,
-                  width:`${transitionScale*circleRadius}px`,
-                  height:`${transitionScale*circleRadius}px`,
+                  //width:`${transitionScale*circleRadius}px`,
+                  //height:`${transitionScale*circleRadius}px`,
                 }}
               ></DraggableCircle>
 
               <DraggableCircle
                 canShow={!selectTransition}
-                radius={circleRadius}
+                radius={transitionScale*circleRadius}
                 isEditable={isEditable}
+                isAnimationEnable={isGlobalAnimEnable}
                 onMouseDown={()=>{
                   //addDragEvent(document.getElementById('draggable_1'),true)
                 }}
@@ -515,8 +519,8 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
                   left:`${boxWidth*(1- transitionScale) + boxWidth*currentSolverData[index][2]*transitionScale}px`,
                   top:`${boxHeight*(1 - currentSolverData[index][3])*transitionScale}px`,
                   transform:`translate3d(${-circleRadius/2}px,${-circleRadius/2}px,0) scale3d(${transitionScale},${transitionScale},1)`,
-                  width:`${transitionScale*circleRadius}px`,
-                  height:`${transitionScale*circleRadius}px`,
+                  //width:`${transitionScale*circleRadius}px`,
+                  //height:`${transitionScale*circleRadius}px`,
                 }}
               ></DraggableCircle>
 
@@ -597,6 +601,7 @@ const DraggableCircle = styled.div<
     canShow:boolean;
     radius:number;
     isEditable:boolean;
+    isAnimationEnable:boolean;
   }
 >`
 left:0px;
@@ -604,16 +609,31 @@ top:0px;
 width:${p => p.radius}px;
 height:${p => p.radius}px;
 position:absolute;
-border-radius:${p => p.radius/2}px;
 display:${p => p.canShow?'block':'none'};
 background:${p => p.isEditable? p.theme.colors.range_input_thumb:p.theme.colors.range_input_thumb_unactive};
 cursor: ${p => p.isEditable?'move':'not-allowed'};
-border-radius: ${p => p.radius/2}px;
+border-radius: 100px;
+margin-left:0px;
+margin-top: 0px;
 box-shadow: ${p => p.isEditable?`0px 0px 3px ${p.theme.colors.text_input_text}`:'none'};
 
+border: 0px solid ${p => p.isEditable? p.theme.colors.range_input_thumb:p.theme.colors.range_input_thumb_unactive};
+
+
+transition: ${p => p.isAnimationEnable?'background 0.2s,border 0.2s,margin-top 0.2s,margin-left 0.2s':''};
+
 :hover {
-  background:${p => p.isEditable? p.theme.colors.range_input_thumb_active:p.theme.colors.range_input_thumb_unactive};
+  background:${p => p.isEditable? p.theme.colors.primary_light_1:p.theme.colors.range_input_thumb_unactive};
+  border: 0px solid ${p => p.isEditable? p.theme.colors.primary_light_1:p.theme.colors.range_input_thumb_unactive};
 }
+
+&:active {
+  background:${p => p.isEditable? p.theme.colors.range_input_thumb_active:''};
+  margin-top: ${p => p.isEditable? '-3px':''};
+  margin-left:${p => p.isEditable? '-3px':''};
+  border: ${p => p.isEditable?'10px':'0px'} solid ${p => p.isEditable? p.theme.colors.range_input_thumb_active:''};
+}
+
 
 `
 
@@ -633,5 +653,5 @@ const CustomBorderline = styled.line<{
   position: relative;
   stroke-linecap:round;
   stroke-linejoin:round;
-  stroke:${p => p.isEditable? p.theme.colors.range_input_thumb:p.theme.colors.slider_input_thumb_unactive};
+  stroke:${p => p.isEditable? p.theme.colors.range_input_line:p.theme.colors.range_input_thumb_unactive};
 `

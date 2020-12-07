@@ -32,12 +32,13 @@ return (
         height:`16px`,
         flex:`1`,
         display:`flex`,
-        transform: interpolate([size], (s) => `scale(${s})`)
+        transform: interpolate([size], (s) => `scale(${s})`),
       }
     }>
       <Button
         style={style}
         onClick={onClick}
+        isAnimationEnable={isGlobalAnimEnable}
         active={active}>
         <Trans>{children}</Trans>
       </Button>
@@ -49,36 +50,16 @@ return (
 const Button = styled.button<
 { 
   active:boolean;
+  isAnimationEnable:boolean;
 }
 >`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
+  width:100%;
+  border-radius:2px;
+  align-items: center;
+  display: inline-flex;
+  flex-direction: row;
 
-  background: ${p => (p.active? p.theme.colors.toggle_button_bg:p.theme.colors.normal_button_bg)};
-  > div{
-    color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
-  }
-  > span{
-    color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
-  }
-  > svg{
-    position: absolute;
-    fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
-  }
-  &:active {
-    border-style: double;
-    background: ${p => p.theme.colors.normal_button_active};
-  }
-  &:active  > div{
-    color: ${p => (p.active? p.theme.colors.text:p.theme.colors.background)};
-  }
-  &:active  > span{
-    color: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
-  }
-  &:active > svg{
-    fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
-  }
-
-  border-radius:4px;
   padding: 0;
   outline:none;
   margin: 0 auto;
@@ -86,10 +67,52 @@ const Button = styled.button<
   cursor:pointer;
   border: 0.5px solid rgba(255, 255, 255, 0.06);
 
-  &:active {
-    border-style: double;
+  background: ${p => (p.active? p.theme.colors.toggle_button_bg:p.theme.colors.normal_button_bg)};
+  transition:${p => p.isAnimationEnable?'all 0.2s':''};
+
+  > div{
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
+    color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
 
+  > span{
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
+    font-size: 11px;
+    line-height: 16px;
+    word-break: keep-all;
+    position: relative;
+    color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+  }
+  > svg{
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
+    position: relative;
+    fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+  }
+
+  &:hover {
+    background: ${p => p.active?'':p.theme.colors.toggle_button_hover_bg};
+    > span{
+      opacity:0.9;
+    }
+    > svg{
+      opacity:0.9;
+    }
+  }
+
+  &:active {
+    border-style: double;
+    background: ${p => p.theme.colors.normal_button_active};
+
+    > div{
+      color: ${p => (p.active? p.theme.colors.text:p.theme.colors.background)};
+    }
+    > span{
+      color: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
+    }
+    > svg{
+      fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
+    }
+  }
 
 `;
 

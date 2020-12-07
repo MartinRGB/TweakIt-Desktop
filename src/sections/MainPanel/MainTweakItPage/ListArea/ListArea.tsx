@@ -24,14 +24,15 @@ const ListArea: React.FC = memo(({children}) => {
                 platform={data['platform']}
                 isUlElement={true}
                 name={data['platform']}
-                index={index}>
+                index={index}
+                listLength={data['li'].length}>
               {
                 data['li'].map(function (animData:any,i:number) {
-                  return <ListTree 
+                  return (<ListTree 
                             key={data['platform']+'_'+animData['name']+'_'+i} 
                             info={data['platform']+'_'+animData['name']} 
                             platform={data['platform']}
-                            index={i}
+                            liIndex={i}
                             isUlElement={false} 
                             name={animData['name']} 
                             calculator={animData['calculator']}
@@ -39,7 +40,7 @@ const ListArea: React.FC = memo(({children}) => {
                             ease_name={[animData['interpolatorName'],animData['iOSName'],animData['webName'],animData['flutterName'],animData['smartisanName']]}
                             visible={animData['visible']}
                             clickable={animData['clickable']}>
-                         </ListTree>
+                         </ListTree>)
                 })
               }
               </ListTree>
@@ -66,7 +67,8 @@ const Container = styled.div`
     // Need a fake scrollbar
     //overflow-y: auto;
     overflow-y:auto;
-    padding:24px 14px 24px 14px;
+    padding: 24px 6px 24px 0px;
+    //padding:24px 14px 24px 14px;
     // Or it will re-rendering cause performance issue
     min-width:250px;
 

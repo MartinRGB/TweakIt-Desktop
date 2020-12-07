@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const RangeInput: React.FC<IInput> = memo(({  style,value,min,max,step,onChange,onBlur,onKeyUp,isEditable}) => {
+const RangeInput: React.FC<IInput> = memo(({  style,value,min,max,step,onChange,onBlur,onKeyUp,isEditable,isAnimationEnable}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -18,6 +18,7 @@ const RangeInput: React.FC<IInput> = memo(({  style,value,min,max,step,onChange,
     immediate: name => down && name === 'x',
     config:animationConfig.button_pressed
  })
+
  const mIsEditable = isEditable?isEditable:true;
   return (<Input
     type="range" 
@@ -30,12 +31,14 @@ const RangeInput: React.FC<IInput> = memo(({  style,value,min,max,step,onChange,
     onChange={onChange}
     onBlur={onBlur}
     onMouseUp={onKeyUp}
+    isAnimationEnable={isAnimationEnable}
   />)
   ;
 })
 
 const Input = styled.input<{
   isEditable:boolean
+  isAnimationEnable:boolean;
 }>`
     padding: 0;
     height: 100%;
@@ -51,13 +54,28 @@ const Input = styled.input<{
     ::-webkit-slider-runnable-track {
       height: 16px;
       width: 16px;
-      background: ${props => props.theme.colors.text_input_bg};;
+      background: ${p => p.isEditable?p.theme.colors.text_input_bg:p.theme.colors.text_input_bg_unactive};
       height: 2px;
       cursor: ${p => p.isEditable?'pointer':'not-allowed'};
 
       opacity: ${p => p.isEditable?'1':'0.4'}
+      transition: ${p => p.isAnimationEnable?'all 0.2s':''};
       
     }
+
+    ::-webkit-slider-runnable-track:hover {
+      background: ${p => p.isEditable?p.theme.colors.primary_middle_opacity:''};
+    }
+
+
+    &: active {
+      ::-webkit-slider-runnable-track {
+
+        background: ${p => p.isEditable?p.theme.colors.primary_dark_1_opacity:''};
+      }
+      
+    }
+
 
     ::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -68,11 +86,18 @@ const Input = styled.input<{
       border-radius: 2px;
       box-shadow: ${p => p.isEditable?`0px 0px 3px ${p.theme.colors.text_input_text}`:'none'};
       margin-top: -7px;
-      transition:all 0.2s;
+      transition: ${p => p.isAnimationEnable?'all 0.2s':''};
     }
 
     ::-webkit-slider-thumb:hover {
-      background:${p => p.isEditable? p.theme.colors.range_input_thumb_active:p.theme.colors.range_input_thumb_unactive};
+      background:${p => p.isEditable? p.theme.colors.primary_light_1:p.theme.colors.range_input_thumb_unactive};
+    }
+
+    ::-webkit-slider-thumb:active {
+      background:${p => p.isEditable? p.theme.colors.range_input_thumb_active:''};
+      height:${p => p.isEditable? '20px':''};
+      width:${p => p.isEditable? '20px':''};
+      margin-top: ${p => p.isEditable? '-9px':''};
     }
 
 `;

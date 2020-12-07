@@ -51,9 +51,9 @@ const ADBButtonToggle: React.FC<IButton> = memo(({ parentStyle,style,children, o
       <Button
         style={{
           ...style,
-          transition: `${isGlobalAnimEnable?'background 0.25s':''}`,
         }}
         active={(active || cmdTriggerAnim)}
+        isAnimationEnable={isGlobalAnimEnable}
         onClick={()=>{
           dealADBCommand();
           onClick();
@@ -76,6 +76,7 @@ const ADBButtonToggle: React.FC<IButton> = memo(({ parentStyle,style,children, o
 // twmacro
 const Button = styled.button<{
   active:boolean;
+  isAnimationEnable:boolean;
 }>`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
   border-radius:4px;
@@ -90,47 +91,56 @@ const Button = styled.button<{
   position: relative;
   display: block;
   
-  background: ${p => (p.active? p.theme.colors.toggle_button_bg:p.theme.colors.normal_button_bg)};
   
+  background: ${p => (p.active? p.theme.colors.toggle_button_bg:p.theme.colors.normal_button_bg)};
+  transition:${p => p.isAnimationEnable?'all 0.2s':''};
   > svg{
     text-align: center;
     vertical-align: middle;
+    position: relative;
     fill:${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
   }
 
   > span{
     color:${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
   }
 
   > div{
+    font-size: 11px;
+    line-height: 16px;
+    word-break: keep-all;
+    position: relative;
     color:${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
   }
-
-  //background: ${p => p.theme.colors.normal_button_bg};
-
-  // > div{
-  //   color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
-  // }
-  // > span{
-  //   color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
-  // }
-  // > svg{
-  //   fill: ${p => p.theme.colors.text};
-  // }
 
   &:active {
     border-style: double;
     background: ${p => p.theme.colors.normal_button_active};
+    > div{
+      color: ${p => p.theme.colors.background};
+    }
+    > span{
+      color: ${p => p.theme.colors.background};
+    }
+    // > svg{
+    //   fill: ${p => p.theme.colors.background};
+    // }
   }
-  &:active  > div{
-    color: ${p => p.theme.colors.background};
+
+
+  &:hover {
+    background: ${p => p.active?'':p.theme.colors.toggle_button_hover_light_bg};
+    > span{
+      opacity:0.9;
+    }
+    > svg{
+      opacity:0.9;
+    }
   }
-  &:active  > span{
-    color: ${p => p.theme.colors.background};
-  }
-  &:active > svg{
-    fill: ${p => p.theme.colors.background};
-  }
+
 
 `;
 

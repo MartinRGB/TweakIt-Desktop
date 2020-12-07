@@ -38,10 +38,12 @@ const PreviewArea: React.FC = memo(({children}) => {
             height:16px;
             width:40px;
             margin-left:8px;
-            flex:1;
-            display:flex;
             > button{
               width:40px;
+            }
+            > button > span{
+              width: 100%;
+              line-height:14px;
             }
           `}
           //onMouseDown={()=>{}} 
@@ -56,10 +58,12 @@ const PreviewArea: React.FC = memo(({children}) => {
             height:16px;
             width:40px;
             margin-left:8px;
-            flex:1;
-            display:flex;
             > button{
               width:40px;
+            }
+            > button > span{
+              width: 100%;
+              line-height:14px;
             }
           `}
           onMouseDown={()=>{setTrans();animationBoxRef.current.startAnimation(true)}} 
@@ -73,10 +77,12 @@ const PreviewArea: React.FC = memo(({children}) => {
             height:16px;
             width:40px;
             margin-left:8px;
-            flex:1;
-            display:flex;
             > button{
               width:40px;
+            }
+            > button > span{
+              width: 100%;
+              line-height:14px;
             }
           `}
           //onMouseDown={()=>{}} 

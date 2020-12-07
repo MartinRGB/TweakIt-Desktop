@@ -70,6 +70,7 @@ export interface IListTree {
   info?: string;
   isUlElement?:boolean;
   index?: number;
+  liIndex?:number;
   animation_data?:any;
   calculator?:any;
   listOnClickCallBack?:any;
@@ -77,6 +78,7 @@ export interface IListTree {
   platform:string;
   clickable?:boolean;
   ease_name?:any;
+  listLength?:number;
 }
 
 export interface IInputTree {
@@ -106,6 +108,7 @@ export interface IInput {
   onKeyDown?: any;
   onBlur?: any;
   onFocus?: any;
+  isGlobalAnimEnable?:any;
 }
 
 export interface ISVG {

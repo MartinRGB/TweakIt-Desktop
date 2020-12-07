@@ -246,11 +246,11 @@ const InputTree: React.FC<IInputTree> = memo(({
 
 
   const handleTextBlur = (e:any) => {
-    setTextBlur(true)
     setTextValue(Math.min(max,Math.max(e.target.value,min)))
   }
   
   const handleTextFocus = (e:any) => {
+    console.log('focus')
     setTextBlur(false)
   }
 
@@ -268,6 +268,7 @@ const InputTree: React.FC<IInputTree> = memo(({
         >{name}</DescText>
         <TextInput 
         value={textValue}
+        isAnimationEnable={isGlobalAnimEnable}
         // min={min} 
         // max={max} 
         isEditable={isEditable}
@@ -306,6 +307,7 @@ const InputTree: React.FC<IInputTree> = memo(({
           value={rangeValue} 
           isEditable={isEditable}
           min={min} 
+          isAnimationEnable={isGlobalAnimEnable}
           max={max} 
           step={0.01} 
           onChange={(e: React.FormEvent<HTMLInputElement>) => {

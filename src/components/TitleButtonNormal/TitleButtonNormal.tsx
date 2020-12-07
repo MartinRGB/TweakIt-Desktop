@@ -21,7 +21,7 @@ const TitleButtonNormal: React.FC<IButton> = memo(({buttonSib,buttonCSS,parentSt
   })
 
   return (
-  <div css={buttonCSS}>
+  <Container css={buttonCSS}>
   <animated.div 
     {...bind()} 
     style={
@@ -37,28 +37,47 @@ const TitleButtonNormal: React.FC<IButton> = memo(({buttonSib,buttonCSS,parentSt
           </div>
       </Button>
   </animated.div>
-  <Sib><Trans>{buttonSib}</Trans></Sib></div>);
+  <Sib><Trans>{buttonSib}</Trans></Sib></Container>);
 
 })
 
 // twmacro
+
+const Container = styled.div`
+display: inline-flex;
+flex-direction: column;
+-webkit-app-region: no-drag;
+`
 const Button = styled.button`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
   padding: 0;
   outline:none;
   top:0;
   left:0;
-  position:absolute;
+  //position:absolute;
   user-select: none;
   cursor:pointer;
   border-radius:4px;
   border: 0.5px solid rgba(255, 255, 255, 0.06);
+  position:relative;
+  display: block;
+  background: ${p=>p.theme.colors.normal_button_bg};
 
   > div > svg{
     position: relative;
     text-align: center;
     vertical-align: middle;
+    fill: ${p=>p.theme.colors.text};
   }
+
+  &:active {
+    background: ${p=>p.theme.colors.toggle_button_active};
+
+    > div > svg {
+      fill: ${p=>p.theme.colors.background};
+    }
+  }
+
 `;
 
 const Sib = styled.p`
@@ -73,6 +92,7 @@ const Sib = styled.p`
   transform: scale3d(1.15,1.15,1);
   font-weight: 500;
   font-family: ${p => p.theme.fonts.headText};
+  user-select:none;
 `
 
 export default TitleButtonNormal

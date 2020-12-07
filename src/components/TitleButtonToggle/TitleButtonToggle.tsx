@@ -21,7 +21,7 @@ const TitleButtonToggle: React.FC<IButton> = memo(({buttonCSS,parentStyle,button
  })
 
   return (
-    <div css={buttonCSS}>
+    <Container css={buttonCSS}>
     <animated.div 
       
       {...bind()} 
@@ -45,8 +45,16 @@ const TitleButtonToggle: React.FC<IButton> = memo(({buttonCSS,parentStyle,button
           {children}
         </Button>
     </animated.div>
-    <Sib><Trans>{buttonSib}</Trans></Sib></div>);
+    <Sib><Trans>{buttonSib}</Trans></Sib></Container>);
 })
+
+const Container = styled.div`
+
+display: inline-flex;
+flex-direction: column;
+-webkit-app-region: no-drag;
+
+`
 
 // twmacro
 const Button = styled.button<
@@ -63,14 +71,23 @@ const Button = styled.button<
   cursor:pointer;
   border-radius:4px;
   border: 0.5px solid rgba(255, 255, 255, 0.06);
-
+  position: relative;
+  background:${p=>p.active?p.theme.colors.toggle_button_bg:p.theme.colors.normal_button_bg};
   > svg{
     position: relative;
     vertical-align: middle;
+    text-align: center;
+    fill: ${p=>p.active?p.theme.colors.background:p.theme.colors.text};
   }
 
   &:active {
     border-style: double;
+    background:${p=>p.theme.colors.toggle_button_active};
+
+    > svg{
+      fill: ${p=>p.active?'':p.theme.colors.background};
+      opacity:0.8;
+    }
   }
 
 `;
@@ -87,6 +104,7 @@ const Sib = styled.p`
   transform: scale3d(1.15,1.15,1);
   font-weight: 500;
   font-family: ${p => p.theme.fonts.headText};
+  user-select:none;
 `
 
 export default TitleButtonToggle

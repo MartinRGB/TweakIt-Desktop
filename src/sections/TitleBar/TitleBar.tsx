@@ -85,32 +85,15 @@ const TitleBar: React.FC = memo(({ children }) => {
             margin-left:8px;
             margin-right:13px;
             height:38px;
-            display: inline-flex;
-            flex-direction: column;
-            -webkit-app-region: no-drag;
             > div > button{
               width:40px;
               height:22px;
-              position: relative;
-              background:${adbIsExpand?theme.colors.toggle_button_bg:theme.colors.normal_button_bg};
             }
             > div > button > svg {
               height:20px;
-              text-align: center;
               top: 0px;
               left: 1px;
-              fill: ${adbIsExpand?theme.colors.background:theme.colors.text};
             }
-            &:active > div > button{
-              background:${theme.colors.toggle_button_active};
-            }
-
-            &:active > div > button > svg{
-              fill: ${adbIsExpand?theme.colors.text:theme.colors.background};
-              opacity:0.8;
-            }
-            
-          
           `}
           buttonSib={'ADB'}
           
@@ -128,24 +111,12 @@ const TitleBar: React.FC = memo(({ children }) => {
             > div > button{
               width:40px;
               height:22px;
-              position: relative;
-              background:${isGlobalAnimEnable?theme.colors.toggle_button_bg:theme.colors.normal_button_bg};
             }
             > div > button > svg {
               height:20px;
-              text-align: center;
               top: 0px;
               left: 0px;
-              fill: ${isGlobalAnimEnable?theme.colors.background:theme.colors.text};
             }
-            &:active > div > button{
-              background:${theme.colors.toggle_button_active};
-            }
-            &:active > div > button > svg{
-              fill: ${adbIsExpand?theme.colors.text:theme.colors.background};
-              opacity:0.8;
-            }
-        
           
           `}
           buttonSib={'Animation'}
@@ -156,35 +127,15 @@ const TitleBar: React.FC = memo(({ children }) => {
           buttonCSS={css`
             height:38px;
             margin-left:8px;
-            display: inline-flex;
-            flex-direction: column;
-            -webkit-app-region: no-drag;
             >div > button{
               width:40px;
               height:22px;
-              position:relative;
-              display: block;
-              background: ${theme.colors.normal_button_bg};
-
             }
 
             > div > button > div > svg{
               height: 20px;
               top: 0px;
               left: 0px;
-              fill: ${theme.colors.text};
-            }
-
-            &:active > div > button{
-              background: ${theme.colors.normal_button_active};
-            }
-
-            &:active > div > button > div > svg{
-              fill: ${theme.colors.background};
-            }
-
-            &:active > div > button{
-              background:${theme.colors.toggle_button_active};
             }
           `} 
           buttonSib={'Theme'}
@@ -194,39 +145,18 @@ const TitleBar: React.FC = memo(({ children }) => {
         <TitleButtonNormal 
         
           buttonCSS={css`
-          height:38px;
-          margin-left:8px;
-          display: inline-flex;
-          flex-direction: column;
-          -webkit-app-region: no-drag;
-          >div > button{
-            width:40px;
-            height:22px;
-            position:relative;
-            display: block;
-            background: ${theme.colors.normal_button_bg};
+            height:38px;
+            margin-left:8px;
+            >div > button{
+              width:40px;
+              height:22px;
+            }
 
-          }
-
-          > div > button > div > svg{
-            height: 20px;
-            top: 0px;
-            left: 0px;
-            fill: ${theme.colors.text};
-          }
-
-          &:active > div > button{
-            background: ${theme.colors.normal_button_active};
-          }
-
-          &:active > div > button > div > svg{
-            fill: ${theme.colors.background};
-          }
-
-          &:active > div > button{
-            background:${theme.colors.toggle_button_active};
-          }
-
+            > div > button > div > svg{
+              height: 20px;
+              top: 0px;
+              left: 0px;
+            }
           `} 
           buttonSib={'Language'}
           onClick={clickLan}>
@@ -238,35 +168,18 @@ const TitleBar: React.FC = memo(({ children }) => {
       <ButtonLayout>
         <TitleButtonToggle 
             buttonCSS={css`
-            margin-left:8px;
-            margin-right:13px;
-            height:38px;
-            display: inline-flex;
-            flex-direction: column;
-            -webkit-app-region: no-drag;
-            > div > button{
-              width:40px;
-              height:22px;
-              position: relative;
-              background:${adbIsExpand?theme.colors.toggle_button_bg:theme.colors.normal_button_bg};
-            }
-            > div > button > svg {
-              height:20px;
-              text-align: center;
-              top: 0px;
-              left: 1px;
-              fill: ${adbIsExpand?theme.colors.background:theme.colors.text};
-            }
-            &:active > div > button{
-              background:${theme.colors.toggle_button_active};
-            }
-
-            &:active > div > button > svg{
-              fill: ${adbIsExpand?theme.colors.text:theme.colors.background};
-              opacity:0.8;
-            }
-            
-          
+              margin-left:8px;
+              margin-right:13px;
+              height:38px;
+              > div > button{
+                width:40px;
+                height:22px;
+              }
+              > div > button > svg {
+                height:20px;
+                top: 0px;
+                left: 1px;
+              }
           `}
           buttonSib={'ADB'}
           active={adbIsExpand} 

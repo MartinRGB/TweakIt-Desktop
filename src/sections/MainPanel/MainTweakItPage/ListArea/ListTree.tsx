@@ -34,12 +34,16 @@ const ListTree: React.FC<IListTree> = memo(({
   info, 
   isUlElement, 
   index, 
+  liIndex,
   animation_data,
   ease_name,
   calculator,
+  listLength,
   visible,}) => {
 
   const UlVerticalPadding: number = 3;
+  const UlHeight:number = 24;
+  const LiHeight:number = 22;
 
   const { currentAnimationItem, selectAnimationItem } = useContext(
     ListSelectStateContext
@@ -114,7 +118,6 @@ const ListTree: React.FC<IListTree> = memo(({
       isGlobalAnimEnable?setSelectTransition(true):setSelectTransition(false)
   }
 
-
   const { revealProgress } = useSpring({
     revealProgress: isOpen ? 1 : (isGlobalAnimEnable?0:1),
     config: animationConfig.list_reveal
@@ -128,10 +131,22 @@ const ListTree: React.FC<IListTree> = memo(({
   }
 
 
+  // function transitionTemplate(i, duration) {
+  //   return `
+  //       &:nth-child(${i + 1}) {
+  //         transition-delay: ${`calc(${duration} * ${i + 3})`};
+  //        }
+  //     `;
+  // }
+
+  // (children)?
+
   return (
-    <Frame>
+    <Frame >
       {children ?
-        <div css={Toggle} onClick={() => setOpen(!isOpen)}>
+        // with children - withIcon(normal ul)
+        <UlElement id="UlElement" isOpen={isOpen} isAnimationEnable={isGlobalAnimEnable} css={Toggle} onClick={() => setOpen(!isOpen)}>
+
           <animated.div
             css={css`
               display: inline-block;
@@ -152,37 +167,40 @@ const ListTree: React.FC<IListTree> = memo(({
               marginLeft: `8px`,
               marginRight: `4px`,
               marginTop: `-2px`,
-            }}></PlatformIcon>:<div></div>
+            }}></PlatformIcon>:''
           }
-          <UlTitle style={style}><Trans>{platform}</Trans></UlTitle>
-        </div> :
+          <UlTitle style={style} height={UlHeight}><Trans>{platform}</Trans></UlTitle>
+        </UlElement>
 
-        <div>
+        :
+        // without children - withoutIcon(normal li)
+        <LiElement id="LiElement">
           {!visible?
-            <div css={css`height:3px`}></div> :
-            <LiTitle style={{ ...style }} isClickable={clickable} isSelected={currentAnimationItem === info } 
+            // ---- divide --- 3px
+            <div css={css`height:0px`}></div> :
+            <LiTitle style={{ ...style }} isAnimationEnable={isGlobalAnimEnable} isClickable={clickable} isSelected={currentAnimationItem === info }
+            height={LiHeight} 
             onClick={() => 
               {
                 if((currentAnimationItem != info) && clickable && !selectTransition){
                     setPrevAndCurrData();
                 }
               }
-            }><Trans>{name}</Trans></LiTitle>
+            }
+            ><Trans>{name}</Trans></LiTitle>
           }
-        </div>
+        </LiElement>
       }
-      <Content style={{
-        opacity: interpolate([revealProgress], (r) => `${r * 1}`),
-        // height: isOpen && previous === isOpen ? 'auto' : interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`)
-        // height: isOpen ? 'auto' : interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`),
 
+      {children ?
+      <UlContent id="UlContent" style={{
+        opacity: interpolate([revealProgress], (r) => `${r * 1}`),
         display: isOpen?'block':'none',
         height: isOpen? interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`): '0px'
-        //display:'block',
-        //height: interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`)
       }}>
 
-          <animated.div
+ 
+          <UlContainer id="UlContainer"
             css={css`
                 padding-top:${UlVerticalPadding}px;
                 padding-bottom:${UlVerticalPadding}px
@@ -194,8 +212,11 @@ const ListTree: React.FC<IListTree> = memo(({
             {...bind}
           >
             {children}
-          </animated.div>
-      </Content>
+          </UlContainer>
+      </UlContent>
+      :
+      ''
+      }
     </Frame>
   )
 })
@@ -204,7 +225,6 @@ const ListTree: React.FC<IListTree> = memo(({
 export default ListTree;
 
 // State Control
-
 const usePrevious = function (value: any) {
   const ref = useRef()
   useEffect(() => void (ref.current = value), [value])
@@ -226,20 +246,87 @@ const useMeasure = function () {
 
 // Styles
 
-const Frame = styled('div')`
+
+const UlElement = styled.div<{
+  isAnimationEnable:boolean;
+  isOpen:boolean;
+}>`
+  background:transparent;
   position: relative;
-  padding: 1px 0px 1px 0px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  opacity:${p => p.isSelected?'1':'0.8'};
+  padding-left: 8px;
+  margin-left: 6px;
+
+  transition:${p=>p.isAnimationEnable?'opacity 0.25s':''};
+
+  > div > svg{
+    position:relative;
+    left:0px;
+    transition:${p=>p.isAnimationEnable?'all 0.15s':''};
+  }
+
+  :before{
+    content:'';
+    width:234px;
+    height:100%;
+    left:0;
+    top:0;
+    border-radius:4px;
+    position:absolute;
+    transition:${p=>p.isAnimationEnable?'all 0.25s':''};
+  }
+
+  &:hover{
+    opacity:0.9;
+    > div > svg {
+      left:${p=>p.isOpen?'0px':'8px'};
+    }
+    :before{
+      background:${p=>p.theme.colors.primary_middle_opacity};
+    }
+  }
+
+  &:active{
+    opacity:1;
+    :before{
+      background:${p=>p.theme.colors.primary_dark_1_opacity};
+    }
+  }
+`
+const LiElement = styled.div`
+  background:transparent;
+  position: relative;
+  display: flex;
+  transition:all 0.2s;
+`
+
+
+
+const Frame = styled('li')`
+  position: relative;
+  padding: 0px 0px 0px 0px;
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: middle;
   color:  ${p => p.theme.colors.text};
   fill: ${p => p.theme.colors.text};
+  background:transparent;
+  list-style: none;
+
+
 `
+
+
 
 
 const LiTitle = styled.span<{
   isSelected: boolean;
   isClickable:boolean;
+  height:number;
+  isAnimationEnable:boolean;
 }>`
   vertical-align: middle;
   user-select:none;
@@ -247,14 +334,44 @@ const LiTitle = styled.span<{
   font-style: normal;
   font-weight: 300;
   font-size: 10px;
-  line-height: 11px;
-  margin-left: 25px;
+  line-height: ${p=>p.height}px;
+  margin-left: 5px;
+  padding-left: 18px;
+  padding-right: 18px;
+  border-radius: 4px;
   color:${p => (p.isSelected ? p.theme.colors.primary : p.theme.colors.text)};
-  opacity:${p => (p.isClickable ? '0.8':'0.4')};
+  opacity:${p => (p.isClickable ?(p.isSelected?'1':'0.7'):'0.3')};
   cursor:${p => (p.isClickable ? 'pointer':'not-allowed')};
+
+  transition:${p=>p.isAnimationEnable?'all 0.25s':''};
+  :before{
+    content:'';
+    width:100%;
+    height:100%;
+    left:0;
+    top:0;
+    border-radius:4px;
+    position:absolute;
+    transition:${p=>p.isAnimationEnable?'all 0.25s':''};
+  }
+  &:hover{
+    :before{
+      background:${p=>p.isClickable?p.theme.colors.primary_middle_opacity:''};
+    }
+    opacity:${p => (p.isClickable ? '0.85':'')};
+  }
+
+  &:active{
+    :before{
+      background:${p=>p.isClickable?p.theme.colors.primary_dark_1_opacity:''};
+    }
+    opacity:${p => (p.isClickable ? '1':'')};
+  }
 `
 
-const UlTitle = styled('span')`
+const UlTitle = styled('span')<{
+  height:number;
+}>`
   vertical-align: middle;
   user-select:none;
   font-family: ${props => props.theme.fonts.headText};
@@ -262,14 +379,17 @@ const UlTitle = styled('span')`
   font-style: normal;
   font-weight: 600;
   font-size: 12px;
-  line-height: 21px;
+  line-height: ${p=>p.height}px;
 `
-const Content = styled(animated.div)`
+const UlContent = styled(animated.div)`
   will-change: transform, opacity, height;
-  margin-left: 6px;
-  padding: 0px 0px 0px 14px;
+  margin-left: 20px;
+  padding: 0px 8px 0px 14px;
   border-left: 1px dashed ${p => p.theme.colors.title_background_bottom};
   overflow: hidden;
+`
+
+const UlContainer = styled(animated.ul)`
 `
 
 const Toggle = css`

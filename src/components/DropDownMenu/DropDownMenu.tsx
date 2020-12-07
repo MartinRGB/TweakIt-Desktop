@@ -114,6 +114,8 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
   <CustomSelectWrapper style={{...style,width:`${menuWidth}`,minWidth:`${menuWidth}`}}>
     <CustomSelect
       onClick={(e:any)=>{onClickSelect(e)}}
+      isExpanded={selectExpand}
+      isAnimationEnable={isGlobalAnimEnable}
     >
       <CustomSelectedSpan>{selectedText}</CustomSelectedSpan>
       <Icons.SelectArrow></Icons.SelectArrow>
@@ -159,7 +161,10 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
                   onClickIndex(index,data.value);
                   onClickList(index,data.value)}}
                 >
-                  <DropDownListBackground>
+                  <DropDownListBackground
+                    style={{
+                    }}
+                    >
                     <Icons.CheckMark style={{
                       position: `absolute`,
                       top: `2px`,
@@ -218,7 +223,7 @@ const DropDownBackground = styled.div`
   top: 0px;
 `
 
-const DropDownListContainer = styled.div<{
+const DropDownListContainer = styled.li<{
 }>`
   width:300px;
   margin-left: 0px;
@@ -228,9 +233,13 @@ const DropDownListContainer = styled.div<{
   cursor:pointer;
   //transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
   
-  // &:hover > div{
-  //   background:${p => p.theme.colors.primary};
-  // }
+  &:hover > div{
+    background:${p => p.theme.colors.primary_middle_opacity};
+  }
+
+  &:active > div{
+    background:${p => p.theme.colors.primary_dark_1_opacity};
+  }
 
   // &:hover > div > svg {
   //   fill:${p => p.theme.colors.background};
@@ -300,15 +309,22 @@ const CustomSelectWrapper = styled.div`
     margin-right: 32px;
     background: ${p => p.theme.colors.normal_button_bg};
 `
-const CustomSelect = styled.button`
+const CustomSelect = styled.button<{
+  isExpanded:boolean;
+  isAnimationEnable:boolean;
+}>`
     height: 100%;
     width: 100%;
     position: absolute;
-    background: transparent;
-    transition:all 0.15s;
+    background: ${p=>p.isExpanded?p.theme.colors.primary_middle_opacity:'transparent'};
+    transition:${p=>p.isAnimationEnable?'all 0.15s':'none'};
     cursor:pointer;
     outline:none;
     border:none;
+
+    &:hover {
+      background:${p=>p.isExpanded?'':p.theme.colors.primary_middle_opacity};
+    }
 
     >svg{
       fill: ${p => p.theme.colors.text};
@@ -328,8 +344,8 @@ const CustomSelect = styled.button`
     }
 
     &:active {
-      background: #a4a7a480;
-      opacity:0.5;
+      background: ${p=>p.theme.colors.primary_dark_1_opacity};
+      //opacity:0.8;
     }
 `
 

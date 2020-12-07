@@ -49,6 +49,10 @@
                 }
             },
             {
+                "name": "Divide",
+                "visible": false
+            },
+            {
                 "name": "Linear",
                 "interpolatorName": "Linear",
                 "flutterName": "Linear",
@@ -225,6 +229,10 @@
                 }
             },
             {
+                "name": "Divide",
+                "visible": false
+            },
+            {
                 "name": "FastOutSlowIn",
                 "interpolatorName":"FastOutSlowIn",
                 "flutterName":"StandardEasing",
@@ -374,6 +382,10 @@
                         "editable": true
                     }
                 }
+            },
+            {
+                "name": "Divide",
+                "visible": false
             },
             {
                 "name": "CustomMocosSpring",
@@ -562,6 +574,10 @@
                         "editable": true
                     }
                 }
+            },
+            {
+                "name": "Divide",
+                "visible": false
             },
             {
                 "name": "Linear",
@@ -769,6 +785,10 @@
                 "name": "Gravity Simulation(🚧W.I.P🚧)",
                 "visible": true,
                 "clickable": false
+            },
+            {
+                "name": "Divide",
+                "visible": false
             },
             {
                 "name": "Linear",

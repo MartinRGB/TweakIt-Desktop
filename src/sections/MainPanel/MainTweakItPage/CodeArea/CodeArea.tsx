@@ -78,29 +78,17 @@ const CodeArea: React.FC = memo(({children}) => {
                     return (
                       <MainButtonToggle
                       buttonCSS={css`
+                        margin-right: 8px;
                         > button {
-                          width:100%;
-                          border-radius:2px;
-                          //display: inline-flex;
                           padding-left: 4px;
                           padding-right: 6px;
-                          align-items: center;
-                          margin-right: 8px;
                           height: 16px;
-                          display: flex;
-                          flex-direction: row;
                           > svg{
-                            position:relative;
                             top: -1px;
-                            left:0px;
                           }
                           > span{
-                            font-size: 11px;
-                            line-height: 16px;
-                            word-break: keep-all;
-                            position: relative;
-                            top: -1px;
                             margin-left: 1px;
+                            top: -1px;
                           }
                         }
                       `}
@@ -119,32 +107,22 @@ const CodeArea: React.FC = memo(({children}) => {
                 
               })
             }
+
+
             <MainButtonNormal
               buttonCSS = {
                 css`
+                margin-right: 8px;
                 > button {
-                  width:100%;
-                  border-radius:2px;
-                  //display: inline-flex;
                   padding-left: 4px;
                   padding-right: 6px;
-                  align-items: center;
-                  margin-right: 8px;
                   height: 16px;
-                  display: flex;
-                  flex-direction: row;
                   > svg{
-                    position:relative;
                     top: -1px;
-                    left:0px;
                   }
                   > span{
-                    font-size: 11px;
-                    line-height: 16px;
-                    word-break: keep-all;
-                    position: relative;
-                    top: -1px;
                     margin-left: 1px;
+                    top: -1px;
                   }
                 }
               `
@@ -173,12 +151,9 @@ const CodeArea: React.FC = memo(({children}) => {
             buttonCSS = {
               css`
                 height:16px;
-                flex:1
-                display:flex;
                 >button{
                   width:24px;
                   height:16px;
-                  border-radius:2px;
                 }
               `
             }
@@ -205,29 +180,17 @@ const CodeArea: React.FC = memo(({children}) => {
           <MainButtonToggle
             active={codeBlockIsShow && isExpanded}
             buttonCSS={css`
+              margin-right: 6px;
               > button {
-                width:100%;
-                border-radius:2px;
-                //display: inline-flex;
                 padding-left: 4px;
                 padding-right: 6px;
-                align-items: center;
-                margin-right: 8px;
                 height: 16px;
-                display: flex;
-                flex-direction: row;
                 > svg{
-                  position:relative;
                   top: -1px;
-                  left:0px;
                 }
                 > span{
-                  font-size: 11px;
-                  line-height: 16px;
-                  word-break: keep-all;
-                  position: relative;
-                  top: -1px;
                   margin-left: 1px;
+                  top: -1px;
                 }
               }
             `}
@@ -242,7 +205,6 @@ const CodeArea: React.FC = memo(({children}) => {
           >
             <Icons.Terminal></Icons.Terminal><CustomSpan><Trans>Console</Trans></CustomSpan>
           </MainButtonToggle>
-
         </TopRightContainer>
       </TopNav>
       <CodeScrollContainer ref={scrollRef}>
@@ -285,7 +247,6 @@ const TopNav = styled.div`
     top: 0px;
     left: 0px;
     height: 40px;
-
 `
 
 const Container = styled.div<{

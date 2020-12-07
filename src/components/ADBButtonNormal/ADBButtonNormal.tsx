@@ -52,9 +52,10 @@ const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , 
       <Button
         style={{
           ...style,
-          transition: `${isGlobalAnimEnable?'background 0.15s':''}`,
+          transition: `${isGlobalAnimEnable?'all 0.2s':''}`,
         }}
         active={(isScaleUp || cmdTriggerAnim)}
+        isAnimationEnable={isGlobalAnimEnable}
         onClick={()=>{
           dealADBCommand();
           onClick();
@@ -71,6 +72,10 @@ const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , 
           SetIsScaleUp(false)
           onMouseUp
         }}
+        onMouseLeave={()=>{
+          SetIsScaleUp(false)
+          onMouseUp
+        }}
         >
         <Trans>{children}</Trans>
       </Button>
@@ -81,6 +86,7 @@ const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , 
 // twmacro
 const Button = styled.button<{
   active:boolean;
+  isAnimationEnable:boolean;
 }>`
   // ${tw`mt-4 p-2 text-white bg-blue-600`}
   border-radius:4px;
@@ -94,49 +100,55 @@ const Button = styled.button<{
   padding-right: 4px;
   position: relative;
   display: block;
-  
+
   background: ${p => (p.active? p.theme.colors.normal_button_active:p.theme.colors.normal_button_bg)};
-  
-  > svg{
-    text-align: center;
-    vertical-align: middle;
-    fill:${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+  transition:${p => p.isAnimationEnable?'all 0.2s':''};
+
+  > div{
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
+    color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
 
   > span{
-    color:${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
+    font-size: 11px;
+    line-height: 16px;
+    word-break: keep-all;
+    position: relative;
+    color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+  }
+  > svg{
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    transition:${p => p.isAnimationEnable?'all 0.2s':''};
+    fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
   }
 
-  > div{
-    color:${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
+  &:hover {
+    background: ${p => p.theme.colors.toggle_button_hover_bg};
+    > span{
+      opacity:0.9;
+    }
+    > svg{
+      opacity:0.9;
+    }
   }
 
-  //background: ${p => p.theme.colors.normal_button_bg};
+  &:active {
+    border-style: double;
+    background: ${p => p.theme.colors.normal_button_active};
 
-  // > div{
-  //   color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
-  // }
-  // > span{
-  //   color: ${p => (p.active? p.theme.colors.background:p.theme.colors.text)};
-  // }
-  // > svg{
-  //   fill: ${p => p.theme.colors.text};
-  // }
-
-  // &:active {
-  //   border-style: double;
-  //   background: ${p => p.theme.colors.normal_button_active};
-  // }
-  // &:active  > div{
-  //   color: ${p => p.theme.colors.background};
-  // }
-  // &:active  > span{
-  //   color: ${p => p.theme.colors.background};
-  // }
-  // &:active > svg{
-  //   fill: ${p => p.theme.colors.background};
-  // }
-
+    > div{
+      color: ${p => (p.active? p.theme.colors.text:p.theme.colors.background)};
+    }
+    > span{
+      color: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
+    }
+    > svg{
+      fill: ${p => (p.active? p.theme.colors.background:p.theme.colors.background)};
+    }
+  }
 `;
 
 export default ADBButtonNormal

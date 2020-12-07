@@ -30,13 +30,15 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
   const [colorMode] = useColorMode();
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {cleanAllData,adbInfoTimes,adbTagStartText,adbCommandText,adbCommandIsSuccess,adbResultText,adbTagEndText,setADBInfoTimes,setADBTagStartText,setADBCommandText,setADBTagEndText,setADBCommandIsSuccess,setADBResultText} =  useContext(ADBConnectStateContext)
+  const [textIsOnFocus,setTextIsOnFocus] = useState<boolean>(true);
+  const [textShouldHighlight,setTextShouldHighlight] = useState<boolean>(true);
 
   const {adbInputCMD,setADBInputCMD,setTriggerControlAnim} = useContext(
     CodeBlockStateContext,
   );
 
   const [isInit,setIsInit] = useState<boolean>(false)
-  const initHeight = 358;
+  const initHeight = 191;
   const paddingValue = 10;
 
   const textAreaRef = useRef();
@@ -181,10 +183,24 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
 
   const onCMDFocus = (e:any) =>{
     scrollRef.current.setInputEditable(true);
+    setTextIsOnFocus(true)
+    setTextShouldHighlight(true)
   }
 
   const onCMDBlur = (e:any) =>{
     scrollRef.current.setInputEditable(false);
+    setTextIsOnFocus(false)
+    setTextShouldHighlight(false)
+  }
+
+  const onMouseHover = () =>{
+    setTextShouldHighlight(true)
+  }
+
+  const onMouseLeave = () =>{
+    if(!textIsOnFocus){
+      setTextShouldHighlight(false)
+    }
   }
 
   return (
@@ -230,13 +246,17 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
       }) 
       :''
     }
-    <CMDInputContainer contentEditable={false} 
+    <CMDInputContainer highlight={textShouldHighlight} isAnimationEnable={isGlobalAnimEnable} contentEditable={false} 
                suppressContentEditableWarning={true}>
-      <Arrow   contentEditable={false} 
-               suppressContentEditableWarning={true}>{`>`}</Arrow>
+
       <CMDInput
+        style={{
+          transition:`${isGlobalAnimEnable?'background 0.15s':'none'}`
+        }}
         ref={textAreaRef}
         placeholder="" 
+        highlight={textShouldHighlight}
+        focus={textIsOnFocus}
         placeholderTextColor={theme.colors.adb_border} 
         value={inputValue}
         onChange={(e)=>onCMDKeychange(e)}
@@ -244,11 +264,16 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
         onKeyUp={(e)=>onCMDKeyup(e)}
         onFocus={(e)=>onCMDFocus(e)}
         onBlur={(e)=>onCMDBlur(e)}
+        onMouseOver={(e)=>{onMouseHover()}}
+        onMouseEnter={(e)=>{onMouseHover()}}
+        onMouseLeave={(e)=>{onMouseLeave()}}
       />
     </CMDInputContainer>
     </TerminalContainer>
   )
 })
+
+
 
 export default TerminalTemplate
 
@@ -293,7 +318,8 @@ const InsideContainer =  styled.div<{
 const CommandInfoContainer = styled.div`
 padding-top: 24px;
 padding-bottom: 10px;
-display: grid;
+// display: grid;
+width: 438px;
 `
 
 const CommandInfo =styled.p`
@@ -309,6 +335,7 @@ const CommandInfoNote =styled.p`
   line-height:21px;
   color:#9D9DB2; //grey
   display: inline-block;
+  float:right;
   ::selection {
     background: ${p => p.theme.colors.selection};
   }
@@ -316,24 +343,38 @@ const CommandInfoNote =styled.p`
 
 
 
-const CMDInputContainer = styled.div`
+const CMDInputContainer = styled.div<{
+  isAnimationEnable:boolean;
+  highlight:boolean;
+}>`
   position: relative;
   height: 28px;
   margin-top: 10px;
+
+  ::before{
+    content: ">";
+    position: absolute;
+    left: 14px;
+    color:${p => p.theme.colors.primary};
+    font-family:${p => p.theme.fonts.monospace};
+    font-size:13px;
+    outline: none;
+    background: transparent;
+    border: none;
+    width: 100%;
+    line-height:28px;
+    z-index: -1;
+    user-select: none;
+    transition:${p=>p.isAnimationEnable?'left 0.15s':'none'};
+    left: ${p=>p.highlight?'14px':'0px'};
+  }
+
 `
 
-const Arrow = styled.p`
-  display: inline-block;
-  color:${p => p.theme.colors.primary};
-  font-family:${p => p.theme.fonts.monospace};
-  font-size:13px;
-  position: absolute;
-  left: 0px;
-  top:0px;
-  line-height:28px;
-`
-
-const CMDInput = styled.input`
+const CMDInput = styled.input<{
+  highlight:boolean
+  focus:boolean;
+}>`
   display: inline-block;
   color:${p => p.theme.colors.primary};
   font-family:${p => p.theme.fonts.monospace};
@@ -342,8 +383,15 @@ const CMDInput = styled.input`
   background: transparent;
   border: none;
   width: 100%;
-  padding-left: 16px;
+  padding-left: 30px;
   resize: none;
   line-height:28px;
+  border-radius:5px;
+  background:${p=>p.highlight?p.theme.colors.primary_opacity:'none'};
+  cursor:${p=>p.focus?'text':'pointer'};
+
+  &:active{
+    background:${p=>p.theme.colors.primary_middle_opacity};
+  }
 
 `
