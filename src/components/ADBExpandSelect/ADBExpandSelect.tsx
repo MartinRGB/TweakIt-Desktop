@@ -9,19 +9,18 @@ import { useTranslation, Trans, Translation } from 'react-i18next'
 import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '@Config/animation.json';
 
-import {execCMD,execCMDPromise,simpleRunCMD} from '@Helpers/ADBCommand/ADBCommand'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import Icons from '@Assets/icons'
-import ADBButtonToggle from '@Components/ADBButtonToggle'
 import ADBButtonNormal from '@Components/ADBButtonNormal'
 import DropDownMenuSimple from '@Components/DropDownMenuSimple'
 
-const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onClick,onArrowClick,onMouseDown,onMouseUp,conatinerCSS,cmdTriggerAnim,cmdStr,iconStr,onADBExpandSelect}) => {
+const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onClick,onArrowClick,onMouseDown,onMouseUp,conatinerCSS,cmdTriggerAnim,cmdStr,iconStr,onADBExpandSelect,enable,optionsData,onMenuClickIndex}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,setADBInputCMD,canTriggerControlAnim,setTriggerControlAnim} = useContext(CodeBlockStateContext,);
+
 
   const {stateWatcher} = useSpring({
     stateWatcher: ((cmdStr === adbInputCMD) && canTriggerControlAnim && codeBlockIsShow) ? 0: 1,
@@ -33,15 +32,11 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
     }
   })
 
-  const dealADBCommand = (cmd:any) =>{
-    simpleRunCMD(cmd,codeBlockIsShow)
-  }
-
   var ExpandSelectIcon;
   ExpandSelectIcon = Icons[(iconStr.replace(/\s/g, "")!)];
 
   const dropdownRef = useRef();
-  const optionsData = [
+  const optionsDatas = [
     { value: "1", label: "Spring" },
     { value: "2", label: "Summer" },
     { value: "3", label: "Autumn" },
@@ -51,17 +46,20 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
     { value: "7", label: "Autumn" },
   ];
 
-  const [currentScreen,setCurrentScreen] = useState<string>('2');
+  const [currentScreen,setCurrentScreen] = useState<string>('-');
 
   return (
   <Container
     css={conatinerCSS}
     style={
-      {...style,}
+      {...style,
+        cursor:`${enable?'':'not-allowed'}`,
+      }
     }>
-    <ClipContainer isAnimationEnable={isGlobalAnimEnable}>
+    <ClipContainer isDeviceEnable={enable} isAnimationEnable={isGlobalAnimEnable}>
     <LeftSide>
       <ADBButtonNormal 
+        enable={enable}
         cmdTriggerAnim={
           ((adbInputCMD === cmdStr) && canTriggerControlAnim && codeBlockIsShow)
         }
@@ -74,10 +72,18 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
               border-radius:0px;
               top:-1px;
             }
-            >span{
-              width:16px;
-              line-height:22px;
+            >button >svg{
+              left: -2px;
+              top:2px;
+            }
+            >button >span{
+              width:14px;
               top:-1px;
+              line-height:22px;
+              width: 14px;
+              font-size:9px;
+              text-align: center;
+              font-weight: 600;
             }
           `
         }
@@ -94,6 +100,7 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
     </LeftSide>
     <Divide isAnimationEnable={isGlobalAnimEnable}></Divide>
     <ADBButtonNormal 
+        enable={enable}
         buttonCSS = {
           css`
             > button{
@@ -121,10 +128,20 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
       </ADBButtonNormal>
       </ClipContainer>
 
-      <DropDownMenuSimple ref={dropdownRef} onClickIndex ={(i,val)=>{ 
-        setCurrentScreen(val)
-
-      }} menuStyle={{left:`-1px`,width:`150px`}} optionsData={optionsData} menuWidth={`150px`}></DropDownMenuSimple>
+      {enable?
+      <DropDownMenuSimple 
+        ref={dropdownRef} 
+        prefix={iconStr}
+        onClickIndex ={(i,val)=>{ 
+          setCurrentScreen('#' + (i+1))
+          onMenuClickIndex(i,val)
+        }} 
+        menuStyle={{left:`-1px`,width:`200px`}} 
+        optionsData={optionsData} 
+        menuWidth={`200px`}>
+      </DropDownMenuSimple>
+      :
+      ''}
   </Container>);
 
 })
@@ -145,6 +162,7 @@ position:relative;
 `
 const ClipContainer = styled.div<{
   isAnimationEnable:boolean;
+  isDeviceEnable:boolean;
 }>`
 display: inline-flex;
 flex-direction: row;
@@ -152,15 +170,13 @@ height:22px;
 border-radius: 4px;
 position:relative;
 border: 1px solid;
-border-color:${p => p.theme.colors.menu_border};
+border-color:${p => p.isDeviceEnable?p.theme.colors.menu_border:p.theme.colors.menu_border_half_alpha};
 transition:${p=>p.isAnimationEnable?'border-color 0.3s':'none'};
 overflow:hidden;
 `
 
 const NumContainer = styled.span`
-line-height:22px;
-width:10px;
-text-align:right;
+font-family: ${p => p.theme.fonts.numberInput};
 `
 
 const LeftSide = styled.div`

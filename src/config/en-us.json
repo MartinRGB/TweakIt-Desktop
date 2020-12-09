@@ -41,6 +41,8 @@
   "Console":"Console",
   "Theme":"Theme",
   "Animation":"Animation",
-  "Language":"Language"
-
+  "Language":"Language",
+  "Cast":"Cast",
+  "Screenshot":"Screenshot",
+  "Record":"Record"
 }

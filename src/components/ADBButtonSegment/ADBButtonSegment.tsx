@@ -8,8 +8,6 @@ import { IADBSegment } from "@Types";
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '@Config/animation.json';
-
-import {execCMD,execCMDPromise,simpleRunCMD} from '@Helpers/ADBCommand/ADBCommand'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
@@ -17,13 +15,14 @@ import Icons from '@Assets/icons'
 import ADBButtonToggle from '@Components/ADBButtonToggle'
 
 
-const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick,onMouseDown,onMouseUp,conatinerCSS,cmdTriggerAnim,cmdArray,iconArray,active,onSegementClickIndex}) => {
+const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick,onMouseDown,onMouseUp,conatinerCSS,cmdTriggerAnim,cmdArray,iconArray,active,onSegementClickIndex,enable,disableIndex}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,setADBInputCMD,canTriggerControlAnim,setTriggerControlAnim} = useContext(CodeBlockStateContext,);
   const [isScaleUp,SetIsScaleUp] = useState<boolean>(false);
   const [currentActiveADBItem,setCurrentActiveADBItem] = useState<string>(active)
 
+  
   const {stateWatcher} = useSpring({
     stateWatcher: (cmdArray.includes(adbInputCMD) && canTriggerControlAnim && codeBlockIsShow) ? 0: 1,
     config:animationConfig.adb_trigger_animtion,
@@ -35,17 +34,17 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
     }
  })
 
-  const dealADBCommand = (cmd:any) =>{
-    simpleRunCMD(cmd,codeBlockIsShow)
-  }
 
   var SegmentIcon;
   return (
   <Container
     isAnimationEnable={isGlobalAnimEnable}
+    isDeviceEnable={enable}
     css={conatinerCSS}
     style={
-      {...style,}
+      {...style,
+       cursor:`${enable?'':'not-allowed'}`,
+      }
     }>
     {
       iconArray.map(function (data:any,index:number) {
@@ -56,12 +55,13 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
             style={{
               border:`none`,
             }}
+            enable={disableIndex === index?false:enable}
             cmdTriggerAnim={
               ((adbInputCMD === cmdArray[index]) && canTriggerControlAnim && codeBlockIsShow)
             }
             cmd={cmdArray[index]}
             onClick={()=>{
-              dealADBCommand(cmdArray[index])
+              //dealADBCommand(cmdArray[index])
               setCurrentActiveADBItem(cmdArray[index])
               onSegementClickIndex(index,iconArray[index],cmdArray[index])
             }}
@@ -87,6 +87,7 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
 
 const Container = styled.div<{
   isAnimationEnable:boolean;
+  isDeviceEnable:boolean;
 }>`
 display: inline-flex;
 flex-direction: row;
@@ -94,7 +95,7 @@ flex-direction: row;
 border-radius: 4px;
 overflow:hidden;
 border: 1px solid;
-border-color:${p => p.theme.colors.menu_border};
+border-color:${p => p.isDeviceEnable?p.theme.colors.menu_border:p.theme.colors.menu_border_half_alpha};
 transition:${p=>p.isAnimationEnable?'border-color 0.3s':'none'};
 `
 

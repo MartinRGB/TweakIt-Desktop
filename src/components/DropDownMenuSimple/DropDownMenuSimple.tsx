@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import {css} from "@emotion/core";
 import { IDropDownMenu } from "@Types";
 
+import { useTranslation, Trans, Translation } from 'react-i18next'
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
@@ -12,7 +13,7 @@ import Icons from '@Assets/icons'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 
-const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClickIndex,menuStyle,style,optionsData,menuWidth}, ref) => {
+const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClickIndex,menuStyle,style,optionsData,menuWidth,prefix}, ref) => {
 
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
@@ -26,7 +27,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
 
 
   const menuPadding = 6;
-  const menuListNum = optionsData.length;
+  const menuListNum = prefix?optionsData.length + 1:optionsData.length;
   const listHeight = 20;
 
   useImperativeHandle(ref, () => ({
@@ -55,7 +56,6 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
       setOpacityTransitionIn(true)
     }
     else{
-      console.log('here')
       isGlobalAnimEnable?setSelectExpandAnimate(false):setSelectAnimationProgress(0)
       isGlobalAnimEnable?'':setSelectExpand(false)
       isGlobalAnimEnable?'':setOpacityTransitionIn(false)
@@ -147,6 +147,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
           style={{
           }}
         >
+        {prefix?<PrefixDiv style={{ height:`${listHeight}px`}}><PrefixSpan><Trans>{prefix}</Trans></PrefixSpan></PrefixDiv>:''}
         {
           optionsData.map(function (data:any,index:number) {
 
@@ -168,7 +169,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
                     >
                     <Icons.CheckMark style={{
                       position: `absolute`,
-                      top: `4px`,
+                      top: `1px`,
                       left: `8px`,
                       transform: `${(selectIndex === index)?`scale3d(1,1,1)`:'scale3d(0,0,0)'}`,
                       opacity: `${(selectIndex === index)?`${selectAnimationProgress}`:'0'}`,
@@ -184,7 +185,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,onClic
                         transition:`${isGlobalAnimEnable?'all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s':'none'}`,
                         
                       }}  
-                    >{data.value}</DropDownListSpan> 
+                    >{'#1 ' + data.value}</DropDownListSpan> 
                 </DropDownListBackground>
               </DropDownListContainer>
             )
@@ -226,7 +227,7 @@ const DropDownBackground = styled.div<{
   width:100%;
   height:100%;
   background:${p => p.theme.colors.normal_button_bg};
-  transition:${p=>p.isAnimationEnable?'background 0.3s':'none'};
+  transition:${p=>p.isAnimationEnable?'opacity 0.3s,background 0.3s':'none'};
   backdrop-filter:blur(3px);
   position: absolute;
   top: 0px;
@@ -277,6 +278,26 @@ const DropDownListContainer = styled.li<{
 `
 
 const DropDownTransitionDiv = styled.div`
+`
+
+const PrefixDiv = styled.div`
+    position: relative;
+    display: block;
+`
+
+const PrefixSpan = styled.span`
+  color:${p => p.theme.colors.text};
+  font-family: ${p => p.theme.fonts.headText};
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 20px;
+  position: absolute;
+  left: 28px;
+  top: 0px;
+  user-select:none;
+  transition:all 0.3s;
+  transform-origin: left center;
+  opacity:0.3;
 `
 
 const DropDownListBackground = styled.div`

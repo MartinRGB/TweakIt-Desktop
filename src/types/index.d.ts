@@ -12,13 +12,14 @@ export interface IButton {
   cmdTriggerAnim?:boolean;
   cmd?:any;
   buttonSib:any;
+  enable?:any;
 }
 
 export interface IADBExpandSelect {
   children?: React.ReactNode;
   onClick?: any;
   onArrowClick? any;
-  onSegementClickIndex?:any;
+  onMenuClickIndex?:any;
   onMouseDown?: any;
   onMouseUp?:any;
   active?: boolean;
@@ -29,6 +30,8 @@ export interface IADBExpandSelect {
   cmdStr?:any;
   iconStr?:any;
   onADBExpandSelect?:any;
+  enable?:any;
+  optionsData?:any;
 }
 
 export interface IADBSegment {
@@ -45,6 +48,8 @@ export interface IADBSegment {
   cmdArray?:any;
   iconArray?:any;
   defaultActive?:any;
+  enable?:boolean;
+  disableIndex?:any;
 }
 
 
@@ -56,6 +61,8 @@ export interface IDropDownMenu{
   style?:any;
   onClickIndex?: any;
   onClick?: any;
+  enable?:any;
+  prefix?:any;
 }
 
 declare global {

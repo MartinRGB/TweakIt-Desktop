@@ -12,13 +12,16 @@ import animationConfig from '@Config/animation.json';
 import ReactPlaceholder from 'react-placeholder';
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import ADBTopArea from './ADBTopArea'
+//adb shell ip addr show wlan0
+//adb shell getprop ro.build.version.sdk
+//adb shell getprop ro.build.version.release 
+import adb from 'adbkit'
 
-const ADBPanel: React.FC = memo(({ children }) => {
+const ADBPanel: React.FC = memo(() => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();
   const isDark = colorMode === `dark`;
   const { t ,i18n} = useTranslation()
-  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const clickLan = () =>{
     i18n.changeLanguage(i18n.language === 'enUs' ? 'zhCn' : 'enUs');
   }
@@ -30,7 +33,9 @@ const ADBPanel: React.FC = memo(({ children }) => {
     ADBExpandStateContext,
   );
 
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const [animationExpand,setAnimationExpand] = useState<boolean>(adbIsExpand)
+
   
   // React Spring State
   // const [isExpand, set] = useState(false)

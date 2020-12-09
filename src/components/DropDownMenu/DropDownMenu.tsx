@@ -12,7 +12,7 @@ import Icons from '@Assets/icons'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 
-const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuStyle,style,optionsData,menuWidth,isRichAnimation}) => {
+const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuStyle,style,optionsData,menuWidth,isRichAnimation,enable}) => {
 
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
@@ -24,9 +24,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
   const [selectExpandAnimate,setSelectExpandAnimate] = useState<boolean>(false)
   const [opacityTransitionIn,setOpacityTransitionIn] = useState<boolean>(false)
 
-
   const menuPadding = 6;
-  const menuListNum = optionsData.length;
   const listHeight = 20;
 
   const onClickSelect = (e:any) =>{
@@ -44,7 +42,6 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
       setOpacityTransitionIn(true)
     }
     else{
-      console.log('here')
       isGlobalAnimEnable?setSelectExpandAnimate(false):setSelectAnimationProgress(0)
       isGlobalAnimEnable?'':setSelectExpand(false)
       isGlobalAnimEnable?'':setOpacityTransitionIn(false)
@@ -111,26 +108,36 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
   })
 
   return (        
-  <CustomSelectWrapper isAnimationEnable={isGlobalAnimEnable} style={{...style,width:`${menuWidth}`,minWidth:`${menuWidth}`}}>
+  <CustomSelectWrapper isAnimationEnable={isGlobalAnimEnable} style={{
+    ...style,
+    width:`${menuWidth}`,
+    minWidth:`${menuWidth}`,
+    cursor:`${enable?'':'not-allowed'}`,
+    opacity:`${enable?'1':'0.5'}`,
+  }}>
     <CustomSelect
       onClick={(e:any)=>{onClickSelect(e)}}
-      isExpanded={selectExpand}
+      isExpanded={selectExpand &&(optionsData.length != 0)}
       isAnimationEnable={isGlobalAnimEnable}
+      style={{
+        pointerEvents:`${enable?'':'none'}`,
+        cursor:`${enable?'pointer':''}`,
+      }}
     >
       <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{selectedText}</CustomSelectedSpan>
       <Icons.SelectArrow></Icons.SelectArrow>
     </CustomSelect>
 
     {
-      selectExpand?
+      (selectExpand && optionsData.length!=0)?
       <DropDownMenuConatiner
       isAnimationEnable={isGlobalAnimEnable}
       style={{
         ...menuStyle,
         height: `${Math.max(0,(selectIndex === -1 || !isRichAnimation)?
-                              (0 + selectAnimationProgress*(menuPadding*2+menuListNum*listHeight - 0))
+                              (0 + selectAnimationProgress*(menuPadding*2+optionsData.length*listHeight - 0))
                               :
-                              (20 + selectAnimationProgress*(menuPadding*2+menuListNum*listHeight - 20))  )}px`,
+                              (20 + selectAnimationProgress*(menuPadding*2+optionsData.length*listHeight - 20))  )}px`,
         padding: `${menuPadding*selectAnimationProgress}px 0px`,
         borderWidth: `${selectAnimationProgress}px`,
         transform:`${isRichAnimation?`translate3d(0px,${(selectIndex === -1)?0:selectAnimationProgress*21 -21}px,0px)`:''}`
@@ -331,7 +338,7 @@ const CustomSelectWrapper = styled.div<{
     position: relative;
     border: 1px solid;
     border-color:${p => p.theme.colors.menu_border};
-    transition:${p=>p.isAnimationEnable?'border-color 0.3s,background 0.3s':'none'};
+    transition:${p=>p.isAnimationEnable?'opacity 0.3s,border-color 0.3s,background 0.3s':'none'};
     border-radius: 4px;
     margin-right: 32px;
     background: ${p => p.theme.colors.normal_button_bg};
@@ -339,13 +346,14 @@ const CustomSelectWrapper = styled.div<{
 const CustomSelect = styled.button<{
   isExpanded:boolean;
   isAnimationEnable:boolean;
+  isEnable:boolean;
 }>`
     height: 100%;
     width: 100%;
     position: absolute;
     background: ${p=>p.isExpanded?p.theme.colors.primary_middle_opacity:'transparent'};
     transition:${p=>p.isAnimationEnable?'all 0.15s':'none'};
-    cursor:pointer;
+    //cursor:pointer;
     outline:none;
     border:none;
 

@@ -1,12 +1,12 @@
 {
 
-  "isDarkMode":true,
+  "isDarkMode":false,
   "isChineseLanguage":true,
   "isAnimationEnable":true,
   
   "codeBlockIsShow":true,
   "isBottomPannelExpanded":true,
-  "isADBPannelExpand":false,
+  "isADBPannelExpand":true,
 
   "initAnimPlatform":"",
   "initAnimName":"",

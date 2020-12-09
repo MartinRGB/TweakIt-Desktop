@@ -10,36 +10,36 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-import {execCMD,execCMDPromise,simpleRunCMD} from '@Helpers/ADBCommand/ADBCommand'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
-
-const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , onClick,onMouseDown,onMouseUp,buttonCSS,cmdTriggerAnim,cmd}) => {
+import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
+const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , onClick,onMouseDown,onMouseUp,buttonCSS,cmdTriggerAnim,cmd,enable}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim,setTriggerControlAnim} = useContext(CodeBlockStateContext,);
+  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim,setTriggerControlAnim,setTriggerBlocAnim} = useContext(CodeBlockStateContext,);
   const [isScaleUp,SetIsScaleUp] = useState<boolean>(false);
   const [bind, { delta, down }] = useGesture()
+
+  const {cmdWithConsole} =  useContext(ADBCommandStateContext)
 
   const {stateWatcher} = useSpring({
     stateWatcher: (cmdTriggerAnim) ? 0: 1,
     config:animationConfig.adb_trigger_animtion,
     onRest: () =>{
      if(cmdTriggerAnim){
-       console.log('here')
        setTriggerControlAnim(false)
      }
     }
  })
 
   const dealADBCommand = () =>{
-    simpleRunCMD(cmd,codeBlockIsShow)
+    cmdWithConsole(cmd)
   }
 
   return (
   <animated.div 
-  
+    
     css={buttonCSS}
     {...bind()}
     style={
@@ -47,16 +47,20 @@ const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , 
       transform: `${(isScaleUp || cmdTriggerAnim)? `scale3d(1.1,1.1,1)`:`scale3d(1,1,1)`}`,
       transition: `${isGlobalAnimEnable?'transform 0.35s cubic-bezier(0.3, 2.5, 0.5, 1) 0s':''}`,
       ...parentStyle,
+      cursor:`${enable?'':'not-allowed'}`,
       }
     }>
       <Button
         style={{
           ...style,
           transition: `${isGlobalAnimEnable?'all 0.2s':''}`,
+          pointerEvents:`${enable?'':'none'}`,
+          opacity:`${enable?'1':'0.5'}`,
         }}
         active={(isScaleUp || cmdTriggerAnim)}
         isAnimationEnable={isGlobalAnimEnable}
         onClick={()=>{
+          setTriggerBlocAnim(true)
           cmd?dealADBCommand():'';
           onClick();
         }}

@@ -43,7 +43,7 @@ const MainPanel: React.FC = memo(({ children }) => {
       css={AnimatedContainerCSS}
       // animated dynamic style
       style={{
-        //width: interpolate([widthProps], (widthProps => `calc(100% - ${widthProps}px)`))
+        width: interpolate([widthProps], (widthProps => `calc(100% - ${widthProps}px)`))
       }}
     >
       <Container 

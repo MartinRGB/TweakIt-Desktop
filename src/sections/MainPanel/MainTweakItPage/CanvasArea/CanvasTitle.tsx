@@ -1,4 +1,4 @@
-import React ,{ useContext} from 'react';
+import React ,{ useContext,memo} from 'react';
 import styled from '@emotion/styled';
 
 import { Trans } from 'react-i18next'
@@ -7,7 +7,11 @@ import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import initState from '@Config/init_state.json'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
-const CanvasTitle: React.FC = ({}) => {
+export interface ICanvasTitle{
+  style?:any
+}
+
+const CanvasTitle: React.FC<ICanvasTitle> = memo(({style}) => {
   
   const { currentAnimName} = useContext(
     AnimatorTypeContext
@@ -15,12 +19,12 @@ const CanvasTitle: React.FC = ({}) => {
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   return (
-      <AnimationTitle isAnimationEnable={isGlobalAnimEnable}>
+      <AnimationTitle style={{...style}} isAnimationEnable={isGlobalAnimEnable}>
           <Trans>{(currentAnimName)?currentAnimName:'select_an_animator'}</Trans>
       </AnimationTitle>
 
   )
-}
+})
 
 export default CanvasTitle
 

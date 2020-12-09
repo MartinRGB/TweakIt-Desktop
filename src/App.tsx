@@ -1,4 +1,4 @@
-import React ,{useEffect} from 'react'
+import React ,{useEffect,useContext} from 'react'
 import { render } from 'react-dom'
 import { GlobalStyle } from '@Styles/GlobalStyle'
 import { css, keyframes } from '@emotion/core';
@@ -19,12 +19,12 @@ import '@Context/i18nContext'
 import { useTranslation, Trans} from 'react-i18next'
 
 import ADBExpandStateProvider from "@Context/ADBExpandContext";
-import ADBConnectProvider from "@Context/ADBConnectContext";
+import ADBCommandProvider from "@Context/ADBCommandContext";
 import CodeBlockProvider from "@Context/CodeBlockContext";
 import GlobalAnimationStateProvider from "@Context/GlobalAnimationContext";
+import ADBConnectProvider from "@Context/ADBConnectContext";
 import {injectPathEnvironments} from '@Helpers/GlobalEnvironments/PathEnvironments'
 import animatorList from '@Config/animator_list.json';
-
 
 // twmacro
 const Button = styled.button`
@@ -42,6 +42,7 @@ document.body.appendChild(mainElement)
 const App = () => {
   const { t ,i18n} = useTranslation()
   //console.log(animatorList)
+
   useEffect(() => {
     injectPathEnvironments()
   }, [])
@@ -51,13 +52,16 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <GlobalAnimationStateProvider>
         <CodeBlockProvider>
-        <ADBConnectProvider>
+        <ADBCommandProvider>
         <ADBExpandStateProvider>
+
+        <ADBConnectProvider>
             <TitleBar>TWEAKIT</TitleBar>
             <ADBPanel></ADBPanel>
             <MainPanel></MainPanel>
-        </ADBExpandStateProvider>
         </ADBConnectProvider>
+        </ADBExpandStateProvider>
+        </ADBCommandProvider>
         </CodeBlockProvider>
         </GlobalAnimationStateProvider>
       </ThemeProvider>

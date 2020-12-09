@@ -8,12 +8,15 @@ export var CodeBlockStateContext = createContext({
   setADBInputCMD:(tag: string) => {},
   canTriggerControlAnim:false,
   setTriggerControlAnim: (tag: boolean) => {},
+  canTriggeBlocAnim:false,
+  setTriggerBlocAnim: (tag: boolean) => {},
 });
 
 var CodeBlockStateProvider: React.FC<{}> = ({ children }) => {
   const [cbIsShow, setCBIsShow] = useState<boolean>(initState.codeBlockIsShow);
   const [adbCMD,setADBCMD] = useState<string>('')
   const [canTCAnim,setTCAnim] = useState<boolean>(false);
+  const [canTBAnim,setTBAnim] = useState<boolean>(false);
 
   function codeBlockIsShowAndSave(tag: boolean) {
     setCBIsShow(tag);
@@ -26,6 +29,11 @@ var CodeBlockStateProvider: React.FC<{}> = ({ children }) => {
   function setCanTriggerControlAnimAndSave(tag:boolean){
     setTCAnim(tag)
   }
+
+  function setCanTriggerBlocAnimAndSave(tag:boolean){
+    setTBAnim(tag)
+  }
+
   return (
     <CodeBlockStateContext.Provider
       value={{
@@ -35,6 +43,8 @@ var CodeBlockStateProvider: React.FC<{}> = ({ children }) => {
         setADBInputCMD:setADBCMDAndSave,
         canTriggerControlAnim:canTCAnim,
         setTriggerControlAnim:setCanTriggerControlAnimAndSave,
+        canTriggeBlocAnim:canTBAnim,
+        setTriggerBlocAnim: setCanTriggerBlocAnimAndSave,
       }}>
       {children}
     </CodeBlockStateContext.Provider>

@@ -40,6 +40,7 @@
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
+    "adbkit": "^2.11.1",
     "autosize": "^4.0.2",
     "babel-loader": "^8.1.0",
     "babel-plugin-macros": "^2.6.1",
@@ -90,6 +91,7 @@
     "worker-loader": "^3.0.6"
   },
   "dependencies": {
+    "@devicefarmer/adbkit": "^2.11.3",
     "i18next": "^19.8.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

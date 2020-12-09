@@ -11,6 +11,7 @@ import adbConfig from '@Config/adb_cmd_list.json';
 import ADBButtonSegment from '@Components/ADBButtonSegment'
 import ADBExpandSelect from '@Components/ADBExpandSelect'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+import {ADBConnectContext}  from '@Context/ADBConnectContext';
 
 const ADBTopArea: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
@@ -21,41 +22,25 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   const segmentCMDStr = [adbConfig.adb_b,adbConfig.adb_test];
 
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
+  const {connectedDevice,connectedDeviceLength,displayInfo,deviceWifi,startWifiConnection} = useContext(ADBConnectContext)
 
   const castIconStr:any = "Cast";
   const screenshotIconStr = "Screenshot";
   const recordIconStr = "Record";
-  const castCMDStr:any = adbConfig.adb_1;
+  const [castCMDStr,setCastCMDStr] = useState<string>(adbConfig.adb_1);
   const screenshotCMDStr = adbConfig.adb_2;
   const recordCMDStr= adbConfig.adb_3;
 
 
-  const optionsData = [
-    { value: "Spring", label: "Spring" },
-    { value: "Summer", label: "Summer" },
-    { value: "Autumn", label: "Autumn" },
-    { value: "Winter", label: "Winter" },
-    { value: "Spring", label: "Spring" },
-    { value: "Summer", label: "Summer" },
-    { value: "Autumn", label: "Autumn" },
-    { value: "Winter", label: "Winter" },
-    { value: "Spring", label: "Spring" },
-    { value: "Summer", label: "Summer" },
-    { value: "Autumn", label: "Autumn" },
-    { value: "Winter", label: "Winter" },
-    { value: "Spring", label: "Spring" },
-    { value: "Summer", label: "Summer" },
-    { value: "Autumn", label: "Autumn" },
-    { value: "Winter", label: "Winter" },
-    { value: "Spring", label: "Spring" },
-    { value: "Summer", label: "Summer" },
-    { value: "Autumn", label: "Autumn" },
-    { value: "Winter", label: "Winter" },
-    { value: "Spring", label: "Spring" },
-    { value: "Summer", label: "Summer" },
-    { value: "Autumn", label: "Autumn" },
-    { value: "Winter", label: "Winter" },
-  ];
+  const [listDataLength,setListDataLength] = useState<number>(0)
+  const [listData,setListData] = useState<any>([])
+
+
+  useEffect( () => {
+
+  }, []);
+
+
 
   
   const [connectionMode,setConnectionMode] = useState<string>(defaultActivie)
@@ -70,12 +55,27 @@ const ADBTopArea: React.FC = memo(({ children }) => {
     console.log(cmd)
     console.log(val)
     setConnectionMode(val)
+    if(i == 1){
+      startWifiConnection()
+    }
+  }
+
+  const onCastIndexClickded= (i:any,val:any) =>{
+    console.log(i)
+    console.log(val)
+    setCastCMDStr(`${adbConfig.adb_1} -s ${val.replace(" - display 0","")}`)
   }
 
 
   return (
       <Container isAnimationEnable={isGlobalAnimEnable}>
-        <DropDownMenu onClickIndex={(i,val)=>{onIndexClicked(i,val)}} style={{zIndex:`1`}} menuStyle={{zIndex:`1`,left:`-1px`,width:`calc(100% + 3px)`}} optionsData={optionsData} menuWidth={`calc(100%)`} isRichAnimation={false}></DropDownMenu>
+        <DropDownMenu onClickIndex={(i,val)=>{onIndexClicked(i,val)}} style={{zIndex:`1`}} menuStyle={{zIndex:`1`,left:`-1px`,width:`calc(100% + 3px)`}} optionsData={connectedDevice} enable={connectedDeviceLength!=0} menuWidth={`calc(100%)`} isRichAnimation={false}></DropDownMenu>
+
+        <div style={{
+            position: `absolute`,
+            top: `0`,
+            left: `0`,
+        }}>{deviceWifi}</div>
 
         <ADBButtonSegment
           style={{    
@@ -85,6 +85,8 @@ const ADBTopArea: React.FC = memo(({ children }) => {
           cmdArray = {segmentCMDStr}
           iconArray = {segmentIconStr}
           active = {defaultActivie}
+          enable = {connectedDeviceLength != 0}
+          disableIndex = {(deviceWifi)?-1:1}
           onSegementClickIndex={(i,val,cmd)=>{onSegementIndexClicked(i,val,cmd)}}
         >
 
@@ -97,6 +99,9 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             }}
             iconStr={castIconStr}
             cmdStr={castCMDStr}
+            enable={connectedDeviceLength!=0}
+            optionsData={displayInfo}
+            onMenuClickIndex={(i,val) =>{onCastIndexClickded(i,val)}}
           >
 
           </ADBExpandSelect>
@@ -106,12 +111,16 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             }}
             iconStr={screenshotIconStr}
             cmdStr={screenshotCMDStr}
+            enable={connectedDeviceLength!=0}
+            optionsData={displayInfo}
           >
 
           </ADBExpandSelect>
           <ADBExpandSelect
             iconStr={recordIconStr}
             cmdStr={recordCMDStr}
+            enable={connectedDeviceLength!=0}
+            optionsData={displayInfo}
           >
 
           </ADBExpandSelect>

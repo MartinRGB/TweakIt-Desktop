@@ -41,5 +41,8 @@
   "Console":"控制台",
   "Theme":"主题",
   "Animation":"动画效果",
-  "Language":"语言"
+  "Language":"语言",
+  "Cast":"投屏",
+  "Screenshot":"截图",
+  "Record":"录屏"
 }

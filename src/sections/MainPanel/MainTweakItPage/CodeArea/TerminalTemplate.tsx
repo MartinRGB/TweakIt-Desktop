@@ -8,11 +8,10 @@ import {css} from "@emotion/core";
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
 import Solver from '@Helpers/Solver'
-import {ADBConnectStateContext} from '@Context/ADBConnectContext'
+import {ADBCommandStateContext} from '@Context/ADBCommandContext'
 import theme from 'src/styles/theme.ts';
 import CodeTexts from '@Components/CodeTexts'
 import autosize from 'autosize'
-import {execCMD,execCMDPromise,registWindowCMDConsole} from '@Helpers/ADBCommand/ADBCommand'
 import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '@Config/animation.json';
 import DataDrivenAnimator from '@Helpers/Animator/DataDrivenAnimator'
@@ -20,6 +19,8 @@ import TerminalCore from './TerminalCore'
 
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+
+
 export interface ITerminalSnippet{
   style?:any;
   scrollRef?:any;
@@ -29,13 +30,14 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
 
   const [colorMode] = useColorMode();
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const {cleanAllData,adbInfoTimes,adbTagStartText,adbCommandText,adbCommandIsSuccess,adbResultText,adbTagEndText,setADBInfoTimes,setADBTagStartText,setADBCommandText,setADBTagEndText,setADBCommandIsSuccess,setADBResultText} =  useContext(ADBConnectStateContext)
+  const {cleanAllData,adbInfoTimes,adbTagStartText,adbCommandText,adbCommandIsSuccess,adbResultText,adbTagEndText,setADBInfoTimes,setADBTagStartText,setADBCommandText,setADBTagEndText,setADBCommandIsSuccess,setADBResultText,cmdWithConsole,setCMDCallbackListener} =  useContext(ADBCommandStateContext)
   const [textIsOnFocus,setTextIsOnFocus] = useState<boolean>(true);
   const [textShouldHighlight,setTextShouldHighlight] = useState<boolean>(true);
 
-  const {adbInputCMD,setADBInputCMD,setTriggerControlAnim} = useContext(
+  const {adbInputCMD,setADBInputCMD,setTriggerControlAnim,canTriggeBlocAnim,setTriggerBlocAnim} = useContext(
     CodeBlockStateContext,
   );
+
 
   const [isInit,setIsInit] = useState<boolean>(false)
   const initHeight = 191;
@@ -55,8 +57,6 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
       scrollRef.current.scrollToBottom();
     }
   }
-
-
 
   const Comment = CodeTexts.Grey;
   const ResultError = CodeTexts.Red;
@@ -80,6 +80,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
     animation.start();
   }
 
+
   const solverScroll:any = new Solver.Android.Spring(450,0.95,0)
   const animationScroll = new DataDrivenAnimator(solverScroll.getValueArray())
   const startScrollAnimation = (height:any) => {
@@ -94,58 +95,11 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
     animationScroll.start();
   }
 
-  const cmdResultToConsole = (cmd:any) =>{
-    // add this for console
-    setADBInputCMD(cmd);
-    
-    execCMDPromise(cmd,`input command is ${cmd}`,
-    (value:any)=>{
-      setADBInfoTimes(adbInfoTimes+1)
-      setADBTagStartText( 
-      [`=================== Result Start At ${new Date().toString()} ===================`]
-      )
-      setADBCommandText(
-      [`Command '${cmd}' result is: `]
-      )
-      setADBCommandIsSuccess(
-      [true]
-      )
-      setADBResultText(
-      [value]
-      )
-      setADBTagEndText(
-      [`=================== Result End At ${new Date().toString()} ===================`]
-      )
-      setInputValue('');
-      if(isGlobalAnimEnable) startTransitionInAnimation();
-    },
-    (value:any)=>{
-      setADBInfoTimes(adbInfoTimes+1)
-      setADBTagStartText( 
-      [`=================== Result Start At ${new Date().toString()} ===================`]
-      )
-      setADBCommandText(
-      [`Command '${cmd}' not found: `]
-      )
-      setADBCommandIsSuccess(
-      [false]
-      )
-      setADBResultText(
-      [value]
-      )
-      setADBTagEndText(
-      [`=================== Result  End  At ${new Date().toString()} ===================`]
-      )
-      setInputValue('');
-      if(isGlobalAnimEnable) startTransitionInAnimation();
-    })
-  }
-
 
   const [inputValue,setInputValue] = useState<string>('');
   const onCMDKeychange = (e:any) =>{
     setInputValue(e.target.value);
-    setADBInputCMD(e.target.value);
+    //setADBInputCMD(e.target.value);
     setTriggerControlAnim(false)
   }
 
@@ -153,6 +107,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
 
     if (e.key === 'Enter') {
 
+      //
       if(e.target.value === ''){
         
       }
@@ -169,13 +124,13 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
         setADBInputCMD(e.target.value);
         setTriggerControlAnim(true)
         setInputValue('loading...');
-        cmdResultToConsole(adbInputCMD)
+        cmdWithConsole(e.target.value)
+        setInputValue('');
+        if(isGlobalAnimEnable) startTransitionInAnimation();
       }
     }
   }
 
-  //TODO
-  registWindowCMDConsole(cmdResultToConsole);
 
   const onCMDKeydown = (e:any) =>{
 
@@ -216,7 +171,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
     </CommandInfoContainer>
     {(isInit&&adbInfoTimes>-1)?
       adbResultText.map(function (data:any,index:number) {
-
+        console.log('23')
         return (
           <CommandContainer style={{
             transition: `${isGlobalAnimEnable?'all 0.6s cubic-bezier(0.13,0.79,0.25,1)':'none'}`,
@@ -247,12 +202,17 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
       }) 
       :''
     }
-    <CMDInputContainer highlight={textShouldHighlight} isAnimationEnable={isGlobalAnimEnable} contentEditable={false} 
-               suppressContentEditableWarning={true}>
-
+    <CMDInputContainer contentEditable={false} 
+        suppressContentEditableWarning={true}>
+      <CMDPlaceHolder
+        highlight={textShouldHighlight}
+        isAnimationEnable={isGlobalAnimEnable}
+        contentEditable={false} 
+        suppressContentEditableWarning={true}
+      >{`>`}</CMDPlaceHolder>
       <CMDInput
         style={{
-          transition:`${isGlobalAnimEnable?'background 0.15s':'none'}`
+          transition:`${isGlobalAnimEnable?'background 0.15s,color 0.15s':'none'}`
         }}
         ref={textAreaRef}
         placeholder="" 
@@ -269,7 +229,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
         onMouseEnter={(e)=>{onMouseHover()}}
         onMouseLeave={(e)=>{onMouseLeave()}}
       />
-    </CMDInputContainer>
+      </CMDInputContainer>
     </TerminalContainer>
   )
 })
@@ -345,34 +305,29 @@ const CommandInfoNote =styled.p`
   }
 `
 
-
-
 const CMDInputContainer = styled.div<{
+}>`
+  position:relative;
+  margin-left:14px;
+`
+
+const CMDPlaceHolder = styled.p<{
   isAnimationEnable:boolean;
   highlight:boolean;
 }>`
-  position: relative;
-  height: 28px;
-  margin-top: 10px;
-
-  ::before{
-    content: ">";
-    position: absolute;
-    left: 14px;
-    color:${p => p.theme.colors.primary};
-    font-family:${p => p.theme.fonts.monospace};
-    font-size:13px;
-    outline: none;
-    background: transparent;
-    border: none;
-    width: 100%;
-    line-height:28px;
-    z-index: -1;
-    user-select: none;
-    transition:${p=>p.isAnimationEnable?'left 0.15s':'none'};
-    left: ${p=>p.highlight?'14px':'0px'};
-  }
-
+  font-family:${p => p.theme.fonts.monospace};
+  font-size:13px;
+  outline: none;
+  background: transparent;
+  border: none;
+  width:30px;
+  line-height:28px;
+  position:absolute;
+  color:${p => p.theme.colors.primary};
+  font-family:${p => p.theme.fonts.monospace};
+  user-select: none;
+  transition:${p=>p.isAnimationEnable?'all 0.2s':'none'};
+  left: ${p=>p.highlight?'-14px':'-7px'};
 `
 
 const CMDInput = styled.input<{
@@ -387,7 +342,7 @@ const CMDInput = styled.input<{
   background: transparent;
   border: none;
   width: 100%;
-  padding-left: 30px;
+  padding-left: 8px;
   resize: none;
   line-height:28px;
   border-radius:5px;
@@ -397,5 +352,5 @@ const CMDInput = styled.input<{
   &:active{
     background:${p=>p.theme.colors.primary_middle_opacity};
   }
-
+  
 `

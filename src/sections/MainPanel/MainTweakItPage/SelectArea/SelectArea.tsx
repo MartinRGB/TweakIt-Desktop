@@ -1,4 +1,4 @@
-import React ,{memo,useState, useContext,useEffect,useRef} from 'react';
+import React ,{memo,useState, useContext,useEffect,useRef,useCallback} from 'react';
 
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
@@ -6,9 +6,7 @@ import styled from '@emotion/styled';
 import {css} from "@emotion/core";
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
-import MainButtonNormal from '@Components/MainButtonNormal'
 import ADBButtonNormal from '@Components/ADBButtonNormal'
-import ADBButtonToggle from '@Components/ADBButtonToggle'
 //import childProcess from 'child_process';
 import Icons from '@Assets/icons'
 import animationConfig from '@Config/animation.json';
@@ -16,10 +14,10 @@ import adbConfig from '@Config/adb_cmd_list';
 
 import theme from 'src/styles/theme.ts';
 import DropDownMenu from '@Components/DropDownMenu'
-import {ADBConnectStateContext} from '@Context/ADBConnectContext'
-import {execCMD,execCMDPromise,simpleRunCMD} from '@Helpers/ADBCommand/ADBCommand'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+import {ADBConnectContext}  from '@Context/ADBConnectContext';
+import adb from 'adbkit'
 
 const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
@@ -32,6 +30,14 @@ const SelectArea: React.FC = memo(({children}) => {
 
   const adbGetStr = adbConfig.adb_get_device;
   const adbBuildStr = adbConfig.adb_help;
+  const {connectedDevice,connectedDeviceLength} = useContext(ADBConnectContext)
+  
+  useEffect( () => {
+
+  }, []);
+
+
+
 
   const optionsData = [
     { value: "Spring", label: "Spring" },
@@ -72,7 +78,6 @@ const SelectArea: React.FC = memo(({children}) => {
     console.log(i)
     console.log(val)
   }
-
   
   return (
     <Container isAnimationEnable={isGlobalAnimEnable}>
@@ -80,9 +85,10 @@ const SelectArea: React.FC = memo(({children}) => {
       <TopLeftContainer>
         <TitleSpan><Trans>Select Animation In Tweakit-Android</Trans></TitleSpan>
 
-        <DropDownMenu onClickIndex={(i,val)=>{onIndexClicked(i,val)}} menuStyle={{left:`-1px`,width:`240px`}}optionsData={optionsData} menuWidth={`240px`} isRichAnimation={true}></DropDownMenu>
+        <DropDownMenu onClickIndex={(i,val)=>{onIndexClicked(i,val)}} menuStyle={{left:`-1px`,width:`240px`}}optionsData={optionsData} enable={connectedDeviceLength != 0} menuWidth={`240px`} isRichAnimation={true}></DropDownMenu>
      
         <ADBButtonNormal 
+          enable={connectedDeviceLength != 0}
           cmdTriggerAnim={
             ((adbInputCMD === adbGetStr) && canTriggerControlAnim && codeBlockIsShow)
           }
@@ -106,6 +112,7 @@ const SelectArea: React.FC = memo(({children}) => {
             <CustomSpan><Trans>Get</Trans></CustomSpan>
         </ADBButtonNormal>
         <ADBButtonNormal
+          enable={connectedDeviceLength != 0}
           cmdTriggerAnim={
             ((adbInputCMD === adbBuildStr) && canTriggerControlAnim && codeBlockIsShow)
           }

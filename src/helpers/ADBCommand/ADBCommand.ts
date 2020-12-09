@@ -1,9 +1,6 @@
 const childProcess = require('child_process');
-const exec = childProcess.exec;
+export const exec = childProcess.exec;
 const fs = require("fs");
-
-import { useContext } from "react";
-import {ADBConnectStateContext} from '@Context/ADBConnectContext'
 
 export const execCMD = (cmd:any,log?:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void) =>{
     
@@ -49,17 +46,4 @@ export const execCMDPromise = (cmd:any,log?:any,successCallback?:(e:any) => void
       }
       // failure                       
     });
-}
-
-export const registWindowCMDConsole = (funs:any) =>{
-  window.cmdConsole = funs;
-}
-
-export const simpleRunCMD = (cmd:any,cbIsShow:boolean) =>{
-  if(window.cmdConsole && cbIsShow){
-    window.cmdConsole(cmd)
-  }
-  else{
-    execCMD(cmd)
-  }
 }

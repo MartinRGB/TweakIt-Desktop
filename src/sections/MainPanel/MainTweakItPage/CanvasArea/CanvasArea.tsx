@@ -8,6 +8,10 @@ import CanvasSVG from './CanvasSVG'
 import initState from '@Config/init_state.json'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
+import {useSpring, animated,interpolate} from 'react-spring'
+import { ADBExpandStateContext } from '@Context/ADBExpandContext';
+import animationConfig from '@Config/animation.json';
+
 const CanvasArea: React.FC = memo(({children}) => {
   
   const svgWidth = initState.svgWidth;
@@ -24,16 +28,32 @@ const CanvasArea: React.FC = memo(({children}) => {
   // ############ Reszie ############
   const sizeRef = useRef(null);
   const [isLayoutRow, setIsLayoutRow] = useState<boolean>(false);
+  const [isTitleShow, setIsTitlteShow] = useState<boolean>(true);
   function updateSize() {
     let height = sizeRef.current.offsetHeight;
     let width  = sizeRef.current.offsetWidth;
     if(width >= 680){
       setIsLayoutRow(true)
+
     }
     else{
       setIsLayoutRow(false)
     }
   }
+
+
+  const { adbIsExpand, setADBExpandState} = useContext(
+    ADBExpandStateContext,
+  );
+
+  const {widthProps} = useSpring({
+    widthProps: adbIsExpand ? 320 : 0,
+    config: animationConfig.panel_slide,
+    onFrame:() =>{
+      updateSize();
+    }
+  })
+
 
   useLayoutEffect(() => {
     updateSize();
