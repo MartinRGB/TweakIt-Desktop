@@ -44,6 +44,7 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
     style={
       {...style,
        cursor:`${enable?'':'not-allowed'}`,
+       opacity:`${enable?'':'0.5'}`,
       }
     }>
     {

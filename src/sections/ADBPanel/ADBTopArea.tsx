@@ -22,7 +22,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   const segmentCMDStr = [adbConfig.adb_b,adbConfig.adb_test];
 
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const {connectedDevice,connectedDeviceLength,displayInfo,deviceWifi,startWifiConnection} = useContext(ADBConnectContext)
+  const {setCurrentSelectId,currentSelectId,connectedDevice,connectedDeviceLength,displayInfo,deviceWifi,startWifiConnection} = useContext(ADBConnectContext)
 
   const castIconStr:any = "Cast";
   const screenshotIconStr = "Screenshot";
@@ -32,50 +32,56 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   const recordCMDStr= adbConfig.adb_3;
 
 
-  const [listDataLength,setListDataLength] = useState<number>(0)
-  const [listData,setListData] = useState<any>([])
-
+  const [currentSelectIndex,setCurrentSelectIndex] = useState<number>(0);
 
   useEffect( () => {
 
   }, []);
 
 
-
   
-  const [connectionMode,setConnectionMode] = useState<string>(defaultActivie)
-  
-  const onIndexClicked = (i:any,val:any) =>{
+  const onDeviceIndexClicked = (i:any,val:any) =>{
     console.log(i)
     console.log(val)
+    setCurrentSelectId(val)
+    setCurrentSelectIndex(i)
+    console.log(deviceWifi)
   }
 
   const onSegementIndexClicked = (i:any,val:any,cmd:any) =>{
     console.log(i)
     console.log(cmd)
     console.log(val)
-    setConnectionMode(val)
+    // /setCurrentSelectId(deviceWifi[currentSelectIndex])
     if(i == 1){
-      startWifiConnection()
+      startWifiConnection(currentSelectId)
     }
   }
 
   const onCastIndexClickded= (i:any,val:any) =>{
     console.log(i)
     console.log(val)
-    setCastCMDStr(`${adbConfig.adb_1} -s ${val.replace(" - display 0","")}`)
+    setCastCMDStr(`${adbConfig.adb_1} -s ${currentSelectId}`)
   }
 
 
   return (
       <Container isAnimationEnable={isGlobalAnimEnable}>
-        <DropDownMenu onClickIndex={(i,val)=>{onIndexClicked(i,val)}} style={{zIndex:`1`}} menuStyle={{zIndex:`1`,left:`-1px`,width:`calc(100% + 3px)`}} optionsData={connectedDevice} enable={connectedDeviceLength!=0} menuWidth={`calc(100%)`} isRichAnimation={false}></DropDownMenu>
+        <DropDownMenu 
+          onClickIndex={(i,val)=>{onDeviceIndexClicked(i,val)}} 
+          style={{zIndex:`1`}} 
+          menuStyle={{zIndex:`1`,left:`-1px`,width:`calc(100% + 3px)`}} 
+          optionsData={connectedDevice} 
+          enable={connectedDeviceLength!=0} 
+          menuWidth={`calc(100%)`} 
+          isRichAnimation={false}
+        ></DropDownMenu>
 
         <div style={{
             position: `absolute`,
             top: `0`,
             left: `0`,
-        }}>{deviceWifi}</div>
+        }}>{deviceWifi[0]}</div>
 
         <ADBButtonSegment
           style={{    
@@ -84,9 +90,9 @@ const ADBTopArea: React.FC = memo(({ children }) => {
           }}
           cmdArray = {segmentCMDStr}
           iconArray = {segmentIconStr}
-          active = {defaultActivie}
-          enable = {connectedDeviceLength != 0}
-          disableIndex = {(deviceWifi)?-1:1}
+          active = {segmentCMDStr[0]}
+          enable = {(currentSelectId != '')}
+          disableIndex = {(deviceWifi[0] != '')?-1:1}
           onSegementClickIndex={(i,val,cmd)=>{onSegementIndexClicked(i,val,cmd)}}
         >
 
@@ -99,7 +105,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             }}
             iconStr={castIconStr}
             cmdStr={castCMDStr}
-            enable={connectedDeviceLength!=0}
+            enable={(currentSelectId != '')}
             optionsData={displayInfo}
             onMenuClickIndex={(i,val) =>{onCastIndexClickded(i,val)}}
           >
@@ -111,16 +117,18 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             }}
             iconStr={screenshotIconStr}
             cmdStr={screenshotCMDStr}
-            enable={connectedDeviceLength!=0}
+            enable={(currentSelectId != '')}
             optionsData={displayInfo}
+            onMenuClickIndex={() =>{}}
           >
 
           </ADBExpandSelect>
           <ADBExpandSelect
             iconStr={recordIconStr}
             cmdStr={recordCMDStr}
-            enable={connectedDeviceLength!=0}
+            enable={(currentSelectId != '')}
             optionsData={displayInfo}
+            onMenuClickIndex={() =>{}}
           >
 
           </ADBExpandSelect>

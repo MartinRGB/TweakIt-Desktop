@@ -56,7 +56,7 @@ export default {
     adb_border:'#DBDBDB',
     adb_control_background:'#C9CACA',
     menu_border:'#d2d2d2',
-    menu_border_half_alpha:'#d2d2d280',
+    menu_border_half_alpha:'#d2d2d2',
     selection:'#0adf073d',
     code_block_background:'#9999991a',
     modes:{
@@ -99,7 +99,7 @@ export default {
         adb_border:'#242424',
         adb_control_background:'#1C221F',
         menu_border:'#656565',
-        menu_border_half_alpha:'#65656580',
+        menu_border_half_alpha:'#65656590',
         code_block_background:'#99999933',
       },
       splash:{

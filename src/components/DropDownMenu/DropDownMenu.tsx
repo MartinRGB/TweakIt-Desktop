@@ -108,12 +108,13 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
   })
 
   return (        
-  <CustomSelectWrapper isAnimationEnable={isGlobalAnimEnable} style={{
+  <CustomSelectWrapper 
+  isDeviceEnable={enable} isAnimationEnable={isGlobalAnimEnable} style={{
     ...style,
     width:`${menuWidth}`,
     minWidth:`${menuWidth}`,
     cursor:`${enable?'':'not-allowed'}`,
-    opacity:`${enable?'1':'0.5'}`,
+    opacity:`${enable?'1':'0.2'}`,
   }}>
     <CustomSelect
       onClick={(e:any)=>{onClickSelect(e)}}
@@ -331,13 +332,14 @@ const DropDownListSpan = styled.span<{
 
 const CustomSelectWrapper = styled.div<{
   isAnimationEnable:boolean;
+  isDeviceEnable:boolean;
 }>`
     height: 20px;
     //width: 240px;
     // min-width:240px;
     position: relative;
     border: 1px solid;
-    border-color:${p => p.theme.colors.menu_border};
+    border-color:${p => p.isDeviceEnable?p.theme.colors.menu_border:p.theme.colors.menu_border_half_alpha};
     transition:${p=>p.isAnimationEnable?'opacity 0.3s,border-color 0.3s,background 0.3s':'none'};
     border-radius: 4px;
     margin-right: 32px;

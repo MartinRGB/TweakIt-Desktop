@@ -54,12 +54,13 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
     style={
       {...style,
         cursor:`${enable?'':'not-allowed'}`,
+        opacity:`${enable?'':'0.5'}`,
       }
     }>
     <ClipContainer isDeviceEnable={enable} isAnimationEnable={isGlobalAnimEnable}>
     <LeftSide>
       <ADBButtonNormal 
-        enable={enable}
+        enable={enable && currentScreen != '-'}
         cmdTriggerAnim={
           ((adbInputCMD === cmdStr) && canTriggerControlAnim && codeBlockIsShow)
         }
@@ -98,7 +99,7 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
         <NumContainer>{currentScreen}</NumContainer>
       </ADBButtonNormal>
     </LeftSide>
-    <Divide isAnimationEnable={isGlobalAnimEnable}></Divide>
+    <Divide isDeviceEnable={enable} isAnimationEnable={isGlobalAnimEnable}></Divide>
     <ADBButtonNormal 
         enable={enable}
         buttonCSS = {
@@ -148,10 +149,12 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
 
 const Divide = styled.div<{
   isAnimationEnable:boolean;
+  isDeviceEnable:boolean;
 }>`
 height:22px;
 width:1px;
-background:${p=>p.theme.colors.menu_border};
+isDeviceEnable:boolean;
+background:${p => p.isDeviceEnable?p.theme.colors.menu_border:p.theme.colors.menu_border_half_alpha};
 transition:${p=>p.isAnimationEnable?'background 0.3s':'none'};
 `
 

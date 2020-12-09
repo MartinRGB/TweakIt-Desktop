@@ -55,7 +55,7 @@ const ADBButtonToggle: React.FC<IButton> = memo(({ parentStyle,style,children, o
         style={{
           ...style,
           pointerEvents:`${enable?'':'none'}`,
-          opacity:`${enable?'1':'0.5'}`,
+          opacity:`${enable?'1':'0.2'}`,
         }}
         isActive={(active || cmdTriggerAnim)}
         isMouseActive={isScaleUp}

@@ -55,7 +55,7 @@ const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , 
           ...style,
           transition: `${isGlobalAnimEnable?'all 0.2s':''}`,
           pointerEvents:`${enable?'':'none'}`,
-          opacity:`${enable?'1':'0.5'}`,
+          opacity:`${enable?'1':'0.2'}`,
         }}
         active={(isScaleUp || cmdTriggerAnim)}
         isAnimationEnable={isGlobalAnimEnable}

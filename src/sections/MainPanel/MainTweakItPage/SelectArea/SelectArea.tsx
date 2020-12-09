@@ -30,7 +30,7 @@ const SelectArea: React.FC = memo(({children}) => {
 
   const adbGetStr = adbConfig.adb_get_device;
   const adbBuildStr = adbConfig.adb_help;
-  const {connectedDevice,connectedDeviceLength} = useContext(ADBConnectContext)
+  const {currentSelectId} = useContext(ADBConnectContext)
   
   useEffect( () => {
 
@@ -85,10 +85,10 @@ const SelectArea: React.FC = memo(({children}) => {
       <TopLeftContainer>
         <TitleSpan><Trans>Select Animation In Tweakit-Android</Trans></TitleSpan>
 
-        <DropDownMenu onClickIndex={(i,val)=>{onIndexClicked(i,val)}} menuStyle={{left:`-1px`,width:`240px`}}optionsData={optionsData} enable={connectedDeviceLength != 0} menuWidth={`240px`} isRichAnimation={true}></DropDownMenu>
+        <DropDownMenu onClickIndex={(i,val)=>{onIndexClicked(i,val)}} menuStyle={{left:`-1px`,width:`240px`}}optionsData={optionsData} enable={(currentSelectId != '')} menuWidth={`240px`} isRichAnimation={true}></DropDownMenu>
      
         <ADBButtonNormal 
-          enable={connectedDeviceLength != 0}
+          enable={(currentSelectId != '')}
           cmdTriggerAnim={
             ((adbInputCMD === adbGetStr) && canTriggerControlAnim && codeBlockIsShow)
           }
@@ -112,7 +112,7 @@ const SelectArea: React.FC = memo(({children}) => {
             <CustomSpan><Trans>Get</Trans></CustomSpan>
         </ADBButtonNormal>
         <ADBButtonNormal
-          enable={connectedDeviceLength != 0}
+          enable={(currentSelectId != '')}
           cmdTriggerAnim={
             ((adbInputCMD === adbBuildStr) && canTriggerControlAnim && codeBlockIsShow)
           }
