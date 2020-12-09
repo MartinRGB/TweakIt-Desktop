@@ -22,7 +22,7 @@ export const execCMD = (cmd:any,log?:any,successCallback?:(e:any) => void,errorC
 
 
 
-export const execCMDPromise = (cmd:any,log?:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void) =>{
+export const execCMDPromise = (cmd:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void,log?:any,) =>{
     var promise = new Promise((resolve, reject) =>{
       exec(cmd, function(error:any, stdout:any, stderr:any){
         if(error) {
@@ -34,16 +34,14 @@ export const execCMDPromise = (cmd:any,log?:any,successCallback?:(e:any) => void
     });
   
     promise.then(function(value) {
-      console.log(log + ':\n' + value);
+      //console.log(log + ':\n' + value);
       if(successCallback){
         successCallback(value);
-      }
-      // success                       
+      }               
     }).catch(function(error) {
-      console.error('error: ' + error);
+      //console.error('error: ' + error);
       if(errorCallback){
         errorCallback(error);
-      }
-      // failure                       
+      }             
     });
 }

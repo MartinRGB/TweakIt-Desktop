@@ -24,10 +24,10 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
 
   
   const {stateWatcher} = useSpring({
-    stateWatcher: (cmdArray.includes(adbInputCMD) && canTriggerControlAnim && codeBlockIsShow) ? 0: 1,
+    stateWatcher: (cmdArray?cmdArray.includes(adbInputCMD):'' && canTriggerControlAnim && codeBlockIsShow) ? 0: 1,
     config:animationConfig.adb_trigger_animtion,
     onRest: () =>{
-     if((cmdArray.includes(adbInputCMD) && canTriggerControlAnim && codeBlockIsShow)){
+     if((cmdArray?cmdArray.includes(adbInputCMD):'' && canTriggerControlAnim && codeBlockIsShow)){
        console.log(adbInputCMD)
         setCurrentActiveADBItem(adbInputCMD)
      }
@@ -58,13 +58,13 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
             }}
             enable={disableIndex === index?false:enable}
             cmdTriggerAnim={
-              ((adbInputCMD === cmdArray[index]) && canTriggerControlAnim && codeBlockIsShow)
+              (cmdArray?(adbInputCMD === cmdArray[index]):'' && canTriggerControlAnim && codeBlockIsShow)
             }
-            cmd={cmdArray[index]}
+            cmd={cmdArray?cmdArray[index]:''}
+            active = {cmdArray?active === cmdArray[index]:active === iconArray[index]}
             onClick={()=>{
-              //dealADBCommand(cmdArray[index])
-              setCurrentActiveADBItem(cmdArray[index])
-              onSegementClickIndex(index,iconArray[index],cmdArray[index])
+              setCurrentActiveADBItem(cmdArray?cmdArray[index]:iconArray[index])
+              onSegementClickIndex(index,iconArray[index],cmdArray?cmdArray[index]:'')
             }}
             buttonCSS = {
               css`
@@ -74,7 +74,7 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
                 }
               `
             }
-            active = {currentActiveADBItem === cmdArray[index]}
+           
             >
               <SegmentIcon></SegmentIcon>
           </ADBButtonToggle>

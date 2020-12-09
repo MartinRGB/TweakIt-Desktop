@@ -4,31 +4,67 @@ import {execCMD,execCMDPromise,exec} from '@Helpers/ADBCommand/ADBCommand';
 import adb from 'adbkit';
 
 export var ADBConnectContext = createContext({
-  currentSelectId:'',
-  setCurrentSelectId:(tag:string) => {},
+  currentSelectDeviceId:'',
+  setCurrentSelectDeviceId:(tag:string) => {},
+  currentSelectIndex:-1,
+  setCurrentSelectIndex:(tag:number) => {},
   connectedDevice: [],
-  connectedDeviceLength:0,
+  connectedDeviceCounts:0,
   displayInfo: [],
   displayCounts:0,
   deviceWifi:[],
-  startWifiConnection:(tag:string) => {},
+  isUSBOnConnect:[],
+  isWifiOnConnect:[],
+  isOnConnect:true,
+  setIsOnConnet:(tag:boolean) => {},
+  startWifiConnection:(tag1:string,tag2:number) => {},
 });
 
 var ADBConnectProvider: React.FC<{}> = ({ children }) => {
-  const [selectId,setSelectId] = useState<string>('');
+  const [selectDeviceId,setSelectDeviceId] = useState<string>('');
+  const [selectDeviceIndex,setSelectDeviceIndex] = useState<number>(-1);
   const [deviceArr, setDeivceArr] = useState<any>([]);
-  const [deviceLen, setDeivceLen] = useState<number>(0);
+  const [deviceCounts, setDeivceCounts] = useState<number>(0);
   const [mDisplayInfo,setDisplayInfo] = useState<any>([]);
   const [mDisplayCounts,setDisplayCounts] = useState<number>(0);
   const [mDeviceWifi,setDeviceWifi] = useState<any>([]);
+  const [mIsOnConnect,setIsConnect] = useState<boolean>(true);
+  const [mUSBIsOnConnect,setUSBIsConnect] = useState<any>([]);
+  const [mWifiIsOnConnect,setWifiIsConnect] = useState<any>([]);
 
-  function setSelctIdAndSave(tag:string){
-    setSelectId(tag)
+  function pushUSBData(tag:boolean){
+    var data = mUSBIsOnConnect;
+    data.push(tag);
+    setUSBIsConnect(data);
+  }
+  function pushWifiData(tag:boolean){
+    var data = mWifiIsOnConnect;
+    data.push(tag);
+    setWifiIsConnect(data);
+  }
+  function cleanWifiData(){
+    setWifiIsConnect([]);
+  }
+  function cleanUSBData(){
+    setUSBIsConnect([]);
+  }
+
+
+  function setNetworkIsConnect(tag:boolean){
+    setIsConnect(tag);
+  }
+
+  function setSelectDeviceIndexAndSave(tag:number){
+    setSelectDeviceIndex(tag)
+  }
+
+  function setSelctDeviceIdAndSave(tag:string){
+    setSelectDeviceId(tag)
   }
 
   function setDeivceArrayAndLength(tag: any) {
     setDeivceArr(tag);
-    setDeivceLen(tag.length);
+    setDeivceCounts(tag.length);
   }
 
   useEffect( () => {
@@ -38,13 +74,13 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
     .then(function(tracker:any) {
       tracker.on('add', function(device:any) {
         console.log('Device %s was plugged', device.id);
-
-
           client.listDevices()
           .then(function(devices:any) {
+            cleanUSBData();
+            cleanWifiData();
             setDevicesNameByTracking(devices)
             setDevicesWifiByTracking(devices)
-            setDevicesDisplayInfo(devices)
+            setDevicesDisplayInfoByTracking(devices)
           })
           .catch(function(err:any) {
             console.error('Something went wrong:', err.stack)
@@ -53,12 +89,12 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
       })
       tracker.on('remove', function(device:any) {
         console.log('Device %s was unplugged', device.id);
-        
           client.listDevices()
           .then(function(devices:any) {
+            cleanUSBData();
             setDevicesNameByTracking(devices)
             setDevicesWifiByTracking(devices)
-            setDevicesDisplayInfo(devices)
+            setDevicesDisplayInfoByTracking(devices)
           })
           .catch(function(err:any) {
             console.error('Something went wrong:', err.stack)
@@ -76,146 +112,199 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
   
 
   const setDevicesNameByTracking = (devices:any) =>{
-      var currentData = [];
-      for(var i = 0;i < devices.length;i++){
-        if(devices[i].id && !devices[i].id.includes(":")){
-          currentData.push({ value: `${devices[i].id}`})
+      var currentData:any = [];
+      console.log(deviceArr)
+      new Promise((resolve, reject) =>{
+        for(var i = 0;i < devices.length;i++){
+          if(devices[i].id && !devices[i].id.includes(":")){
+            currentData.push({ value: `${devices[i].id}`})
+            pushUSBData(true)
+          }
         }
+        resolve(currentData)
+      }).then(function(val:any){
+        setDeivceArrayAndLength(val)
+      })
+  }
+
+  const endlessWifiInfo = (data:any,devices:any,counts:number) =>{
+    new Promise((resolve, reject) =>{
+      exec(`adb -s ${devices[counts].id} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'`, function(error:any, stdout:any, stderr:any){
+        if(error) {
+            reject(error);
+            return;
+        }
+        resolve(stdout.replace(/\n|\r/g, ""));
+      });
+    }).then(function(val) {
+      if(counts < devices.length - 1){
+        data.push(val);
+        return endlessWifiInfo(data,devices,counts+1);
       }
-      setDeivceArrayAndLength(currentData)
+      else{
+        data.push(val);
+        setDeviceWifi(data);
+        //console.log(data)
+      }
+    })
   }
 
   const setDevicesWifiByTracking = (devices:any) =>{
-
-
-    var currentData:any = [];
-
-    var p1 = new Promise((resolve, reject) => {
+    var logicalDevices:any = [];
+    new Promise((resolve, reject) =>{
       for(var i = 0;i < devices.length;i++){
         if(devices[i].id && !devices[i].id.includes(":")){
-  
-          exec(`adb -s ${devices[i].id} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'`, function(error:any, stdout:any, stderr:any){
-            console.log(stdout)
-            currentData.push(stdout)
-          })
-
-          if(i === devices.length - 1){
-
-            
+          if(devices[i].id.includes("emulator")){
+            logicalDevices.push([])
+            pushWifiData(false)
           }
-  
+          else{
+            logicalDevices.push(devices[i])
+            pushWifiData(false)
+          }
         }
       }
-      resolve(currentData)
-    });
-    
-    p1.then(value => {
-      setDeviceWifi(value)
-      console.log(value)
-    }, reason => {
-      console.error(reason); // 出错了！
-    });
-
-    
-
-  
-  }
-
-  const setDevicesDisplayInfo = (devices:any) => {
-
-    var currentData:any = [];
-    for(var i = 0;i < devices.length;i++){
-      if(devices[i].id && !devices[i].id.includes(":")){
-
-        var currentId = devices[i].id;
-
-        execCMDPromise(`adb -s ${devices[i].id} shell dumpsys display | grep 'mBaseDisplayInfo=DisplayInfo{"' | awk -F'",' '{print $1}'`,'',(value:any)=>{
-          var mValue = value.split('mBaseDisplayInfo=DisplayInfo{"')[1].split(', ')[1].replace("Id","");
-          currentData.push({ value: `${currentId} - ${mValue}`});
-    
-        });
+      resolve(logicalDevices)
+    }).then(function(val){
+      //console.log(val)
+      if(val.length === 0){
+        setDeviceWifi([]);
       }
-    }
+      else{
+        endlessWifiInfo([],val,0);
+      }
+    })
 
-    setDisplayInfo(currentData);
-    setDisplayCounts(currentData.length)
-    
   }
 
-  const setWifiConnection = (deviceId:string) =>{
+  const endlessDevicesDisplayInfo = (data:any,devices:any,counts:number) =>{
+    new Promise((resolve, reject) =>{
+      exec(`adb -s ${devices[counts].id} shell dumpsys display | grep 'mBaseDisplayInfo=DisplayInfo{"' | awk -F'",' '{print $1}'`, function(error:any, stdout:any, stderr:any){
+        if(error) {
+            reject(error);
+            return;
+        }
+        var result;
+        if(stdout){
+          result = stdout.toString().split('mBaseDisplayInfo=DisplayInfo{"')[1].replace("Id","");
+        }
+        resolve(result);
+      });
+    }).then(function(val) {
+      if(counts < devices.length - 1){
+        data.push([{ value: `${devices[counts].id} - ${val}`},{ value: `${devices[counts].id} - ${val+'012'}`}]);
+        return endlessDevicesDisplayInfo(data,devices,counts+1);
+      }
+      else{
+        data.push([{ value: `${devices[counts].id} - ${val}`},{ value: `${devices[counts].id} - ${val+'012'}`}]);
+        setDisplayInfo(data);
+        //console.log(data)
+        setDisplayCounts(data.length)
+      }
+    })
+  }
+
+  const setDevicesDisplayInfoByTracking = (devices:any) => {
+    var logicalDevices:any = [];
+    new Promise((resolve, reject) =>{
+      for(var i = 0;i < devices.length;i++){
+        if(devices[i].id && !devices[i].id.includes(":")){
+          logicalDevices.push(devices[i])
+        }
+      }
+      resolve(logicalDevices)
+    }).then(function(val){
+      //console.log(val)
+      if(val.length === 0){
+        setDeviceWifi([]);
+      }
+      else{
+        endlessDevicesDisplayInfo([],val,0);
+      }
+      
+    })
+  }
+
+  const endlessPortConnect = (id:any,ip:any,index:number)=>{
+    execCMDPromise(`adb -s ${id} connect ${ip}`,(out:any)=>{
+      console.log(out)
+      execCMDPromise("adb devices",(out:any)=>{
+        console.log(out)
+        console.log(out.toString().includes('failed'))
+        if(out.toString().includes(ip)){
+          console.log(`无线连接成功，可以掉数据线,地址为 ${ip}`)
+
+          var wifiData = mWifiIsOnConnect;
+          wifiData[index] = true;
+          setWifiIsConnect(wifiData);
+
+          setNetworkIsConnect(true)
+        }
+        else{
+          console.log('无线连接失败，请重来')
+          return endlessPortConnect(id,ip,index)
+        }
+      })
+    })
+  }
+
+  const endlessRootConnect = (id:any,portNum:any,index:number) =>{
+      execCMDPromise("adb devices",(out:any)=>{
+        if(out.toString().includes(id)){
+          console.log(`设备 ${id} Root 成功，开启后续连接`)
+          execCMDPromise(`adb -s ${id} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'`,(out:any)=>{
+            var ipArr = out.toString();
+            console.log(out);
+            console.log('设备 IP 地址为 ' + ipArr + ' ,连接中')
+            execCMDPromise(`adb -s ${id} tcpip ` + portNum,(out:any)=>{
+                console.log(out)
+                console.log('端口为 ' + portNum +' ,连接中');
+                var ipAddressWithoutBr = (ipArr + ':'+portNum).replace(/\n|\r/g, "")
+                console.log(`adb -s ${id} connect ` + ipAddressWithoutBr)
+                endlessPortConnect(id,ipAddressWithoutBr,index)
+            })
+          })
+        }
+        else{
+          console.log(`找不到设备 ${id}，继续搜寻`)
+          return endlessRootConnect(id,portNum,index)
+        }
+      })
+  }
+
+  const setWifiConnection = (deviceId:string,deviceIndex:number) =>{
     var ipArr = '';
     var portNum = '9999'
 
-    exec('adb disconnect;adb root;', function(error:any, stdout:any, stderr:any){
-        if(error) {
-            console.error('error: ' + error);
-            return;
-        }
+    var wifiData = mWifiIsOnConnect;
+    wifiData[deviceIndex] = true;
+    setWifiIsConnect(wifiData);
 
-        console.log(stdout)
-
-        console.log(`adb -s ${deviceId} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'`)
-        exec(`adb -s ${deviceId} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'`, function(error:any, stdout:any, stderr:any){
-            if(error) {
-                console.error('error: ' + error);
-                return;
-            }
+    setNetworkIsConnect(false)
     
-            console.log(stdout)
-            console.log(stderr)
-            ipArr = stdout.toString();
-            //connectionEl.innerHTML = '设备 IP 地址为 ' + ipArr + ' ,连接中';
-            console.log('设备 IP 地址为 ' + ipArr + ' ,连接中')
-
-            exec(`adb -s ${deviceId} tcpip ` + portNum, function(error:any, stdout:any, stderr:any){
-                if(error) {
-                    console.error('error: ' + error);
-                    return;
-                }
-        
-                console.log(stdout)
-                //connectionEl.innerHTML = '端口为 ' + portNum +' ,连接中';
-                console.log('端口为 ' + portNum +' ,连接中');
-
-                var ipAddressWithoutBr = (ipArr + ':'+portNum).replace(/\n|\r/g, "")
-                exec(`adb -s ${deviceId} connect ` + ipAddressWithoutBr, function(error:any, stdout:any, stderr:any){
-                    if(error) {
-                        console.error('error: ' + error);
-                        return;
-                    }
-
-                    console.log(stdout)
-                    console.log(stderr)
-                    exec("adb devices", function(error:any, stdout:any, stderr:any){
-                        if(error) {
-                            console.error('error: ' + error);
-                            return;
-                        }
-        
-                        console.log(stdout.toString());
-                        if(stdout.toString().includes(ipAddressWithoutBr)){
-                            //connectionEl.innerHTML = '无线连接成功，请拔掉数据线,地址为 ' + ipAddressWithoutBr;
-                            console.log('无线连接成功，请拔掉数据线,地址为 ' + ipAddressWithoutBr)
-                        }
-                        
-                    });
-                    
-                });
-            });
-        });
-      });
+    execCMDPromise('adb disconnect;adb root;',(out:any)=>{
+      console.log(out);
+      console.log('ADB 重连，Root 成功')
+      endlessRootConnect(deviceId,portNum,deviceIndex)
+    })
   }
 
   return (
     <ADBConnectContext.Provider
       value={{
-        currentSelectId:selectId,
-        setCurrentSelectId:setSelctIdAndSave,
+        currentSelectDeviceId:selectDeviceId,
+        setCurrentSelectDeviceId:setSelctDeviceIdAndSave,
+        currentSelectIndex:selectDeviceIndex,
+        setCurrentSelectIndex:setSelectDeviceIndex,
         connectedDevice:deviceArr,
-        connectedDeviceLength:deviceLen,
+        connectedDeviceCounts:deviceCounts,
         displayInfo:mDisplayInfo,
         displayCounts:mDisplayCounts,
         deviceWifi:mDeviceWifi,
+        isOnConnect:mIsOnConnect,
+        isUSBOnConnect:mUSBIsOnConnect,
+        isWifiOnConnect:mWifiIsOnConnect,
+        setIsOnConnet:setNetworkIsConnect,
         startWifiConnection:setWifiConnection,
       }}>
       {children}

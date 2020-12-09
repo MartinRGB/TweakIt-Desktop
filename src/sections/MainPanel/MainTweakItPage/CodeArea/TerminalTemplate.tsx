@@ -171,7 +171,6 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
     </CommandInfoContainer>
     {(isInit&&adbInfoTimes>-1)?
       adbResultText.map(function (data:any,index:number) {
-        console.log('23')
         return (
           <CommandContainer style={{
             transition: `${isGlobalAnimEnable?'all 0.6s cubic-bezier(0.13,0.79,0.25,1)':'none'}`,

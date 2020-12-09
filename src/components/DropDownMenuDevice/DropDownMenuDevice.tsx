@@ -1,11 +1,10 @@
-import React, {memo,useContext, useEffect,useState,useRef,forwardRef,useImperativeHandle}from 'react'
+import React, {memo,useContext, useEffect,useState}from 'react'
 import { useColorMode,jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
 import {css} from "@emotion/core";
 import { IDropDownMenu } from "@Types";
 
-import { useTranslation, Trans, Translation } from 'react-i18next'
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
@@ -13,11 +12,11 @@ import Icons from '@Assets/icons'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 
-const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,selectIndex,onClickIndex,menuStyle,style,optionsData,menuWidth,prefix}, ref) => {
+const DropDownMenuDevice: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,onClickIndex,menuStyle,style,optionsData,menuWidth,isRichAnimation,enable}) => {
 
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const [selectedText,setSelectedText] = useState<string>('')
+  const [selectedText,setSelectedText] = useState<string>('select...')
   //const [selectIndex,setSelectIndex] = useState<number>(-1)
   const [selectExpand,setSelectExpand] = useState<boolean>(false)
   
@@ -25,20 +24,8 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
   const [selectExpandAnimate,setSelectExpandAnimate] = useState<boolean>(false)
   const [opacityTransitionIn,setOpacityTransitionIn] = useState<boolean>(false)
 
-
   const menuPadding = 6;
-  const menuListNum = optionsData?(prefix?optionsData.length + 1:optionsData.length):0;
   const listHeight = 20;
-
-  useImperativeHandle(ref, () => ({
-
-    clickExpandSelect(e:any) {
-      onClickSelect(e)
-    },
-    selectText(){
-      return selectedText;
-    },
-  }));
 
   const onClickSelect = (e:any) =>{
 
@@ -65,7 +52,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
 
   var onClickListExpandTimeOut:any;
 
-  const onClickList = (index:number) => {
+  const onClickList = (index:number,value:string) => {
 
     if(onClickListExpandTimeOut){
       clearTimeout(onClickListExpandTimeOut)
@@ -75,7 +62,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
     }
 
     //setSelectIndex(index)
-    setSelectedText(optionsData[index].value)
+    setSelectedText(value)
 
     if(selectExpand){
 
@@ -121,17 +108,40 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
   })
 
   return (        
-  <CustomSelectWrapper style={{...style,width:`${menuWidth}`,minWidth:`${menuWidth}`}}>
+  <CustomSelectWrapper 
+  isDeviceEnable={enable} isAnimationEnable={isGlobalAnimEnable} style={{
+    ...style,
+    width:`${menuWidth}`,
+    minWidth:`${menuWidth}`,
+    cursor:`${enable?'':'not-allowed'}`,
+    opacity:`${enable?'1':'0.2'}`,
+  }}>
+    <CustomSelect
+      onClick={(e:any)=>{onClickSelect(e)}}
+      isExpanded={selectExpand &&(optionsData.length != 0)}
+      isAnimationEnable={isGlobalAnimEnable}
+      style={{
+        pointerEvents:`${enable?'':'none'}`,
+        cursor:`${enable?'pointer':''}`,
+      }}
+    >
+      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{selectedText}</CustomSelectedSpan>
+      <Icons.SelectArrow></Icons.SelectArrow>
+    </CustomSelect>
 
     {
-      selectExpand?
+      (selectExpand && optionsData.length!=0)?
       <DropDownMenuConatiner
       isAnimationEnable={isGlobalAnimEnable}
       style={{
         ...menuStyle,
-        height: `${Math.max(0,(0 + selectAnimationProgress*(menuPadding*2+menuListNum*listHeight - 0)))}px`,
+        height: `${Math.max(0,(selectIndex === -1 || !isRichAnimation)?
+                              (0 + selectAnimationProgress*(menuPadding*2+optionsData.length*listHeight - 0))
+                              :
+                              (20 + selectAnimationProgress*(menuPadding*2+optionsData.length*listHeight - 20))  )}px`,
         padding: `${menuPadding*selectAnimationProgress}px 0px`,
         borderWidth: `${selectAnimationProgress}px`,
+        transform:`${isRichAnimation?`translate3d(0px,${(selectIndex === -1)?0:selectAnimationProgress*21 -21}px,0px)`:''}`
 
       }}
       >
@@ -144,9 +154,9 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
         ></DropDownBackground>
         <DropDownTransitionDiv
           style={{
+            transform:`${(isRichAnimation)?`translate3d(${19*selectAnimationProgress-19}px,${(selectIndex === -1)?0:-selectIndex*listHeight+selectAnimationProgress*(selectIndex*listHeight)}px,0px)`:''}`
           }}
         >
-        {prefix?<PrefixDiv style={{ height:`${listHeight}px`}}><PrefixSpan><Trans>{prefix}</Trans></PrefixSpan></PrefixDiv>:''}
         {
           optionsData.map(function (data:any,index:number) {
 
@@ -159,16 +169,17 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
                 }}
                 key={index}
                 onClick = {()=>{
-                  onClickIndex(index,optionsData[index].value);
-                  onClickList(index)}}
+                  onClickIndex(index,data.value);
+                  onClickList(index,data.value)}}
                 >
                   <DropDownListBackground
+                    isAnimationEnable={isGlobalAnimEnable}
                     style={{
                     }}
                     >
                     <Icons.CheckMark style={{
                       position: `absolute`,
-                      top: `1px`,
+                      top: `2px`,
                       left: `8px`,
                       transform: `${(selectIndex === index)?`scale3d(1,1,1)`:'scale3d(0,0,0)'}`,
                       opacity: `${(selectIndex === index)?`${selectAnimationProgress}`:'0'}`,
@@ -184,7 +195,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
                         transition:`${isGlobalAnimEnable?'all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s':'none'}`,
                         
                       }}  
-                    >{`#${index+1} ` + data.value}</DropDownListSpan> 
+                    >{data.value}</DropDownListSpan> 
                 </DropDownListBackground>
               </DropDownListContainer>
             )
@@ -200,7 +211,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
 
   </CustomSelectWrapper>
   );
-}))
+})
 
 
 const DropDownMenuConatiner = styled.div<{
@@ -210,13 +221,14 @@ const DropDownMenuConatiner = styled.div<{
   top: 20px;
   left: -1px;
   height:0px;
-  border: 1px solid;
+  border: 1px solid ;
   border-color:${p => p.theme.colors.menu_border};
   transition:${p=>p.isAnimationEnable?'border-color 0.3s':'none'};
   border-radius:4px;
   overflow:hidden;
   //width:240px;
   //transition:all 0.3s;
+  z-index:3;
   
 `
 
@@ -226,7 +238,7 @@ const DropDownBackground = styled.div<{
   width:100%;
   height:100%;
   background:${p => p.theme.colors.normal_button_bg};
-  transition:${p=>p.isAnimationEnable?'opacity 0.3s,background 0.3s':'none'};
+  transition:${p=>p.isAnimationEnable?'background 0.3s':'none'};
   backdrop-filter:blur(3px);
   position: absolute;
   top: 0px;
@@ -242,7 +254,7 @@ const DropDownListContainer = styled.li<{
   z-index:0;
   cursor:pointer;
   //transition:all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s;
-
+  
   > div{
     transition:${p=>p.isAnimationEnable?'background 0.15s':'none'};
   }
@@ -279,27 +291,9 @@ const DropDownListContainer = styled.li<{
 const DropDownTransitionDiv = styled.div`
 `
 
-const PrefixDiv = styled.div`
-    position: relative;
-    display: block;
-`
-
-const PrefixSpan = styled.span`
-  color:${p => p.theme.colors.text};
-  font-family: ${p => p.theme.fonts.headText};
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 20px;
-  position: absolute;
-  left: 28px;
-  top: 0px;
-  user-select:none;
-  transition:all 0.3s;
-  transform-origin: left center;
-  opacity:0.3;
-`
-
-const DropDownListBackground = styled.div`
+const DropDownListBackground = styled.div<{
+  isAnimationEnable:boolean;
+}>`
   width:100%;
   height:100%;
 
@@ -322,6 +316,7 @@ const DropDownListSpan = styled.span<{
   isAnimationEnable:boolean;
 }>`
   color:${p => p.theme.colors.text};
+  transition:${p=>p.isAnimationEnable?'color 0.3s':'none'};
   font-family: ${p => p.theme.fonts.headText};
   font-size: 10px;
   font-weight: 500;
@@ -335,12 +330,77 @@ const DropDownListSpan = styled.span<{
   opacity:0.6;
 `
 
-const CustomSelectWrapper = styled.div`
+const CustomSelectWrapper = styled.div<{
+  isAnimationEnable:boolean;
+  isDeviceEnable:boolean;
+}>`
+    height: 20px;
+    //width: 240px;
+    // min-width:240px;
+    position: relative;
+    border: 1px solid;
+    border-color:${p => p.isDeviceEnable?p.theme.colors.menu_border:p.theme.colors.menu_border_half_alpha};
+    transition:${p=>p.isAnimationEnable?'opacity 0.3s,border-color 0.3s,background 0.3s':'none'};
+    border-radius: 4px;
+    margin-right: 32px;
+    background: ${p => p.theme.colors.normal_button_bg};
+`
+const CustomSelect = styled.button<{
+  isExpanded:boolean;
+  isAnimationEnable:boolean;
+  isEnable:boolean;
+}>`
+    height: 100%;
+    width: 100%;
     position: absolute;
-    top:6px;
-    right:-1px;
-    z-index:1;
+    background: ${p=>p.isExpanded?p.theme.colors.primary_middle_opacity:'transparent'};
+    transition:${p=>p.isAnimationEnable?'all 0.15s':'none'};
+    //cursor:pointer;
+    outline:none;
+    border:none;
+
+    &:hover {
+      background:${p=>p.isExpanded?'':p.theme.colors.primary_middle_opacity};
+    }
+
+    >svg{
+      fill: ${p => p.theme.colors.text};
+      position: absolute;
+      right: 1px;
+      top: 1px;
+      //transition:all 0.15s;
+      z-index:1;
+    }
+
+    &:active  > span{
+      //color: ${p => p.theme.colors.background};
+    }
+  
+    &:active  > svg{
+      //fill: ${p => p.theme.colors.background};
+    }
+
+    &:active {
+      background: ${p=>p.theme.colors.primary_dark_1_opacity};
+      //opacity:0.8;
+    }
 `
 
+const CustomSelectedSpan = styled.span<{
+  isAnimationEnable:boolean;
+}>`
+  color:${p => p.theme.colors.text};
+  font-family: ${p => p.theme.fonts.headText};
+  transition:${p=>p.isAnimationEnable?'color 0.3s':'none'};
+  font-size: 10px;
+  transform:scale3d(1.2,1.2,1);
+  transform-origin:left center;
+  font-weight: 500;
+  line-height: 20px;
+  position: absolute;
+  left: 8px;
+  top: -1px;
+  user-select:none;
+`
 
-export default DropDownMenuSimple
+export default DropDownMenuDevice

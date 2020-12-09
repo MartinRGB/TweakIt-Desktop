@@ -35,7 +35,7 @@ const ADBButtonToggle: React.FC<IButton> = memo(({ parentStyle,style,children, o
  })
 
   const dealADBCommand = () =>{
-    cmdWithConsole(cmd)
+    cmd?cmdWithConsole(cmd):''
   }
 
   return (

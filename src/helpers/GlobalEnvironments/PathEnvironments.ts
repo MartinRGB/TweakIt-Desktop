@@ -6,10 +6,14 @@ var localAssetsPath = appPath + '/assets/';
 var localADBPath = localAssetsPath + 'adb/';
 var localScrcpyBinPath = localAssetsPath + 'scrcpy/1.16/bin/';
 var ADBPath = '~/Library/Android/sdk/platform-tools/'; ///usr/local/bin
-var ScrcpyBinPath = '/usr/local/Cellar/scrcpy/1.12.1/bin/';
+var ScrcpyBinPath = '/usr/local/Cellar/scrcpy/1.16/bin/';
 
 export const getUserHome = () =>{
   return process.env.HOME || process.env.USERPROFILE;
+}
+
+export const SDCardTmpPath = () =>{
+  return `/sdcard`;
 }
 
 export const injectPathEnvironments = () =>{
@@ -28,3 +32,4 @@ export const injectPathEnvironments = () =>{
   '/usr/local/munki:' + 
   '/Library/Apple/usr/bin:';
 }
+

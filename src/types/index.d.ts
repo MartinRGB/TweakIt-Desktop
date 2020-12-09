@@ -18,7 +18,7 @@ export interface IButton {
 export interface IADBExpandSelect {
   children?: React.ReactNode;
   onClick?: any;
-  onArrowClick? any;
+  menuSelectIndex?:any;
   onMenuClickIndex?:any;
   onMouseDown?: any;
   onMouseUp?:any;
@@ -63,6 +63,7 @@ export interface IDropDownMenu{
   onClick?: any;
   enable?:any;
   prefix?:any;
+  selectIndex?:any;
 }
 
 declare global {

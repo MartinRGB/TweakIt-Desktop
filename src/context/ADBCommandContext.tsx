@@ -81,7 +81,7 @@ var ADBCommandStateProvider: React.FC<{}> = ({ children }) => {
     // add this for console
     setADBInputCMD(cmd);
     
-    execCMDPromise(cmd,`input command is ${cmd}`,
+    execCMDPromise(cmd,
     (value:any)=>{
       if(codeBlockIsShow){
         setADBTimesAndSave(adbTimes+1)
@@ -124,7 +124,7 @@ var ADBCommandStateProvider: React.FC<{}> = ({ children }) => {
         )
       }
       callback?callback():''
-    })
+    },`input command is ${cmd}`)
   }
 
   function cleanAllADBData(){

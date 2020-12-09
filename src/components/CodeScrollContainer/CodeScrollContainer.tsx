@@ -157,6 +157,8 @@ const Container = styled.div<{
 
     ::-webkit-scrollbar-thumb:hover {
       background:${p => p.theme.colors.text};
+      border-bottom: 14px solid transparent;
+      background-clip: padding-box;
       cursor:pointer;
     }
 `

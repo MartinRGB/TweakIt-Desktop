@@ -1,13 +1,7 @@
 {
     "adb_get_device":"adb devices",
     "adb_help":"adb --help",
-    "adb_test":"adb --test",
-    "adb_a":"adb --a",
-    "adb_b":"adb --b",
-    "adb_1":"scrcpy",
-    "adb_2":"adb -2",
-    "adb_3":"adb -3"
-
+    "adb_test":"adb --test"
 }
   
   
