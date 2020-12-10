@@ -107,6 +107,7 @@ const DropDownMenuDevice: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,o
     }
   })
 
+
   return (        
   <CustomSelectWrapper 
   isDeviceEnable={enable} isAnimationEnable={isGlobalAnimEnable} style={{
@@ -117,7 +118,7 @@ const DropDownMenuDevice: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,o
     opacity:`${enable?'1':'0.2'}`,
   }}>
     <CustomSelect
-      onClick={(e:any)=>{onClickSelect(e)}}
+      onClick={(e:any)=>{onClick();onClickSelect(e)}}
       isExpanded={selectExpand &&(optionsData.length != 0)}
       isAnimationEnable={isGlobalAnimEnable}
       style={{
@@ -125,7 +126,7 @@ const DropDownMenuDevice: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,o
         cursor:`${enable?'pointer':''}`,
       }}
     >
-      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{selectedText}</CustomSelectedSpan>
+      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{(selectIndex === -1)?'select...':selectedText}</CustomSelectedSpan>
       <Icons.SelectArrow></Icons.SelectArrow>
     </CustomSelect>
 
@@ -169,8 +170,8 @@ const DropDownMenuDevice: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,o
                 }}
                 key={index}
                 onClick = {()=>{
-                  onClickIndex(index,data.value);
-                  onClickList(index,data.value)}}
+                  onClickIndex(index,data);
+                  onClickList(index,data)}}
                 >
                   <DropDownListBackground
                     isAnimationEnable={isGlobalAnimEnable}
@@ -195,7 +196,7 @@ const DropDownMenuDevice: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,o
                         transition:`${isGlobalAnimEnable?'all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s':'none'}`,
                         
                       }}  
-                    >{data.value}</DropDownListSpan> 
+                    >{data}</DropDownListSpan> 
                 </DropDownListBackground>
               </DropDownListContainer>
             )
@@ -223,11 +224,11 @@ const DropDownMenuConatiner = styled.div<{
   height:0px;
   border: 1px solid ;
   border-color:${p => p.theme.colors.menu_border};
-  transition:${p=>p.isAnimationEnable?'border-color 0.3s':'none'};
+  transition:${p=>p.isAnimationEnable?'border-color 0.2s':'none'};
   border-radius:4px;
   overflow:hidden;
   //width:240px;
-  //transition:all 0.3s;
+  //transition:all 0.2s;
   z-index:3;
   
 `
@@ -238,7 +239,7 @@ const DropDownBackground = styled.div<{
   width:100%;
   height:100%;
   background:${p => p.theme.colors.normal_button_bg};
-  transition:${p=>p.isAnimationEnable?'background 0.3s':'none'};
+  transition:${p=>p.isAnimationEnable?'background 0.2s':'none'};
   backdrop-filter:blur(3px);
   position: absolute;
   top: 0px;
@@ -284,7 +285,7 @@ const DropDownListContainer = styled.li<{
 
   > div > svg {
     fill: ${p => p.theme.colors.text};
-    transition:${p=>p.isAnimationEnable?'fill 0.3s':'none'};
+    transition:${p=>p.isAnimationEnable?'fill 0.2s':'none'};
   }
 `
 
@@ -316,7 +317,7 @@ const DropDownListSpan = styled.span<{
   isAnimationEnable:boolean;
 }>`
   color:${p => p.theme.colors.text};
-  transition:${p=>p.isAnimationEnable?'color 0.3s':'none'};
+  transition:${p=>p.isAnimationEnable?'color 0.2s':'none'};
   font-family: ${p => p.theme.fonts.headText};
   font-size: 10px;
   font-weight: 500;
@@ -340,7 +341,7 @@ const CustomSelectWrapper = styled.div<{
     position: relative;
     border: 1px solid;
     border-color:${p => p.isDeviceEnable?p.theme.colors.menu_border:p.theme.colors.menu_border_half_alpha};
-    transition:${p=>p.isAnimationEnable?'opacity 0.3s,border-color 0.3s,background 0.3s':'none'};
+    transition:${p=>p.isAnimationEnable?'opacity 0.2s,border-color 0.2s,background 0.2s':'none'};
     border-radius: 4px;
     margin-right: 32px;
     background: ${p => p.theme.colors.normal_button_bg};
@@ -391,7 +392,7 @@ const CustomSelectedSpan = styled.span<{
 }>`
   color:${p => p.theme.colors.text};
   font-family: ${p => p.theme.fonts.headText};
-  transition:${p=>p.isAnimationEnable?'color 0.3s':'none'};
+  transition:${p=>p.isAnimationEnable?'color 0.2s':'none'};
   font-size: 10px;
   transform:scale3d(1.2,1.2,1);
   transform-origin:left center;

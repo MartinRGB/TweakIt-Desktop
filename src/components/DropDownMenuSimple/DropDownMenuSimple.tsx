@@ -75,7 +75,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
     }
 
     //setSelectIndex(index)
-    setSelectedText(optionsData[index].value)
+    setSelectedText(optionsData[index])
 
     if(selectExpand){
 
@@ -96,7 +96,6 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
 
     }
   }
-
 
   var onExpandAnimationEndTimeOut:any;
 
@@ -159,7 +158,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
                 }}
                 key={index}
                 onClick = {()=>{
-                  onClickIndex(index,optionsData[index].value);
+                  onClickIndex(index,optionsData[index]);
                   onClickList(index)}}
                 >
                   <DropDownListBackground
@@ -184,7 +183,7 @@ const DropDownMenuSimple: React.FC<IDropDownMenu> = (forwardRef(({onClick,select
                         transition:`${isGlobalAnimEnable?'all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s':'none'}`,
                         
                       }}  
-                    >{`#${index+1} ` + data.value}</DropDownListSpan> 
+                    >{`#${index+1} ` + data}</DropDownListSpan> 
                 </DropDownListBackground>
               </DropDownListContainer>
             )

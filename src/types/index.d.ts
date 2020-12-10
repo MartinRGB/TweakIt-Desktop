@@ -32,6 +32,7 @@ export interface IADBExpandSelect {
   onADBExpandSelect?:any;
   enable?:any;
   optionsData?:any;
+  currentTopSelectIndex?:any;
 }
 
 export interface IADBSegment {
@@ -64,6 +65,7 @@ export interface IDropDownMenu{
   enable?:any;
   prefix?:any;
   selectIndex?:any;
+  selectId?:any;
 }
 
 declare global {

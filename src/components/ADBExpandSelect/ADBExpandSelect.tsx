@@ -16,7 +16,7 @@ import Icons from '@Assets/icons'
 import ADBButtonNormal from '@Components/ADBButtonNormal'
 import DropDownMenuSimple from '@Components/DropDownMenuSimple'
 
-const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onClick,onMouseDown,onMouseUp,conatinerCSS,cmdTriggerAnim,cmdStr,iconStr,onADBExpandSelect,enable,optionsData,onMenuClickIndex,menuSelectIndex}) => {
+const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onClick,onMouseDown,onMouseUp,conatinerCSS,cmdTriggerAnim,cmdStr,iconStr,onADBExpandSelect,enable,optionsData,onMenuClickIndex,menuSelectIndex,currentTopSelectIndex}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,setADBInputCMD,canTriggerControlAnim,setTriggerControlAnim} = useContext(CodeBlockStateContext,);
@@ -76,7 +76,7 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
         }}
         >
         <ExpandSelectIcon></ExpandSelectIcon>
-        <NumContainer>{'#'+(menuSelectIndex+1)}</NumContainer>
+        <NumContainer>{(currentTopSelectIndex != -1)?('#'+((menuSelectIndex+1))):'-'}</NumContainer>
       </ADBButtonNormal>
     </LeftSide>
     <Divide isDeviceEnable={enable} isAnimationEnable={isGlobalAnimEnable}></Divide>

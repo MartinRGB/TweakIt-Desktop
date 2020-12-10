@@ -13,51 +13,35 @@ import ADBExpandSelect from '@Components/ADBExpandSelect'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import {ADBConnectContext}  from '@Context/ADBConnectContext';
 import {getUserHome,SDCardTmpPath} from '@Helpers/GlobalEnvironments/PathEnvironments'
-import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
-import {ADBSelectContext} from '@Context/ADBSelectContext'
 
 const ADBTopArea: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();
 
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const {updateData,isWifiDeviceRemoved,setIsWifiDeviceRemoved,isWifiOnConnect,connectedDevice,connectedDeviceCounts,displayInfo,deviceWifi,startWifiConnection,setWifiIsConnecting,startUSBConnection,wifiIsConnecting} = useContext(ADBConnectContext)
-
-  //const [currentSelectIndex,setCurrentSelectIndex] = useState<number>(-1)
-  const {currentSelectDeviceId,currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId} = useContext(ADBSelectContext)
+  const {currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId,currentSelectDeviceId,deviceArray,deviceCounts,deviceDisplayInfo,deviceWifi,startWifiConnection,deviceIsOnConnect,setDeviceIsOnConnet} = useContext(ADBConnectContext)
 
   // segment
   const segmentIconStr = ["USB","Wifi",];
   const [segmentActiveStr,setSegmentActiveStr] = useState<string>(segmentIconStr[0])
   
-
-  const onDropDownClick = () =>{
-    //updateData()
-  }
-
   const onDeviceIndexClicked = (i:any,val:any) =>{
     setCurrentSelectIndex(i)
-    setCurrentSelectDeviceId(connectedDevice[i])
+    setCurrentSelectDeviceId(deviceArray[i])
     setSegmentActiveStr(segmentIconStr[0])
     setCastSelectIndex(0);
     setScreenshotSelectIndex(0);
     setRecordSelectIndex(0);
-
-    if(isWifiDeviceRemoved[i]){
-      setSegmentActiveStr(segmentIconStr[1])
-      console.log(isWifiOnConnect)
-    }
   }
 
   const onSegementIndexClicked = (i:any,val:any,cmd:any) =>{
     if(i === 0){
-      //setWifiIsConnecting(false)
-      startUSBConnection(currentSelectDeviceId,currentSelectIndex)
-      setCurrentSelectDeviceId(connectedDevice[currentSelectIndex])
+      setDeviceIsOnConnet(true)
+      setCurrentSelectDeviceId(deviceArray[currentSelectIndex])
       setSegmentActiveStr(segmentIconStr[0])
     }
     if(i === 1){
-      //setWifiIsConnecting(true)
+      setDeviceIsOnConnet(false)
       startWifiConnection(currentSelectDeviceId,currentSelectIndex)
       setCurrentSelectDeviceId(deviceWifi[currentSelectIndex])
       setSegmentActiveStr(segmentIconStr[1])
@@ -90,27 +74,23 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   }
 
 
+  console.log(deviceArray)
+  console.log(deviceCounts)
+  console.log(deviceDisplayInfo)
+  console.log(deviceWifi)
 
   return (
       <Container isAnimationEnable={isGlobalAnimEnable}>
         <DropDownMenuDevice 
-          onClick={()=>{onDropDownClick()}}
           style={{zIndex:`1`}} 
           menuStyle={{zIndex:`1`,left:`-1px`,width:`calc(100% + 3px)`}} 
-          optionsData={connectedDevice} 
-          enable={
-            connectedDeviceCounts!=0 
-            && !wifiIsConnecting
-          } 
+          optionsData={deviceArray} 
+          enable={deviceCounts!=0 && deviceIsOnConnect} 
           menuWidth={`calc(100%)`} 
-          isRichAnimation={false}
+          isRichAnimation={true}
           onClickIndex={(i,val)=>{onDeviceIndexClicked(i,val)}} 
           selectIndex={currentSelectIndex}
         ></DropDownMenuDevice>
-
-        <div style={{position:`absolute`,left:`0`,top:`0`}}>
-          {currentSelectIndex}
-        </div>
 
         <ADBButtonSegment
           style={{    
@@ -119,26 +99,8 @@ const ADBTopArea: React.FC = memo(({ children }) => {
           }}
           iconArray = {segmentIconStr}
           active = {segmentActiveStr}
-          enable = {(
-            currentSelectIndex != -1 && 
-            //currentSelectDeviceId != ''
-            !wifiIsConnecting 
-            //&& connectedDeviceCounts!=0
-          )}
-          disableIndex={(isWifiDeviceRemoved[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][0] === true)?[true,true]:[false,((deviceWifi[currentSelectIndex] != '' && !currentSelectDeviceId.includes('emulator'))?false:true)]}
-          //disableIndex={[false,false]}
-          // disableIndex = {[
-          //   !isWifiDeviceRemoved[currentSelectIndex]?
-          //     false
-          //     :
-          //     true
-          //   ,
-          //   ((deviceWifi[currentSelectIndex] != '' && (connectedDevice && !connectedDevice.includes('emulator')) )?
-          //     false
-          //     :
-          //     true
-          //   )
-          // ]}
+          enable = {(currentSelectDeviceId != '')}
+          disableIndex = {(deviceWifi[currentSelectIndex] != '')?-1:1}
           onSegementClickIndex={(i,val,cmd)=>{onSegementIndexClicked(i,val,cmd)}}
         >
 
@@ -151,21 +113,15 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             }}
             iconStr={castIconStr}
             cmdStr={
-              isWifiDeviceRemoved[currentSelectIndex]?
-              `scrcpy --display ${castSelectIndex} -s ${isWifiOnConnect[currentSelectIndex][2]}`
-              :
               `scrcpy --display ${castSelectIndex} -s ${currentSelectDeviceId}`
             }
             enable={(
-              currentSelectIndex != -1 && 
-              //currentSelectDeviceId != '' && 
-              !wifiIsConnecting
-              //connectedDeviceCounts!=0
-            )}
-            optionsData={displayInfo[currentSelectIndex]}
+              currentSelectDeviceId != '' && 
+              deviceIsOnConnect && 
+              deviceCounts!=0)}
+            optionsData={deviceDisplayInfo[currentSelectIndex]}
             onMenuClickIndex={(i,val) =>{onCastIndexClickded(i,val)}}
             menuSelectIndex={castSelectIndex}
-            currentTopSelectIndex={currentSelectIndex}
           >
 
           </ADBExpandSelect>
@@ -175,45 +131,29 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             }}
             iconStr={screenshotIconStr}
             cmdStr={
-              isWifiDeviceRemoved[currentSelectIndex]?
-              `adb -s ${isWifiOnConnect[currentSelectIndex][2]} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s 00d4fe2f pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${isWifiOnConnect[currentSelectIndex][2]} shell rm ${SDCardTmpPath()}/screen.png`
-              :
               `adb -s ${currentSelectDeviceId} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s 00d4fe2f pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${currentSelectDeviceId} shell rm ${SDCardTmpPath()}/screen.png`
             }
             enable={(
-              currentSelectIndex != -1 && 
-              //currentSelectDeviceId != '' && 
-              (currentSelectDeviceId && !currentSelectDeviceId.includes('emulator')) && 
-              !wifiIsConnecting
-             // connectedDeviceCounts!=0
-            )}
-            optionsData={displayInfo[currentSelectIndex]}
+              (currentSelectDeviceId != '' && !currentSelectDeviceId.includes('emulator') )&& 
+              deviceIsOnConnect && 
+              deviceCounts!=0)}
+            optionsData={deviceDisplayInfo[currentSelectIndex]}
             onMenuClickIndex={(i,val) =>{onScreenshotIndexClickded(i,val)}}
             menuSelectIndex={screenshotSelectIndex}
             onClick={()=>{setTimeTag(getFormateTime())}}
-            currentTopSelectIndex={currentSelectIndex}
           >
 
           </ADBExpandSelect>
           <ADBExpandSelect
             iconStr={recordIconStr}
             cmdStr={
-              isWifiDeviceRemoved[currentSelectIndex]?
-              `scrcpy --display ${recordSelectIndex} -s ${isWifiOnConnect[currentSelectIndex][2]} --record ${getUserHome()}/Desktop/${'record_' + timeTag}.mp4`
-              :
               `scrcpy --display ${recordSelectIndex} -s ${currentSelectDeviceId} --record ${getUserHome()}/Desktop/${'record_' + timeTag}.mp4`
             }
-            enable={
-              currentSelectIndex != -1 && 
-              //currentSelectDeviceId != '' && 
-              !wifiIsConnecting
-              //connectedDeviceCounts!=0  
-            }
-            optionsData={displayInfo[currentSelectIndex]}
+            enable={(currentSelectDeviceId != '' && deviceIsOnConnect && deviceCounts!=0)}
+            optionsData={deviceDisplayInfo[currentSelectIndex]}
             onMenuClickIndex={(i,val) =>{onRecordIndexClickded(i,val)}}
             menuSelectIndex={recordSelectIndex}
             onClick={()=>{setTimeTag(getFormateTime())}}
-            currentTopSelectIndex={currentSelectIndex}
           >
 
           </ADBExpandSelect>

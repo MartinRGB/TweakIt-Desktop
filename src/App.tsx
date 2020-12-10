@@ -23,6 +23,7 @@ import ADBCommandProvider from "@Context/ADBCommandContext";
 import CodeBlockProvider from "@Context/CodeBlockContext";
 import GlobalAnimationStateProvider from "@Context/GlobalAnimationContext";
 import ADBConnectProvider from "@Context/ADBConnectContext";
+import ADBSelectProvider from "@Context/ADBSelectContext";
 import {injectPathEnvironments} from '@Helpers/GlobalEnvironments/PathEnvironments'
 import animatorList from '@Config/animator_list.json';
 
@@ -54,12 +55,13 @@ const App = () => {
         <CodeBlockProvider>
         <ADBCommandProvider>
         <ADBExpandStateProvider>
-
-        <ADBConnectProvider>
+        <ADBSelectProvider>
+          <ADBConnectProvider>
             <TitleBar>TWEAKIT</TitleBar>
             <ADBPanel></ADBPanel>
             <MainPanel></MainPanel>
-        </ADBConnectProvider>
+          </ADBConnectProvider>
+        </ADBSelectProvider>
         </ADBExpandStateProvider>
         </ADBCommandProvider>
         </CodeBlockProvider>

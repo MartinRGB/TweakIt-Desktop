@@ -169,8 +169,8 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
                 }}
                 key={index}
                 onClick = {()=>{
-                  onClickIndex(index,data.value);
-                  onClickList(index,data.value)}}
+                  onClickIndex(index,data);
+                  onClickList(index,data)}}
                 >
                   <DropDownListBackground
                     isAnimationEnable={isGlobalAnimEnable}
@@ -195,7 +195,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
                         transition:`${isGlobalAnimEnable?'all 0.25s cubic-bezier(0.03, 0.76, 0.25, 1) 0s':'none'}`,
                         
                       }}  
-                    >{data.value}</DropDownListSpan> 
+                    >{data}</DropDownListSpan> 
                 </DropDownListBackground>
               </DropDownListContainer>
             )

@@ -55,16 +55,23 @@ const ADBButtonSegment: React.FC<IADBSegment> = memo(({ style,children , onClick
             key={index}
             style={{
               border:`none`,
+              cursor:`${cmdArray?active === cmdArray[index]:active === iconArray[index]?'initial':'pointer'}`
             }}
-            enable={disableIndex === index?false:enable}
+            enable={disableIndex[index] === true?false:enable}
             cmdTriggerAnim={
               (cmdArray?(adbInputCMD === cmdArray[index]):'' && canTriggerControlAnim && codeBlockIsShow)
             }
             cmd={cmdArray?cmdArray[index]:''}
             active = {cmdArray?active === cmdArray[index]:active === iconArray[index]}
             onClick={()=>{
-              setCurrentActiveADBItem(cmdArray?cmdArray[index]:iconArray[index])
-              onSegementClickIndex(index,iconArray[index],cmdArray?cmdArray[index]:'')
+              var currentActive = cmdArray?active === cmdArray[index]:active === iconArray[index];
+              if(currentActive){
+
+              }
+              else{
+                setCurrentActiveADBItem(cmdArray?cmdArray[index]:iconArray[index])
+                onSegementClickIndex(index,iconArray[index],cmdArray?cmdArray[index]:'')
+              }
             }}
             buttonCSS = {
               css`
