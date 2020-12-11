@@ -13,7 +13,7 @@ import { ADBExpandStateContext } from '@Context/ADBExpandContext';
 import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '@Config/animation.json';
 import MainTweakItPage from '@Sections/MainPanel/MainTweakItPage';
-
+import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 const MainPanel: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();
@@ -26,6 +26,7 @@ const MainPanel: React.FC = memo(({ children }) => {
     setColorMode(colorMode === 'default' ? 'dark' : 'default')
   }
 
+  const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   //TODO Issue:Will caused canvas's re-render
   const { adbIsExpand, setADBExpandState} = useContext(
     ADBExpandStateContext,
@@ -43,7 +44,7 @@ const MainPanel: React.FC = memo(({ children }) => {
       css={AnimatedContainerCSS}
       // animated dynamic style
       style={{
-        width: interpolate([widthProps], (widthProps => `calc(100% - ${widthProps}px)`))
+        width: isGlobalAnimEnable?interpolate([widthProps], (widthProps => `calc(100% - ${widthProps}px)`)):`${adbIsExpand?`calc(100% - 320px)`:`calc(100%)`}`
       }}
     >
       <Container 

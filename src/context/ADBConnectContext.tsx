@@ -29,6 +29,7 @@ export var ADBConnectContext = createContext({
   startWifiConnection:(tag1:string,tag2:number) => {},
   startUSBConnection:(tag1:string,tag2:number) => {},
 
+
   isReUpdate:false,
   updateData:() => {},
 });
@@ -49,14 +50,15 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
   const [mWifiDeviceRemove,setMyWifiDeviceRemove] = useState<any>([]);
   
   const [isRequestUpdate,setIsRequestUpdate] = useState<boolean>(false);
+  const [isCNUSBMode,setIsUSBMode] = useState<boolean>(true);
 
   
 
   const {currentSelectDeviceId,currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId} = useContext(ADBSelectContext)
 
-  function setWifiDataByIndex(tag:boolean,val:string,index:number,device?:any){
+  function setWifiDataByIndex(tag:boolean,id:string,index:number,device?:any){
     var data = mWifiConnectData;
-    data[index] = device?[tag,val,device]:[tag,val];
+    data[index] = device?[tag,id,device]:[tag,id];
     setWifiConnectData(data);
   }
 
@@ -222,9 +224,8 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
           setCurrentSelectIndex(val[1])
           //TODO
           //console.log(val[2][val[1]][2])
-          //if(val[2][val[1]][2]) setCurrentSelectDeviceId(val[2][val[1]][2])
-          //else 
-          setCurrentSelectDeviceId(val[2][val[1]][1])
+          if(val[2][val[1]][2]) setCurrentSelectDeviceId(val[2][val[1]][2])
+          else setCurrentSelectDeviceId(val[2][val[1]][1])
           
           var removeData = [];for(var i=0;i<val[2].length;i++){removeData.push(false);}
           setWifiDeivceRemoveAndSave(removeData);
@@ -291,9 +292,8 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
           var removeData:any = [];
           setCurrentSelectIndex(val[1])
           //TODO
-          //if(val[2][val[1]][2]) setCurrentSelectDeviceId(val[2][val[1]][2])
-          //else 
-          setCurrentSelectDeviceId(val[2][val[1]][1])
+          if(val[2][val[1]][2]) setCurrentSelectDeviceId(val[2][val[1]][2])
+          else setCurrentSelectDeviceId(val[2][val[1]][1])
 
           for(var i=0;i<val[2].length;i++){if(i === val[1]){removeData.push(true);}else{removeData.push(false);}}
           setWifiDeivceRemoveAndSave(removeData);
@@ -454,12 +454,12 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
         if(devices[i].id && !devices[i].id.includes(":")){
           if(devices[i].id.includes("emulator")){
             logicalDevices.push([])
-            setWifiDataByIndex(false,devices[i].id,index,'')
+            setWifiDataByIndex(false,devices[i].id,index,devices[i].id)
             index++;
           }
           else{
             logicalDevices.push(devices[i])
-            setWifiDataByIndex(false,devices[i].id,index,'')
+            setWifiDataByIndex(false,devices[i].id,index,devices[i].id)
             index++
           }
         }
@@ -590,6 +590,7 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
 
           setWifiNetworkIsConnecting(false)
           setWifiDataByIndex(true,id,index,ip.split(":")[0]);
+          //setWifiDataByIndex(true,ip,index,id);
         }
         else{
           console.log('无线连接失败，请重来')
@@ -627,6 +628,7 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
     var ipArr = '';
     var portNum = '9999'
 
+    setIsUSBMode(false)
     setWifiNetworkIsConnecting(true)
     
     //adb disconnect;
@@ -638,8 +640,9 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
   }
 
   const setUSBConnection = (deviceId:string,deviceIndex:number) =>{
+    setIsUSBMode(true)
     setWifiNetworkIsConnecting(false)
-    setWifiDataByIndex(false,deviceId,deviceIndex,'');
+    setWifiDataByIndex(false,deviceId,deviceIndex,deviceId);
   }
 
 
