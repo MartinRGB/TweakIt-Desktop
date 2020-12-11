@@ -17,21 +17,24 @@ import DropDownMenu from '@Components/DropDownMenu'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import {ADBConnectContext}  from '@Context/ADBConnectContext';
+import {ADBSelectContext} from '@Context/ADBSelectContext'
 import adb from 'adbkit'
 
 const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
   const [colorMode] = useColorMode();
 
-  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim} = useContext(
+  const {codeBlockIsShow, setCodeBlockIsShow,setTriggerBlocAnim,adbInputCMD,canTriggerControlAnim} = useContext(
     CodeBlockStateContext,
   );
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   const adbGetStr = adbConfig.adb_get_device;
   const adbBuildStr = adbConfig.adb_help;
-  const {currentSelectDeviceId,connectedDeviceCounts,isOnConnect} = useContext(ADBConnectContext)
-  
+  const {realConnectedDevice,isReUpdate,updateData,isWifiDeviceRemoved,isWifiOnConnect,connectedDevice,connectedDeviceCounts,displayInfo,deviceWifi,startWifiConnection,startUSBConnection,wifiIsConnecting} = useContext(ADBConnectContext)
+
+  const {currentSelectDeviceId,currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId} = useContext(ADBSelectContext)
+
   useEffect( () => {
 
   }, []);
@@ -87,16 +90,26 @@ const SelectArea: React.FC = memo(({children}) => {
         onClickIndex={(i,val)=>{onIndexClicked(i,val)}} 
         menuStyle={{left:`-1px`,width:`240px`}}
         optionsData={optionsData} 
-        enable={(currentSelectDeviceId != '' && connectedDeviceCounts!=0 && isOnConnect)} 
+        enable={(
+          currentSelectIndex != -1 && 
+          !wifiIsConnecting &&
+          connectedDeviceCounts!=0 
+          
+        )} 
         menuWidth={`240px`} 
         isRichAnimation={true}></DropDownMenu>
      
         <ADBButtonNormal 
-          enable={(currentSelectDeviceId != '' && connectedDeviceCounts!=0 && isOnConnect)}
+          enable={(            
+            currentSelectIndex != -1 && 
+            !wifiIsConnecting &&
+            connectedDeviceCounts!=0 )}
           cmdTriggerAnim={
             ((adbInputCMD === adbGetStr) && canTriggerControlAnim && codeBlockIsShow)
           }
           cmd={adbGetStr}
+          isDisableCMDAnim={false}
+          //onClick={setTriggerBlocAnim(true)}
           buttonCSS = {
             css`
               margin-left:12px;
@@ -116,11 +129,17 @@ const SelectArea: React.FC = memo(({children}) => {
             <CustomSpan><Trans>Get</Trans></CustomSpan>
         </ADBButtonNormal>
         <ADBButtonNormal
-          enable={(currentSelectDeviceId != '' && connectedDeviceCounts!=0 && isOnConnect)}
+          enable={(              
+            currentSelectIndex != -1 && 
+            !wifiIsConnecting &&
+            connectedDeviceCounts!=0 
+          )}
           cmdTriggerAnim={
             ((adbInputCMD === adbBuildStr) && canTriggerControlAnim && codeBlockIsShow)
           }
           cmd={adbBuildStr}
+          isDisableCMDAnim={false}
+          //onClick={setTriggerBlocAnim(true)}
           buttonCSS = {
             css`
               margin-right:12px;

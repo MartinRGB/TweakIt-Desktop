@@ -35,7 +35,6 @@ export var ADBConnectContext = createContext({
   updateData:() => {},
 
   deviceTarget:null,
-  deviceTargetCounts:0,
 });
 
 
@@ -44,7 +43,6 @@ export var ADBConnectContext = createContext({
 
 export class DeviceObject{
   public id:string;
-  public name:string;
   public type:string;
   public serialNo:string;
   public wifiId:string;
@@ -59,8 +57,7 @@ export class DeviceObject{
   public isActiveWifi:boolean;
 
   constructor(){
-    this.id = '';
-    this.name = '';
+    this.id = '';;
     this.type = '';
     this.serialNo = '';
     this.wifiId = '';
@@ -74,7 +71,6 @@ export class DeviceObject{
   }
 
   public setId(id:string){this.id = id;}
-  public setName(name:string){this.name = name;}
   public setType(type:string){this.type = type;}
   public setSerialNo(serialNo:string){this.serialNo = serialNo;}
   public setWifiId(wifiAddress:string){this.wifiId = wifiAddress;}
@@ -95,6 +91,7 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
   // const [selectDeviceId,setSelectDeviceId] = useState<string>('');
   // const [selectDeviceIndex,setSelectDeviceIndex] = useState<number>(-1);
   const [deviceArr, setDeivceArr] = useState<any>([]);
+  const [deviceCounts, setDeivceCounts] = useState<number>(0);
   const [mDisplayInfo,setDisplayInfo] = useState<any>([]);
   const [mDisplayCounts,setDisplayCounts] = useState<number>(0);
   const [mDeviceWifi,setDeviceWifi] = useState<any>([]);
@@ -102,29 +99,19 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
   const [mWifiConnectData,setWifiConnectData] = useState<any>([]);
 
   const [mWifiDeviceRemove,setMyWifiDeviceRemove] = useState<any>([]);
-  const [deviceCounts, setDeviceCounts] = useState<number>(0);
+
+  const [deviceData,setDeviceData] = useState<any>([]);
+  
 
   const {currentSelectDeviceId,currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId} = useContext(ADBSelectContext)
   var aO = new DeviceObject()
   const [deviceObjects,setDeviceObjects] = useState<DeviceObject[]>([]);
-  const [deviceObjectsCounts, setDeivceObjectCounts] = useState<number>(0);
 
   function addDeviceObjects(objs:DeviceObject){
     var dO:DeviceObject[] = [];
     dO = deviceObjects;
     dO.push(objs)
-    
-    setDeviceObjects(dO)
-    
-    //var filtData = filtWifi(dO);
-    //setDeviceObjects(filtData)
-    
-    // setFiltDeviceObjects()
-  }
-
-  function setFiltDeviceObjects(objs:DeviceObject){
-    var dO:DeviceObject[] = [];
-    dO = deviceObjects;
+    //setDeviceObjects(dO)
     var filtData = filtWifi(dO);
     setDeviceObjects(filtData)
   }
@@ -191,14 +178,13 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
       tracker.on('add', function(device:any) {
         console.log('Device %s was plugged', device.id);
 
-
         var deviceObject = new DeviceObject();
+
         deviceObject.setId(device.id)
         deviceObject.setType(device.id.includes('emulator')?'emulator':device.id.includes(':')?'wifi':'hardware')
 
         execCMDPromise(`adb -s ${device.id} shell getprop ro.serialno`,function(val:any){
           deviceObject.setSerialNo(val)
-          deviceObject.setName(device.id.includes(':')?`wifi - ${val}`:device.id.includes('emulator')?`${device.id}`:`usb - ${device.id}`)
           execCMDPromise(`adb -s ${device.id} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'`,function(val:any){
             deviceObject.setWifiId(val)
             execCMDPromise(`adb -s ${device.id} shell dumpsys display | grep 'mBaseDisplayInfo=DisplayInfo{"' | awk -F'",' '{print $1}'`,function(val:any){
@@ -213,37 +199,19 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
               deviceObject.setIsConnectingWifi(false)
               deviceObject.setIsActiveWifi(false)
               deviceObject.setActiveWifiId('')
-
-              
-              addDeviceObjects(deviceObject);
-              setCurrentSelectIndex(-1)
             })
     
           })
         })
 
-        setDeivceObjectCounts(deviceObjectsCounts+1)
+
+
+        addDeviceObjects(deviceObject);
         // 应该只刷一次
       })
 
       tracker.on('remove', function(device:any) {
         console.log('Device %s was unplugged', device.id);
-
-        new Promise((resolve, reject) =>{
-          var newArr= deviceObjects;
-          for(var i = 0;i<deviceObjects.length-1;i++){
-            if(deviceObjects[i].id === device.id){
-              newArr.splice(i,1);
-            }
-          }
-          resolve(newArr)
-        }).then(function(val:any) {
-          console.log(val)
-          setDeviceObjects(val);
-          setCurrentSelectIndex(-1)
-          console.log(deviceObjects)
-        })
-
       })
       tracker.on('end', function() {
         console.log('Tracking stopped')
@@ -575,7 +543,6 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
 
         updateData:reupdateData,
         deviceTarget:deviceObjects,
-        deviceTargetCounts:deviceObjectsCounts,
 
       }}>
       {children}

@@ -14,10 +14,10 @@ import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
-const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , onClick,onMouseDown,onMouseUp,buttonCSS,cmdTriggerAnim,cmd,enable}) => {
+const ADBButtonNormal: React.FC<IButton> = memo(({isDisableCMDAnim,parentStyle,style,children , onClick,onMouseDown,onMouseUp,buttonCSS,cmdTriggerAnim,cmd,enable}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim,setTriggerControlAnim,setTriggerBlocAnim} = useContext(CodeBlockStateContext,);
+  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim,canTriggeBlocAnim,setTriggerControlAnim,setTriggerBlocAnim} = useContext(CodeBlockStateContext,);
   const [isScaleUp,SetIsScaleUp] = useState<boolean>(false);
   const [bind, { delta, down }] = useGesture()
 
@@ -60,7 +60,7 @@ const ADBButtonNormal: React.FC<IButton> = memo(({ parentStyle,style,children , 
         active={(isScaleUp || cmdTriggerAnim)}
         isAnimationEnable={isGlobalAnimEnable}
         onClick={()=>{
-          setTriggerBlocAnim(true)
+          if(!isDisableCMDAnim) setTriggerBlocAnim(true)
           cmd?dealADBCommand():'';
           onClick();
         }}

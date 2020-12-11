@@ -16,10 +16,10 @@ import Icons from '@Assets/icons'
 import ADBButtonNormal from '@Components/ADBButtonNormal'
 import DropDownMenuSimple from '@Components/DropDownMenuSimple'
 
-const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onClick,onMouseDown,onMouseUp,conatinerCSS,cmdTriggerAnim,cmdStr,iconStr,onADBExpandSelect,enable,optionsData,onMenuClickIndex,menuSelectIndex,currentTopSelectIndex}) => {
+const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onClick,onMouseDown,onMouseUp,conatinerCSS,cmdTriggerAnim,cmdKeyword,cmdStr,iconStr,onADBExpandSelect,enable,optionsData,onMenuClickIndex,menuSelectIndex,currentTopSelectIndex}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,setADBInputCMD,canTriggerControlAnim,setTriggerControlAnim} = useContext(CodeBlockStateContext,);
+  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,setADBInputCMD,canTriggerControlAnim,setTriggerControlAnim,setTriggerBlocAnim} = useContext(CodeBlockStateContext,);
 
 
   var ExpandSelectIcon;
@@ -42,12 +42,15 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
     <ClipContainer isDeviceEnable={enable} isAnimationEnable={isGlobalAnimEnable}>
     <LeftSide>
       <ADBButtonNormal 
-        onClick={()=>{onClick?onClick():''}}
+        onClick={()=>{
+          onClick?onClick():''
+        }}
         enable={enable}
         cmdTriggerAnim={
-          ((adbInputCMD === cmdStr) && canTriggerControlAnim && codeBlockIsShow)
+          ((adbInputCMD === cmdStr || adbInputCMD.includes(cmdKeyword)) && canTriggerControlAnim && codeBlockIsShow)
         }
         cmd={cmdStr} //+currentScreen
+        isDisableCMDAnim={true}
         buttonCSS = {
           css`
             
@@ -99,6 +102,7 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
         parentStyle={{
           transform:'none',
         }}
+        isDisableCMDAnim={true}
         onClick={(e)=>{
           //onClick()
           dropdownRef.current.clickExpandSelect(e)

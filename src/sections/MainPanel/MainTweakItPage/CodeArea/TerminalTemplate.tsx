@@ -34,7 +34,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
   const [textIsOnFocus,setTextIsOnFocus] = useState<boolean>(true);
   const [textShouldHighlight,setTextShouldHighlight] = useState<boolean>(true);
 
-  const {adbInputCMD,setADBInputCMD,setTriggerControlAnim,canTriggeBlocAnim,setTriggerBlocAnim} = useContext(
+  const {adbInputCMD,setADBInputCMD,setTriggerControlAnim,canTriggerControlAnim,canTriggeBlocAnim,setTriggerBlocAnim} = useContext(
     CodeBlockStateContext,
   );
 
@@ -75,7 +75,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
       setTransitionInProgress(animation.getValueProgress())
     })
     animation.setOnEndCallback(()=>{
-      
+      setTriggerBlocAnim(false)
     })
     animation.start();
   }
@@ -101,6 +101,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
     setInputValue(e.target.value);
     //setADBInputCMD(e.target.value);
     setTriggerControlAnim(false)
+    //setTriggerBlocAnim(false)
   }
 
   const onCMDKeyup = (e:any) =>{
@@ -123,13 +124,21 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
       else{
         setADBInputCMD(e.target.value);
         setTriggerControlAnim(true)
+        setTriggerBlocAnim(true)
         setInputValue('loading...');
         cmdWithConsole(e.target.value)
         setInputValue('');
-        if(isGlobalAnimEnable) startTransitionInAnimation();
+        
       }
     }
   }
+
+  useEffect(() => {
+    console.log('Do something after counter has changed');
+    if(canTriggeBlocAnim){
+      if(isGlobalAnimEnable) startTransitionInAnimation();
+    }
+ }, [canTriggeBlocAnim]);
 
 
   const onCMDKeydown = (e:any) =>{

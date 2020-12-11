@@ -10,7 +10,7 @@ import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 import Icons from '@Assets/icons'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
-
+import {ADBSelectContext} from '@Context/ADBSelectContext'
 
 const DropDownMenuDevice: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,onClickIndex,menuStyle,style,optionsData,menuWidth,isRichAnimation,enable}) => {
 
@@ -27,6 +27,8 @@ const DropDownMenuDevice: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,o
   const menuPadding = 6;
   const listHeight = 20;
 
+  const {currentSelectDeviceId,currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId} = useContext(ADBSelectContext)
+  
   const onClickSelect = (e:any) =>{
 
     if(onClickListExpandTimeOut){
@@ -126,7 +128,8 @@ const DropDownMenuDevice: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,o
         cursor:`${enable?'pointer':''}`,
       }}
     >
-      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{(selectIndex === -1)?'select...':selectedText}</CustomSelectedSpan>
+           {/* TODO selectedText (optionsData[currentSelectIndex]?optionsData[currentSelectIndex]:'select...' */}
+      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{(selectIndex === -1)?'select...':(optionsData[currentSelectIndex]?optionsData[currentSelectIndex]:'select...')}</CustomSelectedSpan>
       <Icons.SelectArrow></Icons.SelectArrow>
     </CustomSelect>
 

@@ -13,6 +13,7 @@ export interface IButton {
   cmd?:any;
   buttonSib:any;
   enable?:any;
+  isDisableCMDAnim?:any;
 }
 
 export interface IADBExpandSelect {
@@ -28,6 +29,7 @@ export interface IADBExpandSelect {
   conatinerCSS?:any;
   cmdTriggerAnim?:boolean;
   cmdStr?:any;
+  cmdKeyword?:any;
   iconStr?:any;
   onADBExpandSelect?:any;
   enable?:any;
@@ -66,6 +68,8 @@ export interface IDropDownMenu{
   prefix?:any;
   selectIndex?:any;
   selectId?:any;
+  optionsCounts?:any;
+  selectedText?:any;
 }
 
 declare global {
@@ -75,6 +79,7 @@ declare global {
     appPath:any;
     childProcess:any;
     cmdConsole:any;
+    deviceObjects:any;
   }
 }
 

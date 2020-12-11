@@ -28,7 +28,7 @@ const MainTweakItPage: React.FC = memo(({children}) => {
 
         <ListSelectStateProvider>
           <GraphUpdateProvider>
-          {/* <SelectArea></SelectArea> */}
+          <SelectArea></SelectArea>
           <TopContainer isAnimationEnable={isGlobalAnimEnable}>
             <ListArea></ListArea>
             <DurationDataProvider>
