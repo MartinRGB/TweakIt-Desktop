@@ -1,25 +1,59 @@
 [
     {
-        "ul": "Device Info",
+        "category": "Device Info",
+        "visible":true,
+        "clickable":true,
         "li": [
             {
                 "name": "Net Interface",
                 "type": "ADBInfo",
-                "adb_cmd": "",
-                "data": "wlan{parameter}"
+                "adb_cmd": "adb -s {target} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'",
+                "visible":true,
+                "clickable":true
             },
             {
                 "name": "SDK",
                 "type": "ADBInfo",
-                "adb_cmd": "",
-                "data": "{parameter}"
+                "adb_cmd": "adb -s {target} shell getprop ro.build.version.sdk",
+                "visible":true,
+                "clickable":true
             },
             {
                 "name": "Android Version",
                 "type": "ADBInfo",
-                "adb_cmd": "",
-                "data": "{parameter}"
+                "adb_cmd": "adb -s {target} shell getprop ro.build.version.release",
+                "visible":true,
+                "clickable":true
+            }
+        ]
+    },
+    {
+        "category": "Device Info",
+        "visible":true,
+        "clickable":true,
+        "li": [
+            {
+                "name": "Net Interface",
+                "type": "ADBInfo",
+                "adb_cmd": "adb -s {target} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "SDK",
+                "type": "ADBInfo",
+                "adb_cmd": "adb -s {target} shell getprop ro.build.version.sdk",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Android Version",
+                "type": "ADBInfo",
+                "adb_cmd": "adb -s {target} shell getprop ro.build.version.release",
+                "visible":true,
+                "clickable":true
             }
         ]
     }
+
 ]

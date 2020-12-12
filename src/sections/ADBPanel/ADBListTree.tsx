@@ -3,7 +3,7 @@ import React, { memo, useState, useRef, useEffect, useContext } from 'react'
 import { useSpring, animated, interpolate } from 'react-spring'
 import ResizeObserver from 'resize-observer-polyfill'
 //import styled from 'styled-components'
-import { Icon, IListTree } from "@Types";
+import { Icon, IADBListTree } from "@Types";
 // import * as Icons from './ListIcon'
 
 import { useColorMode, jsx } from 'theme-ui'
@@ -23,22 +23,19 @@ import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import Solver from 'src/helpers/Solver.ts';
 import initState from '@Config/init_state.json'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
 
-const ListTree: React.FC<IListTree> = memo(({
+const ADBListTree: React.FC<IADBListTree> = memo(({
   clickable, 
-  platform,
   children, 
   name, 
   style,
-  defaultOpen = false, 
-  info, 
+  category,
   isUlElement, 
   index, 
-  liIndex,
-  animation_data,
-  ease_name,
-  calculator,
-  listLength,
+  cmdTarget,
+  cmdStr,
+  wifiIsConnecting,
   visible,}) => {
 
   const UlVerticalPadding: number = 3;
@@ -56,90 +53,37 @@ const ListTree: React.FC<IListTree> = memo(({
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
-  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setListDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,selectTransition,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex,setInterpolatorName,setFlutterName,setiOSName,setWebName,setSmartisanName} = useContext(
-    AnimatorTypeContext
-  );
 
   //console.log('ListTree - Render')
 
-  useEffect(() => {
-    if(platform === currentAnimPlatform && name === currentAnimName && calculator === currentAnimCalculator){
-      setPrevAndCurrData();
-    }
-  }, [])
 
-  const setPrevAndCurrData = () =>{
-      // TODO Work for GraphTransition,but not For Input
-      setPreviousAnimPlatform(currentAnimPlatform);
-      setPreviousAnimName(currentAnimName);
-      setPreviousAnimCalculator(currentAnimCalculator);
-      setPreviousSolverData(currentSolverData);
-      Object.entries(currentAnimData).map(function (data:any,index:number) {
-        setPreviousDataMinByIndex(data[1][1].min,index)
-        setPreviousDataRangeByIndex(data[1][1].max - data[1][1].min,index)
-      })
-
-      selectAnimationItem(info)
-      setCurrentAnimPlatform(platform);
-      setCurrentAnimName(name)
-      setCurrentAnimCalculator(calculator)
-
-      setInterpolatorName(ease_name[0])
-      setiOSName(ease_name[1])
-      setWebName(ease_name[2])
-      setFlutterName(ease_name[3])
-      setSmartisanName(ease_name[4])
-
-      if(animation_data){
-        setCurrentAnimData(Object.entries(animation_data))
-      }
-      else{
-        setCurrentAnimData([])
-      }
-
-      // if(name === 'Duration'){
-      //   setDurationData(Math.min(max,Math.max(Number(value),min)),index);
-      // }
-
-      Object.entries(animation_data).map(function (data:any,index:number) {
-        if(data[0] === "Duration"){
-          setListDurationData(data[1].default)
-        }
-        else{
-          setListDurationData(-1)
-        }
-        setCurrentDataRangeByIndex(data[1].max - data[1].min,index)
-      })
-      // BUGS:Delete Comments will delete transition anim
-      // Object.entries(animation_data).map(function (data:any,index:number) {
-      //   setCurrentSolverDataByIndex(data[1].default,index)
-      // })
-
-      isGlobalAnimEnable?setSelectTransition(true):setSelectTransition(false)
-  }
 
   const { revealProgress } = useSpring({
     revealProgress: isOpen ? 1 : (isGlobalAnimEnable?0:1),
     config: animationConfig.list_reveal
   }) 
 
-  // TODO
-  var PlatformIcon;
 
-  if(isUlElement){
-    PlatformIcon = Icons[(platform.replace(/\s/g, "")!)];
+  const getCMDInfoData = (str:any,target:any) =>{
+    console.log(str)
+    console.log(target)
+    execCMDPromise(str.replace(/{target}/g, target),function(val:any){
+      console.log(val)
+      setCurrentInfoString(val)
+    })
   }
 
+  const [currentInfoString,setCurrentInfoString] = useState<string>('');
 
-  // function transitionTemplate(i, duration) {
-  //   return `
-  //       &:nth-child(${i + 1}) {
-  //         transition-delay: ${`calc(${duration} * ${i + 3})`};
-  //        }
-  //     `;
-  // }
+  useEffect(() => {
+    // if(cmdTarget){
+    //   getCMDInfoData(cmdStr,cmdTarget);
+    // }
+    if(cmdTarget != null && !wifiIsConnecting){
+      getCMDInfoData(cmdStr,cmdTarget);
+    }
+  }, [cmdTarget])
 
-  // (children)?
 
   return (
     <Frame isAnimationEnable={isGlobalAnimEnable}>
@@ -154,46 +98,46 @@ const ListTree: React.FC<IListTree> = memo(({
               height: 18px;`
             }
             style={{
-              transform: isOpen?interpolate([revealProgress], (r) => `rotate(${r * 90}deg) translate3d(0px,${r * 1.5}px,0px) scale3d(${1 - r * 0.1},${1 - r * 0.1},${1 - r * 0.1})`):'',
-              marginTop: `-2px`,
+              transform: isOpen?interpolate([revealProgress], (r) => `rotate(${r * 90}deg) translate3d(0px,${r * -4}px,0px) scale3d(${1 - r * 0.1},${1 - r * 0.1},${1 - r * 0.1})`):'',
+              marginTop: `-1px`,
             }}>
             <Icons.CollapsedArrow />
           </animated.div>
-          {
-            isUlElement?<PlatformIcon style={{
-              height: `18px`,
-              width: `18px`,
-              verticalAlign: `middle`,
-              marginLeft: `8px`,
-              marginRight: `4px`,
-              marginTop: `-2px`,
-            }}></PlatformIcon>:''
-          }
-          <UlTitle style={style} height={UlHeight}><Trans>{platform}</Trans></UlTitle>
+          <UlTitle style={style} height={UlHeight}><Trans>{category}</Trans></UlTitle>
         </UlElement>
 
         :
         // without children - withoutIcon(normal li)
         <LiElement id="LiElement">
           {!visible?
-            // ---- divide --- 3px
-            <div css={css`height:0px`}></div> :
-            <LiTitle style={{ ...style }} isAnimationEnable={isGlobalAnimEnable} isClickable={clickable} isSelected={currentAnimationItem === info }
-            height={LiHeight} 
-            onClick={() => 
-              {
-                if((currentAnimationItem != info) && clickable && !selectTransition){
-                    setPrevAndCurrData();
+            '' 
+            :
+            <div>
+              <LiTitle style={{ ...style }} 
+              isAnimationEnable={isGlobalAnimEnable} 
+              isClickable={clickable}
+              height={LiHeight} 
+              onClick={() => 
+                {
+                  
                 }
               }
-            }
-            ><Trans>{name}</Trans></LiTitle>
+              ><Trans>{name}</Trans>
+              </LiTitle>
+              <ADBInfo 
+                isAnimationEnable={isGlobalAnimEnable}
+                isClickable={clickable}
+                height={LiHeight} >
+                  {currentInfoString}
+              </ADBInfo>
+            </div>
           }
         </LiElement>
       }
 
       {children ?
-      <UlContent id="UlContent" style={{
+      <UlContent id="UlContent" 
+      style={{
         opacity: interpolate([revealProgress], (r) => `${r * 1}`),
         display: isOpen?'block':'none',
         height: isOpen? interpolate([revealProgress], (r) => `${r * (viewHeight + UlVerticalPadding * 2)}px`): '0px',
@@ -223,7 +167,7 @@ const ListTree: React.FC<IListTree> = memo(({
 })
 
 
-export default ListTree;
+export default ADBListTree;
 
 // State Control
 const usePrevious = function (value: any) {
@@ -246,7 +190,23 @@ const useMeasure = function () {
 
 
 // Styles
-
+const ADBInfo = styled.span<{
+  isAnimationEnable:boolean;
+  height:number;
+  isClickable:boolean;
+}>`
+font-family: ${props => props.theme.fonts.numberInput};
+font-style: normal;
+font-weight: 300;
+font-size: 10px;
+opacity:${p => (p.isClickable ?'0.7':'0.3')};
+line-height: ${p=>p.height}px;
+color:${p => p.theme.colors.text};
+transition:${p=>p.isAnimationEnable?'all 0.25s':''};
+user-select:none;
+position: absolute;
+right:0px;
+`
 
 const UlElement = styled.div<{
   isAnimationEnable:boolean;
@@ -258,9 +218,8 @@ const UlElement = styled.div<{
   align-items: center;
   flex-direction: row;
   opacity:${p => p.isSelected?'1':'0.8'};
-  padding-left: 8px;
-  margin-left: 6px;
-
+  padding-left: 1px;
+  //margin-top: 6px;
   transition:${p=>p.isAnimationEnable?'opacity 0.25s':''};
 
   > div > svg{
@@ -275,7 +234,7 @@ const UlElement = styled.div<{
 
   :before{
     content:'';
-    width:234px;
+    width:100%;
     height:100%;
     left:0;
     top:0;
@@ -306,6 +265,9 @@ const LiElement = styled.div`
   position: relative;
   display: flex;
   transition:all 0.2s;
+  margin-left:24px;
+  margin-right:24px;
+  height:24px;
 `
 
 
@@ -323,6 +285,8 @@ const Frame = styled.li<{
   background:transparent;
   list-style: none;
   transition:${p=>p.isAnimationEnable?'color 0.25s':''};
+
+  >
 
 `
 
@@ -342,38 +306,14 @@ const LiTitle = styled.span<{
   font-weight: 300;
   font-size: 10px;
   line-height: ${p=>p.height}px;
-  margin-left: 5px;
-  padding-left: 18px;
-  padding-right: 18px;
+  //margin-left: 24px;
   border-radius: 4px;
-  color:${p => (p.isSelected ? p.theme.colors.primary : p.theme.colors.text)};
-  opacity:${p => (p.isClickable ?(p.isSelected?'1':'0.7'):'0.3')};
-  cursor:${p => (p.isClickable ? 'pointer':'not-allowed')};
-
+  color:${p => p.theme.colors.text};
+  opacity:${p => (p.isClickable ?'0.7':'0.3')};
+  cursor:${p => (p.isClickable ? 'initial':'not-allowed')};
+  position: absolute;
+  left: 0px;
   transition:${p=>p.isAnimationEnable?'all 0.25s':''};
-  :before{
-    content:'';
-    width:100%;
-    height:100%;
-    left:0;
-    top:0;
-    border-radius:4px;
-    position:absolute;
-    transition:${p=>p.isAnimationEnable?'all 0.25s':''};
-  }
-  &:hover{
-    :before{
-      background:${p=>p.isClickable?p.theme.colors.primary_middle_opacity:''};
-    }
-    opacity:${p => (p.isClickable ? '0.85':'')};
-  }
-
-  &:active{
-    :before{
-      background:${p=>p.isClickable?p.theme.colors.primary_dark_1_opacity:''};
-    }
-    opacity:${p => (p.isClickable ? '1':'')};
-  }
 `
 
 const UlTitle = styled.span<{
@@ -387,13 +327,12 @@ const UlTitle = styled.span<{
   font-weight: 600;
   font-size: 12px;
   line-height: ${p=>p.height}px;
+  margin-left: 8px;
 `
 const UlContent = styled(animated.div)`
   will-change: transform, opacity, height;
-  margin-left: 20px;
-  padding: 0px 8px 0px 14px;
-  border-left: 1px dashed;
-  border-color:${p => p.theme.colors.title_background_bottom};
+  // margin-left: 20px;
+  // padding: 0px 8px 0px 14px;
   overflow: hidden;
 `
 

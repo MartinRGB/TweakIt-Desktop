@@ -113,6 +113,21 @@ export interface IListTree {
   listLength?:number;
 }
 
+export interface IADBListTree {
+  children?: React.ReactNode;
+  name?: string;
+  style?: any;
+  defaultOpen?: boolean;
+  isUlElement?:boolean;
+  category?:string;
+  index?: number;
+  visible?:boolean;
+  clickable?:boolean;
+  cmdTarget?:string;
+  wifiIsConnecting?:boolean;
+  cmdStr?:string;
+}
+
 export interface IInputTree {
   style?: any;
   index:number;

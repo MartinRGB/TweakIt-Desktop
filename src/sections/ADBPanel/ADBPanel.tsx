@@ -12,10 +12,10 @@ import animationConfig from '@Config/animation.json';
 import ReactPlaceholder from 'react-placeholder';
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import ADBTopArea from './ADBTopArea'
+import ADBListArea from './ADBListArea'
 //adb shell ip addr show wlan0
 //adb shell getprop ro.build.version.sdk
 //adb shell getprop ro.build.version.release 
-import adb from 'adbkit'
 
 const ADBPanel: React.FC = memo(() => {
   // return <button type="button">{children}</button>
@@ -68,6 +68,7 @@ const ADBPanel: React.FC = memo(() => {
         isAnimationEnable={isGlobalAnimEnable}
       >
         <ADBTopArea></ADBTopArea>
+        <ADBListArea></ADBListArea>
       </Container>
     </animated.div>:''
     )
@@ -132,12 +133,12 @@ const Container = styled.div<
   isAnimationEnable:boolean;
 }
 >`
-    // width: 320px;
-    // height: calc(100vh - 38px);
-    // position:absolute;
-    // transition:all 0.3s;
-    // transition-timing-function: cubic-bezier(0,0,0.2,1);
-    // right:${p => (p.active? '0px':'-320px')};
+    width: 320px;
+    height: calc(100vh - 38px);
+    position:absolute;
+    transition:all 0.3s;
+    transition-timing-function: cubic-bezier(0,0,0.2,1);
+    right:${p => (p.active? '0px':'-320px')};
     width: 100%;
     height: 100%;
     background: ${p => p.theme.colors.adb_background};

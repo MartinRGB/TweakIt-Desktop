@@ -16,7 +16,7 @@ const ListArea: React.FC = memo(({children}) => {
   
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   return (
-    <Container>
+    <Container isAnimationEnable={isGlobalAnimEnable}>
       {
           animationList.map(function (data:any,index:number) {
             return (
@@ -59,7 +59,9 @@ const ListArea: React.FC = memo(({children}) => {
 export default ListArea
 
 
-const Container = styled.div`
+const Container = styled.div<{
+  isAnimationEnable:boolean;
+}>`
     height: 100%;
     //background:${p => p.theme.colors.main_top_bg};
     display: flex;
@@ -74,7 +76,7 @@ const Container = styled.div`
     // Or it will re-rendering cause performance issue
     min-width:250px;
     
-
+    transition:${p=>p.isAnimationEnable?'background 0.25s':''};
     /* width */
     ::-webkit-scrollbar {
       width: 2px;
@@ -83,5 +85,6 @@ const Container = styled.div`
     /* Handle */
     ::-webkit-scrollbar-thumb {
       background: ${p => p.theme.colors.text};
+      transition:${p=>p.isAnimationEnable?'background 0.25s':''};
     }
 `

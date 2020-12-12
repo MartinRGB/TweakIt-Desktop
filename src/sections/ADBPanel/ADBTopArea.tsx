@@ -7,7 +7,6 @@ import { jsx,useColorMode} from 'theme-ui'
 import '@Context/i18nContext'
 import DropDownMenuDevice from '@Components/DropDownMenuDevice'
 import Icons from '@Assets/icons'
-import adbConfig from '@Config/adb_cmd_list.json';
 import ADBButtonSegment from '@Components/ADBButtonSegment'
 import ADBExpandSelect from '@Components/ADBExpandSelect'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
@@ -24,7 +23,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   const {realConnectedDevice,isReUpdate,updateData,isWifiDeviceRemoved,isWifiOnConnect,connectedDevice,connectedDeviceCounts,displayInfo,deviceWifi,startWifiConnection,startUSBConnection,wifiIsConnecting} = useContext(ADBConnectContext)
 
   //const [currentSelectIndex,setCurrentSelectIndex] = useState<number>(-1)
-  const {currentSelectDeviceId,currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId} = useContext(ADBSelectContext)
+  const {currentSelectDeviceId,currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId,cmdTarget,setCMDTarget} = useContext(ADBSelectContext)
 
   // segment
   const segmentIconStr = ["USB","Wifi",];
@@ -59,11 +58,27 @@ const ADBTopArea: React.FC = memo(({ children }) => {
       startUSBConnection(currentSelectDeviceId,currentSelectIndex)
       setCurrentSelectDeviceId(connectedDevice[currentSelectIndex])
       setSegmentActiveStr(segmentIconStr[0])
+
+      //TODO
+      if(isWifiDeviceRemoved[currentSelectIndex] && isWifiOnConnect && isWifiOnConnect[currentSelectIndex]){
+        setCMDTarget(isWifiOnConnect[currentSelectIndex][2])
+      }
+      else{
+        setCMDTarget(currentSelectDeviceId)
+      }
     }
     if(i === 1){
       startWifiConnection(currentSelectDeviceId,currentSelectIndex)
       setCurrentSelectDeviceId(deviceWifi[currentSelectIndex])
       setSegmentActiveStr(segmentIconStr[1])
+
+      //TODO
+      if(isWifiDeviceRemoved[currentSelectIndex] && isWifiOnConnect && isWifiOnConnect[currentSelectIndex]){
+        setCMDTarget(isWifiOnConnect[currentSelectIndex][2])
+      }
+      else{
+        setCMDTarget(currentSelectDeviceId)
+      }
     }
   }
   
@@ -104,7 +119,18 @@ const ADBTopArea: React.FC = memo(({ children }) => {
       setScreenshotSelectIndex(0);
       setRecordSelectIndex(0);
     }
- }, [isReUpdate]);
+  }, [isReUpdate]);
+
+  //const [cmdTarget,setCMDTarget] = useState<string>(currentSelectDeviceId)
+  useEffect(() => {
+    if(isWifiDeviceRemoved[currentSelectIndex] && isWifiOnConnect && isWifiOnConnect[currentSelectIndex]){
+      setCMDTarget(isWifiOnConnect[currentSelectIndex][2])
+    }
+    else{
+      setCMDTarget(currentSelectDeviceId)
+    }
+
+  }, [currentSelectDeviceId,isWifiDeviceRemoved[currentSelectIndex]]);
 
 
   return (
@@ -125,11 +151,12 @@ const ADBTopArea: React.FC = memo(({ children }) => {
           //selectedText={connectedDevice[currentSelectIndex]}
         ></DropDownMenuDevice>
 
-        <div onClick={()=>{console.log(deviceTarget)}}style={{position:`absolute`,left:`0`,top:`0`}}>
-          {isWifiDeviceRemoved[currentSelectIndex]?
+        <div onClick={()=>{}}style={{position:`absolute`,left:`0`,top:`0`}}>
+          {/* {isWifiDeviceRemoved[currentSelectIndex]?
               `${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]}`
               :
-              `${currentSelectDeviceId}`}
+              `${currentSelectDeviceId}`} */}
+          {cmdTarget}
         </div>
 
         <ADBButtonSegment
@@ -156,11 +183,14 @@ const ADBTopArea: React.FC = memo(({ children }) => {
               marginRight:`6px`,
             }}
             iconStr={castIconStr}
+            // cmdStr={
+            //   isWifiDeviceRemoved[currentSelectIndex]?
+            //   `scrcpy --display ${castSelectIndex} -s ${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]}`
+            //   :
+            //   `scrcpy --display ${castSelectIndex} -s ${currentSelectDeviceId}`
+            // }
             cmdStr={
-              isWifiDeviceRemoved[currentSelectIndex]?
-              `scrcpy --display ${castSelectIndex} -s ${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]}`
-              :
-              `scrcpy --display ${castSelectIndex} -s ${currentSelectDeviceId}`
+              `scrcpy --display ${castSelectIndex} -s ${cmdTarget}`
             }
             enable={(
               currentSelectIndex != -1 && 
@@ -180,11 +210,14 @@ const ADBTopArea: React.FC = memo(({ children }) => {
               marginRight:`6px`,
             }}
             iconStr={screenshotIconStr}
+            // cmdStr={
+            //   isWifiDeviceRemoved[currentSelectIndex]?
+            //   `adb -s ${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s 00d4fe2f pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]} shell rm ${SDCardTmpPath()}/screen.png`
+            //   :
+            //   `adb -s ${currentSelectDeviceId} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s 00d4fe2f pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${currentSelectDeviceId} shell rm ${SDCardTmpPath()}/screen.png`
+            // }
             cmdStr={
-              isWifiDeviceRemoved[currentSelectIndex]?
-              `adb -s ${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s 00d4fe2f pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]} shell rm ${SDCardTmpPath()}/screen.png`
-              :
-              `adb -s ${currentSelectDeviceId} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s 00d4fe2f pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${currentSelectDeviceId} shell rm ${SDCardTmpPath()}/screen.png`
+              `adb -s ${cmdTarget} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s 00d4fe2f pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${cmdTarget} shell rm ${SDCardTmpPath()}/screen.png`
             }
             cmdKeyword={'screencap'}
             enable={(
@@ -204,11 +237,14 @@ const ADBTopArea: React.FC = memo(({ children }) => {
           </ADBExpandSelect>
           <ADBExpandSelect
             iconStr={recordIconStr}
+            // cmdStr={
+            //   isWifiDeviceRemoved[currentSelectIndex]?
+            //   `scrcpy --display ${recordSelectIndex} -s ${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]} --record ${getUserHome()}/Desktop/${'record_' + timeTag}.mp4`
+            //   :
+            //   `scrcpy --display ${recordSelectIndex} -s ${currentSelectDeviceId} --record ${getUserHome()}/Desktop/${'record_' + timeTag}.mp4`
+            // }
             cmdStr={
-              isWifiDeviceRemoved[currentSelectIndex]?
-              `scrcpy --display ${recordSelectIndex} -s ${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]} --record ${getUserHome()}/Desktop/${'record_' + timeTag}.mp4`
-              :
-              `scrcpy --display ${recordSelectIndex} -s ${currentSelectDeviceId} --record ${getUserHome()}/Desktop/${'record_' + timeTag}.mp4`
+              `scrcpy --display ${recordSelectIndex} -s ${cmdTarget} --record ${getUserHome()}/Desktop/${'record_' + timeTag}.mp4`
             }
             cmdKeyword={'record'}
             enable={
@@ -251,6 +287,7 @@ const Container = styled.div<{
   border-bottom:1px solid ${p => p.theme.colors.adb_border};
   position: relative;
   transition:${p=>p.isAnimationEnable?'background 0.3s,border-bottom 0.3s':'none'};
+  
 `
 
 const ScreenContainer = styled.div`

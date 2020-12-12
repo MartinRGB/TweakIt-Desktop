@@ -10,7 +10,7 @@ import ADBButtonNormal from '@Components/ADBButtonNormal'
 //import childProcess from 'child_process';
 import Icons from '@Assets/icons'
 import animationConfig from '@Config/animation.json';
-import adbConfig from '@Config/adb_cmd_list';
+import cmdList from '@Config/cmd_list';
 
 import theme from 'src/styles/theme.ts';
 import DropDownMenu from '@Components/DropDownMenu'
@@ -18,7 +18,6 @@ import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import {ADBConnectContext}  from '@Context/ADBConnectContext';
 import {ADBSelectContext} from '@Context/ADBSelectContext'
-import adb from 'adbkit'
 
 const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
@@ -29,8 +28,8 @@ const SelectArea: React.FC = memo(({children}) => {
   );
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
-  const adbGetStr = adbConfig.adb_get_device;
-  const adbBuildStr = adbConfig.adb_help;
+  const adbGetStr = cmdList.adb_get_device;
+  const adbBuildStr = cmdList.adb_help;
   const {realConnectedDevice,isReUpdate,updateData,isWifiDeviceRemoved,isWifiOnConnect,connectedDevice,connectedDeviceCounts,displayInfo,deviceWifi,startWifiConnection,startUSBConnection,wifiIsConnecting} = useContext(ADBConnectContext)
 
   const {currentSelectDeviceId,currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId} = useContext(ADBSelectContext)
