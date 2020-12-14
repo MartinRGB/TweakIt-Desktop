@@ -11,9 +11,45 @@ export interface IButton {
   buttonCSS?:any;
   cmdTriggerAnim?:boolean;
   cmd?:any;
-  buttonSib:any;
+  buttonSib?:any;
   enable?:any;
   isDisableCMDAnim?:any;
+}
+
+export interface IADBNormalButtonGroup {
+  onMouseDown?: any;
+  iconStrArray?:any;
+  keywordArray?: boolean;
+  cmdSetStrArray?:any;
+  style?:any;
+  cmdTarget?:any;
+  cmdTriggerAnim?:boolean;
+  isAnimationEnable?:any;
+  enable?:any;
+  isDisableCMDAnim?:any;
+}
+
+
+
+export interface IADBSwitcher {
+  children?: React.ReactNode;
+  onClick?: any;
+  onMouseDown?: any;
+  onMouseUp?:any;
+  active?: boolean;
+  style?:any;
+  parentStyle?:any;
+  buttonCSS?:any;
+  cmdTriggerAnimON?:boolean;
+  cmdTriggerAnimOFF?:boolean;
+  cmdSetStr?:any;
+  cmdTarget?:any;
+  switcherOFF?:any;
+  switcherON?:any;
+  buttonSib?:any;
+  enable?:any;
+  isDisableCMDAnim?:boolean;
+  isAnimationEnable?:boolean;
 }
 
 export interface IADBExpandSelect {
@@ -125,7 +161,19 @@ export interface IADBListTree {
   clickable?:boolean;
   cmdTarget?:string;
   wifiIsConnecting?:boolean;
-  cmdStr?:string;
+  cmdGetStr?:string;
+  cmdSetStr?:string;
+  type:string;
+  min?:number;
+  max?:number;
+  divide?:string;
+  displayInfo?:any;
+  switcherOFF?:any;
+  switcherON?:any;
+  cmdKeyWord?:any;
+  iconStrArray?:any;
+  keywordArray?:any;
+  cmdSetStrArray?:any;
 }
 
 export interface IInputTree {
@@ -156,6 +204,32 @@ export interface IInput {
   onBlur?: any;
   onFocus?: any;
   isGlobalAnimEnable?:any;
+}
+
+export interface IADBInput {
+  id:any;
+  style?: any;
+  value: any;
+  index?:any;
+  defaultValue?: number;
+  isEditable?:boolean;
+  min?: number;
+  max?: number;
+  step?: number;
+  onChange?: any;
+  onKeyUp?: any;
+  onKeyDown?: any;
+  onBlur?: any;
+  onFocus?: any;
+  isAnimationEnable?:any;
+  cmdTarget?:any;
+  cmdGetStr?:string;
+  cmdSetStr?:string;
+  number?:any;
+  cmdDivide?:any;
+  cmdTriggerAnim?:any;
+  isDisableCMDAnim?:any;
+  cmdKeyWord?:any;
 }
 
 export interface ISVG {

@@ -17,7 +17,7 @@ import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
 const ADBButtonNormal: React.FC<IButton> = memo(({isDisableCMDAnim,parentStyle,style,children , onClick,onMouseDown,onMouseUp,buttonCSS,cmdTriggerAnim,cmd,enable}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim,canTriggeBlocAnim,setTriggerControlAnim,setTriggerBlocAnim} = useContext(CodeBlockStateContext,);
+  const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim,canTriggeBlocAnim,setTriggerControlAnim,setTriggerBlocAnim} = useContext(CodeBlockStateContext);
   const [isScaleUp,SetIsScaleUp] = useState<boolean>(false);
   const [bind, { delta, down }] = useGesture()
 

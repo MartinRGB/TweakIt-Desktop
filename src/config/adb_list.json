@@ -7,53 +7,183 @@
             {
                 "name": "Net Interface",
                 "type": "ADBInfo",
-                "adb_cmd": "adb -s {target} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'",
+                "cmdGetStr": "adb -s {target} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print \"wlan0_\"$2}' | awk -F'/' '{print $1}'",
                 "visible":true,
                 "clickable":true
             },
             {
                 "name": "SDK",
                 "type": "ADBInfo",
-                "adb_cmd": "adb -s {target} shell getprop ro.build.version.sdk",
+                "cmdGetStr": "adb -s {target} shell getprop ro.build.version.sdk",
                 "visible":true,
                 "clickable":true
             },
             {
                 "name": "Android Version",
                 "type": "ADBInfo",
-                "adb_cmd": "adb -s {target} shell getprop ro.build.version.release",
+                "cmdGetStr": "adb -s {target} shell getprop ro.build.version.release ",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Display Counts",
+                "type": "ADBInfo",
+                "cmdGetStr": "adb -s {target} shell dumpsys display | grep 'mBaseDisplayInfo=DisplayInfo{\"' | wc -l",
                 "visible":true,
                 "clickable":true
             }
         ]
     },
     {
-        "category": "Device Info",
+        "category": "Screen Management",
         "visible":true,
         "clickable":true,
         "li": [
             {
-                "name": "Net Interface",
-                "type": "ADBInfo",
-                "adb_cmd": "adb -s {target} shell ip addr show wlan0 | grep 'inet\\s' | awk '{print $2}' | awk -F'/' '{print $1}'",
+                "name": "Display Resolution",
+                "type": "DisplayInfoGroup",
+                "keyword": "size",
+                "cmdGetStr": "adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}'",
+                "cmdSetStr": "adb -s {target} shell wm size",
+                "cmdMutiParaDivide": "x",
+                "visible":true,
+                "clickable":true,
+                "min":0,
+                "max":4096
+            },
+            {
+                "name": "Display DPI",
+                "type": "DisplayInfoGroup",
+                "keyword": "density",
+                "cmdGetStr": "adb -s {target} shell wm density | grep 'Physical' | grep -Eo '[0-9]{1,4}'",
+                "cmdSetStr": "adb -s {target} shell wm density",
+                "visible":true,
+                "clickable":true,
+                "min":0,
+                "max":800
+            }
+        ]
+    }
+    ,
+    {
+        "category": "System Control",
+        "visible":true,
+        "clickable":true,
+        "li": [
+            {
+                "name": "Immersive Mode",
+                "type": "ADBSwitcher",
+                "cmdSetStr": "adb -s {target} shell settings put global policy_control",
+                "cmdON":"immersive.status=*",
+                "cmdOFF":"null*",
+                "keyword": "policy_control",
                 "visible":true,
                 "clickable":true
             },
             {
-                "name": "SDK",
-                "type": "ADBInfo",
-                "adb_cmd": "adb -s {target} shell getprop ro.build.version.sdk",
+                "name": "Show Pointer Coordinates",
+                "type": "ADBSwitcher",
+                "cmdSetStr": "adb -s {target} shell settings put system pointer_location",
+                "cmdON":"1",
+                "cmdOFF":"0",
+                "keyword": "pointer_location",
                 "visible":true,
                 "clickable":true
             },
             {
-                "name": "Android Version",
-                "type": "ADBInfo",
-                "adb_cmd": "adb -s {target} shell getprop ro.build.version.release",
+                "name": "Show Pointer",
+                "type": "ADBSwitcher",
+                "cmdSetStr": "adb -s {target} shell settings put system show_touches",
+                "keyword": "show_touches",
+                "cmdON":"1",
+                "cmdOFF":"0",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Debug Layout",
+                "type": "ADBSwitcher",
+                "cmdSetStr": "adb -s {target} shell setprop debug.layout",
+                "keyword": "debug.layout",
+                "cmdON":"true",
+                "cmdOFF":"false",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Expand Notification Center",
+                "type": "ADBSwitcher",
+                "cmdSetStr": "adb -s {target} shell service call statusbar",
+                "keyword": "call statusbar",
+                "cmdON":"1",
+                "cmdOFF":"2",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Light Off",
+                "type": "ADBSwitcher",
+                "cmdSetStr": "adb -s {target} shell input keyevent",
+                "keyword": "input keyevent",
+                "cmdON":"223",
+                "cmdOFF":"224",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Keybaord Input(Only Eng)",
+                "type": "ADBTextInput",
+                "cmdSetStr": "adb -s {target} shell input text",
+                "keyword": "input text",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Virtual Key",
+                "type": "ADBNormalButtonGroup",
+                "cmdSetStrArray": ["adb -s {target} shell input keyevent KEYCODE_APP_SWITCH","adb -s {target} shell input keyevent KEYCODE_HOME","adb -s {target} shell input keyevent KEYCODE_BACK","adb -s {target} reboot","adb -s {target} shell input keyevent KEYCODE_POWER"],
+                "keywordArray": ["KEYCODE_APP_SWITCH","KEYCODE_HOME","KEYCODE_BACK","reboot","KEYCODE_POWER"],
+                "iconStrArray":["Overview","Home","Back","Reboot","Shutdown"],
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Volume Key",
+                "type": "ADBNormalButtonGroup",
+                "cmdSetStrArray": ["adb -s {target} shell input keyevent KEYCODE_VOLUME_UP","adb -s {target} shell input keyevent KEYCODE_VOLUME_DOWN"],
+                "keywordArray": ["KEYCODE_VOLUME_UP","KEYCODE_VOLUME_DOWN"],
+                "iconStrArray":["VolumeUp","VolumeDown"],
+                "visible":true,
+                "clickable":true
+            }
+            
+        ]
+    }
+    ,
+    {
+        "category": "Application Management",
+        "visible":true,
+        "clickable":true,
+        "li": [
+            {
+                "name": "Get Current PackageName",
+                "type": "ADBGetInfo",
+                "keyword": "size",
+                "cmdGetStr": "adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}'",
+                "cmdMutiParaDivide": "x",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Get Current ActivityName",
+                "type": "ADBGetInfo",
+                "keyword": "density",
+                "cmdGetStr": "adb -s {target} shell wm density | grep 'Physical' | grep -Eo '[0-9]{1,4}'",
                 "visible":true,
                 "clickable":true
             }
         ]
     }
+    
 
 ]

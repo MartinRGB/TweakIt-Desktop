@@ -27,6 +27,13 @@ import Record from '@Assets/icons/svg/Record.Icon';
 import Screenshot from '@Assets/icons/svg/Screenshot.Icon';
 import Cast from '@Assets/icons/svg/Cast.Icon';
 import DownSelect from '@Assets/icons/svg/DownSelect.Icon';
+import VolumeUp from '@Assets/icons/svg/VolumeUp.Icon';
+import VolumeDown from '@Assets/icons/svg/VolumeDown.Icon';
+import Back from '@Assets/icons/svg/Back.Icon';
+import Home from '@Assets/icons/svg/Home.Icon';
+import Overview from '@Assets/icons/svg/Overview.Icon';
+import Reboot from '@Assets/icons/svg/Reboot.Icon';
+import Shutdown from '@Assets/icons/svg/Shutdown.Icon';
 
 export default {
   DarkMode,
@@ -55,5 +62,12 @@ export default {
   Record,
   Screenshot,
   Cast,
-  DownSelect
+  DownSelect,
+  Shutdown,
+  Reboot,
+  Overview,
+  Back,
+  Home,
+  VolumeDown,
+  VolumeUp,
 };

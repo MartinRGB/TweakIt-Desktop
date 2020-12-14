@@ -15,10 +15,9 @@ import ADBListTree from './ADBListTree'
 
 import {ADBConnectContext}  from '@Context/ADBConnectContext';
 import {ADBSelectContext} from '@Context/ADBSelectContext';
+import ADBSwitcher from '@Components/ADBSwitcher'
 
-//adb shell ip addr show wlan0
-//adb shell getprop ro.build.version.sdk
-//adb shell getprop ro.build.version.release 
+
 
 
 const ADBListArea: React.FC = memo(() => {
@@ -29,10 +28,9 @@ const ADBListArea: React.FC = memo(() => {
 
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
-  const {wifiIsConnecting} = useContext(ADBConnectContext)
+  const {wifiIsConnecting,displayInfo} = useContext(ADBConnectContext)
   // const {currentSelectDeviceId,currentSelectIndex} = useContext(ADBSelectContext)
-  const {cmdTarget} = useContext(ADBSelectContext)
-
+  const {cmdTarget,currentSelectIndex} = useContext(ADBSelectContext)
 
   const renderFunction = () =>{
     return(
@@ -55,17 +53,27 @@ const ADBListArea: React.FC = memo(() => {
                             name={cmdData['name']} 
                             visible={cmdData['visible']}
                             clickable={cmdData['clickable']}
-                            cmdStr={cmdData['adb_cmd']}
+                            cmdGetStr={cmdData['cmdGetStr']}
+                            cmdSetStr={cmdData['cmdSetStr']?cmdData['cmdSetStr']:''}
+                            type={cmdData['type']}
                             wifiIsConnecting ={wifiIsConnecting}
                             cmdTarget={cmdTarget}
+                            min={cmdData['min']?cmdData['min']:0}
+                            max={cmdData['max']?cmdData['max']:0}
+                            divide={cmdData['cmdMutiParaDivide']?cmdData['cmdMutiParaDivide']:''}
+                            displayInfo={displayInfo[currentSelectIndex]}
+                            switcherON={cmdData['cmdON']?cmdData['cmdON']:''}
+                            switcherOFF={cmdData['cmdOFF']?cmdData['cmdOFF']:''}
+                            cmdKeyWord={cmdData['keyword']?cmdData['keyword']:''}
+                            iconStrArray={cmdData['iconStrArray']?cmdData['iconStrArray']:''}
+                            keywordArray={cmdData['keywordArray']?cmdData['keywordArray']:''}
+                            cmdSetStrArray={cmdData['cmdSetStrArray']?cmdData['cmdSetStrArray']:''}
                             >
                          </ADBListTree>)
                 })
               }
               </ADBListTree>
             )
-        
-
           })}
     </Container>
     )

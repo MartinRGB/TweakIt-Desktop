@@ -24,6 +24,12 @@ import Solver from 'src/helpers/Solver.ts';
 import initState from '@Config/init_state.json'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
+import ADBInfo from '@Components/ADBInfo'
+import ADBNumberInputGroup from '@Components/ADBInput/ADBNumberInputGroup'
+import ADBSwitcher from '@Components/ADBSwitcher'
+import {CodeBlockStateContext} from '@Context/CodeBlockContext'
+import ADBTextInput from '@Components/ADBInput/ADBTextInput'
+import ADBNormalButtonGroup from '@Components/ADBButtonNormal/ADBNormalButtonGroup'
 
 const ADBListTree: React.FC<IADBListTree> = memo(({
   clickable, 
@@ -32,10 +38,22 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
   style,
   category,
   isUlElement, 
+  switcherON,
+  switcherOFF,
+  displayInfo,
   index, 
+  divide,
+  cmdKeyWord,
   cmdTarget,
-  cmdStr,
+  cmdGetStr,
+  cmdSetStr,
+  type,
+  min,
+  max,
   wifiIsConnecting,
+  iconStrArray,
+  keywordArray,
+  cmdSetStrArray,
   visible,}) => {
 
   const UlVerticalPadding: number = 3;
@@ -48,15 +66,17 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
 
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
-  const [isOpen, setOpen] = useState(initState.isAnimationPannelExpand)
+  const {codeBlockIsShow, setCodeBlockIsShow,setTriggerBlocAnim,adbInputCMD,canTriggerControlAnim} = useContext(
+    CodeBlockStateContext,
+  );
+
+  const [isOpen, setOpen] = useState(initState.isADBPannelExpand)
 
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
 
   //console.log('ListTree - Render')
-
-
 
   const { revealProgress } = useSpring({
     revealProgress: isOpen ? 1 : (isGlobalAnimEnable?0:1),
@@ -65,22 +85,17 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
 
 
   const getCMDInfoData = (str:any,target:any) =>{
-    console.log(str)
-    console.log(target)
     execCMDPromise(str.replace(/{target}/g, target),function(val:any){
-      console.log(val)
       setCurrentInfoString(val)
     })
+ 
   }
 
   const [currentInfoString,setCurrentInfoString] = useState<string>('');
 
   useEffect(() => {
-    // if(cmdTarget){
-    //   getCMDInfoData(cmdStr,cmdTarget);
-    // }
-    if(cmdTarget != null && !wifiIsConnecting){
-      getCMDInfoData(cmdStr,cmdTarget);
+    if(cmdTarget != null && cmdTarget != '' && !wifiIsConnecting && cmdGetStr !=null){
+      getCMDInfoData(cmdGetStr,cmdTarget);
     }
   }, [cmdTarget])
 
@@ -112,10 +127,11 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
           {!visible?
             '' 
             :
-            <div>
+            <div style={{width:`100%`,display: `flex`,flexDirection:`column`}}>
               <LiTitle style={{ ...style }} 
               isAnimationEnable={isGlobalAnimEnable} 
               isClickable={clickable}
+              isZhCn={(useTranslation().i18n.language === 'zhCn')}
               height={LiHeight} 
               onClick={() => 
                 {
@@ -124,12 +140,90 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
               }
               ><Trans>{name}</Trans>
               </LiTitle>
-              <ADBInfo 
-                isAnimationEnable={isGlobalAnimEnable}
+              {(type === 'ADBInfo')?<ADBInfo 
                 isClickable={clickable}
                 height={LiHeight} >
-                  {currentInfoString}
-              </ADBInfo>
+                  {cmdTarget?currentInfoString:'-'}
+              </ADBInfo>:''}
+              {(type === 'DisplayInfoGroup')?
+              <ADBNumberInputGroup 
+              value={currentInfoString.split('\n').slice(0,-1)} 
+              isEditable={(currentInfoString != '' && currentInfoString != null)}
+              min={min} 
+              isAnimationEnable={isGlobalAnimEnable}
+              cmdTriggerAnim={
+                ((adbInputCMD === cmdGetStr || adbInputCMD.includes(cmdKeyWord)) && canTriggerControlAnim && codeBlockIsShow)
+              }
+              isDisableCMDAnim={false}
+              max={max} 
+              step={1} 
+              cmdGetStr={cmdGetStr}
+              cmdSetStr={cmdSetStr?cmdSetStr:''}
+              cmdTarget={cmdTarget}
+              cmdDivide={divide}
+              />
+              :
+              ''}
+              {(type === 'ADBSwitcher')?
+              <ADBSwitcher 
+              buttonCSS={css`
+                position: absolute;
+                right: 0px;
+                top: 4px;
+              `}
+              enable={cmdTarget != ''}
+              cmdSetStr={cmdSetStr?cmdSetStr:''}
+              cmdTarget={cmdTarget}
+              isDisableCMDAnim={false}
+              cmdTriggerAnimON={((adbInputCMD.includes(cmdKeyWord) && adbInputCMD.includes(switcherON)) && canTriggerControlAnim && codeBlockIsShow)}
+              cmdTriggerAnimOFF={((adbInputCMD.includes(cmdKeyWord) && adbInputCMD.includes(switcherOFF)) && canTriggerControlAnim && codeBlockIsShow)}
+              switcherON={switcherON}
+              switcherOFF={switcherOFF}
+              isAnimationEnable={isGlobalAnimEnable}
+              style={{
+                width:`28px`,
+                height:`14px`
+              }}
+              onClick={()=>{}}
+              ></ADBSwitcher>
+              :
+              ''
+              }
+              {(type === 'ADBTextInput')?
+              <ADBTextInput
+                isEditable={cmdTarget != ''}
+                style={{
+                  height: `18px`,
+                  width: `100%`,
+                  lineHeight: `18px`,
+                  marginTop:`6px`,
+                  marginBottom:`6px`,
+                }}
+                cmdSetStr={cmdSetStr}
+                cmdTriggerAnim={
+                  ((adbInputCMD.includes(cmdKeyWord)) && canTriggerControlAnim && codeBlockIsShow)
+                }
+                isDisableCMDAnim = {false}
+                isAnimationEnable={isGlobalAnimEnable}
+                cmdTarget={cmdTarget}
+              />
+              :
+              ''
+              }
+              {(type === 'ADBNormalButtonGroup')?
+              <ADBNormalButtonGroup
+                enable={cmdTarget != ''}
+                iconStrArray={iconStrArray}
+                keywordArray={keywordArray}
+                cmdSetStrArray={cmdSetStrArray}
+                isDisableCMDAnim = {true}
+                isAnimationEnable={isGlobalAnimEnable}
+                cmdTarget={cmdTarget}
+              />
+              :
+              ''
+              }
+
             </div>
           }
         </LiElement>
@@ -190,23 +284,6 @@ const useMeasure = function () {
 
 
 // Styles
-const ADBInfo = styled.span<{
-  isAnimationEnable:boolean;
-  height:number;
-  isClickable:boolean;
-}>`
-font-family: ${props => props.theme.fonts.numberInput};
-font-style: normal;
-font-weight: 300;
-font-size: 10px;
-opacity:${p => (p.isClickable ?'0.7':'0.3')};
-line-height: ${p=>p.height}px;
-color:${p => p.theme.colors.text};
-transition:${p=>p.isAnimationEnable?'all 0.25s':''};
-user-select:none;
-position: absolute;
-right:0px;
-`
 
 const UlElement = styled.div<{
   isAnimationEnable:boolean;
@@ -267,7 +344,9 @@ const LiElement = styled.div`
   transition:all 0.2s;
   margin-left:24px;
   margin-right:24px;
-  height:24px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  // height:24px;
 `
 
 
@@ -298,12 +377,13 @@ const LiTitle = styled.span<{
   isClickable:boolean;
   height:number;
   isAnimationEnable:boolean;
+  isZhCn:boolean;
 }>`
   vertical-align: middle;
   user-select:none;
   font-family: ${props => props.theme.fonts.normalText};
   font-style: normal;
-  font-weight: 300;
+  font-weight: ${p => p.isZhCn?'500':'300'};
   font-size: 10px;
   line-height: ${p=>p.height}px;
   //margin-left: 24px;
@@ -311,8 +391,8 @@ const LiTitle = styled.span<{
   color:${p => p.theme.colors.text};
   opacity:${p => (p.isClickable ?'0.7':'0.3')};
   cursor:${p => (p.isClickable ? 'initial':'not-allowed')};
-  position: absolute;
-  left: 0px;
+  // position: absolute;
+  // left: 0px;
   transition:${p=>p.isAnimationEnable?'all 0.25s':''};
 `
 

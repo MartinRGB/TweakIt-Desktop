@@ -95,9 +95,11 @@ const Input = styled.input<{
 
     ::-webkit-slider-thumb:active {
       background:${p => p.isEditable? p.theme.colors.range_input_thumb_active:''};
-      height:${p => p.isEditable? '20px':''};
-      width:${p => p.isEditable? '20px':''};
-      margin-top: ${p => p.isEditable? '-9px':''};
+      // height:${p => p.isEditable? '20px':''};
+      // width:${p => p.isEditable? '20px':''};
+      // margin-top: ${p => p.isEditable? '-9px':''};
+      transform:${p => p.isEditable? 'scale3d(1.25,1.25,1)':''};
+
     }
 
 `;

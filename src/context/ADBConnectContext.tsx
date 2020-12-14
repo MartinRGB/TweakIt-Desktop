@@ -520,6 +520,7 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
     }).then(function(val) {
       if(counts < devices.length - 1){
         //,`${devices[counts]} - ${val?val:`display ${counts}`}`
+        //data.push([`${devices[counts]} - ${val?val:`display ${counts}`}`,`${devices[counts]} - ${val?val:`display ${counts}`}`]);
         data.push([`${devices[counts]} - ${val?val:`display ${counts}`}`]);
         return endlessDevicesDisplayInfo(data,devices,counts+1);
       }
@@ -527,7 +528,6 @@ var ADBConnectProvider: React.FC<{}> = ({ children }) => {
         //,`${devices[counts]} - ${val?val:`display ${counts}`}`
         data.push([`${devices[counts]} - ${val?val:`display ${counts}`}`]);
         setDisplayInfo(data);
-        //console.log(data)
         setDisplayCounts(data.length)
       }
     })
