@@ -9,8 +9,11 @@ import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import ADBButtonNormal from '@Components/ADBButtonNormal'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
+import {getUserHome} from 'src/helpers/GlobalEnvironments/PathEnvironments';
 
-export interface IADBGetInfo{
+const {dialog} = require('electron').remote;
+
+export interface IADBExtractComp{
   childen:any;
   enable?:any;
   isDisableCMDAnim?:any;
@@ -22,17 +25,27 @@ export interface IADBGetInfo{
   cmdTriggerAnim?:any;
 }
 
-const ADBGetInfo: React.FC<IADBGetInfo> = memo(({cmdTriggerAnim,keyword,btnStr,children,enable,isDisableCMDAnim,cmdStr,cmdTarget}) => {
+const ADBExtractComp: React.FC<IADBExtractComp> = memo(({cmdTriggerAnim,keyword,btnStr,children,enable,isDisableCMDAnim,cmdStr,cmdTarget}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const [currentInfo,setCurrentInfo] = useState<string>('-')
 
-  const getCallBackInfo = (str:any,target:any) =>{
-    console.log(str);
-    console.log(target)
-    execCMDPromise(str.replace(/{target}/g, target),function(val:any){
-      setCurrentInfo(val)
-    })
+  const [mCMDStr,setMyCMDStr] = useState<string>('')
+
+  const selectAPKToExtract = (target:any) =>{
+    execCMDPromise(`adb -s '${target}' shell dumpsys activity recents | grep 'Recent #0' | cut -d= -f2 | sed 's| .*||' | cut -d '/' -f1`, function(valName:any){
+      execCMDPromise(`adb -s '${target}' shell pm path` + ' ' + valName, function(val:any){
+          var path = val.toString();
+          path = path.substring(path.indexOf(':')+1,path.lastIndexOf('k')+1);
+          console.log(path)
+
+          setMyCMDStr(`adb -s '${target}' pull`  + ' ' + path + ' '  +getUserHome()+`/Desktop/${valName.replace(/\s/g, "")}.apk`)
+          // execCMDPromise(`adb -s '${target}' pull`  + ' ' + path + ' '  +getUserHome()+`/Desktop/${valName.replace(/\s/g, "")}.apk`, function(val:any){
+          //     console.log('提取成功')
+
+          // });
+      });
+
+    });
   }
 
   return (
@@ -41,8 +54,8 @@ const ADBGetInfo: React.FC<IADBGetInfo> = memo(({cmdTriggerAnim,keyword,btnStr,c
         enable={enable}
         cmdTriggerAnim={cmdTriggerAnim}
         isDisableCMDAnim={isDisableCMDAnim}
-        cmd = {(cmdStr!=null?cmdStr.replace(/{target}/g, cmdTarget):'')}
-        onClick ={()=>{getCallBackInfo(cmdStr,cmdTarget)}}
+        cmd = {mCMDStr}
+        onClick ={()=>{selectAPKToExtract(cmdTarget)}}
         buttonCSS = {
           css`
             position: absolute;
@@ -72,7 +85,6 @@ const ADBGetInfo: React.FC<IADBGetInfo> = memo(({cmdTriggerAnim,keyword,btnStr,c
       >{children}
       <CustomSpan><Trans>{btnStr}</Trans></CustomSpan>
     </ADBButtonNormal>
-    <CallbackSpan isAnimationEnable={isGlobalAnimEnable}>{currentInfo?currentInfo:'-'}</CallbackSpan>
   </div>
   )
 })
@@ -89,22 +101,4 @@ const CustomSpan = styled.span`
 `
 
 
-const CallbackSpan = styled.span<{
-  isAnimationEnable:boolean;
-}>`
-  width: 100%;
-  text-align: right;
-  display:block;
-  opacity:0.7;
-  font-family: ${props => props.theme.fonts.numberInput};
-  font-style: normal;
-  font-weight: 300;
-  font-size: 10px;
-  line-height: 22px;
-  color:${p => p.theme.colors.text};
-  transition:${p=>p.isAnimationEnable?'all 0.25s':''};
-  user-select:none;
-`
-
-
-export default ADBGetInfo
+export default ADBExtractComp

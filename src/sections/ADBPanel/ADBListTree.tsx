@@ -30,7 +30,9 @@ import ADBSwitcher from '@Components/ADBSwitcher'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import ADBTextInput from '@Components/ADBInput/ADBTextInput'
 import ADBNormalButtonGroup from '@Components/ADBButtonNormal/ADBNormalButtonGroup'
-
+import ADBGetInfo from '@Components/ADBInfo/ADBGetInfo'
+import ADBInstallComp from '@Components/ADBButtonNormal/ADBInstallComp'
+import ADBExtractComp from '@Components/ADBButtonNormal/ADBExtractComp'
 const ADBListTree: React.FC<IADBListTree> = memo(({
   clickable, 
   children, 
@@ -54,6 +56,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
   iconStrArray,
   keywordArray,
   cmdSetStrArray,
+  btnStr,
   visible,}) => {
 
   const UlVerticalPadding: number = 3;
@@ -154,7 +157,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
               cmdTriggerAnim={
                 ((adbInputCMD === cmdGetStr || adbInputCMD.includes(cmdKeyWord)) && canTriggerControlAnim && codeBlockIsShow)
               }
-              isDisableCMDAnim={false}
+              isDisableCMDAnim={true}
               max={max} 
               step={1} 
               cmdGetStr={cmdGetStr}
@@ -174,7 +177,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
               enable={cmdTarget != ''}
               cmdSetStr={cmdSetStr?cmdSetStr:''}
               cmdTarget={cmdTarget}
-              isDisableCMDAnim={false}
+              isDisableCMDAnim={true}
               cmdTriggerAnimON={((adbInputCMD.includes(cmdKeyWord) && adbInputCMD.includes(switcherON)) && canTriggerControlAnim && codeBlockIsShow)}
               cmdTriggerAnimOFF={((adbInputCMD.includes(cmdKeyWord) && adbInputCMD.includes(switcherOFF)) && canTriggerControlAnim && codeBlockIsShow)}
               switcherON={switcherON}
@@ -203,7 +206,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
                 cmdTriggerAnim={
                   ((adbInputCMD.includes(cmdKeyWord)) && canTriggerControlAnim && codeBlockIsShow)
                 }
-                isDisableCMDAnim = {false}
+                isDisableCMDAnim = {true}
                 isAnimationEnable={isGlobalAnimEnable}
                 cmdTarget={cmdTarget}
               />
@@ -223,6 +226,56 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
               :
               ''
               }
+
+              {(type === 'ADBGetInfo')?
+              <ADBGetInfo
+                enable={cmdTarget != ''}
+                isDisableCMDAnim = {true}
+                cmdStr={cmdGetStr}
+                cmdTriggerAnim={
+                  ((adbInputCMD.includes(cmdKeyWord)) && canTriggerControlAnim && codeBlockIsShow)
+                }
+                cmdKeyword={cmdKeyWord}
+                btnStr={btnStr}
+                cmdTarget={cmdTarget}
+              ></ADBGetInfo>
+              :
+              ''
+              }
+
+              {(type === 'ADBInstallComp')?
+              <ADBInstallComp
+                enable={cmdTarget != ''}
+                isDisableCMDAnim = {true}
+                cmdStr={cmdSetStr}
+                cmdTriggerAnim={
+                  ((adbInputCMD.includes(cmdKeyWord)) && canTriggerControlAnim && codeBlockIsShow)
+                }
+                cmdKeyword={cmdKeyWord}
+                btnStr={btnStr}
+                cmdTarget={cmdTarget}
+              ></ADBInstallComp>
+              :
+              ''
+              }
+              {(type === 'ADBExtractComp')?
+              <ADBExtractComp
+                enable={cmdTarget != ''}
+                isDisableCMDAnim = {true}
+                cmdStr={cmdSetStr}
+                cmdTriggerAnim={
+                  ((adbInputCMD.includes(cmdKeyWord)) && canTriggerControlAnim && codeBlockIsShow)
+                }
+                cmdKeyword={cmdKeyWord}
+                btnStr={btnStr}
+                cmdTarget={cmdTarget}
+              ></ADBExtractComp>
+              :
+              ''
+              }
+
+
+
 
             </div>
           }

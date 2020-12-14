@@ -53,7 +53,7 @@ const ADBListArea: React.FC = memo(() => {
                             name={cmdData['name']} 
                             visible={cmdData['visible']}
                             clickable={cmdData['clickable']}
-                            cmdGetStr={cmdData['cmdGetStr']}
+                            cmdGetStr={cmdData['cmdGetStr']?cmdData['cmdGetStr']:''}
                             cmdSetStr={cmdData['cmdSetStr']?cmdData['cmdSetStr']:''}
                             type={cmdData['type']}
                             wifiIsConnecting ={wifiIsConnecting}
@@ -68,6 +68,7 @@ const ADBListArea: React.FC = memo(() => {
                             iconStrArray={cmdData['iconStrArray']?cmdData['iconStrArray']:''}
                             keywordArray={cmdData['keywordArray']?cmdData['keywordArray']:''}
                             cmdSetStrArray={cmdData['cmdSetStrArray']?cmdData['cmdSetStrArray']:''}
+                            btnStr={cmdData['btnStr']?cmdData['btnStr']:''}
                             >
                          </ADBListTree>)
                 })

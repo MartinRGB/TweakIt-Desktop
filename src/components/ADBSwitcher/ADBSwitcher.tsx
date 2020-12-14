@@ -22,15 +22,15 @@ const ADBSwitcher: React.FC<IADBSwitcher> = memo(({ isDisableCMDAnim,switcherON,
 
   const {cmdWithConsole} =  useContext(ADBCommandStateContext)
 
-  const {stateWatcher} = useSpring({
-    stateWatcher: (cmdTriggerAnimOFF || cmdTriggerAnimON) ? 0: 1,
-    config:animationConfig.adb_trigger_animtion,
-    onRest: () =>{
-     if(cmdTriggerAnimON || cmdTriggerAnimOFF){
-       setTriggerControlAnim(false)
-     }
-    }
- })
+  // const {stateWatcher} = useSpring({
+  //   stateWatcher: (cmdTriggerAnimOFF || cmdTriggerAnimON) ? 0: 1,
+  //   config:animationConfig.adb_trigger_animtion,
+  //   onRest: () =>{
+  //    if(cmdTriggerAnimON || cmdTriggerAnimOFF){
+  //      setTriggerControlAnim(false)
+  //    }
+  //   }
+  // })
 
   const dealADBCommand = () =>{
     cmdSetStr?cmdWithConsole(cmdSetStr.replace(/{target}/g, cmdTarget)+' '+(!active?switcherON:switcherOFF)):''

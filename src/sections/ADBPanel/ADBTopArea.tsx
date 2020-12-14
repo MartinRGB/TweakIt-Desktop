@@ -151,13 +151,9 @@ const ADBTopArea: React.FC = memo(({ children }) => {
           //selectedText={connectedDevice[currentSelectIndex]}
         ></DropDownMenuDevice>
 
-        <div onClick={()=>{}}style={{position:`absolute`,left:`0`,top:`0`}}>
-          {/* {isWifiDeviceRemoved[currentSelectIndex]?
-              `${isWifiOnConnect && isWifiOnConnect[currentSelectIndex] && isWifiOnConnect[currentSelectIndex][2]}`
-              :
-              `${currentSelectDeviceId}`} */}
+        {/* <div onClick={()=>{}}style={{position:`absolute`,left:`0`,top:`0`}}>
           {cmdTarget}
-        </div>
+        </div> */}
 
         <ADBButtonSegment
           style={{    
@@ -217,7 +213,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             //   `adb -s ${currentSelectDeviceId} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s 00d4fe2f pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${currentSelectDeviceId} shell rm ${SDCardTmpPath()}/screen.png`
             // }
             cmdStr={
-              `adb -s ${cmdTarget} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s 00d4fe2f pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${cmdTarget} shell rm ${SDCardTmpPath()}/screen.png`
+              `adb -s ${cmdTarget} shell screencap -d ${screenshotSelectIndex} -p ${SDCardTmpPath()}/screen.png;adb -s ${cmdTarget} pull ${SDCardTmpPath()}/screen.png ${getUserHome()}/Desktop/${'capture_' + timeTag}.png;adb -s ${cmdTarget} shell rm ${SDCardTmpPath()}/screen.png`
             }
             cmdKeyword={'screencap'}
             enable={(

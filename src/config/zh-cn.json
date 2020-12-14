@@ -63,11 +63,10 @@
   "Virtual Key":"虚拟按键",
   "Volume Key":"音量键",
   "Application Management":"应用管理",
-  "Install Apk":"安装 APK",
+  "Install APK":"安装 APK",
   "Extract APK":"提取 APK",
   "Select":"选择",
   "Extract":"提取",
   "Get":"获取",
-  "Get Current PackageName":"获取当前 Package 名称",
-  "Get Current ActivityName":"获取当前 Activity 名称"
+  "Get Current Activity & Package":"获取当前 Package 和 Activity"
 }

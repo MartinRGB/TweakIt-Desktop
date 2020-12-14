@@ -63,11 +63,10 @@
   "Virtual Key":"Virtual Key",
   "Volume Key":"Volume Key",
   "Application Management":"Application Management",
-  "Install Apk":"Install APK",
+  "Install APK":"Install APK",
   "Extract APK":"Extract APK",
   "Select":"select",
   "Extract":"extract",
-  "Get":"get",
-  "Get Current PackageName":"Get Current PackageName",
-  "Get Current ActivityName":"Get Current ActivityName"
+  "Get":"Get",
+  "Get Current Activity & Package":"Get Current Activity & Package"
 }

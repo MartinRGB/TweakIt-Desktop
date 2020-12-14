@@ -56,7 +56,8 @@ const ADBPanel: React.FC = memo(() => {
   })
 
   const renderFunction = () =>{
-    return(animationExpand?
+    return(
+      //animationExpand?
     <animated.div
       css={AnimatedContainerCSS}
       style={{
@@ -70,7 +71,8 @@ const ADBPanel: React.FC = memo(() => {
         <ADBTopArea></ADBTopArea>
         <ADBListArea></ADBListArea>
       </Container>
-    </animated.div>:''
+    </animated.div>
+      //:''
     )
     
   }

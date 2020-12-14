@@ -24,6 +24,7 @@ const ADBNumberInputGroup: React.FC<IADBInput> = memo(({ number,id,style,value,m
  })
  const mIsEditable = isEditable?isEditable:true;
 const [mTextValue,setTextValue] = useState<string[]>(value);
+const [mDefaultTextValue,setDefaultTextValue] = useState<string[]>(value);
 
 const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim,canTriggeBlocAnim,setTriggerControlAnim,setTriggerBlocAnim} = useContext(CodeBlockStateContext);
 const {stateWatcher} = useSpring({
@@ -39,9 +40,10 @@ const {stateWatcher} = useSpring({
 
 //const inputRef = value.map((data:any,i:number) => useRef());
 
-
 useEffect(() => {
-  setTextValue(value);
+  if(mTextValue.length === 0){
+    setTextValue(value);
+  }
 }, [value])
 
 const {cmdWithConsole} =  useContext(ADBCommandStateContext)

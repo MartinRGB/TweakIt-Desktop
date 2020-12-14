@@ -134,7 +134,6 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
   }
 
   useEffect(() => {
-    console.log('Do something after counter has changed');
     if(canTriggeBlocAnim){
       if(isGlobalAnimEnable) startTransitionInAnimation();
     }

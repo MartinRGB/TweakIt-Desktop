@@ -1,4 +1,4 @@
-import React ,{memo,useContext, useEffect,useState,useRef} from 'react';
+import React ,{memo,useContext, useEffect,useState,useRef,useLayoutEffect} from 'react';
 import ReactDOM from 'react-dom';
 import {css} from "@emotion/core";
 import styled from '@emotion/styled';
@@ -14,10 +14,12 @@ import { useTranslation, Trans, Translation } from 'react-i18next'
 import animationConfig from '@Config/animation.json'
 import CopyToast from './CopyToast';
 import SpringFactorEvaluator from './SpringFactorEvaluator'
+import {useSpring, animated,interpolate} from 'react-spring'
 import CodeScrollContainer from '@Components/CodeScrollContainer'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import initState from "@Config/init_state.json";
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+import { ADBExpandStateContext } from '@Context/ADBExpandContext';
 import { Resizable } from 're-resizable'
 
 const CodeArea: React.FC = memo(({children}) => {
@@ -30,6 +32,44 @@ const CodeArea: React.FC = memo(({children}) => {
     CodeBlockStateContext,
   );
 
+  // Resize
+  // ############ Reszie ############
+  const sizeRef = useRef(null);
+  const [isIconCollapsed, setIconCollapsed] = useState<boolean>(false);
+  function updateSize() {
+    let height = sizeRef.current.offsetHeight;
+    let width  = sizeRef.current.offsetWidth;
+    if(width < 573){
+      setIconCollapsed(true)
+
+    }
+    else{
+      setIconCollapsed(false)
+    }
+  }
+  useLayoutEffect(() => {
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => 
+      window.removeEventListener("resize", updateSize);
+  }, []);
+
+  useEffect( () => {
+    if(sizeRef.current){updateSize()}
+  }, [sizeRef]);
+
+  const { adbIsExpand, setADBExpandState} = useContext(
+    ADBExpandStateContext,
+  );
+
+  const {widthProps} = useSpring({
+    widthProps: adbIsExpand ? 320 : 0,
+    config: animationConfig.panel_slide,
+    onFrame:() =>{
+      updateSize();
+    }
+  })
+  
   
 
   const [activeName,setActiveName] = useState<string>('')
@@ -99,6 +139,7 @@ const CodeArea: React.FC = memo(({children}) => {
     <Container
       isExpanded ={isExpanded}
       isOnDrag = {isOnDrag}
+      ref={sizeRef}
       style={{
         // 0s,
         transition:`${isGlobalAnimEnable?'height 0.3s cubic-bezier(0.13, 0.79, 0.25, 1),background 0.3s ,box-shadow 0.3s ':'none'}`,
@@ -137,7 +178,7 @@ const CodeArea: React.FC = memo(({children}) => {
                       active={activeName === IconStr[index] && isExpanded && !codeBlockIsShow}
                       key={'CodeButton' + '_' +index}
                     >
-                      <PlatformIcon></PlatformIcon><CustomSpan>{IconStr[index]}</CustomSpan>
+                      <PlatformIcon></PlatformIcon><CustomSpan style={{display:`${isIconCollapsed?'none':''}`,}}>{IconStr[index]}</CustomSpan>
                     </MainButtonToggle>
                     )
 
@@ -171,7 +212,7 @@ const CodeArea: React.FC = memo(({children}) => {
                   }
                 }}
               >
-              <Icons.Copy></Icons.Copy><CustomSpan style={{}}><Trans>Copy</Trans></CustomSpan>
+              <Icons.Copy></Icons.Copy><CustomSpan style={{display:`${isIconCollapsed?'none':''}`,}}><Trans>Copy</Trans></CustomSpan>
             </MainButtonNormal>
         </TopLeftContainer>
         <TopRightContainer>
@@ -243,7 +284,7 @@ const CodeArea: React.FC = memo(({children}) => {
 
             }}
           >
-            <Icons.Terminal></Icons.Terminal><CustomSpan><Trans>Console</Trans></CustomSpan>
+            <Icons.Terminal></Icons.Terminal><CustomSpan style={{display:`${isIconCollapsed?'none':''}`,}}><Trans>Console</Trans></CustomSpan>
           </MainButtonToggle>
         </TopRightContainer>
       </TopNav>
@@ -287,6 +328,7 @@ const TopNav = styled.div`
     top: 0px;
     left: 0px;
     height: 40px;
+    min-width: 343px;
 `
 
 const Container = styled.div<{

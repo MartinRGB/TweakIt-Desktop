@@ -174,6 +174,7 @@ export interface IADBListTree {
   iconStrArray?:any;
   keywordArray?:any;
   cmdSetStrArray?:any;
+  btnStr?:any
 }
 
 export interface IInputTree {

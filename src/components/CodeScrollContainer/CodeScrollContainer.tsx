@@ -121,10 +121,11 @@ const Container = styled.div<{
   isAnimationEnable:boolean;
 }>`
     width: calc(100% - 28px);
+    min-width: 343px;
     height: 100%;
     margin-top: 40px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 14px;
+    margin-right: 14px;
     //margin-bottom: 12px;
     overflow-y: scroll;
     outline: none;

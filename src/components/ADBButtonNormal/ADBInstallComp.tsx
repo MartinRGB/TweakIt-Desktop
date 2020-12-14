@@ -9,8 +9,9 @@ import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import ADBButtonNormal from '@Components/ADBButtonNormal'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
+const {dialog} = require('electron').remote;
 
-export interface IADBGetInfo{
+export interface IADBInstallComp{
   childen:any;
   enable?:any;
   isDisableCMDAnim?:any;
@@ -22,17 +23,30 @@ export interface IADBGetInfo{
   cmdTriggerAnim?:any;
 }
 
-const ADBGetInfo: React.FC<IADBGetInfo> = memo(({cmdTriggerAnim,keyword,btnStr,children,enable,isDisableCMDAnim,cmdStr,cmdTarget}) => {
+const ADBInstallComp: React.FC<IADBInstallComp> = memo(({cmdTriggerAnim,keyword,btnStr,children,enable,isDisableCMDAnim,cmdStr,cmdTarget}) => {
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const [currentInfo,setCurrentInfo] = useState<string>('-')
 
-  const getCallBackInfo = (str:any,target:any) =>{
+
+  const [mCMDStr,setMyCMDStr] = useState<string>('')
+  const selectAPKToInstall = (str:any,target:any) =>{
     console.log(str);
     console.log(target)
-    execCMDPromise(str.replace(/{target}/g, target),function(val:any){
-      setCurrentInfo(val)
-    })
+    let options = {properties:["openFile"]}
+    var path = dialog.showOpenDialog(options); 
+    path.then(function (result:any) {
+        var apkPath = result.filePaths;
+        console.log(result.filePaths)
+        if(apkPath.indexOf(0) == -1){
+            apkPath = result.filePaths.toString().replace(/ /g,"\\ ");
+            console.log(result.filePaths.toString().replace(/ /g,'\\ '));
+        }
+        setMyCMDStr(str.replace(/{target}/g, target) + ' ' + apkPath)
+        // execCMDPromise(str.replace(/{target}/g, target) + ' ' + apkPath,function(val:any){
+        //   console.log(val);
+        // })
+    
+    });
   }
 
   return (
@@ -41,8 +55,8 @@ const ADBGetInfo: React.FC<IADBGetInfo> = memo(({cmdTriggerAnim,keyword,btnStr,c
         enable={enable}
         cmdTriggerAnim={cmdTriggerAnim}
         isDisableCMDAnim={isDisableCMDAnim}
-        cmd = {(cmdStr!=null?cmdStr.replace(/{target}/g, cmdTarget):'')}
-        onClick ={()=>{getCallBackInfo(cmdStr,cmdTarget)}}
+        cmd = {mCMDStr}
+        onClick ={()=>{selectAPKToInstall(cmdStr,cmdTarget)}}
         buttonCSS = {
           css`
             position: absolute;
@@ -72,7 +86,6 @@ const ADBGetInfo: React.FC<IADBGetInfo> = memo(({cmdTriggerAnim,keyword,btnStr,c
       >{children}
       <CustomSpan><Trans>{btnStr}</Trans></CustomSpan>
     </ADBButtonNormal>
-    <CallbackSpan isAnimationEnable={isGlobalAnimEnable}>{currentInfo?currentInfo:'-'}</CallbackSpan>
   </div>
   )
 })
@@ -89,22 +102,5 @@ const CustomSpan = styled.span`
 `
 
 
-const CallbackSpan = styled.span<{
-  isAnimationEnable:boolean;
-}>`
-  width: 100%;
-  text-align: right;
-  display:block;
-  opacity:0.7;
-  font-family: ${props => props.theme.fonts.numberInput};
-  font-style: normal;
-  font-weight: 300;
-  font-size: 10px;
-  line-height: 22px;
-  color:${p => p.theme.colors.text};
-  transition:${p=>p.isAnimationEnable?'all 0.25s':''};
-  user-select:none;
-`
 
-
-export default ADBGetInfo
+export default ADBInstallComp

@@ -43,7 +43,7 @@
                 "name": "Display Resolution",
                 "type": "DisplayInfoGroup",
                 "keyword": "size",
-                "cmdGetStr": "adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}'",
+                "cmdGetStr": "counter=`adb -s {target} shell wm size | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm size | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi",
                 "cmdSetStr": "adb -s {target} shell wm size",
                 "cmdMutiParaDivide": "x",
                 "visible":true,
@@ -55,7 +55,7 @@
                 "name": "Display DPI",
                 "type": "DisplayInfoGroup",
                 "keyword": "density",
-                "cmdGetStr": "adb -s {target} shell wm density | grep 'Physical' | grep -Eo '[0-9]{1,4}'",
+                "cmdGetStr": "counter=`adb -s {target} shell wm density | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm density | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb shell wm density | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi",
                 "cmdSetStr": "adb -s {target} shell wm density",
                 "visible":true,
                 "clickable":true,
@@ -166,22 +166,33 @@
         "clickable":true,
         "li": [
             {
-                "name": "Get Current PackageName",
+                "name": "Get Current Activity & Package",
                 "type": "ADBGetInfo",
-                "keyword": "size",
-                "cmdGetStr": "adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}'",
-                "cmdMutiParaDivide": "x",
+                "keyword": "mResumedActivity",
+                "btnStr":"Get",
+                "cmdGetStr": "adb -s {target} shell dumpsys activity | grep -E 'mResumedActivity' | awk '{print $4}'",
                 "visible":true,
                 "clickable":true
             },
             {
-                "name": "Get Current ActivityName",
-                "type": "ADBGetInfo",
-                "keyword": "density",
-                "cmdGetStr": "adb -s {target} shell wm density | grep 'Physical' | grep -Eo '[0-9]{1,4}'",
+                "name": "Install APK",
+                "type": "ADBInstallComp",
+                "keyword": "",
+                "btnStr":"Select",
+                "cmdSetStr": "adb -s {target} shell setprop debug.allow.persist.update true;adb install -r",
+                "visible":true,
+                "clickable":true
+            },
+            {
+                "name": "Extract APK",
+                "type": "ADBExtractComp",
+                "keyword": "",
+                "btnStr":"Extract",
+                "cmdSetStr": "adb -s {target} shell dumpsys activity recents | grep 'Recent #0' | cut -d= -f2 | sed 's| .*||' | cut -d '/' -f1",
                 "visible":true,
                 "clickable":true
             }
+
         ]
     }
     
