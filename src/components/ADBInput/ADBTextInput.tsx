@@ -8,7 +8,6 @@ import { IADBInput } from "@Types";
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
-import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
 const ADBTextInput: React.FC<IADBInput> = memo(({ number,index,id,style,min,max,step,isEditable,onChange,onKeyUp,onKeyDown,onBlur,onFocus,isAnimationEnable,cmdTarget,cmdGetStr,cmdSetStr,cmdTriggerAnim,isDisableCMDAnim},ref) => {

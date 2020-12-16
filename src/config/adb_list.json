@@ -177,7 +177,7 @@
             {
                 "name": "Install APK",
                 "type": "ADBInstallComp",
-                "keyword": "",
+                "keyword": "install",
                 "btnStr":"Select",
                 "cmdSetStr": "adb -s {target} shell setprop debug.allow.persist.update true;adb install -r",
                 "visible":true,
@@ -186,7 +186,7 @@
             {
                 "name": "Extract APK",
                 "type": "ADBExtractComp",
-                "keyword": "",
+                "keyword": "pm path",
                 "btnStr":"Extract",
                 "cmdSetStr": "adb -s {target} shell dumpsys activity recents | grep 'Recent #0' | cut -d= -f2 | sed 's| .*||' | cut -d '/' -f1",
                 "visible":true,

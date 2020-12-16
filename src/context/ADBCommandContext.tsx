@@ -1,7 +1,7 @@
 import React, { createContext, useState,useContext } from "react";
 import initState from "@Config/init_state.json";
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
-import {execCMD,execCMDPromise} from '@Helpers/ADBCommand/ADBCommand';
+import {execCMDPromise} from '@Helpers/ADBCommand/ADBCommand';
 
 type ADBCommandStateContextType = {
 

@@ -1,6 +1,6 @@
 import React, { createContext, useState,useEffect,useContext} from "react";
 import initState from "@Config/init_state.json";
-import {execCMD,execCMDPromise,exec} from '@Helpers/ADBCommand/ADBCommand';
+import {execCMDPromise} from '@Helpers/ADBCommand/ADBCommand';
 import adb from 'adbkit';
 
 type ADBConnectionContextType = {
@@ -291,26 +291,30 @@ var ADBConnectionProvider: React.FC<{}> = ({ children }) => {
 
   useEffect( () => {
     const client = adb.createClient()
-    execCMDPromise('adb disconnect',function(val:any){
-
-      client.trackDevices()
-      .then(function(tracker:any) {
-        tracker.on('add', function(device:any) {
-          console.log('Device %s was plugged', device.id);
-          addDeviceData(device)
-        })
-        tracker.on('remove', function(device:any) {
-          console.log('Device %s was unplugged', device.id);
-          removeDeviceData(device)
-        })
+    new Promise((resolve, reject) =>{
+      execCMDPromise('adb disconnect',function(val:any){
+        resolve(val)
       })
-      .catch(function(err:any) {
-        console.error('Something went wrong:', err.stack)
-      })
+    }).then(function(val:any){
 
+      console.log(val)
     })
 
 
+    client.trackDevices()
+    .then(function(tracker:any) {
+      tracker.on('add', function(device:any) {
+        console.log('Device %s was plugged', device.id);
+        addDeviceData(device)
+      })
+      tracker.on('remove', function(device:any) {
+        console.log('Device %s was unplugged', device.id);
+        removeDeviceData(device)
+      })
+    })
+    .catch(function(err:any) {
+      console.error('Something went wrong:', err.stack)
+    })
 
   },[]);
   

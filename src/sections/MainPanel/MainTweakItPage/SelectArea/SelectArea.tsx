@@ -10,7 +10,7 @@ import ADBButtonNormal from '@Components/ADBButtonNormal'
 //import childProcess from 'child_process';
 import Icons from '@Assets/icons'
 import animationConfig from '@Config/animation.json';
-import cmdList from '@Config/cmd_list';
+import cmdList from '@Config/cmd_list.json';
 
 import theme from 'src/styles/theme.ts';
 import DropDownMenu from '@Components/DropDownMenu'

@@ -18,7 +18,8 @@ export const SDCardTmpPath = () =>{
 
 export const injectPathEnvironments = () =>{
   window.appPath = appPath;
-  process.env.PATH =  '/usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:' + 
+  process.env.PATH =  
+  '/usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:' + 
   localNodePath + '.bin' + ':' + 
   localADBPath.substring(0, localADBPath.length - 1) + ':' + 
   localScrcpyBinPath.substring(0, localScrcpyBinPath.length - 1) + ':' +

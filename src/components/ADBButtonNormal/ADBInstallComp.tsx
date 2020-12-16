@@ -7,8 +7,6 @@ import { IInput } from "@Types";
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import ADBButtonNormal from '@Components/ADBButtonNormal'
-import {CodeBlockStateContext} from '@Context/CodeBlockContext'
-import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
 const {dialog} = require('electron').remote;
 import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
 export interface IADBInstallComp{
@@ -45,16 +43,11 @@ const ADBInstallComp: React.FC<IADBInstallComp> = memo(({cmdTriggerAnim,keyword,
         }
         
         cmdWithConsole(str.replace(/{target}/g, target) + ' ' + apkPath)
-        //setMyCMDStr(str.replace(/{target}/g, target) + ' ' + apkPath)
-        // execCMDPromise(str.replace(/{target}/g, target) + ' ' + apkPath,function(val:any){
-        //   console.log(val);
-        // })
     
     });
   }
 
   return (
-    <div>
       <ADBButtonNormal
         enable={enable}
         cmdTriggerAnim={cmdTriggerAnim}
@@ -90,7 +83,6 @@ const ADBInstallComp: React.FC<IADBInstallComp> = memo(({cmdTriggerAnim,keyword,
       >
       <CustomSpan><Trans>{btnStr}</Trans></CustomSpan>
     </ADBButtonNormal>
-  </div>
   )
 })
 

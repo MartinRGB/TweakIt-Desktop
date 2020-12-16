@@ -41,18 +41,12 @@ const ADBExtractComp: React.FC<IADBExtractComp> = memo(({cmdTriggerAnim,keyword,
           console.log(path)
 
           cmdWithConsole(`adb -s '${target}' pull`  + ' ' + path + ' '  +getUserHome()+`/Desktop/${valName.replace(/\s/g, "")}.apk`)
-          //setMyCMDStr(`adb -s '${target}' pull`  + ' ' + path + ' '  +getUserHome()+`/Desktop/${valName.replace(/\s/g, "")}.apk`)
-          // execCMDPromise(`adb -s '${target}' pull`  + ' ' + path + ' '  +getUserHome()+`/Desktop/${valName.replace(/\s/g, "")}.apk`, function(val:any){
-          //     console.log('提取成功')
-
-          // });
       });
 
     });
   }
 
   return (
-    <div>
       <ADBButtonNormal
         enable={enable}
         cmdTriggerAnim={cmdTriggerAnim}
@@ -88,7 +82,6 @@ const ADBExtractComp: React.FC<IADBExtractComp> = memo(({cmdTriggerAnim,keyword,
       >
       <CustomSpan><Trans>{btnStr}</Trans></CustomSpan>
     </ADBButtonNormal>
-  </div>
   )
 })
 

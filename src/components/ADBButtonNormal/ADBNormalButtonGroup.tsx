@@ -8,7 +8,6 @@ import { IADBNormalButtonGroup } from "@Types";
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
-import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
 import ADBButtonNormal from './ADBButtonNormal'
 import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'

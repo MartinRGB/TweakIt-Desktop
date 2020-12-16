@@ -8,7 +8,6 @@ import { IADBInput } from "@Types";
 import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
-import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
 import ADBNumberInput from './ADBNumberInput'
 import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
@@ -96,9 +95,6 @@ const {cmdWithConsole} =  useContext(ADBCommandStateContext)
                     textStr += (i != value.length-1)?mTextValue[i].toString()+cmdDivide:mTextValue[i].toString();
                   }
                 }
-                // execCMDPromise(cmdSetStr.replace(/{target}/g, cmdTarget) + ' ' + textStr,function(val:any){
-                // })
-
                 cmdWithConsole(cmdSetStr.replace(/{target}/g, cmdTarget) + ' ' + textStr)
               }
             }}
@@ -115,8 +111,6 @@ const {cmdWithConsole} =  useContext(ADBCommandStateContext)
                   textStr += (i != value.length-1)?mTextValue[i].toString()+cmdDivide:mTextValue[i].toString();
                 }
               }
-              // execCMDPromise(cmdSetStr.replace(/{target}/g, cmdTarget) + ' ' + textStr,function(val:any){
-              // })
               cmdWithConsole(cmdSetStr.replace(/{target}/g, cmdTarget) + ' ' + textStr)
             }}
     

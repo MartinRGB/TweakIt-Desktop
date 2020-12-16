@@ -22,18 +22,17 @@ const ADBSwitcher: React.FC<IADBSwitcher> = memo(({ isDisableCMDAnim,switcherON,
 
   const {cmdWithConsole} =  useContext(ADBCommandStateContext)
 
-  // const {stateWatcher} = useSpring({
-  //   stateWatcher: (cmdTriggerAnimOFF || cmdTriggerAnimON) ? 0: 1,
-  //   config:animationConfig.adb_trigger_animtion,
-  //   onRest: () =>{
-  //    if(cmdTriggerAnimON || cmdTriggerAnimOFF){
-  //      setTriggerControlAnim(false)
-  //    }
-  //   }
-  // })
+  const [isAnimate,setIsAnimate] = useState<boolean>(false);
 
   const dealADBCommand = () =>{
-    cmdSetStr?cmdWithConsole(cmdSetStr.replace(/{target}/g, cmdTarget)+' '+(!active?switcherON:switcherOFF)):''
+    setIsAnimate(true)
+    var animTimeout = setTimeout(()=>{
+      cmdSetStr?cmdWithConsole(cmdSetStr.replace(/{target}/g, cmdTarget)+' '+(!active?switcherON:switcherOFF)):''
+      clearTimeout(animTimeout)
+      setIsAnimate(false)
+
+    },250)
+
   }
 
   useEffect(() => {
@@ -57,16 +56,16 @@ const ADBSwitcher: React.FC<IADBSwitcher> = memo(({ isDisableCMDAnim,switcherON,
     style={
       { 
       ...parentStyle,
-      cursor:`${enable?'':'not-allowed'}`,
+      cursor:`${(enable)?(isAnimate?'progress':''):'not-allowed'}`,
       }
     }>
       <Button
         style={{
           ...style,
-          pointerEvents:`${enable?'':'none'}`,
+          pointerEvents:`${(enable && !isAnimate)?'':'none'}`,
           //opacity:`${enable?'1':'0.2'}`,
         }}
-        isActive={(active)}
+        isActive={(active )}
         isMouseActive={isScaleUp}
         isEditable={enable}
         isAnimationEnable={isAnimationEnable}

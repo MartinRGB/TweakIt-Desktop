@@ -41,6 +41,7 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
 
   const startAnimate = () => {
 
+
     if(startAnimator && startAnimator.isAnimating()){startAnimator.stop()}
     if(endAnimator && endAnimator.isAnimating()){endAnimator.stop()}
 

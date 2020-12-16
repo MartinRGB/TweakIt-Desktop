@@ -33,9 +33,14 @@ const ADBButtonNormal: React.FC<IButton> = memo(({isDisableCMDAnim,parentStyle,s
     }
  })
 
+
+  const [isAnimate,setIsAnimate] = useState<boolean>(false);
+
   const dealADBCommand = () =>{
     cmdWithConsole(cmd)
+
   }
+
 
   return (
   <animated.div 
@@ -47,20 +52,26 @@ const ADBButtonNormal: React.FC<IButton> = memo(({isDisableCMDAnim,parentStyle,s
       transform: `${(isScaleUp || cmdTriggerAnim)? `scale3d(1.1,1.1,1)`:`scale3d(1,1,1)`}`,
       transition: `${isGlobalAnimEnable?'transform 0.35s cubic-bezier(0.3, 2.5, 0.5, 1) 0s':''}`,
       ...parentStyle,
-      cursor:`${enable?'':'not-allowed'}`,
+      cursor:`${(enable)?(isAnimate?'progress':''):'not-allowed'}`,
       }
     }>
       <Button
         style={{
           ...style,
           transition: `${isGlobalAnimEnable?'all 0.2s':''}`,
-          pointerEvents:`${enable?'':'none'}`,
+          pointerEvents:`${(enable && !isAnimate)?'':'none'}`,
           opacity:`${enable?'1':'0.2'}`,
         }}
         active={(isScaleUp || cmdTriggerAnim)}
         isAnimationEnable={isGlobalAnimEnable}
         onClick={()=>{
-          if(!isDisableCMDAnim) setTriggerBlocAnim(true)
+
+          setIsAnimate(true)
+          var animTimeout = setTimeout(()=>{
+            if(!isDisableCMDAnim) setTriggerBlocAnim(true)
+            setIsAnimate(false)
+            clearTimeout(animTimeout)
+          },350)
           cmd?dealADBCommand():'';
           onClick();
         }}

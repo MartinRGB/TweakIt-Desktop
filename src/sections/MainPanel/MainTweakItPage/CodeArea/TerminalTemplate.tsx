@@ -15,7 +15,6 @@ import autosize from 'autosize'
 import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '@Config/animation.json';
 import DataDrivenAnimator from '@Helpers/Animator/DataDrivenAnimator'
-import TerminalCore from './TerminalCore'
 
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
@@ -30,7 +29,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
 
   const [colorMode] = useColorMode();
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  const {cleanAllData,adbInfoTimes,adbTagStartText,adbCommandText,adbCommandIsSuccess,adbResultText,adbTagEndText,setADBInfoTimes,setADBTagStartText,setADBCommandText,setADBTagEndText,setADBCommandIsSuccess,setADBResultText,cmdWithConsole,setCMDCallbackListener} =  useContext(ADBCommandStateContext)
+  const {cleanAllData,adbInfoTimes,adbTagStartText,adbCommandText,adbCommandIsSuccess,adbResultText,adbTagEndText,setADBInfoTimes,setADBTagStartText,setADBCommandText,setADBTagEndText,setADBCommandIsSuccess,setADBResultText,cmdWithConsole} =  useContext(ADBCommandStateContext)
   const [textIsOnFocus,setTextIsOnFocus] = useState<boolean>(true);
   const [textShouldHighlight,setTextShouldHighlight] = useState<boolean>(true);
 
@@ -66,11 +65,13 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
   const Break = CodeTexts.Break;
 
 
-  const solver:any = new Solver.Android.Spring(450,0.8,0)
-  const animation = new DataDrivenAnimator(solver.getValueArray())
+  console.log('rerender')
+  // const solver:any = new Solver.Android.Spring(450,0.8,0)
+  const animation = new DataDrivenAnimator(animationConfig.code_block_spring)
   const [transitionInProgress,setTransitionInProgress] = useState<number>(1);
   const startTransitionInAnimation = () => {
-    animation.setFromToDuration(0,1,solver.duration*1000);
+    var solverDuration = 0.4239952120668245;
+    animation.setFromToDuration(0,1,solverDuration*1000);
     animation.setOnFrameCallback(()=>{
       setTransitionInProgress(animation.getValueProgress())
     })
@@ -81,10 +82,11 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
   }
 
 
-  const solverScroll:any = new Solver.Android.Spring(450,0.95,0)
-  const animationScroll = new DataDrivenAnimator(solverScroll.getValueArray())
+  // const solverScroll:any = new Solver.Android.Spring(450,0.95,0)
+  const animationScroll = new DataDrivenAnimator(animationConfig.code_block_scroll)
   const startScrollAnimation = (height:any) => {
-    animationScroll.setFromToDuration(1,0,Math.min(1000,solver.duration*(height/1000)*2*1000));
+    var solverDuration = 0.400;
+    animationScroll.setFromToDuration(1,0,solverDuration*1000);
     animationScroll.setOnFrameCallback(()=>{
       containerRef.current.style.height = `${(height - (initHeight - paddingValue*2 - 20))*animationScroll.getValueProgress() + (initHeight - paddingValue*2 - 20)}px`;
     })
@@ -110,7 +112,6 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
 
       //
       if(e.target.value === ''){
-        
       }
       else if(e.target.value === 'clear'){
         setInputValue('');

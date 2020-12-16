@@ -1,5 +1,6 @@
 const childProcess = require('child_process');
 export const exec = childProcess.exec;
+export const spawn = childProcess.spawn;
 const fs = require("fs");
 
 export const execCMD = (cmd:any,log?:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void) =>{
@@ -22,9 +23,10 @@ export const execCMD = (cmd:any,log?:any,successCallback?:(e:any) => void,errorC
 
 
 
-export const execCMDPromise = (cmd:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void,log?:any,) =>{
+export const execCMDPromise = (cmd:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void,log?:any) =>{
+    var execution:any;
     var promise = new Promise((resolve, reject) =>{
-      exec(cmd, function(error:any, stdout:any, stderr:any){
+      execution = exec(cmd, function(error:any, stdout:any, stderr:any){
         if(error) {
             reject(error);
             return;
@@ -37,11 +39,14 @@ export const execCMDPromise = (cmd:any,successCallback?:(e:any) => void,errorCal
       //console.log(log + ':\n' + value);
       if(successCallback){
         successCallback(value);
+        execution.kill()
       }               
     }).catch(function(error) {
       //console.error('error: ' + error);
       if(errorCallback){
         errorCallback(error);
+        execution.kill()
       }             
     });
+
 }
