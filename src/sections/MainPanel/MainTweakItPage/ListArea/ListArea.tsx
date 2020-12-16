@@ -15,6 +15,8 @@ import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 const ListArea: React.FC = memo(({children}) => {
   
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
+
+
   return (
     <Container isAnimationEnable={isGlobalAnimEnable}>
       {

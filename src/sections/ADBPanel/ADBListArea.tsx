@@ -27,7 +27,7 @@ const ADBListArea: React.FC = memo(() => {
 
   const renderFunction = () =>{
     return(
-    <Container>
+    <Container isAnimationEnable={isGlobalAnimEnable}>
         {adbList.map(function (data:any,index:number) {
             return (
               <ADBListTree 
@@ -85,9 +85,23 @@ export default ADBListArea
 
 const Container = styled.div<
 {
+  isAnimationEnable:boolean;
 }
 >`
     width: 100%;
     height: 100%;
-    padding: 12px 14px;
+    padding: 12px 14px 24px 12px;
+    overflow-y: scroll;
+    transition:${p=>p.isAnimationEnable?'background 0.25s':''};
+    /* width */
+    ::-webkit-scrollbar {
+      width: 2px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: ${p => p.theme.colors.text};
+      transition:${p=>p.isAnimationEnable?'background 0.25s':''};
+    }
+
 `;

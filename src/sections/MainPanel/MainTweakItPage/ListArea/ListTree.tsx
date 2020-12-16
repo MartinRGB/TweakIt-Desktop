@@ -39,19 +39,23 @@ const ListTree: React.FC<IListTree> = memo(({
   ease_name,
   calculator,
   listLength,
+  selectArray,
   visible,}) => {
 
   const UlVerticalPadding: number = 3;
   const UlHeight:number = 24;
   const LiHeight:number = 22;
 
-  const { currentAnimationItem, selectAnimationItem } = useContext(
+  const { currentAnimationItem, selectAnimationItem,setPreviousAndCurrentGraph } = useContext(
     ListSelectStateContext
   );
 
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
-  const [isOpen, setOpen] = useState(initState.isAnimationPannelExpand)
+  const [isOpen, setOpen] = useState(initState.isAnimationListExpand)
+
+  //const [isOpen, setOpen] = useState(selectArray)
+
 
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
@@ -69,57 +73,12 @@ const ListTree: React.FC<IListTree> = memo(({
   }, [])
 
   const setPrevAndCurrData = () =>{
-      // TODO Work for GraphTransition,but not For Input
-      setPreviousAnimPlatform(currentAnimPlatform);
-      setPreviousAnimName(currentAnimName);
-      setPreviousAnimCalculator(currentAnimCalculator);
-      setPreviousSolverData(currentSolverData);
-      Object.entries(currentAnimData).map(function (data:any,index:number) {
-        setPreviousDataMinByIndex(data[1][1].min,index)
-        setPreviousDataRangeByIndex(data[1][1].max - data[1][1].min,index)
-      })
-
-      selectAnimationItem(info)
-      setCurrentAnimPlatform(platform);
-      setCurrentAnimName(name)
-      setCurrentAnimCalculator(calculator)
-
-      setInterpolatorName(ease_name[0])
-      setiOSName(ease_name[1])
-      setWebName(ease_name[2])
-      setFlutterName(ease_name[3])
-      setSmartisanName(ease_name[4])
-
-      if(animation_data){
-        setCurrentAnimData(Object.entries(animation_data))
-      }
-      else{
-        setCurrentAnimData([])
-      }
-
-      // if(name === 'Duration'){
-      //   setDurationData(Math.min(max,Math.max(Number(value),min)),index);
-      // }
-
-      Object.entries(animation_data).map(function (data:any,index:number) {
-        if(data[0] === "Duration"){
-          setListDurationData(data[1].default)
-        }
-        else{
-          setListDurationData(-1)
-        }
-        setCurrentDataRangeByIndex(data[1].max - data[1].min,index)
-      })
-      // BUGS:Delete Comments will delete transition anim
-      // Object.entries(animation_data).map(function (data:any,index:number) {
-      //   setCurrentSolverDataByIndex(data[1].default,index)
-      // })
-
-      isGlobalAnimEnable?setSelectTransition(true):setSelectTransition(false)
+    setPreviousAndCurrentGraph(info,platform,name,calculator,ease_name,animation_data)
   }
 
+  //(isOpen != undefined && isOpen[index] === true)
   const { revealProgress } = useSpring({
-    revealProgress: isOpen ? 1 : (isGlobalAnimEnable?0:1),
+    revealProgress:  isOpen ? 1 : (isGlobalAnimEnable?0:1),
     config: animationConfig.list_reveal
   }) 
 
@@ -130,21 +89,23 @@ const ListTree: React.FC<IListTree> = memo(({
     PlatformIcon = Icons[(platform.replace(/\s/g, "")!)];
   }
 
-
-  // function transitionTemplate(i, duration) {
-  //   return `
-  //       &:nth-child(${i + 1}) {
-  //         transition-delay: ${`calc(${duration} * ${i + 3})`};
-  //        }
-  //     `;
-  // }
-
   // (children)?
   return (
     <Frame isAnimationEnable={isGlobalAnimEnable}>
       {children ?
         // with children - withIcon(normal ul)
-        <UlElement id="UlElement" isOpen={isOpen} isAnimationEnable={isGlobalAnimEnable} css={Toggle} onClick={() => setOpen(!isOpen)}>
+        <UlElement id="UlElement" isOpen={isOpen} isAnimationEnable={isGlobalAnimEnable} css={Toggle} onClick={() => {
+
+          setOpen(!isOpen)
+            // console.log(index)
+            // console.log(selectArray)
+            // var openData = [...isOpen]
+            // openData[index] = !openData[index]
+
+            // console.log(openData)
+            // setOpen(openData)
+          
+          }}>
 
           <animated.div
             css={css`

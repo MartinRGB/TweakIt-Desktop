@@ -81,7 +81,6 @@ const SVGFakeGraph: React.FC<ISVG> = memo(({
     
     // Select Transition
     if(selectTransition && isInit && !isAnimate){
-      console.log('select')
       previousSolver = Solver.CreateSolverByString(previousAnimCalculator,previousAnimPlatform,previousAnimName,previousSolverData);
       currentSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
       transitionWithPrevAndCurrData(previousSolver,currentSolver)

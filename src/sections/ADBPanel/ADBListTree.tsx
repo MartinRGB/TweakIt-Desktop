@@ -18,9 +18,6 @@ import animationConfig from '@Config/animation.json'
 
 import Icons from '@Assets/icons'
 
-import { ListSelectStateContext } from '@Context/ListSelectStateContext';
-import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
-import Solver from 'src/helpers/Solver.ts';
 import initState from '@Config/init_state.json'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
@@ -63,17 +60,13 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
   const UlHeight:number = 24;
   const LiHeight:number = 22;
 
-  const { currentAnimationItem, selectAnimationItem } = useContext(
-    ListSelectStateContext
-  );
-
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   const {codeBlockIsShow, setCodeBlockIsShow,setTriggerBlocAnim,adbInputCMD,canTriggerControlAnim} = useContext(
     CodeBlockStateContext,
   );
 
-  const [isOpen, setOpen] = useState(initState.isADBPannelExpand)
+  const [isOpen, setOpen] = useState(initState.isADBListExpand)
 
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()

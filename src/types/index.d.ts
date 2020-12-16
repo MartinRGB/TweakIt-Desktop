@@ -147,6 +147,7 @@ export interface IListTree {
   clickable?:boolean;
   ease_name?:any;
   listLength?:number;
+  selectArray?:any;
 }
 
 export interface IADBListTree {

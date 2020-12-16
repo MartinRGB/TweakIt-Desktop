@@ -146,4 +146,6 @@ const Container = styled.div<
     background: ${p => p.theme.colors.adb_background};
     box-shadow: -1px 0px 0px ${p => p.theme.colors.adb_border};
     transition:${p=>p.isAnimationEnable?'box-shadow 0.3s,background 0.3s':'none'};
+    display: flex;
+    flex-direction: column;
 `;
