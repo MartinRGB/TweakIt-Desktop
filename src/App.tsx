@@ -22,11 +22,9 @@ import ADBExpandStateProvider from "@Context/ADBExpandContext";
 import ADBCommandProvider from "@Context/ADBCommandContext";
 import CodeBlockProvider from "@Context/CodeBlockContext";
 import GlobalAnimationStateProvider from "@Context/GlobalAnimationContext";
-import ADBConnectProvider from "@Context/ADBConnectContext";
-import ADBSelectProvider from "@Context/ADBSelectContext";
 import {injectPathEnvironments} from '@Helpers/GlobalEnvironments/PathEnvironments'
 import animatorList from '@Config/animator_list.json';
-
+import ADBConnectionProvider from "@Context/ADBConnectionContext";
 // twmacro
 const Button = styled.button`
   ${tw`mt-4 p-2 text-white bg-blue-600`}
@@ -55,13 +53,11 @@ const App = () => {
         <CodeBlockProvider>
         <ADBCommandProvider>
         <ADBExpandStateProvider>
-        <ADBSelectProvider>
-          <ADBConnectProvider>
+            <ADBConnectionProvider>
             <TitleBar>TWEAKIT</TitleBar>
             <ADBPanel></ADBPanel>
             <MainPanel></MainPanel>
-          </ADBConnectProvider>
-        </ADBSelectProvider>
+            </ADBConnectionProvider>
         </ADBExpandStateProvider>
         </ADBCommandProvider>
         </CodeBlockProvider>

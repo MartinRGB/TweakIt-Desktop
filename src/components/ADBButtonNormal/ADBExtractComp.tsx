@@ -12,6 +12,7 @@ import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
 import {getUserHome} from 'src/helpers/GlobalEnvironments/PathEnvironments';
 
 const {dialog} = require('electron').remote;
+import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
 
 export interface IADBExtractComp{
   childen:any;
@@ -31,6 +32,7 @@ const ADBExtractComp: React.FC<IADBExtractComp> = memo(({cmdTriggerAnim,keyword,
 
   const [mCMDStr,setMyCMDStr] = useState<string>('')
 
+  const {cmdWithConsole} =  useContext(ADBCommandStateContext)
   const selectAPKToExtract = (target:any) =>{
     execCMDPromise(`adb -s '${target}' shell dumpsys activity recents | grep 'Recent #0' | cut -d= -f2 | sed 's| .*||' | cut -d '/' -f1`, function(valName:any){
       execCMDPromise(`adb -s '${target}' shell pm path` + ' ' + valName, function(val:any){
@@ -38,7 +40,8 @@ const ADBExtractComp: React.FC<IADBExtractComp> = memo(({cmdTriggerAnim,keyword,
           path = path.substring(path.indexOf(':')+1,path.lastIndexOf('k')+1);
           console.log(path)
 
-          setMyCMDStr(`adb -s '${target}' pull`  + ' ' + path + ' '  +getUserHome()+`/Desktop/${valName.replace(/\s/g, "")}.apk`)
+          cmdWithConsole(`adb -s '${target}' pull`  + ' ' + path + ' '  +getUserHome()+`/Desktop/${valName.replace(/\s/g, "")}.apk`)
+          //setMyCMDStr(`adb -s '${target}' pull`  + ' ' + path + ' '  +getUserHome()+`/Desktop/${valName.replace(/\s/g, "")}.apk`)
           // execCMDPromise(`adb -s '${target}' pull`  + ' ' + path + ' '  +getUserHome()+`/Desktop/${valName.replace(/\s/g, "")}.apk`, function(val:any){
           //     console.log('提取成功')
 
@@ -82,7 +85,7 @@ const ADBExtractComp: React.FC<IADBExtractComp> = memo(({cmdTriggerAnim,keyword,
             }
           `
         }
-      >{children}
+      >
       <CustomSpan><Trans>{btnStr}</Trans></CustomSpan>
     </ADBButtonNormal>
   </div>

@@ -20,7 +20,7 @@ const ADBInfo: React.FC<IADBInfo> = memo(({height,isClickable,children}) => {
     isAnimationEnable={isGlobalAnimEnable}
     isClickable={isClickable}
     height={height} >
-      <Trans>{children}</Trans>
+      {children}
   </Info>)
   ;
 })

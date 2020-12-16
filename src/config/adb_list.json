@@ -34,6 +34,8 @@
             }
         ]
     },
+
+
     {
         "category": "Screen Management",
         "visible":true,
@@ -43,7 +45,7 @@
                 "name": "Display Resolution",
                 "type": "DisplayInfoGroup",
                 "keyword": "size",
-                "cmdGetStr": "counter=`adb -s {target} shell wm size | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm size | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi",
+                "cmdGetStr": "counter=`adb -s {target} shell wm size | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm size | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi",
                 "cmdSetStr": "adb -s {target} shell wm size",
                 "cmdMutiParaDivide": "x",
                 "visible":true,
@@ -55,7 +57,7 @@
                 "name": "Display DPI",
                 "type": "DisplayInfoGroup",
                 "keyword": "density",
-                "cmdGetStr": "counter=`adb -s {target} shell wm density | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm density | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb shell wm density | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi",
+                "cmdGetStr": "counter=`adb -s {target} shell wm density | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm density | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb -s {target} shell wm density | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi",
                 "cmdSetStr": "adb -s {target} shell wm density",
                 "visible":true,
                 "clickable":true,

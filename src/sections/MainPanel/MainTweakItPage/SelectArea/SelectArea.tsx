@@ -16,8 +16,7 @@ import theme from 'src/styles/theme.ts';
 import DropDownMenu from '@Components/DropDownMenu'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
-import {ADBConnectContext}  from '@Context/ADBConnectContext';
-import {ADBSelectContext} from '@Context/ADBSelectContext'
+import {ADBConnectionContext}  from '@Context/ADBConnectionContext';
 
 const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
@@ -30,9 +29,9 @@ const SelectArea: React.FC = memo(({children}) => {
 
   const adbGetStr = cmdList.adb_get_device;
   const adbBuildStr = cmdList.adb_help;
-  const {realConnectedDevice,isReUpdate,updateData,isWifiDeviceRemoved,isWifiOnConnect,connectedDevice,connectedDeviceCounts,displayInfo,deviceWifi,startWifiConnection,startUSBConnection,wifiIsConnecting} = useContext(ADBConnectContext)
 
-  const {currentSelectDeviceId,currentSelectIndex,setCurrentSelectIndex,setCurrentSelectDeviceId} = useContext(ADBSelectContext)
+  const {serialNoDevicesCounts,currentDeviceSelectIndex,serialNoDevicesIsConnectingWifi,serialNoDevicesIsConnectingUSB} = useContext(ADBConnectionContext)
+
 
   useEffect( () => {
 
@@ -90,9 +89,10 @@ const SelectArea: React.FC = memo(({children}) => {
         menuStyle={{left:`-1px`,width:`240px`}}
         optionsData={optionsData} 
         enable={(
-          currentSelectIndex != -1 && 
-          !wifiIsConnecting &&
-          connectedDeviceCounts!=0 
+          currentDeviceSelectIndex != -1 &&
+          serialNoDevicesCounts != 0 &&
+          !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
+          !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
           
         )} 
         menuWidth={`240px`} 
@@ -100,9 +100,11 @@ const SelectArea: React.FC = memo(({children}) => {
      
         <ADBButtonNormal 
           enable={(            
-            currentSelectIndex != -1 && 
-            !wifiIsConnecting &&
-            connectedDeviceCounts!=0 )}
+            currentDeviceSelectIndex != -1 &&
+            serialNoDevicesCounts != 0 &&
+            !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
+            !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
+          )}
           cmdTriggerAnim={
             ((adbInputCMD === adbGetStr) && canTriggerControlAnim && codeBlockIsShow)
           }
@@ -129,9 +131,10 @@ const SelectArea: React.FC = memo(({children}) => {
         </ADBButtonNormal>
         <ADBButtonNormal
           enable={(              
-            currentSelectIndex != -1 && 
-            !wifiIsConnecting &&
-            connectedDeviceCounts!=0 
+            currentDeviceSelectIndex != -1 &&
+            serialNoDevicesCounts != 0 &&
+            !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
+            !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
           )}
           cmdTriggerAnim={
             ((adbInputCMD === adbBuildStr) && canTriggerControlAnim && codeBlockIsShow)

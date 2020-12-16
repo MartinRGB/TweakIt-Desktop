@@ -30,9 +30,11 @@ const ADBNumberInput: React.FC<IADBInput> = memo(({ number,index,id,style,value,
   setTextShouldHighlight(true)
 }
 
-const thisOnBlur = (e:any) =>{
+const thisOnBlur = (e:any,i:number) =>{
   setTextIsOnFocus(false)
   setTextShouldHighlight(false)
+
+  onBlur(e,i,Math.max(min?min:0,Math.min(max?max:4000,e.target.value)));
 }
 
 const onMouseHover = () =>{
@@ -93,7 +95,7 @@ const thisOnKeyUp = (e: React.FormEvent<HTMLInputElement>,i:number) => {
           onChange={(e)=>{thisOnFocus(e);thisOnChange(e,index)}}
           onKeyUp={(e)=>{thisOnKeyUp(e,index)}}
           onKeyDown={onKeyDown}
-          onBlur={(e)=>{onBlur?onBlur(e):'';thisOnBlur(e)}}
+          onBlur={(e)=>{thisOnBlur(e,index)}}
           onFocus={(e)=>{onFocus?onFocus(e):'';thisOnFocus(e)}}
           onMouseOver={(e)=>{onMouseHover()}}
           onMouseEnter={(e)=>{onMouseHover()}}

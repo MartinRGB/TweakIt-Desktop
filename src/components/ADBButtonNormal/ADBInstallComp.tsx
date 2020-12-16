@@ -10,7 +10,7 @@ import ADBButtonNormal from '@Components/ADBButtonNormal'
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
 const {dialog} = require('electron').remote;
-
+import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
 export interface IADBInstallComp{
   childen:any;
   enable?:any;
@@ -29,6 +29,8 @@ const ADBInstallComp: React.FC<IADBInstallComp> = memo(({cmdTriggerAnim,keyword,
 
 
   const [mCMDStr,setMyCMDStr] = useState<string>('')
+  const {cmdWithConsole} =  useContext(ADBCommandStateContext)
+
   const selectAPKToInstall = (str:any,target:any) =>{
     console.log(str);
     console.log(target)
@@ -41,7 +43,9 @@ const ADBInstallComp: React.FC<IADBInstallComp> = memo(({cmdTriggerAnim,keyword,
             apkPath = result.filePaths.toString().replace(/ /g,"\\ ");
             console.log(result.filePaths.toString().replace(/ /g,'\\ '));
         }
-        setMyCMDStr(str.replace(/{target}/g, target) + ' ' + apkPath)
+        
+        cmdWithConsole(str.replace(/{target}/g, target) + ' ' + apkPath)
+        //setMyCMDStr(str.replace(/{target}/g, target) + ' ' + apkPath)
         // execCMDPromise(str.replace(/{target}/g, target) + ' ' + apkPath,function(val:any){
         //   console.log(val);
         // })
@@ -83,7 +87,7 @@ const ADBInstallComp: React.FC<IADBInstallComp> = memo(({cmdTriggerAnim,keyword,
             }
           `
         }
-      >{children}
+      >
       <CustomSpan><Trans>{btnStr}</Trans></CustomSpan>
     </ADBButtonNormal>
   </div>

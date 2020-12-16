@@ -13,12 +13,7 @@ import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import adbList from '@Config/adb_list.json'
 import ADBListTree from './ADBListTree'
 
-import {ADBConnectContext}  from '@Context/ADBConnectContext';
-import {ADBSelectContext} from '@Context/ADBSelectContext';
-import ADBSwitcher from '@Components/ADBSwitcher'
-
-
-
+import {ADBConnectionContext}  from '@Context/ADBConnectionContext';
 
 const ADBListArea: React.FC = memo(() => {
   // return <button type="button">{children}</button>
@@ -28,9 +23,7 @@ const ADBListArea: React.FC = memo(() => {
 
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
-  const {wifiIsConnecting,displayInfo} = useContext(ADBConnectContext)
-  // const {currentSelectDeviceId,currentSelectIndex} = useContext(ADBSelectContext)
-  const {cmdTarget,currentSelectIndex} = useContext(ADBSelectContext)
+  const  {serialNoDevicesIsConnectingWifi,serialNoDevicesDisplayInfos,serialNoDevicesTargets,currentDeviceSelectIndex} = useContext(ADBConnectionContext)
 
   const renderFunction = () =>{
     return(
@@ -56,12 +49,12 @@ const ADBListArea: React.FC = memo(() => {
                             cmdGetStr={cmdData['cmdGetStr']?cmdData['cmdGetStr']:''}
                             cmdSetStr={cmdData['cmdSetStr']?cmdData['cmdSetStr']:''}
                             type={cmdData['type']}
-                            wifiIsConnecting ={wifiIsConnecting}
-                            cmdTarget={cmdTarget}
+                            wifiIsConnecting ={serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex]}
+                            cmdTarget={serialNoDevicesTargets[currentDeviceSelectIndex]}
                             min={cmdData['min']?cmdData['min']:0}
                             max={cmdData['max']?cmdData['max']:0}
                             divide={cmdData['cmdMutiParaDivide']?cmdData['cmdMutiParaDivide']:''}
-                            displayInfo={displayInfo[currentSelectIndex]}
+                            displayInfo={serialNoDevicesDisplayInfos[currentDeviceSelectIndex]}
                             switcherON={cmdData['cmdON']?cmdData['cmdON']:''}
                             switcherOFF={cmdData['cmdOFF']?cmdData['cmdOFF']:''}
                             cmdKeyWord={cmdData['keyword']?cmdData['keyword']:''}

@@ -69,7 +69,7 @@ const ADBGetInfo: React.FC<IADBGetInfo> = memo(({cmdTriggerAnim,keyword,btnStr,c
             }
           `
         }
-      >{children}
+      >
       <CustomSpan><Trans>{btnStr}</Trans></CustomSpan>
     </ADBButtonNormal>
     <CallbackSpan isAnimationEnable={isGlobalAnimEnable}>{currentInfo?currentInfo:'-'}</CallbackSpan>
@@ -103,7 +103,9 @@ const CallbackSpan = styled.span<{
   line-height: 22px;
   color:${p => p.theme.colors.text};
   transition:${p=>p.isAnimationEnable?'all 0.25s':''};
-  user-select:none;
+  //user-select:none;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 `
 
 

@@ -97,7 +97,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
   const [currentInfoString,setCurrentInfoString] = useState<string>('');
 
   useEffect(() => {
-    if(cmdTarget != null && cmdTarget != '' && !wifiIsConnecting && cmdGetStr !=null){
+    if(cmdTarget != null && cmdTarget != '' && cmdTarget != undefined && !wifiIsConnecting && cmdGetStr !=null){
       getCMDInfoData(cmdGetStr,cmdTarget);
     }
   }, [cmdTarget])
@@ -174,7 +174,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
                 right: 0px;
                 top: 4px;
               `}
-              enable={cmdTarget != ''}
+              enable={cmdTarget != undefined}
               cmdSetStr={cmdSetStr?cmdSetStr:''}
               cmdTarget={cmdTarget}
               isDisableCMDAnim={true}
@@ -194,7 +194,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
               }
               {(type === 'ADBTextInput')?
               <ADBTextInput
-                isEditable={cmdTarget != ''}
+                isEditable={cmdTarget != undefined}
                 style={{
                   height: `18px`,
                   width: `100%`,
@@ -215,7 +215,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
               }
               {(type === 'ADBNormalButtonGroup')?
               <ADBNormalButtonGroup
-                enable={cmdTarget != ''}
+                enable={cmdTarget != undefined}
                 iconStrArray={iconStrArray}
                 keywordArray={keywordArray}
                 cmdSetStrArray={cmdSetStrArray}
@@ -229,7 +229,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
 
               {(type === 'ADBGetInfo')?
               <ADBGetInfo
-                enable={cmdTarget != ''}
+                enable={cmdTarget != undefined}
                 isDisableCMDAnim = {true}
                 cmdStr={cmdGetStr}
                 cmdTriggerAnim={
@@ -245,7 +245,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
 
               {(type === 'ADBInstallComp')?
               <ADBInstallComp
-                enable={cmdTarget != ''}
+                enable={cmdTarget != undefined}
                 isDisableCMDAnim = {true}
                 cmdStr={cmdSetStr}
                 cmdTriggerAnim={
@@ -260,7 +260,7 @@ const ADBListTree: React.FC<IADBListTree> = memo(({
               }
               {(type === 'ADBExtractComp')?
               <ADBExtractComp
-                enable={cmdTarget != ''}
+                enable={cmdTarget != undefined}
                 isDisableCMDAnim = {true}
                 cmdStr={cmdSetStr}
                 cmdTriggerAnim={

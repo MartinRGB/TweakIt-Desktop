@@ -13,7 +13,7 @@ import ADBNumberInput from './ADBNumberInput'
 import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
 import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 
-const ADBNumberInputGroup: React.FC<IADBInput> = memo(({ number,id,style,value,min,max,step,isEditable,onChange,onKeyUp,onKeyDown,onBlur,onFocus,isAnimationEnable,cmdTarget,cmdGetStr,cmdSetStr,cmdDivide,cmdTriggerAnim,isDisableCMDAnim,cmdKeyWord}) => {
+const ADBNumberInputGroup: React.FC<IADBInput> = memo(({id,style,value,min,max,step,isEditable,isAnimationEnable,cmdTarget,cmdGetStr,cmdSetStr,cmdDivide,cmdTriggerAnim,isDisableCMDAnim,cmdKeyWord}) => {
   const [colorMode, setColorMode] = useColorMode()
 
   const [bind, { delta, down }] = useGesture()
@@ -24,7 +24,6 @@ const ADBNumberInputGroup: React.FC<IADBInput> = memo(({ number,id,style,value,m
  })
  const mIsEditable = isEditable?isEditable:true;
 const [mTextValue,setTextValue] = useState<string[]>(value);
-const [mDefaultTextValue,setDefaultTextValue] = useState<string[]>(value);
 
 const {codeBlockIsShow, setCodeBlockIsShow,adbInputCMD,canTriggerControlAnim,canTriggeBlocAnim,setTriggerControlAnim,setTriggerBlocAnim} = useContext(CodeBlockStateContext);
 const {stateWatcher} = useSpring({
@@ -37,14 +36,21 @@ const {stateWatcher} = useSpring({
   }
 })
 
+useEffect(() => {
+
+  setTextValue(value);
+}, [cmdTarget])
+
+// console.log(cmdTarget)
+// console.log(value)
 
 //const inputRef = value.map((data:any,i:number) => useRef());
 
-useEffect(() => {
-  if(mTextValue.length === 0){
-    setTextValue(value);
-  }
-}, [value])
+// useEffect(() => {
+//   if(mTextValue.length === 0){
+//     setTextValue(value);
+//   }
+// }, [value])
 
 const {cmdWithConsole} =  useContext(ADBCommandStateContext)
   return (
@@ -64,14 +70,13 @@ const {cmdWithConsole} =  useContext(ADBCommandStateContext)
               ...style,
               marginRight:`${(index === 0 && value.length > 1)?8:0}px`,
             }}
-            value={mTextValue[index] || ''} 
+            value={value[index] || ''} 
             min={min} 
             max={max} 
             step={step} 
             index={index}
             isEditable={isEditable}
             onChange={(e: React.FormEvent<HTMLInputElement>,index:number,val:any) => {
-              console.log(value)
               e.preventDefault();
               var mArray = mTextValue;
               mArray[index] = val;
@@ -81,10 +86,15 @@ const {cmdWithConsole} =  useContext(ADBCommandStateContext)
             onKeyUp={(e: React.FormEvent<HTMLInputElement>,index:number,val:any) => {
               if(e.keyCode ===13){
                 e.preventDefault();
-                //if(!isDisableCMDAnim) setTriggerBlocAnim(true)
+                var mArray = mTextValue;
+                mArray[index] = val;
+                setTextValue(mArray);
                 var textStr = ``;
                 for(var i=0;i<value.length;i++){
-                  textStr += (i != value.length-1)?mTextValue[i].toString()+cmdDivide:mTextValue[i].toString();
+                  if(mTextValue && mTextValue[i]){
+
+                    textStr += (i != value.length-1)?mTextValue[i].toString()+cmdDivide:mTextValue[i].toString();
+                  }
                 }
                 // execCMDPromise(cmdSetStr.replace(/{target}/g, cmdTarget) + ' ' + textStr,function(val:any){
                 // })
@@ -92,12 +102,18 @@ const {cmdWithConsole} =  useContext(ADBCommandStateContext)
                 cmdWithConsole(cmdSetStr.replace(/{target}/g, cmdTarget) + ' ' + textStr)
               }
             }}
-            onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+            onBlur={(e: React.FormEvent<HTMLInputElement>,index:number,val:any) => {
               e.preventDefault();
+              var mArray = mTextValue;
+              mArray[index] = val;
+              setTextValue(mArray);
+
               if(!isDisableCMDAnim) setTriggerBlocAnim(true)
               var textStr = ``;
               for(var i=0;i<value.length;i++){
-                textStr += (i != value.length-1)?mTextValue[i].toString()+cmdDivide:mTextValue[i].toString();
+                if(mTextValue && mTextValue[i]){
+                  textStr += (i != value.length-1)?mTextValue[i].toString()+cmdDivide:mTextValue[i].toString();
+                }
               }
               // execCMDPromise(cmdSetStr.replace(/{target}/g, cmdTarget) + ' ' + textStr,function(val:any){
               // })
