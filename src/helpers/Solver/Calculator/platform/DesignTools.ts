@@ -6,7 +6,7 @@ import {OrigamiPOPSpring as OrigamiPOP,
 
 class OrigamiPOPSpring extends OrigamiPOP{constructor(bounciness?:number,speed?:number){super(bounciness,speed)}}
 class FramerRK4Spring extends FramerRK4{constructor(tension?:number,friction?:number,velocity?:number){super(tension,friction,velocity)}}
-class FramerDHOSpring extends FramerDHO{constructor(stiffness?:number,damping?:number,mass?:number,velocity?:number){super(stiffness,damping,mass,velocity)}}
+class FramerDHOSpring extends FramerDHO{constructor(stiffness?:number,damping?:number,velocity?:number){super(stiffness,damping,1,velocity)}}
 class ProtopieSpring extends Protopie{constructor(tension?:number,friction?:number){super(tension,friction)}}
 class PrincipleSpring extends Protopie{constructor(tension?:number,friction?:number){super(tension,friction)}}
 
