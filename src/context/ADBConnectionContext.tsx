@@ -49,7 +49,7 @@ var ADBConnectionProvider: React.FC<{}> = ({ children }) => {
   const[snDevices,setSNDevices] = useState<string[]>([]);
   const[snDevicesCounts,setSNDevicesCounts] = useState<number>(0);
   const[snDevicesWifiAddrs,setSNDevicesWifiAddrs] = useState<string[]>([]);
-  const[snDevicesDisplayInfos,setSnDevicesDisplayInfos] = useState<string[][]>([]);
+  const[snDevicesDisplayInfos,setSnDevicesDisplayInfos] = useState<string[][]>([[]]);
 
   const[snDevicesTargets,setSNDevicesTargets] = useState<string[]>([]);
 
@@ -152,11 +152,12 @@ var ADBConnectionProvider: React.FC<{}> = ({ children }) => {
 
 
   function endlessGetDisplayInfos(device:any){
-    var snDeviceDisplayInfosData = snDevicesDisplayInfos
+    var snDeviceDisplayInfosData:any = snDevicesDisplayInfos
     execCMDPromise(`adb -s ${device.id} shell dumpsys display | grep 'mBaseDisplayInfo=DisplayInfo{"' | awk -F'",' '{print $1}'`,function(val:any){
       var result = val.toString().split('mBaseDisplayInfo=DisplayInfo{"')[1].replace("Id","");
-      snDeviceDisplayInfosData.push([`${device.id} - ${result.replace(/(\r\n|\n|\r)/gm, "")}`]);
-      setSnDevicesDisplayInfos(snDeviceDisplayInfosData);
+      // snDeviceDisplayInfosData.push([`${device.id} - ${result.replace(/(\r\n|\n|\r)/gm, "")}`]);
+      // setSnDevicesDisplayInfos(snDeviceDisplayInfosData);
+      snDeviceDisplayInfosData[snDevices.indexOf(device.id)] = [`${device.id} - ${result.replace(/(\r\n|\n|\r)/gm, "")}`];
     },function(error:any){
       endlessGetDisplayInfos(device)
     })

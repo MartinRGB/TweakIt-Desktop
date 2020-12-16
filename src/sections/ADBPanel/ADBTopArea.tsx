@@ -99,7 +99,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
         ></DropDownMenuDevice>
 
 
-        {/* <ADBDebugPannel>
+        <ADBDebugPannel>
           <li>{`snDevices                `   + serialNoDeivces.toString()}</li>
           <li>{`selectIndex              `   + currentDeviceSelectIndex.toString()}</li>
           <li>{`snDevicesCounts          `   + serialNoDevicesCounts.toString()}</li>
@@ -109,7 +109,8 @@ const ADBTopArea: React.FC = memo(({ children }) => {
           <li>{`isConnectingUSB          `   + serialNoDevicesIsConnectingUSB.toString()}</li>
           <li>{`connectingMode           `   + serialNoDevicesMode.toString()}</li>
           <li>{`isRemovedUSB             `   + serialNoDevicesIsRemovedUSB.toString()}</li>
-        </ADBDebugPannel> */}
+          <li>{`displayInfo              `   + serialNoDevicesDisplayInfos.toString()}</li>
+        </ADBDebugPannel>
 
         <ADBButtonSegment
           style={{    
