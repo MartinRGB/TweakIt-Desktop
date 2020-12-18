@@ -68,5 +68,8 @@
   "Select":"select",
   "Extract":"extract",
   "Get":"Get",
-  "Get Current Activity & Package":"Get Current Activity & Package"
+  "Get Current Activity & Package":"Get Current Activity & Package",
+  "Build":"Build",
+  "Connect":"Connect",
+  "Disconnect":"Disconnect"  
 }

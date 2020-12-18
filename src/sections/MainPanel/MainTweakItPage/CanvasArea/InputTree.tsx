@@ -32,6 +32,7 @@ import {DurationDataContext} from'@Context/DurationDataContext'
 import Solver from '@Helpers/Solver';
 import DataDrivenAnimator from '@Helpers/Animator/DataDrivenAnimator'
 
+import {TweakItConnectionContext} from'@Context/TweakItConnectionContext'
 
 const InputTree: React.FC<IInputTree> = memo(({ 
   style,
@@ -50,6 +51,8 @@ const InputTree: React.FC<IInputTree> = memo(({
   const {listDurationData,previousDataRange,currentDataRange,setCurrentSolverDataByIndex,currentSolverData,previousDataMin,currentAnimCalculator,previousSolverData} = useContext(
     AnimatorTypeContext
   );
+
+  const {isTweakItAndroidExist,setIsTweakItAndoridExist,setJSONData,jsonData} = useContext(TweakItConnectionContext)
 
   const {shouldGraphUpdate,setGraphShouldUpdate,triggredIndex,setTriggeredIndex} = useContext(
     GraphUpdateContext
@@ -198,6 +201,7 @@ const InputTree: React.FC<IInputTree> = memo(({
 
   const handleRangeBlur = (e:any) =>{
       setTriggeredIndex(-1)
+      console.log('range blur');
   }
 
   const handleTextChange = (e:any) => {
@@ -260,6 +264,7 @@ const InputTree: React.FC<IInputTree> = memo(({
 
   const handleTextBlur = (e:any) => {
     setTextValue(Math.min(max,Math.max(e.target.value,min)))
+    console.log('text blur');
   }
   
   const handleTextFocus = (e:any) => {

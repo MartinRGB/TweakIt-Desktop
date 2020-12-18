@@ -7,7 +7,7 @@ import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 export var ListSelectStateContext = createContext({
   currentAnimationItem: initState.initAnimPlatform + '_' + initState.initAnimName,
   selectAnimationItem: (tag: any) => {},
-  setPreviousAndCurrentGraph: (animInfo:any,animPlatform:any,animName:any,animCalculator:any,animEase:any,animData:any) => {}
+  setPreviousAndCurrentGraph: (animInfo:any,animPlatform:any,animName:any,animCalculator:any,animEase:any,animData:any) => {},
 });
 
 var ListSelectStateProvider: React.FC<{}> = ({ children }) => {
@@ -27,6 +27,7 @@ var ListSelectStateProvider: React.FC<{}> = ({ children }) => {
     setPreviousAnimName(currentAnimName);
     setPreviousAnimCalculator(currentAnimCalculator);
     setPreviousSolverData(currentSolverData);
+    
     Object.entries(currentAnimData).map(function (data:any,index:number) {
       setPreviousDataMinByIndex(data[1][1].min,index)
       setPreviousDataRangeByIndex(data[1][1].max - data[1][1].min,index)

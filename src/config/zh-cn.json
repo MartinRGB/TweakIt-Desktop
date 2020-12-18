@@ -68,5 +68,8 @@
   "Select":"选择",
   "Extract":"提取",
   "Get":"获取",
-  "Get Current Activity & Package":"获取当前 Package 和 Activity"
+  "Get Current Activity & Package":"获取当前 Package 和 Activity",
+  "Build":"构建",
+  "Connect":"连接",
+  "Disconnect":"断开"  
 }

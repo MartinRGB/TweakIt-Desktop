@@ -11,44 +11,89 @@ import ListTree from './ListTree'
 
 import animationList from '@Config/animator_list.json'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+import  {TweakItConnectionContext} from '@Context/TweakItConnectionContext'
 
 const ListArea: React.FC = memo(({children}) => {
   
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-
+  const {isTweakItAndroidExist} = useContext(TweakItConnectionContext)
 
   return (
     <Container isAnimationEnable={isGlobalAnimEnable}>
       {
           animationList.map(function (data:any,index:number) {
-            return (
-              <ListTree 
-                key={data['platform']+'_'+index} 
-                info={data['platform']} 
-                platform={data['platform']}
-                isUlElement={true}
-                name={data['platform']}
-                index={index}
-                listLength={data['li'].length}>
-              {
-                data['li'].map(function (animData:any,i:number) {
-                  return (<ListTree 
-                            key={data['platform']+'_'+animData['name']+'_'+i} 
-                            info={data['platform']+'_'+animData['name']} 
-                            platform={data['platform']}
-                            liIndex={i}
-                            isUlElement={false} 
-                            name={animData['name']} 
-                            calculator={animData['calculator']}
-                            animation_data={animData['animation_data']}
-                            ease_name={[animData['interpolatorName'],animData['iOSName'],animData['webName'],animData['flutterName'],animData['smartisanName']]}
-                            visible={animData['visible']}
-                            clickable={animData['clickable']}>
-                         </ListTree>)
-                })
+            if(isTweakItAndroidExist){
+              if(data['platform'] === 'Android'){
+                return (
+                  <ListTree 
+                    key={data['platform']+'_'+index} 
+                    info={data['platform']} 
+                    platform={data['platform']}
+                    isUlElement={true}
+                    name={data['platform']}
+                    switcherOption={Array(animationList.length).fill(false)}
+                    index={index}
+                    listLength={data['li'].length}>
+                  {
+                    data['li'].map(function (animData:any,i:number) {
+                      if(animData['isAndroidSupport']){
+                        return (<ListTree 
+                          key={data['platform']+'_'+animData['name']+'_'+i} 
+                          info={data['platform']+'_'+animData['name']} 
+                          platform={data['platform']}
+                          liIndex={i}
+                          isUlElement={false} 
+                          name={animData['name']} 
+                          calculator={animData['calculator']}
+                          animation_data={animData['animation_data']}
+                          ease_name={[animData['interpolatorName'],animData['iOSName'],animData['webName'],animData['flutterName'],animData['smartisanName']]}
+                          visible={animData['visible']}
+                          clickable={animData['clickable']}>
+                       </ListTree>)
+                      }
+
+                    })
+                  }
+                  </ListTree>
+                )
               }
-              </ListTree>
-            )
+              else{
+                return ''
+              }
+              
+            }
+            else{
+              return (
+                <ListTree 
+                  key={data['platform']+'_'+index} 
+                  info={data['platform']} 
+                  platform={data['platform']}
+                  isUlElement={true}
+                  name={data['platform']}
+                  switcherOption={Array(animationList.length).fill(false)}
+                  index={index}
+                  listLength={data['li'].length}>
+                {
+                  data['li'].map(function (animData:any,i:number) {
+                    return (<ListTree 
+                              key={data['platform']+'_'+animData['name']+'_'+i} 
+                              info={data['platform']+'_'+animData['name']} 
+                              platform={data['platform']}
+                              liIndex={i}
+                              isUlElement={false} 
+                              name={animData['name']} 
+                              calculator={animData['calculator']}
+                              animation_data={animData['animation_data']}
+                              ease_name={[animData['interpolatorName'],animData['iOSName'],animData['webName'],animData['flutterName'],animData['smartisanName']]}
+                              visible={animData['visible']}
+                              clickable={animData['clickable']}>
+                           </ListTree>)
+                  })
+                }
+                </ListTree>
+              )
+            }
+            
         
 
           })

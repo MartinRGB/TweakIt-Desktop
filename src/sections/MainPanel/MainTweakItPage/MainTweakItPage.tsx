@@ -17,6 +17,8 @@ import GraphUpdateProvider from '@Context/GraphUpdateContext'
 import DurationDataProvider from '@Context/DurationDataContext'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
+import  TweakItConnectionContextProvider from '@Context/TweakItConnectionContext';
+
 const MainTweakItPage: React.FC = memo(({children}) => {
 
   //const { t, i18n } = useTranslation()
@@ -28,6 +30,7 @@ const MainTweakItPage: React.FC = memo(({children}) => {
 
         <ListSelectStateProvider>
           <GraphUpdateProvider>
+          <TweakItConnectionContextProvider>
           <SelectArea></SelectArea>
           <TopContainer isAnimationEnable={isGlobalAnimEnable}>
             <ListArea></ListArea>
@@ -36,6 +39,7 @@ const MainTweakItPage: React.FC = memo(({children}) => {
               <PreviewArea></PreviewArea>
             </DurationDataProvider>
           </TopContainer>
+          </TweakItConnectionContextProvider>
           <CodeArea></CodeArea>
           </GraphUpdateProvider>
         </ListSelectStateProvider>

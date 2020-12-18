@@ -125,7 +125,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
         cursor:`${enable?'pointer':''}`,
       }}
     >
-      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{selectedText}</CustomSelectedSpan>
+      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{optionsData.length ===0?'select..':selectedText}</CustomSelectedSpan>
       <Icons.SelectArrow></Icons.SelectArrow>
     </CustomSelect>
 
@@ -169,8 +169,8 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
                 }}
                 key={index}
                 onClick = {()=>{
-                  onClickIndex(index,data);
-                  onClickList(index,data)}}
+                  onClickList(index,data)
+                  onClickIndex(index,data);}}
                 >
                   <DropDownListBackground
                     isAnimationEnable={isGlobalAnimEnable}

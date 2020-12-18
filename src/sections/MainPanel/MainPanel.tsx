@@ -14,6 +14,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import animationConfig from '@Config/animation.json';
 import MainTweakItPage from '@Sections/MainPanel/MainTweakItPage';
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+
 const MainPanel: React.FC = memo(({ children }) => {
   // return <button type="button">{children}</button>
   const [colorMode, setColorMode] = useColorMode();

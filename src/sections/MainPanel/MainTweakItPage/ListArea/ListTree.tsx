@@ -23,6 +23,7 @@ import { AnimatorTypeContext } from '@Context/AnimatorTypeContext';
 import Solver from 'src/helpers/Solver.ts';
 import initState from '@Config/init_state.json'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
+import  {TweakItConnectionContext} from '@Context/TweakItConnectionContext'
 
 const ListTree: React.FC<IListTree> = memo(({
   clickable, 
@@ -39,12 +40,13 @@ const ListTree: React.FC<IListTree> = memo(({
   ease_name,
   calculator,
   listLength,
-  selectArray,
+  switcherOption,
   visible,}) => {
 
   const UlVerticalPadding: number = 3;
   const UlHeight:number = 24;
   const LiHeight:number = 22;
+
 
   const { currentAnimationItem, selectAnimationItem,setPreviousAndCurrentGraph } = useContext(
     ListSelectStateContext
@@ -53,7 +55,8 @@ const ListTree: React.FC<IListTree> = memo(({
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
 
   const [isOpen, setOpen] = useState(initState.isAnimationListExpand)
-
+  const [openOption, setOptionOption] = useState<any>([])
+  const {isTweakItAndroidExist} = useContext(TweakItConnectionContext)
   //const [isOpen, setOpen] = useState(selectArray)
 
 
@@ -71,6 +74,12 @@ const ListTree: React.FC<IListTree> = memo(({
       setPrevAndCurrData();
     }
   }, [])
+
+  useEffect(() => {
+    if(isTweakItAndroidExist){
+      setOpen(true);
+    }
+  }, [isTweakItAndroidExist])
 
   const setPrevAndCurrData = () =>{
     setPreviousAndCurrentGraph(info,platform,name,calculator,ease_name,animation_data)
@@ -97,13 +106,6 @@ const ListTree: React.FC<IListTree> = memo(({
         <UlElement id="UlElement" isOpen={isOpen} isAnimationEnable={isGlobalAnimEnable} css={Toggle} onClick={() => {
 
           setOpen(!isOpen)
-            // console.log(index)
-            // console.log(selectArray)
-            // var openData = [...isOpen]
-            // openData[index] = !openData[index]
-
-            // console.log(openData)
-            // setOpen(openData)
           
           }}>
 

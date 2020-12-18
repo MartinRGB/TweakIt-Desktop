@@ -148,6 +148,7 @@ export interface IListTree {
   ease_name?:any;
   listLength?:number;
   selectArray?:any;
+  switcherOption?:any;
 }
 
 export interface IADBListTree {

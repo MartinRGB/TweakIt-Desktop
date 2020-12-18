@@ -18,9 +18,11 @@ import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import {ADBConnectionContext}  from '@Context/ADBConnectionContext';
 
+import  {TweakItConnectionContext} from '@Context/TweakItConnectionContext';
 
 import { ListSelectStateContext } from '@Context/ListSelectStateContext';
-import { exec } from 'src/helpers/ADBCommand/ADBCommand.ts';
+import { exec, execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
+import { resolve } from 'webpack/electron.webpack.ts';
 
 // Getter
 
@@ -30,11 +32,12 @@ import { exec } from 'src/helpers/ADBCommand/ADBCommand.ts';
 //adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_get"
 //adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_get"
 
+//adb -s 1f496250 shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_get"
+
 // Setter
 // $adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.15,"naturalFreq":200}}]}"
 
 // adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_set" --arg "{"animator_list":[{"animation_name":"MainActivity.java_161","animation_data":{"calculator":"SpringAnimationCalculator","Stiffness":{"min":0,"max":3000,"default":800},"DampingRatio":{"min":0.01,"max":1,"default":0.855},"Velocity":{"min":0,"max":0,"default":0}}}]}"
-
 
 const passedAnimationData = {
   "animation_data": {
@@ -84,12 +87,6 @@ const alterAnimationData = {
 }
 
 
-const alterAnimationInfo = 'Android_Overshoot'
-const alterAnimationPlatform = 'Android'
-const alterAnimationName = 'Overshoot'
-const alterAnimationCalculator = 'InterpolatorCalculator'
-const alterAnimationEaseName = ['Overshoot','','','','']
-
 const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
   const [colorMode] = useColorMode();
@@ -100,70 +97,93 @@ const SelectArea: React.FC = memo(({children}) => {
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {setPreviousAndCurrentGraph} = useContext(ListSelectStateContext)
 
-  const adbGetStr = cmdList.adb_get_device;
-  const adbBuildStr = cmdList.adb_help;
+  const {serialNoDevicesCounts,currentDeviceSelectIndex,serialNoDevicesIsConnectingWifi,serialNoDevicesIsConnectingUSB,serialNoDevicesTargets} = useContext(ADBConnectionContext)
 
-  const {serialNoDevicesCounts,currentDeviceSelectIndex,serialNoDevicesIsConnectingWifi,serialNoDevicesIsConnectingUSB} = useContext(ADBConnectionContext)
+  const {isTweakItAndroidExist,setIsTweakItAndoridExist} = useContext(TweakItConnectionContext)
 
-
-  const [outputData,setOutputData] = useState<string>();
-
-  function getAnimData(){
-    exec('adb -s emulator-5554 shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_get"', function(error:any, stdout:any, stderr:any){
-      if(error) {
-          console.error('error: ' + error);
-          return;
-      }
-      
-      setOutputData(stdout)
-    });
-  }
 
   useEffect( () => {
+    if(!isTweakItAndroidExist){
+      setOptionsData([])
+    }
 
-  }, []);
+  }, [isTweakItAndroidExist]);
 
+  const [optionsData,setOptionsData] = useState<string[]>([])
 
-  const optionsData = [
-    "Spring",
-    "Summer",
-    "Autumn",
-    "Winter",
-    "Spring",
-    "Summer",
-    "Autumn",
-    "Winter",
-    "Spring",
-    "Summer",
-    "Autumn",
-    "Winter",
-    "Spring",
-    "Summer",
-    "Autumn",
-    "Winter",
-    "Spring",
-    "Summer",
-    "Autumn",
-    "Winter",
-    "Spring",
-    "Summer",
-    "Autumn",
-    "Winter"
-  ];
+  const [connectionText,setConnectionText] =  useState<string>('Connect')
+
+  const [jsonData,setJsonData] = useState<any>();
+  const [selectIndex,setSelectIndex] = useState<number>(-1);
 
   const getMessageFromDevice = () =>{
-    console.log('get')
+    if(connectionText === 'Connect'){
+      execCMDPromise(`adb -s ${serialNoDevicesTargets} shell dumpsys activity | grep -E 'mResumedActivity' | awk '{print $4}'`,function(val:any){
+        const activityName = val.split('/')[0];
+  
+        execCMDPromise(`adb -s ${serialNoDevicesTargets} shell content call --uri content://${activityName}.tweakit/tweak_call --method "anim_get"`,function(val:any){
+          if(val.includes("animation_name")){
+            setIsTweakItAndoridExist(true)
+            setConnectionText('Disconnect')
+            var value = val.replace("Result: Bundle[{result=","");
+            value = value.substring(0, value.length - 3);
+            var obj = JSON.parse(value)
+            setJsonData(obj)
+            var opData = [];
+            for(var i = 0;i<obj['animator_list'].length;i++){
+              opData.push(obj['animator_list'][i]['animation_name'])
+            };
+            setOptionsData(opData);
+            // if(selectObjIndex != -1){
+            //   setGraphTrans(selectObjIndex)
+            // }
+
+            if(selectIndex != -1){
+              //setGraphTrans(selectIndex)
+              setPreviousAndCurrentGraph(
+                "Android_"+(obj['animator_list'][selectIndex]['name'].includes('Interpolator')?obj['animator_list'][selectIndex]['name'].replace("Interpolator",""):obj['animator_list'][selectIndex]['name']),"Android",
+                obj['animator_list'][selectIndex]['name'].includes('Interpolator')?obj['animator_list'][selectIndex]['name'].replace("Interpolator",""):obj['animator_list'][selectIndex]['name'],obj['animator_list'][selectIndex]['calculator'],
+                ['','','','',''],
+                obj['animator_list'][selectIndex]['animation_data'])
+
+            }
+
+          }
+          else{
+            setIsTweakItAndoridExist(false)
+          }
+        })
+        
+      })
+
+    }
+
+    if(connectionText === 'Disconnect'){
+      setIsTweakItAndoridExist(false)
+      setConnectionText('Connect')
+    }
+
   }
 
-  const postMessageToDevice = () =>{
-    console.log('build')
-  }
 
   const onIndexClicked = (i:any,val:any) =>{
     console.log(i)
     console.log(val)
+
+    setGraphTrans(i)
+    setSelectIndex(i)
+    //setSelectObjIndex(i)
   }
-  
+
+  const setGraphTrans = (i:number) =>{
+    console.log(jsonData)
+    setPreviousAndCurrentGraph(
+      "Android_"+(jsonData['animator_list'][i]['name'].includes('Interpolator')?jsonData['animator_list'][i]['name'].replace("Interpolator",""):jsonData['animator_list'][i]['name']),"Android",
+      jsonData['animator_list'][i]['name'].includes('Interpolator')?jsonData['animator_list'][i]['name'].replace("Interpolator",""):jsonData['animator_list'][i]['name'],jsonData['animator_list'][i]['calculator'],
+      ['','','','',''],
+      jsonData['animator_list'][i]['animation_data'])
+  }
+
   return (
     <Container isAnimationEnable={isGlobalAnimEnable}>
 
@@ -178,7 +198,8 @@ const SelectArea: React.FC = memo(({children}) => {
           currentDeviceSelectIndex != -1 &&
           serialNoDevicesCounts != 0 &&
           !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
-          !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
+          !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex] && 
+          isTweakItAndroidExist
           
         )} 
         menuWidth={`240px`} 
@@ -192,9 +213,10 @@ const SelectArea: React.FC = memo(({children}) => {
             !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
           )}
           cmdTriggerAnim={
-            ((adbInputCMD === adbGetStr) && canTriggerControlAnim && codeBlockIsShow)
+            // ((adbInputCMD === adbGetStr) && canTriggerControlAnim && codeBlockIsShow)
+            false
           }
-          cmd={adbGetStr}
+          cmd={''}
           isDisableCMDAnim={false}
           //onClick={setTriggerBlocAnim(true)}
           buttonCSS = {
@@ -213,70 +235,10 @@ const SelectArea: React.FC = memo(({children}) => {
           }
           onClick={getMessageFromDevice}
           >
-            <CustomSpan><Trans>Get</Trans></CustomSpan>
-        </ADBButtonNormal>
-        <ADBButtonNormal
-          enable={(              
-            currentDeviceSelectIndex != -1 &&
-            serialNoDevicesCounts != 0 &&
-            !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
-            !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
-          )}
-          cmdTriggerAnim={
-            ((adbInputCMD === adbBuildStr) && canTriggerControlAnim && codeBlockIsShow)
-          }
-          cmd={adbBuildStr}
-          isDisableCMDAnim={false}
-          //onClick={setTriggerBlocAnim(true)}
-          buttonCSS = {
-            css`
-              margin-right:12px;
-              > button{
-                height:20px;
-                width:40px;
-              }
-              > button > span{
-                width: 100%;
-                line-height:16px;
-              }
-            `
-          }
-          onClick={postMessageToDevice}
-          >
-            <CustomSpan><Trans>Build</Trans></CustomSpan>
+        <CustomSpan><Trans>{connectionText}</Trans></CustomSpan>
         </ADBButtonNormal>
 
-        <button style={{padding:`4px`}} onClick={()=>{
-         setPreviousAndCurrentGraph(passedAnimationInfo,passedAnimationPlatform,passedAnimationName,passedAnimationCalculator,passedAnimationEaseName,passedAnimationData['animation_data'])
-        }}>passed</button>
 
-        <button style={{padding:`4px`}} onClick={()=>{
-          setPreviousAndCurrentGraph(alterAnimationInfo,alterAnimationPlatform,alterAnimationName,alterAnimationCalculator,alterAnimationEaseName,alterAnimationData['animation_data'])
-        }}>gone</button>
-
-        <button onClick={()=>{
-            getAnimData()
-          }}>getData</button>
-
-      <button onClick={()=>{
-          exec('adb -s emulator-5554 shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":"MainActivity.java_97","anim_data":{"type":"SpringAnimation","dampingRatio":{"min":0,"max":10,"value":0.15},"naturalFreq":{"min":0.10000000149011612,"max":1000,"value":100.1}}}]}"', function(error:any, stdout:any, stderr:any){
-            if(error) {
-                console.error('error: ' + error);
-                return;
-            }
-            getAnimData()
-          });
-          }}>setData 0.15,100</button>
-
-          <p css={css`
-    background: blue;
-    color: wheat;
-    padding: 14px;
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-    width: 500px;
-`}>{outputData}</p>
       </TopLeftContainer>
     </Container>
   )

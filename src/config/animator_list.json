@@ -6,6 +6,7 @@
                 "name": "Spring",
                 "visible": true,
                 "clickable": true,
+                "isAndroidSupport":true,
                 "calculator": "SpringAnimationCalculator",
                 "animation_data": {
                     "Stiffness": {
@@ -57,6 +58,7 @@
                 "smartisanName":"LINEAR",
                 "visible": true,
                 "clickable": true,
+                "isAndroidSupport":true,
                 "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Duration": {
@@ -72,6 +74,7 @@
                 "interpolatorName": "Accelerate",
                 "visible": true,
                 "clickable": true,
+                "isAndroidSupport":true,
                 "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Factor": {
@@ -94,6 +97,7 @@
                 "flutterName":"Decelerate",
                 "visible": true,
                 "clickable": true,
+                "isAndroidSupport":true,
                 "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Factor": {
@@ -115,6 +119,7 @@
                 "interpolatorName": "AccelerateDecelerate",
                 "visible": true,
                 "clickable": true,
+                "isAndroidSupport":true,
                 "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Duration": {
@@ -151,6 +156,7 @@
                 "interpolatorName": "Overshoot",
                 "visible": true,
                 "clickable": true,
+                "isAndroidSupport":true,
                 "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Factor": {
@@ -193,6 +199,7 @@
                 "interpolatorName": "Bounce",
                 "visible": true,
                 "clickable": true,
+                "isAndroidSupport":true,
                 "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Duration": {
@@ -413,6 +420,7 @@
                 "interpolatorName": "CustomSpring",
                 "visible": true,
                 "clickable": true,
+                "isAndroidSupport":true,
                 "calculator": "InterpolatorCalculator",
                 "animation_data": {
                     "Factor": {
