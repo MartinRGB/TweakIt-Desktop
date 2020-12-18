@@ -27,13 +27,13 @@ import { exec } from 'src/helpers/ADBCommand/ADBCommand.ts';
 // $adb -s emulator-5554 shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_get"
 // Result: Bundle[{result={"anim_list":[{"anim_name":"MainActivity.java_97","anim_data":{"type":"SpringAnimation","dampingRatio":{"min":0,"max":10,"value":0.55},"naturalFreq":{"min":0.10000000149011612,"max":1000,"value":300.1}}}]}}]
 
-//adb -s 1f496250 shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_get"
-
+//adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_get"
+//adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_get"
 
 // Setter
-// $adb -s 1f496250 shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.15,"naturalFreq":200}}]}"
+// $adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.15,"naturalFreq":200}}]}"
 
-// adb -s emulator-5554 shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":"MainActivity.java_97","anim_data":{"type":"SpringAnimation","dampingRatio":{"min":0,"max":10,"value":0.15},"naturalFreq":{"min":0.10000000149011612,"max":1000,"value":100.1}}}]}"
+// adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_set" --arg "{"animator_list":[{"animation_name":"MainActivity.java_161","animation_data":{"calculator":"SpringAnimationCalculator","Stiffness":{"min":0,"max":3000,"default":800},"DampingRatio":{"min":0.01,"max":1,"default":0.855},"Velocity":{"min":0,"max":0,"default":0}}}]}"
 
 
 const passedAnimationData = {

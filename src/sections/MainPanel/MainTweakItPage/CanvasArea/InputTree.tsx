@@ -7,6 +7,8 @@ import ResizeObserver from 'resize-observer-polyfill'
 import { IInputTree } from "@Types";
 // import * as Icons from './ListIcon'
 
+import {execCMD} from '@Helpers/ADBCommand/ADBCommand'
+
 import { useColorMode, jsx } from 'theme-ui'
 import tw from 'twin.macro'
 import styled from '@emotion/styled';
@@ -156,6 +158,10 @@ const InputTree: React.FC<IInputTree> = memo(({
   const handleRangeChange = (e:any) => {
 
 
+
+    
+    // Put int FinishChange
+    //execCMD(`adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_set" --arg "{"animator_list":[{"animation_name":"MainActivity.java_161","animation_data":{"calculator":"SpringAnimationCalculator","Stiffness":{"min":0,"max":3000,"default":${e.target.value}},"DampingRatio":{"min":0.01,"max":1,"default":0.855},"Velocity":{"min":0,"max":0,"default":0}}}]}"`)
 
     if(isGlobalAnimEnable){
       setPreviousRangeValue(rangeValue);
