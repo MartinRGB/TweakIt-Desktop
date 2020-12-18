@@ -128,7 +128,6 @@ const SelectArea: React.FC = memo(({children}) => {
             var value = val.replace("Result: Bundle[{result=","");
             value = value.substring(0, value.length - 3);
             var obj = JSON.parse(value)
-            setJsonData(obj)
             var opData = [];
             for(var i = 0;i<obj['animator_list'].length;i++){
               opData.push(obj['animator_list'][i]['animation_name'])
@@ -147,6 +146,8 @@ const SelectArea: React.FC = memo(({children}) => {
                 obj['animator_list'][selectIndex]['animation_data'])
 
             }
+
+            setJsonData(obj)
 
           }
           else{
