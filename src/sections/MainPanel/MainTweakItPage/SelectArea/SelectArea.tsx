@@ -23,6 +23,8 @@ import  {TweakItConnectionContext} from '@Context/TweakItConnectionContext';
 import { ListSelectStateContext } from '@Context/ListSelectStateContext';
 import { exec, execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
 import { resolve } from 'webpack/electron.webpack.ts';
+import { HorizontalLineCalculator } from 'src/helpers/Solver/Calculator/BaseCalculator.ts';
+import Solver from '@Helpers/Solver'
 
 // Getter
 
@@ -39,67 +41,18 @@ import { resolve } from 'webpack/electron.webpack.ts';
 
 // adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_set" --arg "{"animator_list":[{"animation_name":"MainActivity.java_161","animation_data":{"calculator":"SpringAnimationCalculator","Stiffness":{"min":0,"max":3000,"default":800},"DampingRatio":{"min":0.01,"max":1,"default":0.855},"Velocity":{"min":0,"max":0,"default":0}}}]}"
 
-const passedAnimationData = {
-  "animation_data": {
-    "Stiffness": {
-        "default": 500,
-        "min": 1,
-        "max": 5000,
-        "editable": true
-    },
-    "DampingRatio": {
-        "default": 0.25,
-        "min": 0.01,
-        "max": 0.999,
-        "editable": true
-    },
-    "Velocity": {
-        "default": 0,
-        "min": 0,
-        "max": 1000,
-        "editable": true
-    }
-  }
-}
-
-
-const passedAnimationInfo = 'Android_Spring'
-const passedAnimationPlatform = 'Android'
-const passedAnimationName = 'Spring'
-const passedAnimationCalculator = 'SpringAnimationCalculator'
-const passedAnimationEaseName = ['','','','','']
-
-const alterAnimationData = {
-  "animation_data": {
-    "Factor": {
-        "default": 2,
-        "min": 0.01,
-        "max": 5,
-        "editable": true
-    },
-    "Duration": {
-        "default": 1,
-        "min": 0.01,
-        "max": 10,
-        "editable": true
-    }
-  }
-}
 
 
 const SelectArea: React.FC = memo(({children}) => {
   const { t ,i18n} = useTranslation()
   const [colorMode] = useColorMode();
 
-  const {codeBlockIsShow, setCodeBlockIsShow,setTriggerBlocAnim,adbInputCMD,canTriggerControlAnim} = useContext(
-    CodeBlockStateContext,
-  );
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {setPreviousAndCurrentGraph} = useContext(ListSelectStateContext)
 
   const {serialNoDevicesCounts,currentDeviceSelectIndex,serialNoDevicesIsConnectingWifi,serialNoDevicesIsConnectingUSB,serialNoDevicesTargets} = useContext(ADBConnectionContext)
 
-  const {isTweakItAndroidExist,setIsTweakItAndoridExist} = useContext(TweakItConnectionContext)
+  const {setDeviceName,setActivieActivty,isTweakItAndroidExist,setIsTweakItAndoridExist,setSelectObjIndex,selectObjIndex,jsonData,setJSONData} = useContext(TweakItConnectionContext)
 
 
   useEffect( () => {
@@ -113,13 +66,12 @@ const SelectArea: React.FC = memo(({children}) => {
 
   const [connectionText,setConnectionText] =  useState<string>('Connect')
 
-  const [jsonData,setJsonData] = useState<any>();
-  const [selectIndex,setSelectIndex] = useState<number>(-1);
-
   const getMessageFromDevice = () =>{
     if(connectionText === 'Connect'){
       execCMDPromise(`adb -s ${serialNoDevicesTargets} shell dumpsys activity | grep -E 'mResumedActivity' | awk '{print $4}'`,function(val:any){
         const activityName = val.split('/')[0];
+        setActivieActivty(activityName)
+        setDeviceName(serialNoDevicesTargets)
   
         execCMDPromise(`adb -s ${serialNoDevicesTargets} shell content call --uri content://${activityName}.tweakit/tweak_call --method "anim_get"`,function(val:any){
           if(val.includes("animation_name")){
@@ -128,30 +80,23 @@ const SelectArea: React.FC = memo(({children}) => {
             var value = val.replace("Result: Bundle[{result=","");
             value = value.substring(0, value.length - 3);
             var obj = JSON.parse(value)
-            var opData = [];
-            for(var i = 0;i<obj['animator_list'].length;i++){
-              opData.push(obj['animator_list'][i]['animation_name'])
-            };
-            setOptionsData(opData);
-            // if(selectObjIndex != -1){
-            //   setGraphTrans(selectObjIndex)
-            // }
 
-            if(selectIndex != -1){
-              //setGraphTrans(selectIndex)
-              setPreviousAndCurrentGraph(
-                "Android_"+(obj['animator_list'][selectIndex]['name'].includes('Interpolator')?obj['animator_list'][selectIndex]['name'].replace("Interpolator",""):obj['animator_list'][selectIndex]['name']),"Android",
-                obj['animator_list'][selectIndex]['name'].includes('Interpolator')?obj['animator_list'][selectIndex]['name'].replace("Interpolator",""):obj['animator_list'][selectIndex]['name'],obj['animator_list'][selectIndex]['calculator'],
-                ['','','','',''],
-                obj['animator_list'][selectIndex]['animation_data'])
+            setJSONData(obj,(data:any)=>{
+              console.log(data)
+              var opData = [];
+              for(var i = 0;i<data['animator_list'].length;i++){
+                opData.push(data['animator_list'][i]['animation_name'])
+              };
+              setOptionsData(opData);
+              
+            })
 
-            }
-
-            setJsonData(obj)
 
           }
           else{
+            setSelectObjIndex(-1)
             setIsTweakItAndoridExist(false)
+            setPreviousAndCurrentGraph('','','','HorizontalLineCalculator',[''],new Solver.Default.HorizontalLine().getValueArray())
           }
         })
         
@@ -160,8 +105,10 @@ const SelectArea: React.FC = memo(({children}) => {
     }
 
     if(connectionText === 'Disconnect'){
+      setSelectObjIndex(-1)
       setIsTweakItAndoridExist(false)
       setConnectionText('Connect')
+      setPreviousAndCurrentGraph('','','','HorizontalLineCalculator',[''],new Solver.Default.HorizontalLine().getValueArray())
     }
 
   }
@@ -170,14 +117,12 @@ const SelectArea: React.FC = memo(({children}) => {
   const onIndexClicked = (i:any,val:any) =>{
     console.log(i)
     console.log(val)
-
+    setSelectObjIndex(i)
     setGraphTrans(i)
-    setSelectIndex(i)
-    //setSelectObjIndex(i)
+
   }
 
   const setGraphTrans = (i:number) =>{
-    console.log(jsonData)
     setPreviousAndCurrentGraph(
       "Android_"+(jsonData['animator_list'][i]['name'].includes('Interpolator')?jsonData['animator_list'][i]['name'].replace("Interpolator",""):jsonData['animator_list'][i]['name']),"Android",
       jsonData['animator_list'][i]['name'].includes('Interpolator')?jsonData['animator_list'][i]['name'].replace("Interpolator",""):jsonData['animator_list'][i]['name'],jsonData['animator_list'][i]['calculator'],
@@ -195,6 +140,7 @@ const SelectArea: React.FC = memo(({children}) => {
         onClickIndex={(i,val)=>{onIndexClicked(i,val)}} 
         menuStyle={{left:`-1px`,width:`240px`}}
         optionsData={optionsData} 
+        selectIndex={selectObjIndex}
         enable={(
           currentDeviceSelectIndex != -1 &&
           serialNoDevicesCounts != 0 &&

@@ -52,7 +52,7 @@ const InputTree: React.FC<IInputTree> = memo(({
     AnimatorTypeContext
   );
 
-  const {isTweakItAndroidExist,setIsTweakItAndoridExist,setJSONData,jsonData} = useContext(TweakItConnectionContext)
+  const {deviceName,activeActivity,isTweakItAndroidExist,setSelectObjIndex,selectObjIndex,setIsTweakItAndoridExist,setJSONData,jsonData} = useContext(TweakItConnectionContext)
 
   const {shouldGraphUpdate,setGraphShouldUpdate,triggredIndex,setTriggeredIndex} = useContext(
     GraphUpdateContext
@@ -164,7 +164,7 @@ const InputTree: React.FC<IInputTree> = memo(({
 
     
     // Put int FinishChange
-    //execCMD(`adb -s 00d4fe2f shell content call --uri content://com.smartisan.tweakitdemo.tweakit/tweak_call --method "anim_set" --arg "{"animator_list":[{"animation_name":"MainActivity.java_161","animation_data":{"calculator":"SpringAnimationCalculator","Stiffness":{"min":0,"max":3000,"default":${e.target.value}},"DampingRatio":{"min":0.01,"max":1,"default":0.855},"Velocity":{"min":0,"max":0,"default":0}}}]}"`)
+
 
     if(isGlobalAnimEnable){
       setPreviousRangeValue(rangeValue);
@@ -202,6 +202,17 @@ const InputTree: React.FC<IInputTree> = memo(({
   const handleRangeBlur = (e:any) =>{
       setTriggeredIndex(-1)
       console.log('range blur');
+
+      setValueToAndroid(e.target.value);
+
+  }
+
+  const setValueToAndroid = (e:any) =>{
+    var newJsonData = jsonData;
+      
+    newJsonData['animator_list'][selectObjIndex]['animation_data'][name].default = e;
+
+    execCMD(`adb -s ${deviceName} shell content call --uri content://${activeActivity}.tweakit/tweak_call --method "anim_set" --arg "${JSON.stringify(newJsonData)}"`)
   }
 
   const handleTextChange = (e:any) => {
@@ -265,6 +276,7 @@ const InputTree: React.FC<IInputTree> = memo(({
   const handleTextBlur = (e:any) => {
     setTextValue(Math.min(max,Math.max(e.target.value,min)))
     console.log('text blur');
+    setValueToAndroid(Math.min(max,Math.max(e.target.value,min)));
   }
   
   const handleTextFocus = (e:any) => {

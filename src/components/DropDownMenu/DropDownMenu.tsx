@@ -12,12 +12,12 @@ import Icons from '@Assets/icons'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 
 
-const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuStyle,style,optionsData,menuWidth,isRichAnimation,enable}) => {
+const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,selectIndex,onClickIndex,menuStyle,style,optionsData,menuWidth,isRichAnimation,enable}) => {
 
   const [colorMode, setColorMode] = useColorMode()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const [selectedText,setSelectedText] = useState<string>('select...')
-  const [selectIndex,setSelectIndex] = useState<number>(-1)
+  //const [selectIndex,setSelectIndex] = useState<number>(-1)
   const [selectExpand,setSelectExpand] = useState<boolean>(false)
   
   const [selectAnimationProgress,setSelectAnimationProgress] = useState<number>(0)
@@ -61,7 +61,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
       clearTimeout(onExpandAnimationEndTimeOut)
     }
 
-    setSelectIndex(index)
+    //setSelectIndex(index)
     setSelectedText(value)
 
     if(selectExpand){
@@ -125,7 +125,7 @@ const DropDownMenu: React.FC<IDropDownMenu> = memo(({onClick,onClickIndex,menuSt
         cursor:`${enable?'pointer':''}`,
       }}
     >
-      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{optionsData.length ===0?'select..':selectedText}</CustomSelectedSpan>
+      <CustomSelectedSpan isAnimationEnable={isGlobalAnimEnable}>{(selectIndex === -1)?'select...':(optionsData[selectIndex]?optionsData[selectIndex]:'select...')}</CustomSelectedSpan>
       <Icons.SelectArrow></Icons.SelectArrow>
     </CustomSelect>
 

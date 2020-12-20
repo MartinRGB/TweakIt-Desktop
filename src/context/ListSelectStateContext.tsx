@@ -46,7 +46,7 @@ var ListSelectStateProvider: React.FC<{}> = ({ children }) => {
 
     if(animData){
       setCurrentAnimData(Object.entries(animData))
-      console.log(animData)
+      //console.log(animData)
     }
     else{
       setCurrentAnimData([])
