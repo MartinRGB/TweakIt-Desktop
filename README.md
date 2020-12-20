@@ -57,6 +57,7 @@
 ![WebGL](https://img.shields.io/badge/-WebGL-000?&logo=webgl)
 ![WASM](https://img.shields.io/badge/-WebAssembly-000?&logo=webassembly)
 ![WebSocket](https://img.shields.io/badge/-WebSocket-000?&logo=socket.io)
+![WebSocket](https://img.shields.io/badge/-GraphQL-000?&logo=graphql)
 
 </table>
 
