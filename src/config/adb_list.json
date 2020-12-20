@@ -179,7 +179,7 @@
                 "type": "ADBInstallComp",
                 "keyword": "install",
                 "btnStr":"Select",
-                "cmdSetStr": "adb -s {target} shell setprop debug.allow.persist.update true;adb install -r",
+                "cmdSetStr": "adb -s {target} shell setprop debug.allow.persist.update true;adb -s {target} install -r",
                 "visible":true,
                 "clickable":true
             },
