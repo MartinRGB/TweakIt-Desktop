@@ -16,7 +16,7 @@
 ![JSON](https://img.shields.io/badge/-JSON-000?&logo=JSON)
 ![SVG](https://img.shields.io/badge/-SVG-000?&logo=SVG)
 
-**UI框架**
+**UI 框架**
 
 ![React](https://img.shields.io/badge/-React-000?&logo=React)
 
