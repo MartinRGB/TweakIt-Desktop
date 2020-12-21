@@ -27,11 +27,11 @@
 
 **后端相关**
 
-![NPM](https://img.shields.io/badge/-NPM-000?&logo=npm)
 ![Node.js](https://img.shields.io/badge/-Node.js-000?&logo=node.js)
 
-**打包**
+**包管理 & 打包**
 
+![NPM](https://img.shields.io/badge/-NPM-000?&logo=npm)
 ![Webpack](https://img.shields.io/badge/-Webpack-000?&logo=Webpack)
 
 **跨平台**
