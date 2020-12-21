@@ -1,6 +1,5 @@
 const childProcess = require('child_process');
 export const exec = childProcess.exec;
-export const spawn = childProcess.spawn;
 const fs = require("fs");
 
 export const execCMD = (cmd:any,log?:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void) =>{
