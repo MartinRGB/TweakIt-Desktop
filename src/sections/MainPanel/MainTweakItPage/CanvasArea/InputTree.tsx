@@ -118,7 +118,8 @@ const InputTree: React.FC<IInputTree> = memo(({
     config: animationConfig.slider_drag,
     onFrame: () =>{
 
-      if(isGlobalAnimEnable){
+      //TODO
+      if(isGlobalAnimEnable && !isTweakItAndroidExist){
         var value = sliderProgress.value.toFixed(2);
         setRangeValue(Math.min(max,Math.max(Number(value),min)))
 
@@ -148,7 +149,8 @@ const InputTree: React.FC<IInputTree> = memo(({
 
     },
     onRest: () => {
-      if(isGlobalAnimEnable){
+      //TODO
+      if(isGlobalAnimEnable && !isTweakItAndroidExist){
         setPreviousRangeValue(rangeValue)
         setRangeAnimTriggered(false)
       }
@@ -161,12 +163,11 @@ const InputTree: React.FC<IInputTree> = memo(({
   const handleRangeChange = (e:any) => {
 
 
-
-    
     // Put int FinishChange
 
 
-    if(isGlobalAnimEnable){
+    //TODO
+    if(isGlobalAnimEnable && !isTweakItAndroidExist){
       setPreviousRangeValue(rangeValue);
       setTargetRangeValue(Math.min(max,Math.max(e.target.value,min)))
       setTriggeredIndex(index)
@@ -202,15 +203,20 @@ const InputTree: React.FC<IInputTree> = memo(({
   const handleRangeBlur = (e:any) =>{
       setTriggeredIndex(-1)
       console.log('range blur');
-
-      setValueToAndroid(e.target.value);
+      if(isTweakItAndroidExist) setValueToAndroid(e.target.value);
 
   }
 
   const setValueToAndroid = (e:any) =>{
     var newJsonData = jsonData;
       
-    newJsonData['animator_list'][selectObjIndex]['animation_data'][name].default = e;
+    newJsonData['animator_list'][selectObjIndex]['animation_data'][name].default = Number(e);
+
+    console.log(`adb -s ${deviceName} shell content call --uri content://${activeActivity}.tweakit/tweak_call --method "anim_set" --arg "${JSON.stringify(newJsonData)}"`)
+
+    console.log(activeActivity)
+    console.log(deviceName)
+    console.log(newJsonData)
 
     execCMD(`adb -s ${deviceName} shell content call --uri content://${activeActivity}.tweakit/tweak_call --method "anim_set" --arg "${JSON.stringify(newJsonData)}"`)
   }
@@ -276,7 +282,7 @@ const InputTree: React.FC<IInputTree> = memo(({
   const handleTextBlur = (e:any) => {
     setTextValue(Math.min(max,Math.max(e.target.value,min)))
     console.log('text blur');
-    setValueToAndroid(Math.min(max,Math.max(e.target.value,min)));
+    if(isTweakItAndroidExist) setValueToAndroid(Math.min(max,Math.max(e.target.value,min)));
   }
   
   const handleTextFocus = (e:any) => {
