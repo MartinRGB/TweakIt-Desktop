@@ -101,6 +101,7 @@
   "build": {
     "productName": "TweakIt",
     "appId": "com.martinrgb.TweakIt",
+    "extraResources":["assets"],
     "mac": {
       "icon": "./icons/macIcon.icns",
       "category": "public.app-category.tools"
