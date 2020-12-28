@@ -361,10 +361,9 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
         left: `50%`,
         top: `50%`,
         transform: `translate3d(-50%, -50%, 0px)`,
+      }}>
 
-      }}
-    >
-        <div
+      <div
         style={
             {
               width:`${boxWidth}px`,
@@ -528,56 +527,60 @@ const BezierInputTree: React.FC<IBezierInputTree> = memo(({
 
 
           </DraggableContainer>
-        }</div>
+        }
+      </div>
+        
         <TextInput 
-        id={'bezier_input'}
-        value={textValue}
-        isEditable={isEditable}
-        step={0.01} 
+          id={'bezier_input'}
+          value={textValue}
+          isEditable={isEditable}
+          step={0.01} 
+          parentStyle = {{
+            width:'100%'
+          }}
+          style={{
+            width:`${isDoubleBezier?'auto':'100%'}`,
+            height:'auto',
+            margin:'0 auto',
+            background:'transparent',
+            border:'none',
+            fontSize:'12px',
+            position:'absolute',
+            // bottom:`${isDoubleBezier?`${isDoubleLast?'':`${(svgHeight-boxHeightO)/2 - 14*1.5}px`}`:`${(svgHeight-boxHeightO)/2 - 14*1.5}px`}`,
+            bottom:`-150px`,
+            top:`${isDoubleBezier?`${isDoubleLast?`${(svgHeight-boxHeightO)/2 - 14*1.5}px`:''}`:''}`,
+            left:`${isDoubleBezier?`${isDoubleLast?'':'0px'}`:''}`,
+            right:`${isDoubleBezier?`${isDoubleLast?'0px':''}`:''}`,
+            // left: `50%`,
+            // transform: `translate3d(-50%, 0%, 0px)`,
+          }}
 
-        style={{
-          width:`${isDoubleBezier?'auto':'100%'}`,
-          height:'auto',
-          margin:'0 auto',
-          background:'transparent',
-          border:'none',
-          fontSize:'12px',
-          position:'absolute',
-          bottom:`${isDoubleBezier?`${isDoubleLast?'':`${(svgHeight-boxHeightO)/2 - 14*1.5}px`}`:`${(svgHeight-boxHeightO)/2 - 14*1.5}px`}`,
-          top:`${isDoubleBezier?`${isDoubleLast?`${(svgHeight-boxHeightO)/2 - 14*1.5}px`:''}`:''}`,
-          left:`${isDoubleBezier?`${isDoubleLast?'':'0px'}`:''}`,
-          right:`${isDoubleBezier?`${isDoubleLast?'0px':''}`:''}`,
-          // left: `50%`,
-          // transform: `translate3d(-50%, 0%, 0px)`,
-        }}
+          onChange={(e: React.FormEvent<HTMLInputElement>) => {
+            e.preventDefault();
+            isEditable?handleBezierTextChange(e):''
+            //handleBezierDragInput([0.5,0.2,1.0,1.0])
+          }}   
 
-        onChange={(e: React.FormEvent<HTMLInputElement>) => {
-          e.preventDefault();
-          isEditable?handleBezierTextChange(e):''
-          //handleBezierDragInput([0.5,0.2,1.0,1.0])
-        }}   
-
-        onKeyUp={(e: React.FormEvent<HTMLInputElement>) => {
-          // PressEnter
-          if(e.keyCode ===13){
+          onKeyUp={(e: React.FormEvent<HTMLInputElement>) => {
+            // PressEnter
+            if(e.keyCode ===13){
+              e.preventDefault();
+              isEditable?handleBezierTextBlur(e):''
+            }
+          }}
+          onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+            // Out of Focus
             e.preventDefault();
             isEditable?handleBezierTextBlur(e):''
-          }
-        }}
-        onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-          // Out of Focus
-          e.preventDefault();
-          isEditable?handleBezierTextBlur(e):''
-        }}
+          }}
 
-        onFocus={(e: React.FormEvent<HTMLInputElement>) => {
-          // Out of Focus
-          e.preventDefault();
-          isEditable?handleBezierTextFocus(e):''
-        }
+          onFocus={(e: React.FormEvent<HTMLInputElement>) => {
+            // Out of Focus
+            e.preventDefault();
+            isEditable?handleBezierTextFocus(e):''
+          }}/>
 
-        }/>
-      </div>
+    </div>
   )
 })
 

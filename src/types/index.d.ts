@@ -193,6 +193,7 @@ export interface IInputTree {
 }
 
 export interface IInput {
+  parentStyle?:any;
   id:any;
   style?: any;
   value?: number;

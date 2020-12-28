@@ -9,7 +9,7 @@ import {useSpring, animated,interpolate} from 'react-spring'
 import { useGesture } from 'react-with-gesture'
 import animationConfig from '@Config/animation.json';
 
-const TextInput: React.FC<IInput> = memo(({ id,style,value,min,max,step,isEditable,onChange,onKeyUp,onKeyDown,onBlur,onFocus,isAnimationEnable}) => {
+const TextInput: React.FC<IInput> = memo(({ id,style,value,min,max,step,isEditable,onChange,onKeyUp,onKeyDown,onBlur,onFocus,isAnimationEnable,parentStyle}) => {
   const [colorMode, setColorMode] = useColorMode()
   const [textIsOnFocus,setTextIsOnFocus] = useState<boolean>(false);
   const [textShouldHighlight,setTextShouldHighlight] = useState<boolean>(false);
@@ -54,7 +54,14 @@ const thisOnKeyup = (e: React.FormEvent<HTMLInputElement>) => {
 }
 
   return (
-    <div style={{cursor:`${isEditable?'':'not-allowed'}`,height:`100%`,width:`40px`,position:`relative`}}>
+    <div style={{
+      width:`40px`,
+      ...parentStyle,
+      cursor:`${isEditable?'':'not-allowed'}`,
+      height:`100%`,
+      
+      position:`relative`
+    }}>
       
     <Input
     id={id}
