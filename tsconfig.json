@@ -28,6 +28,7 @@
       "@Styles/*": ["src/styles/*"],
       "@Types": ["src/types"],
       "@Helpers/*": ["src/helpers/*"],
+      "@Vendor/*": ["src/vendor/*"],
     }
   }
 }

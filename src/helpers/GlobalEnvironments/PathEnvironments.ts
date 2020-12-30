@@ -35,16 +35,16 @@ export const injectPathEnvironments = () =>{
   adbPathInRes.substring(0, adbPathInRes.length - 1) + ':' +
   scrcpyPathInRes.substring(0, scrcpyPathInRes.length - 1) + ':' + 
   ffmpegBinPathInRes.substring(0, ffmpegBinPathInRes.length - 1) + ':' + 
-  ffmpegLibPathInRes.substring(0, ffmpegLibPathInRes.length - 1) + ':';
+  ffmpegLibPathInRes.substring(0, ffmpegLibPathInRes.length - 1) + ':' +
 
-  // '/usr/bin:' +
-  // '/bin:' +
-  // '/usr/local/sbin:' +
-  // '/usr/local/bin:' +
-  // '/usr/sbin:' +
-  // '/sbin:' + 
-  // '/opt/puppetlabs/bin:' +
-  // '/usr/local/munki:' + 
-  // '/Library/Apple/usr/bin:';
+  '/usr/bin:' +
+  '/bin:' +
+  '/usr/local/sbin:' +
+  '/usr/local/bin:' +
+  '/usr/sbin:' +
+  '/sbin:' + 
+  '/opt/puppetlabs/bin:' +
+  '/usr/local/munki:' + 
+  '/Library/Apple/usr/bin:';
 }
 

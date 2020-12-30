@@ -17,6 +17,8 @@
           "module": "@emotion/core"
         }
       ],
-      ["babel-plugin-transform-react-jsx", { "pragma": "__cssprop" }]
+      ["babel-plugin-transform-react-jsx", { "pragma": "__cssprop" }],
+      ["@babel/plugin-transform-runtime"],
+      ["@babel/plugin-proposal-class-properties"]
     ]
   }

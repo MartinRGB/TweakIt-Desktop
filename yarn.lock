@@ -11526,3 +11526,13 @@ yauzl@^2.10.0:
   dependencies:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.1.0"
+
+yuv-buffer@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/yuv-buffer/-/yuv-buffer-1.0.0.tgz#09a454858d74df2bc31cd588edd70ffcb86bfc9a"
+  integrity sha1-CaRUhY103yvDHNWI7dcP/Lhr/Jo=
+
+yuv-canvas@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/yuv-canvas/-/yuv-canvas-1.2.6.tgz#246452196fca9e581f09abed9b90c94aff6014e2"
+  integrity sha512-luNSFyGOPIJP4L8LUSgaBwWoAdmm45lCY44jhDgyREHcjnAtnR5Poj0C821UJ2CPD5GVIlfHOeFO2PDRCl2w/A==
