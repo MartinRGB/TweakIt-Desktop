@@ -36,19 +36,21 @@ module.exports = {
     rules: [
       {
         test: /\.(js|ts|tsx)$/,
-        exclude: [path.resolve(__dirname, '../node_modules/'),path.resolve(__dirname, '../src/worker/')],  //   /node_modules/
+        exclude: [path.resolve(__dirname, '../node_modules/'),path.resolve(__dirname, '../src/worker/'),path.resolve(__dirname, '../src/ws-scrcpy/')],  //   /node_modules/
         use: {
           loader: 'babel-loader'
         }
       },
       {
         test: /\.(jpg|png)$/,
+        exclude: [path.resolve(__dirname, '../src/ws-scrcpy/')],
         use: {
           loader: 'url-loader',
         },
       },
       {
         test: /\.worker\.js$/,
+        exclude: [path.resolve(__dirname, '../src/ws-scrcpy/')],
         //include: [path.resolve(__dirname, '../src/worker')],
         use: { loader: "worker-loader" },
       }

@@ -1,4 +1,4 @@
-import React ,{useEffect,useContext} from 'react'
+import React ,{useEffect,useContext,useRef} from 'react'
 import { render } from 'react-dom'
 import { GlobalStyle } from '@Styles/GlobalStyle'
 import { css, keyframes } from '@emotion/core';
@@ -25,11 +25,11 @@ import GlobalAnimationStateProvider from "@Context/GlobalAnimationContext";
 import {injectPathEnvironments} from '@Helpers/GlobalEnvironments/PathEnvironments'
 import ADBConnectionProvider from "@Context/ADBConnectionContext";
 
-import Scrcpy from '@Helpers/ScrcpyClient/ScrcpyClient'
-import MseDecoder from '@Helpers/ScrcpyClient/MseDecoder'
-import Decoder from '@Helpers/ScrcpyClient/Decoder/Decoder'
-import Size from '@Helpers/ScrcpyClient/Decoder/Size'
-import VideoSettings from '@Helpers/ScrcpyClient/Decoder/VideoSettings'
+// import Scrcpy from '@Helpers/ScrcpyClient/ScrcpyClient'
+// import MseDecoder from '@Helpers/ScrcpyClient/MseDecoder'
+// import Decoder from '@Helpers/ScrcpyClient/Decoder/Decoder'
+// import Size from '@Helpers/ScrcpyClient/Decoder/Size'
+// import VideoSettings from '@Helpers/ScrcpyClient/Decoder/VideoSettings'
 
 //const Scrcpy = require('scrcpy-client');
 
@@ -47,89 +47,91 @@ mainElement.setAttribute('id', 'root')
 document.body.appendChild(mainElement)
 
 
-let buffer: ArrayBuffer | undefined;
-const NoPts = BigInt(-1);
-
-
-  const decoder = new MseDecoder('00d4fe2f');
-
-
+// let buffer: ArrayBuffer | undefined;
+// const NoPts = BigInt(-1);
+// const decoder = new MseDecoder('00d4fe2f');
+// var sourceBuffer:SourceBuffer;
+// var mimeCodec = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
+// var mediaSource:MediaSource;
 
 const App = () => {
   const { t ,i18n} = useTranslation()
   //console.log(animatorList)
 
+  const videoRef = useRef(null);
+
   useEffect(() => {
     injectPathEnvironments()
 
-    const scrcpy = new Scrcpy('');
+    //const scrcpy = new Scrcpy('');
 
 
-  const deviceView = document.createElement('div');
-  deviceView.className = 'device-view';
-  deviceView.style.transform = 'scale(0.33)';
-  deviceView.style.transformOrigin = 'top left';
-  deviceView.style.float = 'none';
-  deviceView.style.position = 'absolute';
-  deviceView.style.left = '0px';
-  deviceView.style.top = '0px';
-  const video = document.createElement('div');
-  video.className = 'video';
-  video.style.width ="1080px";
-  video.style.height = "2340px";
+    // const deviceView = document.createElement('div');
+    // deviceView.className = 'device-view';
+    // deviceView.style.transform = 'scale(0.33)';
+    // deviceView.style.transformOrigin = 'top left';
+    // deviceView.style.float = 'none';
+    // deviceView.style.position = 'absolute';
+    // deviceView.style.left = '0px';
+    // deviceView.style.top = '0px';
+    // const video = document.createElement('div');
+    // video.className = 'video';
+    // video.style.width ="1080px";
+    // video.style.height = "2340px";
 
-  deviceView.appendChild(video);
-  decoder.setParent(video);
-  decoder.pause();
-  document.body.appendChild(deviceView);
-  const current = decoder.getVideoSettings();
+    // deviceView.appendChild(video);
+    // decoder.setParent(video);
+    // decoder.pause();
+    // document.body.appendChild(deviceView);
+    // const current = decoder.getVideoSettings();
 
-  const bounds = new Size(1080, 2340); //this.getMaxSize();
-        const { bitrate, maxFps, iFrameInterval, lockedVideoOrientation, sendFrameMeta } = current;
-        const newVideoSettings = new VideoSettings({
-            bounds,
-            bitrate,
-            maxFps,
-            iFrameInterval,
-            lockedVideoOrientation,
-            sendFrameMeta,
-        });
-  decoder.setVideoSettings(newVideoSettings, false);
-  const STATE = Decoder.STATE;
+    // const bounds = new Size(1080, 2340); //this.getMaxSize();
+    //       const { bitrate, maxFps, iFrameInterval, lockedVideoOrientation, sendFrameMeta } = current;
+    //       const newVideoSettings = new VideoSettings({
+    //           bounds,
+    //           bitrate,
+    //           maxFps,
+    //           iFrameInterval,
+    //           lockedVideoOrientation,
+    //           sendFrameMeta,
+    //       });
+    // decoder.setVideoSettings(newVideoSettings, false);
+    // const STATE = Decoder.STATE;
 
-    scrcpy.on('data', (pts:any, data:any) => 
-    {
+    // scrcpy.on('data', (pts:any, data:any) => 
+    // {
     
-      console.log(`[${pts}] Data: ${data.length}b`);
+    //   console.log(`[${pts}] Data: ${data.length}b`);
   
-    if (pts === NoPts) {
-        buffer = data;
-    }
+    // if (pts === NoPts) {
+    //     buffer = data;
+    // }
 
-    let array: Uint8Array;
-    if (buffer) {
-        array = new Uint8Array(buffer.byteLength + data!.byteLength);
-        array.set(new Uint8Array(buffer));
-        array.set(new Uint8Array(data!), buffer.byteLength);
-        buffer = undefined;
-    } else {
-        array = new Uint8Array(data!);
-    }
-    console.log(array);
+    // let array: Uint8Array;
+    // if (buffer) {
+    //     array = new Uint8Array(buffer.byteLength + data!.byteLength);
+    //     array.set(new Uint8Array(buffer));
+    //     array.set(new Uint8Array(data!), buffer.byteLength);
+    //     buffer = undefined;
+    // } else {
+    //     array = new Uint8Array(data!);
+    // }
+    // //console.log(array);
 
-    if (decoder.getState() === STATE.PAUSED) {
-        decoder.play();
-    }
-    if (decoder.getState() === STATE.PLAYING) {
-        decoder.pushFrame(new Uint8Array(array));
-    }
+    // if (decoder.getState() === STATE.PAUSED) {
+    //     decoder.play();
+    // }
+    // if (decoder.getState() === STATE.PLAYING) {
+    //   console.log('push')
+    //     decoder.pushFrame(new Uint8Array(array));
+    // }
 
     
-    });
+    // });
 
-    scrcpy.start()
-      .then((info:any) => console.log(`Started -> ${info.name} at ${info.width}x${info.height}`))
-      .catch((e:any) => console.error('Impossible to start', e));
+    // scrcpy.start()
+    //   .then((info:any) => console.log(`Started -> ${info.name} at ${info.width}x${info.height}`))
+    //   .catch((e:any) => console.error('Impossible to start', e));
 
 
   }, [])
@@ -143,6 +145,17 @@ const App = () => {
         <ADBExpandStateProvider>
             <ADBConnectionProvider>
             <TitleBar>TWEAKIT</TitleBar>
+            {/* <div style={{
+              width:`1080px`,
+              height:`2340px`,
+              position:`absolute`,
+              left:`0px`,
+              top:`0px`,
+              transform:`scale(0.33)`,
+            }}>
+            <video ref={videoRef} style={{width:`1080px`,height:`2340px`}} controls></video>
+            </div> */}
+            
             <ADBPanel></ADBPanel>
             <MainPanel></MainPanel>
             </ADBConnectionProvider>

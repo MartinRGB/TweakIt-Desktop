@@ -10,12 +10,14 @@
     ],
     "allowJs": true,
     "jsx": "react",
+    "declaration": false, 
     "sourceMap": true,
     "outDir": "./dist",
     "strict": true ,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "removeComments": true, 
     "baseUrl": "./",
     "paths":{
       "*.ts":["*"],
@@ -29,6 +31,7 @@
       "@Types": ["src/types"],
       "@Helpers/*": ["src/helpers/*"],
       "@Vendor/*": ["src/vendor/*"],
+      "@WSTypes/*": ["src/types/*"],
     }
   }
 }

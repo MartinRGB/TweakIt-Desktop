@@ -1,7 +1,7 @@
-import Decoder from './Decoder/Decoder';
+import Decoder from './Decoder';
 import VideoConverter, { setLogger } from 'h264-converter';
-import VideoSettings from './Decoder/VideoSettings';
-import Size from './Decoder/Size';
+import VideoSettings from '../VideoSettings';
+import Size from '../Size';
 
 interface QualityStats {
     timestamp: number;
@@ -61,10 +61,8 @@ export default class MseDecoder extends Decoder {
     private MAX_BUFFER = this.isSafari ? 2 : this.isChrome && this.isMac ? 0.9 : 0.2;
     private MAX_AHEAD = -0.2;
 
-    constructor(deviceId: string, protected tag: HTMLVideoElement = MseDecoder.createElement()) {
-        super(deviceId, 'MseDecoder', tag);
-        tag.style.width = '100%';
-        tag.style.height = '100%';
+    constructor(udid: string, protected tag: HTMLVideoElement = MseDecoder.createElement()) {
+        super(udid, 'MseDecoder', tag);
         tag.oncontextmenu = function (e: MouseEvent): boolean {
             e.preventDefault();
             return false;
@@ -259,7 +257,6 @@ export default class MseDecoder extends Decoder {
     };
 
     public pushFrame(frame: Uint8Array): void {
-        // appenRawData
         super.pushFrame(frame);
         if (this.converter) {
             this.converter.appendRawData(frame);

@@ -1,5 +1,4 @@
 const path = require('path')
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const rootPath = path.resolve(__dirname, '..')
 
@@ -37,7 +36,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|ts|tsx)$/,
-        exclude: /node_modules/,
+        exclude: [path.resolve(__dirname, '../node_modules/'),path.resolve(__dirname, '../src/ws-scrcpy/')],
         use: {
           loader: 'babel-loader'
         }
