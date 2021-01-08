@@ -8,11 +8,13 @@ import * as querystring from 'querystring';
 import * as readline from 'readline';
 import { IncomingMessage, ServerResponse, STATUS_CODES } from 'http';
 import { ServiceDeviceTracker } from './ServiceDeviceTracker';
-// import { ServiceShell } from './ServiceShell';
 import { ACTION } from './Constants';
 import { ServiceWebsocketProxy } from './ServiceWebsocketProxy';
 
-const port = parseInt(process.argv[2], 10) || 4001;
+import {FRONTEND_PORT,DEVICE_ID} from '../GlobalConstants'
+
+//const port = parseInt(process.argv[2], 10) || portNum;
+const port = parseInt(process.argv[2], 10) || FRONTEND_PORT;
 const map: Record<string, string> = {
     '.wasm': 'application/wasm',
     '.js': 'text/javascript',
@@ -84,7 +86,7 @@ wss.on('connection', async (ws: WebSocket, req) => {
                 ws.close(4003, `Invalid value "${remote}" for "remote" parameter`);
                 break;
             }
-            const udid = parsedQuery.udid;
+            const udid = parsedQuery.udid; //parsedQuery.udid
             if (typeof udid !== 'string' || !udid) {
                 ws.close(4003, `Invalid value "${udid}" for "udid" parameter`);
                 break;

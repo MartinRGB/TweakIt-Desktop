@@ -1,18 +1,19 @@
-import '../../vendor/Genymobile/scrcpy/scrcpy-server.jar';
-import '../../vendor/Genymobile/scrcpy/LICENSE.txt';
+import '../vendor/Genymobile/scrcpy/scrcpy-server.jar';
+import '../vendor/Genymobile/scrcpy/LICENSE.txt';
 
-import ADB, { AdbKitChangesSet, AdbKitClient, AdbKitTracker, PushTransfer } from '@devicefarmer/adbkit';
+import ADB from '@devicefarmer/adbkit';
+import { AdbKitChangesSet, AdbKitClient, AdbKitTracker, PushTransfer} from './@devicefarmer/adbkit'
 import { EventEmitter } from 'events';
 import { spawn } from 'child_process';
 import * as path from 'path';
 import { DeviceDescriptor } from './DeviceDescriptor';
 import { ARGS_STRING, SERVER_PACKAGE, SERVER_VERSION } from './Constants';
-import DroidDeviceDescriptor from '../common/DroidDeviceDescriptor';
-import Timeout = NodeJS.Timeout;
-import { NetInterface } from '../common/NetInterface';
+import DroidDeviceDescriptor from './interfaces/DroidDeviceDescriptor';
+// import Timeout = NodeJS.Timeout;
+import { NetInterface } from './interfaces/NetInterface';
 
 const TEMP_PATH = '/data/local/tmp/';
-const FILE_DIR = path.join(__dirname, 'vendor/Genymobile/scrcpy');
+const FILE_DIR = path.join(__dirname, 'ws-scrcpy/vendor/Genymobile/scrcpy');
 const FILE_NAME = 'scrcpy-server.jar';
 
 const GET_SHELL_PROCESSES = 'for DIR in /proc/*; do [ -d "$DIR" ] && echo $DIR;  done';
@@ -29,8 +30,8 @@ export class ServerDeviceConnection extends EventEmitter {
     private client: AdbKitClient = ADB.createClient();
     private tracker?: AdbKitTracker;
     private initialized = false;
-    private restartTimeoutId?: Timeout;
-    private throttleTimeoutId?: Timeout;
+    private restartTimeoutId?: NodeJS.Timeout;
+    private throttleTimeoutId?: NodeJS.Timeout;
     private lastEmit = 0;
     private waitAfterError = 1000;
     private ignoredDevices: Set<string> = new Set();

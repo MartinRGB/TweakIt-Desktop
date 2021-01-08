@@ -1,72 +1,76 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const rootPath = path.resolve(__dirname, '..');
 const nodeExternals = require('webpack-node-externals');
-const path = require('path');
-const rootPath = path.resolve(__dirname, '..')
 
 const common = {
+}
+
+// const scrcpyFrontend = {
+//   entry: path.resolve(rootPath, 'ws-scrcpy', 'app/index.ts'),
+//   externals: ['fs'],
+//   plugins: [
+//     new HtmlWebpackPlugin(),
+//   ],
+//   output: {
+//     filename: 'bundle.js',
+//     path: path.resolve(__dirname, 'dist/scrcpy-window'),
+//   },
+// };
+
+const scrcpyFrontend = {
   mode: 'development',
   devtool: 'inline-source-map',
+  entry: path.resolve(rootPath, './ws-scrcpy/frontend', 'index.ts'),
+  externals: ['fs'],
   module: {
     rules: [
       {
-        test: /\.css$/i,
-        include: [
-          path.resolve(__dirname, "./ws-scrcpy")
-        ],
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-      {
-        test: /\.(ts|tsx)?$/,
-        include: [
-          path.resolve(__dirname, "./ws-scrcpy")
-        ],
-        use: {
-          loader: 'ts-loader'
-        },
+        test: /\.tsx?$/,
+        use: 'babel-loader',
         exclude: /node_modules/,
       },
       {
-        test: /\.worker\.js$/,
-        include: [
-          path.resolve(__dirname, "./ws-scrcpy")
-        ],
-        use: { loader: 'worker-loader' }
-      },
-      {
-        test: /\.svg$/,
-        include: [
-          path.resolve(__dirname, "./ws-scrcpy")
-        ],
-        loader: 'svg-inline-loader'
-      },
-      {
         test: /\.(png|jpe?g|gif)$/i,
-        include: [
-          path.resolve(__dirname, "./ws-scrcpy")
-        ],
         use: [
           {
             loader: 'file-loader',
           },
         ],
       },
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: __dirname + "/../ws-scrcpy/index.html",
+      inject: 'head'
+    }),
+  ],
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(rootPath, 'dist/public'),
+  },
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
+  },
+};
+
+const scrcpyServer = {
+  entry: path.resolve(rootPath, './ws-scrcpy/server', 'index.ts'),
+  externals: [nodeExternals()],
+  // devtool: 'inline-source-map',
+  target: 'node',
+  mode: 'development',
+  devtool: 'source-map',
+  module: {
+    rules: [
       {
-        test: /\.(asset)$/i,
-        include: [
-          path.resolve(__dirname, "./ws-scrcpy")
-        ],
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name]',
-            },
-          },
-        ],
+        test: /\.tsx?$/,
+        use: 'babel-loader',
+        exclude: /node_modules/,
       },
       {
-        include: path.resolve(__dirname, './vendor/Genymobile'),
+        include: path.resolve(__dirname, '../ws-scrcpy/vendor/Genymobile'),
         use: [
           {
             loader: 'file-loader',
@@ -77,34 +81,7 @@ const common = {
         ]
       }
     ]
-  },
-  resolve: {
-    extensions: [ '.tsx','.ts', '.js' ], //
-  },
-  
-}
-
-const frontend = {
-  entry: path.resolve(rootPath, 'ws-scrcpy', 'app/index.ts'),
-  externals: ['fs'],
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: __dirname + "/../ws-scrcpy/public/index.html",
-      inject: 'head'
-    }),
-    new MiniCssExtractPlugin(),
-  ],
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, '../dist/scrcpy-window'),
-  },
-};
-
-const backend = {
-  entry: './ws-scrcpy/server/index.ts',
-  externals: [nodeExternals()],
-  devtool: 'inline-source-map',
-  mode: 'development',
+    },
   node: {
     global: false,
     __filename: false,
@@ -112,12 +89,15 @@ const backend = {
   },
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, '../dist/scrcpy-server'),
+    path: path.resolve(rootPath, 'dist/scrcpy-server'),
   },
-  target: 'node',
-}
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
+  },
+};
+
 
 module.exports = [
-  Object.assign({} , common, frontend),
-  Object.assign({} , common, backend)
-];
+  Object.assign({} , common, scrcpyFrontend),
+  Object.assign({} , common, scrcpyServer),
+]

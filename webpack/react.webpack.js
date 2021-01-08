@@ -1,37 +1,16 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const rootPath = path.resolve(__dirname, '..')
+const rootPath = path.resolve(__dirname, '..');
+const nodeExternals = require('webpack-node-externals');
 
-module.exports = {
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.json'],
+const common = {
+}
 
-    plugins: [
-      new TsconfigPathsPlugin({
-        //configFile: "./tsconfig.json",
-        //logLevel: "info",
-        extensions: ['.tsx', '.ts', '.js', '.json', '.png', '.jpg'],
-        //mainFields: ["browser", "main"],
-        // baseUrl: "/foo"
-      }),
-    ],
-
-    // alias: {
-    //   "i18n": path.resolve(__dirname, "../src/components/i18n/*"),
-    //   "components": path.resolve(__dirname, "../src/components/*"),
-    //   "config": path.resolve(__dirname, "../src/config/*"),
-    //   "context": path.resolve(__dirname, "../src/context/*"),
-    //   "sections": path.resolve(__dirname, "../src/sections/*"),
-    //   "styles": path.resolve(__dirname, "../src/styles/*"),
-    //   "types": path.resolve(__dirname, "../src/types/*"),
-    // },
-    
-    mainFields: ['main', 'module', 'browser']
-  },
-  entry: path.resolve(rootPath, 'src', 'App.tsx'),
+const mainApplication = {
   target: 'electron-renderer',
   devtool: 'source-map',
+  entry: path.resolve(rootPath, 'src', 'App.tsx'),
   module: {
     rules: [
       {
@@ -51,7 +30,6 @@ module.exports = {
       {
         test: /\.worker\.js$/,
         exclude: [path.resolve(__dirname, '../src/ws-scrcpy/')],
-        //include: [path.resolve(__dirname, '../src/worker')],
         use: { loader: "worker-loader" },
       }
     ]
@@ -61,7 +39,7 @@ module.exports = {
     historyApiFallback: true,
     compress: true,
     hot: true,
-    port: 4000,
+    port: 50000,
     publicPath: '/'
   },
   output: {
@@ -71,8 +49,77 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin()
-  ]
+  ],
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.json'],
+
+    plugins: [
+      new TsconfigPathsPlugin({
+        extensions: ['.tsx', '.ts', '.js', '.json', '.png', '.jpg'],
+      }),
+    ],
+    mainFields: ['main', 'module', 'browser']
+  },
 }
+
+const scrcpyFrontend = {
+  entry: path.resolve(rootPath, 'ws-scrcpy', 'app/index.ts'),
+  externals: ['fs'],
+  plugins: [
+    new HtmlWebpackPlugin(),
+  ],
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist/scrcpy-window'),
+  },
+};
+
+const scrcpyServer = {
+  entry: path.resolve(rootPath, './src/ws-scrcpy/server', 'index.ts'),
+  externals: [nodeExternals()],
+  // devtool: 'inline-source-map',
+  target: 'node',
+  mode: 'development',
+  devtool: 'source-map',
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'babel-loader',
+        exclude: /node_modules/,
+      },
+      {
+        include: path.resolve(__dirname, '../ws-scrcpy/vendor/Genymobile'),
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]'
+            }
+          }
+        ]
+      }
+    ]
+    },
+  node: {
+    global: false,
+    __filename: false,
+    __dirname: false,
+  },
+  output: {
+    filename: 'index.js',
+    path: path.resolve(rootPath, 'dist/scrcpy-server'),
+  },
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
+  },
+};
+
+
+module.exports = [
+  Object.assign({} , common, mainApplication),
+  //Object.assign({} , common, scrcpyServer),
+]
 // const path = require("path");
 // const HtmlWebpackPlugin = require("html-webpack-plugin");
 

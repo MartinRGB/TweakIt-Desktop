@@ -31,7 +31,7 @@
       "@Types": ["src/types"],
       "@Helpers/*": ["src/helpers/*"],
       "@Vendor/*": ["src/vendor/*"],
-      "@WSTypes/*": ["src/types/*"],
-    }
-  }
+      "@Modules/": ["src/types/*"],
+    },
+  },
 }

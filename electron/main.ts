@@ -7,8 +7,8 @@ let mainWindow: Electron.BrowserWindow | null
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: 1120,
+    height: 860,
     minHeight: 500,
     minWidth: 320,
     //frame: false,
@@ -21,7 +21,7 @@ function createWindow() {
   })
 
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:4000')
+    mainWindow.loadURL('http://localhost:50000')
   } else {
     mainWindow.loadURL(
       url.format({

@@ -1,4 +1,4 @@
-import { Message } from '../common/Message';
+import { Message } from './interfaces/Message';
 import WebSocket from 'ws';
 
 export abstract class ReleasableService {

@@ -1,8 +1,8 @@
 import WebSocket from 'ws';
 import { ServerDeviceConnection } from './ServerDeviceConnection';
 import { ReleasableService } from './ReleasableService';
-import { Message } from '../common/Message';
-import DroidDeviceDescriptor from '../common/DroidDeviceDescriptor';
+import { Message } from './interfaces/Message';
+import DroidDeviceDescriptor from './interfaces/DroidDeviceDescriptor';
 
 enum Command {
     KILL_SERVER = 'kill_server',

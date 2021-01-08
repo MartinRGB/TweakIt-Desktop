@@ -59,7 +59,7 @@ const InputTree: React.FC<IInputTree> = memo(({
   );
   const {setDurationData} = useContext(DurationDataContext)
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
-  
+
   var inputVis;
   if(visible != undefined){
     inputVis = visible;

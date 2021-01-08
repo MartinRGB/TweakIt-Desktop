@@ -21,7 +21,6 @@ export const execCMD = (cmd:any,log?:any,successCallback?:(e:any) => void,errorC
 }
 
 
-
 export const execCMDPromise = (cmd:any,successCallback?:(e:any) => void,errorCallback?:(e:any)=>void,log?:any) =>{
     var execution:any;
     var promise = new Promise((resolve, reject) =>{
@@ -49,3 +48,4 @@ export const execCMDPromise = (cmd:any,successCallback?:(e:any) => void,errorCal
     });
 
 }
+

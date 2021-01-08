@@ -1,5 +1,5 @@
-import DroidDeviceDescriptor from '../common/DroidDeviceDescriptor';
-import { NetInterface } from '../common/NetInterface';
+import DroidDeviceDescriptor from './interfaces/DroidDeviceDescriptor';
+import { NetInterface } from './interfaces/NetInterface';
 
 export class DeviceDescriptor {
     public releaseVersion: string;

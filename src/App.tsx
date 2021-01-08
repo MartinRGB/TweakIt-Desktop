@@ -1,4 +1,4 @@
-import React ,{useEffect,useContext,useRef} from 'react'
+import React ,{useEffect,useContext,useRef,useState} from 'react'
 import { render } from 'react-dom'
 import { GlobalStyle } from '@Styles/GlobalStyle'
 import { css, keyframes } from '@emotion/core';
@@ -24,115 +24,73 @@ import CodeBlockProvider from "@Context/CodeBlockContext";
 import GlobalAnimationStateProvider from "@Context/GlobalAnimationContext";
 import {injectPathEnvironments} from '@Helpers/GlobalEnvironments/PathEnvironments'
 import ADBConnectionProvider from "@Context/ADBConnectionContext";
-
-// import Scrcpy from '@Helpers/ScrcpyClient/ScrcpyClient'
-// import MseDecoder from '@Helpers/ScrcpyClient/MseDecoder'
-// import Decoder from '@Helpers/ScrcpyClient/Decoder/Decoder'
-// import Size from '@Helpers/ScrcpyClient/Decoder/Size'
-// import VideoSettings from '@Helpers/ScrcpyClient/Decoder/VideoSettings'
-
-//const Scrcpy = require('scrcpy-client');
-
 // twmacro
-const Button = styled.button`
-  ${tw`mt-4 p-2 text-white bg-blue-600`}
-`;
+import {execCMD, execCMDPromise} from "@Helpers/ADBCommand/ADBCommand"
 
-// pure tw
-const Input = () => <input tw="mt-4 p-2 text-white bg-red-600" />
-//const Buttons = () => <Button tw="mt-4 p-2 text-white bg-blue-600">click</Button>
+const { app } = window.require('electron').remote;
+var path = require("path");
+
+var appPath = app.getAppPath().replace(/ /g,"\\ ");
+var localNodePath = appPath + '/node_modules/'
+
+var localDistPath = appPath + '/dist/';
+
+var localAssetsPath = appPath + '/assets/';
+var localADBPath = localAssetsPath + 'adb/';
+var localScrcpyBinPath = localAssetsPath + 'scrcpy/1.16/bin/';
+
+var localResAssetsPath = path.join(process.resourcesPath, "/assets/");
+var resADBPath = localResAssetsPath + 'adb/';
+var resScrcpyPath = localResAssetsPath + 'scrcpy/1.16/bin/';
 
 const mainElement = document.createElement('div')
 mainElement.setAttribute('id', 'root')
 document.body.appendChild(mainElement)
 
-
-// let buffer: ArrayBuffer | undefined;
-// const NoPts = BigInt(-1);
-// const decoder = new MseDecoder('00d4fe2f');
-// var sourceBuffer:SourceBuffer;
-// var mimeCodec = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
-// var mediaSource:MediaSource;
-
 const App = () => {
   const { t ,i18n} = useTranslation()
-  //console.log(animatorList)
 
-  const videoRef = useRef(null);
+  const [isRevealScrcpy,setIsRevealScrcpy] = useState<boolean>(false);
+
+  const frameRef = useRef(null);
+
+  function createBrowserWindow() {
+    const remote = require('electron').remote;
+    const BrowserWindow = remote.BrowserWindow;
+    const win = new BrowserWindow({
+      width: 360,
+      height: 818,
+      minHeight: 360,
+      minWidth: 818,
+      maxHeight:818,
+      maxWidth:360,
+      //frame: false,
+      backgroundColor: '#000000',
+      // backgroundColor: '#191622',
+      titleBarStyle: 'hiddenInset',
+      webPreferences: {
+        nodeIntegration: true
+      }
+    });
+  
+    win.loadURL('http://localhost:50001/');
+  }
+
+  const triggerScrcpyWindow = () =>{
+    createBrowserWindow();
+  }
+
+  const triggerNode = () =>{
+    execCMD(`lsof -P | grep ':50001' | awk '{print $2}' | xargs kill -9`,'',function(){
+      execCMD(`node ${localDistPath}/scrcpy-server/index.js`,'',function(){
+      })
+    });
+
+
+  }
 
   useEffect(() => {
     injectPathEnvironments()
-
-    //const scrcpy = new Scrcpy('');
-
-
-    // const deviceView = document.createElement('div');
-    // deviceView.className = 'device-view';
-    // deviceView.style.transform = 'scale(0.33)';
-    // deviceView.style.transformOrigin = 'top left';
-    // deviceView.style.float = 'none';
-    // deviceView.style.position = 'absolute';
-    // deviceView.style.left = '0px';
-    // deviceView.style.top = '0px';
-    // const video = document.createElement('div');
-    // video.className = 'video';
-    // video.style.width ="1080px";
-    // video.style.height = "2340px";
-
-    // deviceView.appendChild(video);
-    // decoder.setParent(video);
-    // decoder.pause();
-    // document.body.appendChild(deviceView);
-    // const current = decoder.getVideoSettings();
-
-    // const bounds = new Size(1080, 2340); //this.getMaxSize();
-    //       const { bitrate, maxFps, iFrameInterval, lockedVideoOrientation, sendFrameMeta } = current;
-    //       const newVideoSettings = new VideoSettings({
-    //           bounds,
-    //           bitrate,
-    //           maxFps,
-    //           iFrameInterval,
-    //           lockedVideoOrientation,
-    //           sendFrameMeta,
-    //       });
-    // decoder.setVideoSettings(newVideoSettings, false);
-    // const STATE = Decoder.STATE;
-
-    // scrcpy.on('data', (pts:any, data:any) => 
-    // {
-    
-    //   console.log(`[${pts}] Data: ${data.length}b`);
-  
-    // if (pts === NoPts) {
-    //     buffer = data;
-    // }
-
-    // let array: Uint8Array;
-    // if (buffer) {
-    //     array = new Uint8Array(buffer.byteLength + data!.byteLength);
-    //     array.set(new Uint8Array(buffer));
-    //     array.set(new Uint8Array(data!), buffer.byteLength);
-    //     buffer = undefined;
-    // } else {
-    //     array = new Uint8Array(data!);
-    // }
-    // //console.log(array);
-
-    // if (decoder.getState() === STATE.PAUSED) {
-    //     decoder.play();
-    // }
-    // if (decoder.getState() === STATE.PLAYING) {
-    //   console.log('push')
-    //     decoder.pushFrame(new Uint8Array(array));
-    // }
-
-    
-    // });
-
-    // scrcpy.start()
-    //   .then((info:any) => console.log(`Started -> ${info.name} at ${info.width}x${info.height}`))
-    //   .catch((e:any) => console.error('Impossible to start', e));
-
 
   }, [])
   return (
@@ -145,19 +103,17 @@ const App = () => {
         <ADBExpandStateProvider>
             <ADBConnectionProvider>
             <TitleBar>TWEAKIT</TitleBar>
-            {/* <div style={{
-              width:`1080px`,
-              height:`2340px`,
-              position:`absolute`,
-              left:`0px`,
-              top:`0px`,
-              transform:`scale(0.33)`,
-            }}>
-            <video ref={videoRef} style={{width:`1080px`,height:`2340px`}} controls></video>
-            </div> */}
-            
             <ADBPanel></ADBPanel>
             <MainPanel></MainPanel>
+              {/* <IFrame src="http://localhost:50001/"
+                      ref={frameRef}
+                      width="360px"
+                      height="780px"
+                      scrolling="no"
+                      isTrigger = {isRevealScrcpy}
+                      id="myId"/> */}
+              <TestButton onClick={triggerScrcpyWindow}>In-Browser Scrcpy</TestButton>
+              <TestButton style={{left:`600px`}}onClick={triggerNode}>Open Node</TestButton>
             </ADBConnectionProvider>
         </ADBExpandStateProvider>
         </ADBCommandProvider>
@@ -169,5 +125,28 @@ const App = () => {
 }
 
 
+const IFrame = styled.iframe<{
+  isTrigger:boolean;
+}>`
+  position: absolute;
+  left:${p => p.isTrigger?'0px':'-360px'};
+  top: 52px;
+  z-index: 10;
+  display: block;
+  overflow: hidden;
+  outline: none;
+  border: none;
+  background: black;
+  transition:all 0.3s;
+`
+const TestButton = styled.button`
+position: absolute;
+left: 500px;
+top: 61px;
+z-index: 10;
+display: block;
+width: 100px;
+height: 30px;
+`
 
 render(<App />, mainElement)
