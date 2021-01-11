@@ -1,4 +1,15 @@
 
+|     |     |
+|-----|-----|
+|Language  |![Java](https://img.shields.io/badge/-Java-000?&logo=Java) ![JavaScript](https://img.shields.io/badge/-JavaScript-000?&logo=JavaScript) ![TypeScript](https://img.shields.io/badge/-TypeScript-000?&logo=TypeScript) ![JSON](https://img.shields.io/badge/-JSON-000?&logo=JSON) ![SVG](https://img.shields.io/badge/-SVG-000?&logo=SVG)|
+|UI Framework  |![React](https://img.shields.io/badge/-React-000?&logo=React) ![Electron](https://img.shields.io/badge/-Electron-000?&logo=Electron)|
+|CSS In JS |![Stylus](https://img.shields.io/badge/-Stylus-000?&logo=Stylus) ![Emotion](https://img.shields.io/badge/-Emotion-000?&logo=Stylus) |
+|Command Line |![HomeBrew](https://img.shields.io/badge/-HomeBrew-000?&logo=HomeBrew) ![PowerShell](https://img.shields.io/badge/-Shell-000?&logo=PowerShell)|
+|Communication|![Android](https://img.shields.io/badge/-ADB-000?&logo=android) ![Android](https://img.shields.io/badge/-Scrcpy-000?&logo=android) ![WebSocket](https://img.shields.io/badge/-WebSocket-000?&logo=socket.io)|
+|Rendering |![WebGL](https://img.shields.io/badge/-WebGL-000?&logo=webgl)|
+|Package manager |![NPM](https://img.shields.io/badge/-NPM-000?&logo=npm) ![Webpack](https://img.shields.io/badge/-Webpack-000?&logo=Webpack)  |
+
+<!--
 
 <table>
     <tbody>
@@ -9,7 +20,6 @@
 
 
 **语言**
-
 ![Java](https://img.shields.io/badge/-Java-000?&logo=Java)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-000?&logo=JavaScript)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-000?&logo=TypeScript)
@@ -17,43 +27,34 @@
 ![SVG](https://img.shields.io/badge/-SVG-000?&logo=SVG)
 
 **UI 框架**
-
 ![React](https://img.shields.io/badge/-React-000?&logo=React)
 
 **CSS In JS**
-
 ![Stylus](https://img.shields.io/badge/-Stylus-000?&logo=Stylus)
 ![Emotion](https://img.shields.io/badge/-Emotion-000?&logo=Stylus)
 
 **后端相关**
-
 ![Node.js](https://img.shields.io/badge/-Node.js-000?&logo=node.js)
 
 **包管理 & 打包**
-
 ![NPM](https://img.shields.io/badge/-NPM-000?&logo=npm)
 ![Webpack](https://img.shields.io/badge/-Webpack-000?&logo=Webpack)
 
 **跨平台**
-
 ![Electron](https://img.shields.io/badge/-Electron-000?&logo=Electron)
 
 **命令行**
-
 ![HomeBrew](https://img.shields.io/badge/-HomeBrew-000?&logo=HomeBrew)
 ![PowerShell](https://img.shields.io/badge/-Shell-000?&logo=PowerShell)
 
 **图像渲染**
-
 ![WebGL](https://img.shields.io/badge/-WebGL-000?&logo=webgl)
 
 **Android 端通信**
-
 ![Android](https://img.shields.io/badge/-ADB-000?&logo=android)
 ![Android](https://img.shields.io/badge/-Scrcpy-000?&logo=android)
 
 **后续计划**
-
 ![WebGL](https://img.shields.io/badge/-WebGL-000?&logo=webgl)
 ![WASM](https://img.shields.io/badge/-WebAssembly-000?&logo=webassembly)
 ![WebSocket](https://img.shields.io/badge/-WebSocket-000?&logo=socket.io)
@@ -61,11 +62,13 @@
 
 </table>
 
+-->
+
 ## TweakIt-Desktop
 
 An Android Debugging Application
 
-Boilerplate for a project using Electron, React, Typescript, Emotion, TailWindCSS, Theme UI and React-i18next.
+A project using Electron, React, Typescript, Emotion, TailWindCSS, Theme UI and React-i18next.
 
 ## Installation
 
@@ -95,6 +98,12 @@ or
 npm run dev
 ```
 
+run ws-scrcpy stand alone
+
+```bash
+npm run start:scrcpy-standalone
+```
+
 ## Packaging
 To generate a project package run `package`
 
@@ -102,12 +111,10 @@ To generate a project package run `package`
 npm run package
 ```
 
-
-
-## Contributing
-
-Pull requests are always welcome 😃.
+## Related projects
+* [Genymobile/scrcpy](https://github.com/Genymobile/scrcpy)
+* [DeviceFarmer/adbkit](https://github.com/DeviceFarmer/adbkit)
+* [NetrisTV/ws-scrcpy](https://github.com/NetrisTV/ws-scrcpy)
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
