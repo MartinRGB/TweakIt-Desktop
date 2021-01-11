@@ -9,7 +9,8 @@ const common = {
 
 const mainApplication = {
   target: 'electron-renderer',
-  devtool: 'source-map',
+  //devtool: 'source-map',
+  devtool: 'inline-source-map',
   entry: path.resolve(rootPath, 'src', 'App.tsx'),
   module: {
     rules: [
