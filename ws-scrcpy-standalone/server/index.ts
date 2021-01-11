@@ -14,7 +14,7 @@ import { ServiceWebsocketProxy } from './ServiceWebsocketProxy';
 import {FRONTEND_PORT,DEVICE_ID} from '../GlobalConstants'
 
 //const port = parseInt(process.argv[2], 10) || portNum;
-const port = parseInt(process.argv[2], 10) || FRONTEND_PORT;
+const port = FRONTEND_PORT;
 const map: Record<string, string> = {
     '.wasm': 'application/wasm',
     '.js': 'text/javascript',
@@ -86,7 +86,7 @@ wss.on('connection', async (ws: WebSocket, req) => {
                 ws.close(4003, `Invalid value "${remote}" for "remote" parameter`);
                 break;
             }
-            const udid = parsedQuery.udid; //parsedQuery.udid
+            const udid = parsedQuery.udid; //parsedQuery.udid process.argv[2]
             if (typeof udid !== 'string' || !udid) {
                 ws.close(4003, `Invalid value "${udid}" for "udid" parameter`);
                 break;
@@ -106,7 +106,6 @@ wss.on('connection', async (ws: WebSocket, req) => {
 });
 
 server.listen(port);
-
 server.on('listening', printListeningMsg);
 
 function fixedEncodeURI(str: string): string {

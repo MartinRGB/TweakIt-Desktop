@@ -172,7 +172,6 @@ const SelectArea: React.FC = memo(({children}) => {
               margin-right:12px;
               > button{
                 height:20px;
-                width:40px;
               }
               > button > span{
                 width: 100%;

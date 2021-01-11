@@ -104,7 +104,7 @@ const ADBExpandSelect: React.FC<IADBExpandSelect> = memo(({ style,children , onC
         }}
         isDisableCMDAnim={true}
         onClick={(e)=>{
-          //onClick()
+          onClick()
           dropdownRef.current.clickExpandSelect(e)
         }}
         >

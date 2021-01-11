@@ -21,7 +21,7 @@ const common = {
 const scrcpyFrontend = {
   mode: 'development',
   devtool: 'inline-source-map',
-  entry: path.resolve(rootPath, './ws-scrcpy/frontend', 'index.ts'),
+  entry: path.resolve(rootPath, './ws-scrcpy-standalone/frontend', 'index.ts'),
   externals: ['fs'],
   module: {
     rules: [
@@ -42,7 +42,7 @@ const scrcpyFrontend = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: __dirname + "/../ws-scrcpy/index.html",
+      template: __dirname + "/../ws-scrcpy-standalone/index.html",
       inject: 'head'
     }),
   ],
@@ -56,7 +56,7 @@ const scrcpyFrontend = {
 };
 
 const scrcpyServer = {
-  entry: path.resolve(rootPath, './ws-scrcpy/server', 'index.ts'),
+  entry: path.resolve(rootPath, './ws-scrcpy-standalone/server', 'index.ts'),
   externals: [nodeExternals()],
   // devtool: 'inline-source-map',
   target: 'node',
@@ -70,12 +70,12 @@ const scrcpyServer = {
         exclude: /node_modules/,
       },
       {
-        include: path.resolve(__dirname, '../ws-scrcpy/vendor/Genymobile'),
+        include: path.resolve(__dirname, './vendor/Genymobile'),
         use: [
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].[ext]'
+              name: 'vendor/Genymobile/scrcpy/[name].[ext]' //[path][name].[ext]
             }
           }
         ]

@@ -176,7 +176,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
       <CommandInfo >ls</CommandInfo> <CommandInfoNote><Trans>List files</Trans></CommandInfoNote><Break/>
       <CommandInfo >adb --help</CommandInfo> <CommandInfoNote><Trans>List all ADB commands</Trans></CommandInfoNote><Break/>
       <CommandInfo >node --help</CommandInfo> <CommandInfoNote><Trans>List all Node commands</Trans></CommandInfoNote><Break/>
-      <CommandInfo >brew --help</CommandInfo> <CommandInfoNote><Trans>List all Brew commands</Trans></CommandInfoNote>
+      <CommandInfo ></CommandInfo> <CommandInfoNote><Trans></Trans></CommandInfoNote>
     </CommandInfoContainer>
     {(isInit&&adbInfoTimes>-1)?
       adbResultText.map(function (data:any,index:number) {

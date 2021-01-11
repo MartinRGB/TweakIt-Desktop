@@ -16,7 +16,7 @@ import {SCALE_DOWN_FACTOR,WINDOW_PADDING_TOP} from '../../GlobalConstants'
 //import { KeyCodeControlMessage } from '../controlMessage/KeyCodeControlMessage';
 
 // Try get High Resolution
-const deviceWidthInPx = 2340;
+const deviceWidthInPx = 1080;
 const deviceHeightInPx = 2340;
 
 export class ScrcpyClient extends BaseClient<never> {
@@ -56,7 +56,7 @@ export class ScrcpyClient extends BaseClient<never> {
         const idView = document.createElement('div');
         idView.style.position = 'absolute';
         idView.style.lineHeight = WINDOW_PADDING_TOP*SCALE_DOWN_FACTOR + 'px'
-        idView.style.fontSize = WINDOW_PADDING_TOP + 'px';
+        idView.style.fontSize = (WINDOW_PADDING_TOP-10) + 'px';
         idView.style.color = 'white';
         idView.style.textAlign = 'center';
         idView.style.left = '0px';

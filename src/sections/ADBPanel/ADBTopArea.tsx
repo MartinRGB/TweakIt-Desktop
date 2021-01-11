@@ -13,9 +13,16 @@ import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
 import {getUserHome,SDCardTmpPath} from '@Helpers/GlobalEnvironments/PathEnvironments'
 
 import {ADBConnectionContext}  from '@Context/ADBConnectionContext';
+import { useTranslation, Trans} from 'react-i18next'
+import {execCMD, execCMDPromise} from "@Helpers/ADBCommand/ADBCommand"
+import {startScrcpyServer,getPath} from '@WSScrcpy/server'
+
+const ipcRenderer = require('electron').ipcRenderer
+
 
 const ADBTopArea: React.FC = memo(({ children }) => {
   const [colorMode, setColorMode] = useColorMode();
+  const { t ,i18n} = useTranslation()
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
   const {serialNoDeivcesWifiAddrs,serialNoDeivces,serialNoDevicesCounts,currentDeviceSelectIndex,setCurrentDeviceSelectIndex,setSerialNoDevicesModeByIndex,serialNoDevicesMode,serialNoDevicesTargets,startCurrentDeviceWifiConnection,serialNoDevicesIsConnectingWifi,serialNoDevicesIsRemovedUSB,serialNoDevicesIsConnectingUSB,serialNoDevicesDisplayInfos} = useContext(ADBConnectionContext)
 
@@ -78,6 +85,71 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   }
 
 
+  // Soft rendering
+  const [hasTriggerServer,setHasTriggerServer] = useState<boolean>(false);
+  const [isSoftRender,setIsSoftRender] = useState<boolean>(true);
+
+  // TODO:build  for dev environment
+  // const triggerScrcpyServerLocal = () =>{
+  //   if(!hasTriggerServer){
+  //     execCMD(`lsof -P | grep ':50001' | awk '{print $2}' | xargs kill -9`,'',function(){
+  //       if(serialNoDevicesTargets[currentDeviceSelectIndex] != null && serialNoDevicesTargets[currentDeviceSelectIndex] != undefined){
+  //         execCMD(`node ${localDistPath}/scrcpy-server/index.js ${serialNoDevicesTargets[currentDeviceSelectIndex]}`,'',function(){
+  //         console.log('23')
+  //         })
+  //       }
+  //     });
+  //   }
+  // }
+
+  const startScrcpyByMSE = () =>{
+
+    const isWifi = serialNoDevicesTargets[currentDeviceSelectIndex].includes('.');
+    const deviceId = `${serialNoDevicesTargets[currentDeviceSelectIndex]}`;
+    const deviceUuId = serialNoDeivces[currentDeviceSelectIndex];
+
+    const ip = isWifi?`${deviceId.split(':')[0]}`:'localhost';
+    const port = isWifi?8886:50001;
+    const query = isWifi?``:`?action=proxy&remote=tcp%3A8886&udid=${deviceId}`
+    const udid = isWifi?`${deviceUuId}`:`${deviceId}`
+
+    if(deviceId != null && deviceId != undefined) {        
+      startScrcpyServer(udid,ip,port,query,()=>{
+        const sizeStr = "counter=`adb -s {target} shell wm size | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm size | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi";
+        execCMDPromise(sizeStr.replace(/{target}/g, deviceId),function(val:any){
+          console.log(val.split('\n'));
+          const width=Number(val.split('\n')[0])/3;
+          const height=Number(val.split('\n')[1])/3 + 38;
+
+          ipcRenderer.send('createCastWindow',
+          width,
+          height);
+
+          // Notice:IPC Render Method is not agile
+          // ipcRenderer.send('createCastWindow', 
+          // `${ip}`,
+          // `${port}`,
+          // `${query}`,
+          // `${udid}`,
+          // width,
+          // height);
+      
+        })
+      });
+    }
+  }
+
+  const triggerScrcpyServer = () =>{
+    if(!hasTriggerServer){
+      execCMD(`lsof -P | grep ':50001' | awk '{print $2}' | xargs kill -9`,'',function(){
+        setHasTriggerServer(true);
+        startScrcpyByMSE();
+      });
+    }
+    else{
+      startScrcpyByMSE();
+    }
+  }
 
 
   return (
@@ -97,6 +169,34 @@ const ADBTopArea: React.FC = memo(({ children }) => {
           onClickIndex={(i:any,val:any)=>{onDeviceIndexClicked(i,val)}} 
           selectIndex={currentDeviceSelectIndex}
         ></DropDownMenuDevice>
+
+        <RadioGroupContainer
+          enable = {(
+            currentDeviceSelectIndex != -1 &&
+            serialNoDevicesCounts != 0 &&
+            !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
+            !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
+          )}
+          >
+          <RadioContainer 
+          isAnimationEnable={isGlobalAnimEnable}
+          enable = {(
+            currentDeviceSelectIndex != -1 &&
+            serialNoDevicesCounts != 0 &&
+            !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
+            !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
+          )}
+          style={{marginRight:`6px`}} onClick = {()=>{setIsSoftRender(true)}}><input style={{filter:`hue-rotate(260deg)`}}type="radio" checked={isSoftRender} onChange={e => {}} value="Soft" /><p style={{display:`inline-block`,marginLeft:`5px`}}><Trans>Software rendering</Trans></p></RadioContainer>
+          <RadioContainer 
+          isAnimationEnable={isGlobalAnimEnable}
+          enable = {(
+            currentDeviceSelectIndex != -1 &&
+            serialNoDevicesCounts != 0 &&
+            !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
+            !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
+          )}
+          onClick = {()=>{setIsSoftRender(false)}}><input style={{filter:`hue-rotate(260deg)`}} type="radio" checked={!isSoftRender} onChange={e => {}} value="Hardware"  /><p style={{display:`inline-block`,marginLeft:`5px`}}><Trans>Hardware rendering</Trans></p></RadioContainer>
+        </RadioGroupContainer>
 
 
         {/* <ADBDebugPannel>
@@ -127,7 +227,9 @@ const ADBTopArea: React.FC = memo(({ children }) => {
 
           )}
           onSegementClickIndex={(i:any,val:any,cmd:any)=>{onSegementIndexClicked(i,val,cmd)}}
-          disableIndex={(serialNoDevicesIsRemovedUSB[currentDeviceSelectIndex])?[true,true]:[false,(serialNoDeivces[currentDeviceSelectIndex] && serialNoDeivces[currentDeviceSelectIndex].includes('emulator'))?true:false]}
+          disableIndex={(serialNoDevicesIsRemovedUSB[currentDeviceSelectIndex])?
+            [true,true]:
+            [false,((serialNoDeivces[currentDeviceSelectIndex] && serialNoDeivces[currentDeviceSelectIndex].includes('emulator')) || isSoftRender)?true:false]}
         >
 
         </ADBButtonSegment>
@@ -139,7 +241,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             }}
             iconStr={castIconStr}
             cmdStr={
-              `scrcpy --display ${castSelectIndex} -s ${serialNoDevicesTargets[currentDeviceSelectIndex]}`
+              isSoftRender?``:`scrcpy --display ${castSelectIndex} -s ${serialNoDevicesTargets[currentDeviceSelectIndex]}`
             }
             enable={(
               currentDeviceSelectIndex != -1 &&
@@ -151,6 +253,8 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             optionsData={serialNoDevicesDisplayInfos[currentDeviceSelectIndex]}
             onMenuClickIndex={(i:any,val:any) =>{onCastIndexClickded(i,val)}}
             menuSelectIndex={castSelectIndex}
+            onClick={()=>{
+              isSoftRender?triggerScrcpyServer():``}}
             currentTopSelectIndex={currentDeviceSelectIndex}
           >
 
@@ -178,7 +282,6 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             onClick={()=>{setTimeTag(getFormateTime())}}
             currentTopSelectIndex={currentDeviceSelectIndex}
           >
-
           </ADBExpandSelect>
           <ADBExpandSelect
             iconStr={recordIconStr}
@@ -190,7 +293,8 @@ const ADBTopArea: React.FC = memo(({ children }) => {
               currentDeviceSelectIndex != -1 &&
               serialNoDevicesCounts != 0 &&
               !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
-              !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
+              !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex] && 
+              !isSoftRender
             }
             optionsData={serialNoDevicesDisplayInfos[currentDeviceSelectIndex]}
             onMenuClickIndex={(i:any,val:any) =>{onRecordIndexClickded(i,val)}}
@@ -207,6 +311,38 @@ const ADBTopArea: React.FC = memo(({ children }) => {
 })
 
 export default ADBTopArea
+
+const RadioGroupContainer = styled.div<{
+  enable:boolean;
+}>`
+  margin-top:8px;
+  cursor:${p => p.enable?'':'not-allowed'};
+`
+
+const RadioContainer = styled.div<{
+  enable:boolean;
+  isAnimationEnable:boolean;
+}>`
+display: inline-block;
+width: calc(50% - 3px);
+padding-left: 6px;
+font-family: ${p => p.theme.fonts.numberInput};
+font-style: normal;
+font-weight: bold;
+font-size: 10px;
+color: ${p => p.theme.colors.text};
+border-radius: 4px;
+overflow: hidden;
+border: 1px solid;
+border-color: ${p=>p.theme.colors.menu_border};
+background: ${p=>p.theme.colors.normal_button_bg};
+height: 20px;
+line-height: 19px;
+pointer-events: ${p => p.enable?'':'none'};
+cursor:${p => p.enable?'pointer':''};
+opacity:${p => p.enable?'1':'0.2'};
+transition:${p=>p.isAnimationEnable?'all 0.3s':'none'};
+`
 
 const getFormateTime = () =>{
   return new Date().getUTCFullYear() +
@@ -231,7 +367,7 @@ const Container = styled.div<{
   isAnimationEnable:boolean;
 }>`
   width:100%;
-  height:90px;
+  height:130px;
   padding: 18px 38px;
   background:${p=>p.theme.colors.adb_top_background};
   border-bottom:1px solid ${p => p.theme.colors.adb_border};

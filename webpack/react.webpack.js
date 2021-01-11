@@ -15,22 +15,31 @@ const mainApplication = {
     rules: [
       {
         test: /\.(js|ts|tsx)$/,
-        exclude: [path.resolve(__dirname, '../node_modules/'),path.resolve(__dirname, '../src/worker/'),path.resolve(__dirname, '../src/ws-scrcpy/')],  //   /node_modules/
+        exclude: [path.resolve(__dirname, '../node_modules/'),path.resolve(__dirname, '../src/worker/')],  //   /node_modules/
         use: {
           loader: 'babel-loader'
         }
       },
       {
         test: /\.(jpg|png)$/,
-        exclude: [path.resolve(__dirname, '../src/ws-scrcpy/')],
         use: {
           loader: 'url-loader',
         },
       },
       {
         test: /\.worker\.js$/,
-        exclude: [path.resolve(__dirname, '../src/ws-scrcpy/')],
         use: { loader: "worker-loader" },
+      },
+      {
+        include: path.resolve(__dirname, '../src/ws-scrcpy/vendor/Genymobile'),
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'vendor/Genymobile/scrcpy/[name].[ext]'
+            }
+          }
+        ]
       }
     ]
   },
@@ -62,25 +71,14 @@ const mainApplication = {
   },
 }
 
-const scrcpyFrontend = {
-  entry: path.resolve(rootPath, 'ws-scrcpy', 'app/index.ts'),
-  externals: ['fs'],
-  plugins: [
-    new HtmlWebpackPlugin(),
-  ],
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist/scrcpy-window'),
-  },
-};
 
-const scrcpyServer = {
-  entry: path.resolve(rootPath, './src/ws-scrcpy/server', 'index.ts'),
-  externals: [nodeExternals()],
-  // devtool: 'inline-source-map',
-  target: 'node',
+
+const scrcpyFrontend = {
+  // target: 'electron-renderer',
+  // devtool: 'source-map',
   mode: 'development',
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
+  entry: path.resolve(rootPath, 'src', 'ws-scrcpy/frontend/index.ts'), // path.resolve(rootPath, 'src', 'ws-scrcpy/frontend/Previewer.tsx')
   module: {
     rules: [
       {
@@ -89,36 +87,86 @@ const scrcpyServer = {
         exclude: /node_modules/,
       },
       {
-        include: path.resolve(__dirname, '../ws-scrcpy/vendor/Genymobile'),
+        test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
             loader: 'file-loader',
-            options: {
-              name: '[path][name].[ext]'
-            }
-          }
-        ]
-      }
+          },
+        ],
+      },
     ]
-    },
-  node: {
-    global: false,
-    __filename: false,
-    __dirname: false,
+  },
+  plugins: [
+    new HtmlWebpackPlugin(),
+  ],
+  devServer: {
+    contentBase: path.join(rootPath, 'dist/renderer/previewer'),
+    historyApiFallback: true,
+    compress: true,
+    hot: true,
+    port: 50001,
+    publicPath: '/'
   },
   output: {
-    filename: 'index.js',
-    path: path.resolve(rootPath, 'dist/scrcpy-server'),
+    filename: 'bundle.js',
+    path: path.join(rootPath, 'dist/renderer/previewer'),
   },
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],
+    plugins: [
+      new TsconfigPathsPlugin({
+        extensions: ['.tsx', '.ts', '.js', '.json', '.png', '.jpg'],
+      }),
+    ],
+    mainFields: ['main', 'module', 'browser']
   },
 };
+
+// const scrcpyServer = {
+//   entry: path.resolve(rootPath, './src/ws-scrcpy/server', 'index.ts'),
+//   externals: [nodeExternals()],
+//   // devtool: 'inline-source-map',
+//   target: 'node',
+//   mode: 'development',
+//   devtool: 'source-map',
+//   module: {
+//     rules: [
+//       {
+//         test: /\.tsx?$/,
+//         use: 'babel-loader',
+//         exclude: /node_modules/,
+//       },
+//       {
+//         include: path.resolve(__dirname, '../ws-scrcpy/vendor/Genymobile'),
+//         use: [
+//           {
+//             loader: 'file-loader',
+//             options: {
+//               name: '[path][name].[ext]'
+//             }
+//           }
+//         ]
+//       }
+//     ]
+//     },
+//   node: {
+//     global: false,
+//     __filename: false,
+//     __dirname: false,
+//   },
+//   output: {
+//     filename: 'index.js',
+//     path: path.resolve(rootPath, 'dist/scrcpy-server'),
+//   },
+//   resolve: {
+//     extensions: [ '.tsx', '.ts', '.js' ],
+//   },
+// };
 
 
 module.exports = [
   Object.assign({} , common, mainApplication),
-  //Object.assign({} , common, scrcpyServer),
+  Object.assign({} , common, scrcpyFrontend),
 ]
 // const path = require("path");
 // const HtmlWebpackPlugin = require("html-webpack-plugin");

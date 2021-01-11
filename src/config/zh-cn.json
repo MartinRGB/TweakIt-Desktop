@@ -71,5 +71,7 @@
   "Get Current Activity & Package":"获取当前 Package 和 Activity",
   "Build":"构建",
   "Connect":"连接",
-  "Disconnect":"断开"  
+  "Disconnect":"断开",
+  "Hardware rendering":"硬件渲染",
+  "Software rendering":"软件渲染"
 }

@@ -13,7 +13,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|ts|tsx)$/,
-        exclude: [path.resolve(__dirname, '../node_modules/'),path.resolve(__dirname, '../src/ws-scrcpy/')],
+        exclude: [path.resolve(__dirname, '../node_modules/')], //,path.resolve(__dirname, '../src/ws-scrcpy/')
         use: {
           loader: 'babel-loader'
         }

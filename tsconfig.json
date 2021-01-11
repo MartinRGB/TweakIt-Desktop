@@ -31,7 +31,8 @@
       "@Types": ["src/types"],
       "@Helpers/*": ["src/helpers/*"],
       "@Vendor/*": ["src/vendor/*"],
-      "@Modules/": ["src/types/*"],
+      "@WSScrcpy/*": ["src/ws-scrcpy/*"],
+      "@Electron/*": ["electron/*"],
     },
   },
 }

@@ -12,9 +12,19 @@ import DroidDeviceDescriptor from './interfaces/DroidDeviceDescriptor';
 // import Timeout = NodeJS.Timeout;
 import { NetInterface } from './interfaces/NetInterface';
 
+
+
+
+const { app } = window.require('electron').remote;
+var appPath = app.getAppPath().replace(/ /g,"\\ ");
+var localAssetsPath = appPath + '/assets/';
+var appResPath = path.join(process.resourcesPath, "/assets/");
+var localDistRendererPath = appPath + '/dist/renderer/';
+
 const TEMP_PATH = '/data/local/tmp/';
-const FILE_DIR = path.join(__dirname, 'ws-scrcpy/vendor/Genymobile/scrcpy');
+const FILE_DIR = path.join(__dirname, localDistRendererPath + 'vendor/Genymobile/scrcpy');
 const FILE_NAME = 'scrcpy-server.jar';
+
 
 const GET_SHELL_PROCESSES = 'for DIR in /proc/*; do [ -d "$DIR" ] && echo $DIR;  done';
 const CHECK_CMDLINE = `[ -f "$a/cmdline" ] && grep -av find "$a/cmdline" |grep -sae '^app_process.*${SERVER_PACKAGE}' |grep ${SERVER_VERSION} 2>&1 > /dev/null && echo $a;`;
@@ -291,6 +301,7 @@ export class ServerDeviceConnection extends EventEmitter {
     private async copyServer(udid: string): Promise<PushTransfer> {
         const client = this.getOrCreateClient(udid);
         await client.waitBootComplete(udid);
+        
         const src = path.join(FILE_DIR, FILE_NAME);
         const dst = TEMP_PATH + FILE_NAME; // don't use path.join(): will not work on win host
         return client.push(udid, src, dst);
