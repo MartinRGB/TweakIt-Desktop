@@ -1,7 +1,7 @@
 
 |     |     |
 |-----|-----|
-|Language  |![Java](https://img.shields.io/badge/-Java-000?&logo=Java) ![JavaScript](https://img.shields.io/badge/-JavaScript-000?&logo=JavaScript) ![TypeScript](https://img.shields.io/badge/-TypeScript-000?&logo=TypeScript) ![JSON](https://img.shields.io/badge/-JSON-000?&logo=JSON) ![SVG](https://img.shields.io/badge/-SVG-000?&logo=SVG)|
+|Language  |![Java](https://img.shields.io/badge/-Java-000?&logo=Java) ![JavaScript](https://img.shields.io/badge/-JavaScript-000?&logo=JavaScript) ![TypeScript](https://img.shields.io/badge/-TypeScript-000?&logo=TypeScript)|
 |UI Framework  |![React](https://img.shields.io/badge/-React-000?&logo=React) ![Electron](https://img.shields.io/badge/-Electron-000?&logo=Electron)|
 |CSS In JS |![Stylus](https://img.shields.io/badge/-Stylus-000?&logo=Stylus) ![Emotion](https://img.shields.io/badge/-Emotion-000?&logo=Stylus) |
 |Command Line |![HomeBrew](https://img.shields.io/badge/-HomeBrew-000?&logo=HomeBrew) ![PowerShell](https://img.shields.io/badge/-Shell-000?&logo=PowerShell)|
