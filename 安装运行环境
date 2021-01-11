@@ -1,7 +1,7 @@
 which -s brew
 if [[ $? != 0 ]] ; then
     # Install Homebrew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)";brew cask install android-platform-tools;brew install scrcpy;brew install ffmpeg;brew install sdl2;
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)";brew cask install android-platform-tools;brew install scrcpy;brew install ffmpeg;brew install sdl2;brew install node;
 else
-    brew update;brew cask install android-platform-tools;brew install scrcpy;brew install ffmpeg;brew install sdl2;
+    brew update;brew cask install android-platform-tools;brew install scrcpy;brew install ffmpeg;brew install sdl2;brew install node;
 fi
