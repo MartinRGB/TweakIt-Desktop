@@ -1,6 +1,7 @@
 
 |     |     |
 |-----|-----|
+|Design |![Figma](https://img.shields.io/badge/-Figma-000?&logo=figma) ![Blender](https://img.shields.io/badge/-Blender-000?&logo=blender)  |
 |Language  |![Java](https://img.shields.io/badge/-Java-000?&logo=Java) ![JavaScript](https://img.shields.io/badge/-JavaScript-000?&logo=JavaScript) ![TypeScript](https://img.shields.io/badge/-TypeScript-000?&logo=TypeScript)|
 |UI Framework  |![React](https://img.shields.io/badge/-React-000?&logo=React) ![Electron](https://img.shields.io/badge/-Electron-000?&logo=Electron)|
 |CSS In JS |![Stylus](https://img.shields.io/badge/-Stylus-000?&logo=Stylus) ![Emotion](https://img.shields.io/badge/-Emotion-000?&logo=Stylus) |
