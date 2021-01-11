@@ -118,3 +118,5 @@ npm run package
 
 ## License
 
+See [Apache](https://github.com/MartinRGB/TweakIt-Desktop/blob/main/LICENSE) License here
+
