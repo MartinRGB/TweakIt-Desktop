@@ -1,7 +1,201 @@
 which -s brew
 if [[ $? != 0 ]] ; then
     # Install Homebrew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)";brew cask install android-platform-tools;brew install scrcpy;brew install ffmpeg;brew install sdl2;brew install node;
+    /bin/bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/ineo6/homebrew-install/install.sh)"
+    echo 
+    location=$(which brew)
+    echo "✅ brew installed successfully in $location"
+    echo "✅ brew 安装完成"
+    echo 
+    export HOMEBREW_NO_AUTO_UPDATE=1;
+    # 安装 git
+    brew install git;
+    echo 
+    location=$(which git)
+    echo "✅ git installed successfully in $location"
+    echo "✅ git 安装完成"
+    echo 
+    # 替换 Homebrew
+    git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+    # 替换 Homebrew Core
+    git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+    # 替换 Homebrew Cask
+    git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+    # 替换 Homebrew-bottles
+    # 对于 bash 用户：
+    echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bash_profile
+    # source ~/.bash_profile
+    brew install -f --cask android-platform-tools;
+    echo 
+    location=$(which adb)
+    echo "✅ ADB installed successfully in $location"
+    echo "✅ ADB 安装完成"
+    brew install scrcpy;
+    echo 
+    location=$(which scrcpy)
+    echo "✅ scrcpy installed successfully in $location"
+    echo "✅ ADB 安装完成"
+    echo 
+    brew install ffmpeg;
+    echo 
+    location=$(which ffmpeg)
+    echo "✅ FFmpeg installed successfully in $location"
+    echo "✅ FFmpeg 安装完成"
+    echo 
+    brew install sdl2;
+    echo 
+    location=$(which sdl2-config)
+    echo "✅ SDL2 installed successfully in $location"
+    echo "✅ SDL2 安装完成"
+    echo 
+    # deleted
+    : 'brew install node;
+    echo 
+    location=$(which node)
+    echo "✅ node installed successfully in $location"
+    echo "✅ node 安装完成"'
 else
-    brew update;brew cask install android-platform-tools;brew install scrcpy;brew install ffmpeg;brew install sdl2;brew install node;
+    which -s git
+    if [[ $? != 0 ]] ; then
+        export HOMEBREW_NO_AUTO_UPDATE=1;
+        # 安装 git
+        brew install git;
+        # 替换 Homebrew
+        git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+        # 替换 Homebrew Core
+        git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+        # 替换 Homebrew Cask
+        git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+        # 替换 Homebrew-bottles
+        # 对于 bash 用户：
+        echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bash_profile
+        # source ~/.bash_profile
+        echo 
+        location=$(which git)
+        echo "✅ git installed successfully in $location"
+    else
+        echo 
+        location=$(which git)
+        echo "💻 git is already existed in $location"
+    fi
+
+    # deleted
+    which -s adb
+    if [[ $? != 0 ]] ; then
+        export HOMEBREW_NO_AUTO_UPDATE=1;
+        # 替换 Homebrew
+        git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+        # 替换 Homebrew Core
+        git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+        # 替换 Homebrew Cask
+        git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+        # 替换 Homebrew-bottles
+        # 对于 bash 用户：
+        echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bash_profile
+        # source ~/.bash_profile
+        brew install -f --cask android-platform-tools;
+        echo 
+        location=$(which adb)
+        echo "✅ ADB installed successfully in $location"
+    else
+        echo 
+        location=$(which adb)
+        echo "💻 ADB is already existed in $location"
+    fi
+
+    which -s scrcpy
+    if [[ $? != 0 ]] ; then
+        export HOMEBREW_NO_AUTO_UPDATE=1;
+        # 替换 Homebrew
+        git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+        # 替换 Homebrew Core
+        git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+        # 替换 Homebrew Cask
+        git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+        # 替换 Homebrew-bottles
+        # 对于 bash 用户：
+        echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bash_profile
+        # source ~/.bash_profile
+        brew install scrcpy
+        echo 
+        location=$(which scrcpy)
+        echo "✅ scrcpy installed successfully in $location"
+    else
+        echo 
+        location=$(which scrcpy)
+        echo "💻 scrcpy is already existed in $location"
+    fi
+
+    which -s ffmpeg
+    if [[ $? != 0 ]] ; then
+        export HOMEBREW_NO_AUTO_UPDATE=1;
+        # 替换 Homebrew
+        git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+        # 替换 Homebrew Core
+        git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+        # 替换 Homebrew Cask
+        git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+        # 替换 Homebrew-bottles
+        # 对于 bash 用户：
+        echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bash_profile
+        # source ~/.bash_profile
+        brew install FFmpeg
+        echo 
+        location=$(which ffmpeg)
+        echo "✅ FFmpeg installed successfully in $location"
+    else
+        echo 
+        location=$(which ffmpeg)
+        echo "💻 FFmpeg is already existed in $location"
+    fi
+
+    which -s sdl2-config
+    if [[ $? != 0 ]] ; then
+        export HOMEBREW_NO_AUTO_UPDATE=1;
+        # 替换 Homebrew
+        git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+        # 替换 Homebrew Core
+        git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+        # 替换 Homebrew Cask
+        git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+        # 替换 Homebrew-bottles
+        # 对于 bash 用户：
+        echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bash_profile
+        # source ~/.bash_profile
+        brew install sdl2
+        echo 
+        location=$(which sdl2-config)
+        echo "✅ SDL2 installed successfully in $location"
+    else
+        echo 
+        location=$(which sdl2-config)
+        echo "💻 SDL2 is already existed in $location"
+    fi
+
+    # deleted
+    : 'which -s node
+    if [[ $? != 0 ]] ; then
+        export HOMEBREW_NO_AUTO_UPDATE=1;
+        # 替换 Homebrew
+        git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+        # 替换 Homebrew Core
+        git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+        # 替换 Homebrew Cask
+        git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
+        # 替换 Homebrew-bottles
+        # 对于 bash 用户：
+        echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bash_profile
+        # source ~/.bash_profile
+        brew install node
+        echo 
+        location=$(which node)
+        echo "✅ node installed successfully in $location"
+    else
+        echo 
+        location=$(which node)
+        echo "💻 node is already existed in $location"
+    fi'
 fi
+
+echo 
+echo 🍺🍺🍺 the installation has finished 🍺🍺🍺
