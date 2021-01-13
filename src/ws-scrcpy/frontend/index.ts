@@ -2,7 +2,7 @@
 //import * as querystring from 'querystring';
 //import { ScrcpyClient } from './client/ScrcpyClient';
 //import { ShellClient } from './client/ShellClient';
-import { DroidDeviceTrackerClient } from './client/DroidDeviceTrackerClient';
+//import { DroidDeviceTrackerClient } from './client/DroidDeviceTrackerClient';
 //import { ScrcpyStreamParams } from './interfaces/ScrcpyStreamParams';
 //import { ShellParams } from '../common/ShellParams';
 import {PrepareDataClient} from './client/PrepareDataClient'

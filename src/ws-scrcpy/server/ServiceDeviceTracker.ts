@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import { ServerDeviceConnection } from './ServerDeviceConnection';
 import { ReleasableService } from './ReleasableService';
-import { Message } from './interfaces/Message';
+import { ClientMessage,FinalMessage} from './interfaces/Message';
 import DroidDeviceDescriptor from './interfaces/DroidDeviceDescriptor';
 
 enum Command {
@@ -12,31 +12,38 @@ enum Command {
 export class ServiceDeviceTracker extends ReleasableService {
     private sdc: ServerDeviceConnection = ServerDeviceConnection.getInstance();
 
-    constructor(ws: WebSocket) {
-        super(ws);
+    constructor(ws: WebSocket,msg:ClientMessage) {
+        super(ws,msg);
 
         this.sdc
             .init()
             .then(() => {
                 this.sdc.addListener(ServerDeviceConnection.UPDATE_EVENT, this.buildAndSendMessage);
-                this.buildAndSendMessage(this.sdc.getDevices());
+                this.buildAndSendMessage(this.sdc.getDevices(),msg);
             })
             .catch((e: Error) => {
                 console.error(`Error: ${e.message}`);
             });
     }
 
-    private buildAndSendMessage = (list: DroidDeviceDescriptor[]): void => {
-        const msg: Message = {
+    private buildAndSendMessage = (list: DroidDeviceDescriptor[],message:ClientMessage): void => {
+        // const msg: Message = {
+        //     id: -1,
+        //     type: 'devicelist',
+        //     data: list,
+        // };
+        const msg: FinalMessage = {
             id: -1,
             type: 'devicelist',
             data: list,
+            clientMsg:message,
         };
+
         this.sendMessage(msg);
     };
 
-    public static createService(ws: WebSocket): ReleasableService {
-        return new ServiceDeviceTracker(ws);
+    public static createService(ws: WebSocket,msg:ClientMessage): ReleasableService {
+        return new ServiceDeviceTracker(ws,msg);
     }
 
     protected onSocketMessage(event: WebSocket.MessageEvent): void {

@@ -5,15 +5,16 @@ import {ScrcpyClient} from './ScrcpyClient'
 import {ScrcpyStreamParams} from '../interfaces/ScrcpyStreamParams'
 import {SocketEventListener} from '../interfaces/SocketEventListener'
 
-export class PrepareDataClient extends ManagerClient<null>{
+export class PrepareDataClientReact extends ManagerClient<null>{
+
 
     //public static ACTION = ACTION.FROM_CLIENT;
     private static mSocketEventListener:SocketEventListener;
 
     public static ACTION = ACTION.DEVICE_LIST;
 
-    public static start(): PrepareDataClient {
-        return new PrepareDataClient(this.ACTION);
+    public static start(): PrepareDataClientReact {
+        return new PrepareDataClientReact(this.ACTION);
     }
 
     protected constructor(action:string){
@@ -22,8 +23,8 @@ export class PrepareDataClient extends ManagerClient<null>{
     }
 
     protected onSocketOpen(): void {
-        if( PrepareDataClient.mSocketEventListener ){
-            PrepareDataClient.mSocketEventListener.onSocketOpen();
+        if( PrepareDataClientReact.mSocketEventListener ){
+            PrepareDataClientReact.mSocketEventListener.onSocketOpen();
         }
     }
 
@@ -32,8 +33,8 @@ export class PrepareDataClient extends ManagerClient<null>{
         setTimeout(() => {
             this.openNewWebSocket();
         }, 2000);
-        if( PrepareDataClient.mSocketEventListener ){
-            PrepareDataClient.mSocketEventListener.onSocketClose(e);
+        if( PrepareDataClientReact.mSocketEventListener ){
+            PrepareDataClientReact.mSocketEventListener.onSocketClose(e);
         }
     }
 
@@ -42,20 +43,20 @@ export class PrepareDataClient extends ManagerClient<null>{
         try {
             message = JSON.parse(e.data);
             //console.log(message);
-            const paraObj = {
-                action: 'stream',
-                decoder: 'mse',
-                ip: `${message.clientMsg.ip}`,
-                port: `${message.clientMsg.port}`,
-                query: `${message.clientMsg.query}`,
-                udid: `${message.clientMsg.udid}`,
-            };
+            
+            // const paraObj = {
+            //     action: 'stream',
+            //     decoder: 'mse',
+            //     ip: `${message.clientMsg.ip}`,
+            //     port: `${message.clientMsg.port}`,
+            //     query: `${message.clientMsg.query}`,
+            //     udid: `${message.clientMsg.udid}`,
+            // };
 
-            if( PrepareDataClient.mSocketEventListener ){
-                PrepareDataClient.mSocketEventListener.onSocketMessage(message);
+            if( PrepareDataClientReact.mSocketEventListener ){
+                PrepareDataClientReact.mSocketEventListener.onSocketMessage(message);
             }
-        
-            new ScrcpyClient(paraObj as ScrcpyStreamParams);
+            //new ScrcpyClient(paraObj as ScrcpyStreamParams);
             //this.onGetStreamParams(paraObj as ScrcpyStreamParams)
         } catch (error) {
             console.error(error.message);
@@ -65,6 +66,6 @@ export class PrepareDataClient extends ManagerClient<null>{
     }
 
     public static setSocketEventListener(listener: SocketEventListener): void{
-        PrepareDataClient.mSocketEventListener = listener;
+        PrepareDataClientReact.mSocketEventListener = listener;
     };
 }

@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import { ServerDeviceConnection } from './ServerDeviceConnection';
 import { ReleasableService } from './ReleasableService';
-import { ClientMessage,Message,ClMessage } from './interfaces/Message';
+import { ClientMessage,Message,FinalMessage } from './interfaces/Message';
 import DroidDeviceDescriptor from './interfaces/DroidDeviceDescriptor';
 
 enum Command {
@@ -13,7 +13,7 @@ export class ClientDataService extends ReleasableService {
     private sdc: ServerDeviceConnection = ServerDeviceConnection.getInstance();
 
     constructor(ws: WebSocket,msg:ClientMessage) {
-        super(ws);
+        super(ws,msg);
 
         //this.buildAndSendMessage(msg);
 
@@ -28,13 +28,7 @@ export class ClientDataService extends ReleasableService {
         });
     }
 
-    public static createService(ws: WebSocket,id:string,ip:string,port:number,query:string): ReleasableService {
-        const msg: ClientMessage = {
-            ip: ip,
-            port: port,
-            query: query,
-            udid:id,
-        };
+    public static createService(ws: WebSocket,msg:ClientMessage): ReleasableService {
         return new ClientDataService(ws,msg);
     }
 
@@ -56,7 +50,7 @@ export class ClientDataService extends ReleasableService {
         //     data: list,
         // };
 
-        const msg: ClMessage = {
+        const msg: FinalMessage = {
             id: -1,
             type: 'devicelist',
             data: list,

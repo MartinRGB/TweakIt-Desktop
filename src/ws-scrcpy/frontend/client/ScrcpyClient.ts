@@ -45,6 +45,7 @@ export class ScrcpyClient extends BaseClient<never> {
 
         const deviceView = document.createElement('div');
         deviceView.className = 'device-view';
+        deviceView.id = 'device-view';
         deviceView.style.transform = `scale(${1/SCALE_DOWN_FACTOR})`;
         deviceView.style.transformOrigin = 'top left';
         deviceView.style.float = 'none';
@@ -54,6 +55,7 @@ export class ScrcpyClient extends BaseClient<never> {
         deviceView.style.background = 'black';
 
         const idView = document.createElement('div');
+        idView.id = 'id-view';
         idView.style.position = 'absolute';
         idView.style.lineHeight = WINDOW_PADDING_TOP*SCALE_DOWN_FACTOR + 'px'
         idView.style.fontSize = (WINDOW_PADDING_TOP-10) + 'px';
@@ -72,6 +74,7 @@ export class ScrcpyClient extends BaseClient<never> {
 
         const video = document.createElement('div');
         video.className = 'video';
+        video.id = 'video-container';
         video.style.width = deviceWidthInPx + 'px';
         video.style.height = deviceHeightInPx + 'px';
         video.style.background = 'black';
@@ -115,7 +118,7 @@ export class ScrcpyClient extends BaseClient<never> {
         streamReceiver.on('clientsStats', (stats) => {
             this.deviceName = stats.deviceName;
 
-            idView.innerHTML = stats.deviceName + ' - ' +udid;
+            idView.innerHTML = stats.deviceName + ' --- ' +udid;
             this.clientId = stats.clientId;
             this.clientsCount = stats.clientsCount;
         });

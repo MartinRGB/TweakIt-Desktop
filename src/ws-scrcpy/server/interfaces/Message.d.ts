@@ -12,7 +12,7 @@ export interface Message {
     data: any;
 }
 
-export interface ClMessage {
+export interface FinalMessage {
     id: number;
     type: string;
     data: any;

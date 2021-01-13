@@ -15,7 +15,8 @@ import {getUserHome,SDCardTmpPath} from '@Helpers/GlobalEnvironments/PathEnviron
 import {ADBConnectionContext}  from '@Context/ADBConnectionContext';
 import { useTranslation, Trans} from 'react-i18next'
 import {execCMD, execCMDPromise} from "@Helpers/ADBCommand/ADBCommand"
-import {startScrcpyServer,getPath} from '@WSScrcpy/server'
+import {startScrcpyServer} from '@WSScrcpy/server'
+import {WINDOW_PADDING_TOP,SCALE_DOWN_FACTOR,BACKEND_SOCKET_PORT} from '@WSScrcpy/GlobalConstants'
 
 const ipcRenderer = require('electron').ipcRenderer
 
@@ -102,6 +103,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
   //   }
   // }
 
+
   const startScrcpyByMSE = () =>{
 
     const isWifi = serialNoDevicesTargets[currentDeviceSelectIndex].includes('.');
@@ -109,22 +111,24 @@ const ADBTopArea: React.FC = memo(({ children }) => {
     const deviceUuId = serialNoDeivces[currentDeviceSelectIndex];
 
     const ip = isWifi?`${deviceId.split(':')[0]}`:'localhost';
-    const port = isWifi?8886:50001;
-    const query = isWifi?``:`?action=proxy&remote=tcp%3A8886&udid=${deviceId}`
-    const udid = isWifi?`${deviceUuId}`:`${deviceId}`
-
-    if(deviceId != null && deviceId != undefined) {        
-      startScrcpyServer(udid,ip,port,query,()=>{
+    const isReactPreviewer = true;
+    const port = isWifi?8886:BACKEND_SOCKET_PORT; //isReactPreviewer?50002:50001)
+    const query = isWifi?``:`?action=proxy&remote=tcp%3A8886&udid=${deviceId}`;
+    const udid = isWifi?`${deviceUuId}`:`${deviceId}`;
+    
+    if(deviceId != null && deviceId != undefined) {      
+      startScrcpyServer(isReactPreviewer,udid,ip,port,query,()=>{
         const sizeStr = "counter=`adb -s {target} shell wm size | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm size | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi";
         execCMDPromise(sizeStr.replace(/{target}/g, deviceId),function(val:any){
-          console.log(val.split('\n'));
-          const width=Number(val.split('\n')[0])/3;
-          const height=Number(val.split('\n')[1])/3 + 38;
-
-          ipcRenderer.send('createCastWindow',
-          width,
-          height);
-
+          const width=Number(val.split('\n')[0])/SCALE_DOWN_FACTOR;
+          const height=Number(val.split('\n')[1])/SCALE_DOWN_FACTOR + WINDOW_PADDING_TOP;
+          if(isReactPreviewer){
+            ipcRenderer.send('createPreviewerReactWindow',width,height);
+          }
+          else{
+            ipcRenderer.send('createPreviewerWindow',width,height);
+          }
+          
           // Notice:IPC Render Method is not agile
           // ipcRenderer.send('createCastWindow', 
           // `${ip}`,
@@ -139,9 +143,10 @@ const ADBTopArea: React.FC = memo(({ children }) => {
     }
   }
 
+
   const triggerScrcpyServer = () =>{
     if(!hasTriggerServer){
-      execCMD(`lsof -P | grep ':50001' | awk '{print $2}' | xargs kill -9`,'',function(){
+      execCMD(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9;`,'',function(){
         setHasTriggerServer(true);
         startScrcpyByMSE();
       });
@@ -149,6 +154,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
     else{
       startScrcpyByMSE();
     }
+      
   }
 
 

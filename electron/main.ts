@@ -4,7 +4,8 @@ import * as url from 'url'
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 let mainWindow: Electron.BrowserWindow | null
-let castWindow: Electron.BrowserWindow | null;
+let previewerWindow: Electron.BrowserWindow | null;
+let previewerReactWindow: Electron.BrowserWindow | null;
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
@@ -38,8 +39,8 @@ function createMainWindow() {
   })
 }
 
-function createCastWindow(width:number,height:number) { //ip:string,port:number,query:string,udid:string,
-  castWindow = new BrowserWindow({
+function createPreviewerWindow(width:number,height:number) { //ip:string,port:number,query:string,udid:string,
+  previewerWindow = new BrowserWindow({
     width: width,
     height: height,
     minWidth: width,
@@ -57,9 +58,9 @@ function createCastWindow(width:number,height:number) { //ip:string,port:number,
 
   // TODO
   if (process.env.NODE_ENV === 'development') {
-    castWindow.loadURL('http://localhost:50001')
+    previewerWindow.loadURL('http://localhost:50001')
   } else {
-    castWindow.loadURL(
+    previewerWindow.loadURL(
       url.format({
         pathname: path.join(__dirname, 'renderer/previewer/index.html'),
         protocol: 'file:',
@@ -67,7 +68,8 @@ function createCastWindow(width:number,height:number) { //ip:string,port:number,
       })
     )
   }
-  // castWindow.loadURL(
+
+  // previewerWindow.loadURL(
   //   url.format({
   //     pathname: path.join(__dirname, 'renderer/previewer/index.html'),
   //     protocol: 'file:',
@@ -76,14 +78,47 @@ function createCastWindow(width:number,height:number) { //ip:string,port:number,
   // )
 
   // Notice IPC Render Method is not agile
-  // castWindow.webContents.on('did-finish-load', () => {
-  //   if(castWindow !=null){
-  //     castWindow.webContents.send('msg', ip,port,query,udid);
+  // previewerWindow.webContents.on('did-finish-load', () => {
+  //   if(previewerWindow !=null){
+  //     previewerWindow.webContents.send('msg', ip,port,query,udid);
   //   }
   // });
 
-  castWindow.on('closed',()=>{
-    castWindow = null;
+  previewerWindow.on('closed',()=>{
+    previewerWindow = null;
+  })
+}
+
+function createPreviewerReactWindow(width:number,height:number) {
+  previewerReactWindow = new BrowserWindow({
+    width: width,
+    height: height,
+    minWidth: width,
+    minHeight: height,
+    maxWidth:width,
+    maxHeight:height,
+    backgroundColor: '#000000',
+    titleBarStyle: 'hiddenInset',
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  // TODO
+  if (process.env.NODE_ENV === 'development') {
+    previewerReactWindow.loadURL('http://localhost:50002')
+  } else {
+    previewerReactWindow.loadURL(
+      url.format({
+        pathname: path.join(__dirname, 'renderer/test/index.html'),
+        protocol: 'file:',
+        slashes: true
+      })
+    )
+  }
+
+  previewerReactWindow.on('closed',()=>{
+    previewerReactWindow = null;
   })
 }
 
@@ -103,8 +138,8 @@ app.on('ready', createMainWindow)
     // ipcMain.on('createCastWindow', (event,ip,port,query,udid,width,height) => {
     //   event.sender.send('nameReply', { not_right: false })
     //   console.log(ip,port,query)
-    //   if(castWindow !=null){
-    //     castWindow.close();
+    //   if(previewerWindow !=null){
+    //     previewerWindow.close();
     //     createCastWindow(ip,port,query,udid,width,height)
     //   }
     //   else{
@@ -112,14 +147,25 @@ app.on('ready', createMainWindow)
     //   }
     // })
 
-    ipcMain.on('createCastWindow', (event,width,height) => {
+    ipcMain.on('createPreviewerWindow', (event,width,height) => {
       event.sender.send('test', { not_right: false })
-      if(castWindow !=null){
-        castWindow.close();
-        createCastWindow(width,height)
+      if(previewerWindow !=null){
+        previewerWindow.close();
+        createPreviewerWindow(width,height)
       }
       else{
-        createCastWindow(width,height)
+        createPreviewerWindow(width,height)
+      }
+    })
+
+    ipcMain.on('createPreviewerReactWindow', (event,width,height) => {
+      event.sender.send('test', { not_right: false })
+      if(previewerReactWindow !=null){
+        previewerReactWindow.close();
+        createPreviewerReactWindow(width,height)
+      }
+      else{
+        createPreviewerReactWindow(width,height)
       }
     })
   })

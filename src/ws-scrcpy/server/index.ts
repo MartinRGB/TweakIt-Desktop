@@ -12,11 +12,9 @@ import { ServiceDeviceTracker } from './ServiceDeviceTracker';
 import { ClientDataService } from './ClientDataService';
 import { ACTION } from './Constants';
 import { ServiceWebsocketProxy } from './ServiceWebsocketProxy';
-
-import {FRONTEND_PORT} from '../GlobalConstants'
+import { ClientMessage} from './interfaces/Message';
 
 //const port = parseInt(process.argv[2], 10) || portNum;
-const serverPort = parseInt(process.argv[2], 10) || FRONTEND_PORT;
 const map: Record<string, string> = {
     '.wasm': 'application/wasm',
     '.js': 'text/javascript',
@@ -34,6 +32,7 @@ const map: Record<string, string> = {
 
 //const PUBLIC_DIR = '/Users/MartinRGB/Documents/GitHub/TweakIt-Desktop/dist/public';
 //const PUBLIC_DIR = '/Users/MartinRGB/Documents/GitHub/TweakIt-Desktop/dist/renderer/previewer'
+//const serverPort = parseInt(process.argv[2], 10) || FRONTEND_PORT;
 
 const { app } = window.require('electron').remote;
 var appPath = app.getAppPath().replace(/ /g,"\\ ");
@@ -44,63 +43,82 @@ var localDistRendererPath = appPath + '/dist/renderer/';
 var mWebSocket:WebSocket.Server;
 var server;
 
+var clientMsg:ClientMessage;
 
-export function getPath(){
+export function getPath(folderName:string){
     var DIR;
-    DIR = path.join(__dirname, localDistRendererPath + 'previewer');
-    console.log(DIR)
-
+    DIR = path.join(__dirname, localDistRendererPath + folderName); //cast
     return DIR;
 }
 
-const PUBLIC_DIR = getPath();
+export function getClientMessage(){
+    return clientMsg;
+}
 
-function setWSSConnection(wss:WebSocket.Server,id:string,ip:string,port:number,query:string){
+function setWSSConnection(wss:WebSocket.Server,msg:ClientMessage,callback?:()=>void){
+
+    var hasGetDeviceList:boolean = false;
+    var hasCreateProxy:boolean = false;
+    var hasFromClient:boolean = false;
     wss.on('connection', async (ws: WebSocket, req) => {
-        if (!req.url) {
-            ws.close(4001, 'Invalid url');
-            return;
-        }
-        const parsed = url.parse(req.url);
-        const parsedQuery = querystring.parse(parsed.query || '');
-        if (typeof parsedQuery.action === 'undefined') {
-            ws.close(4002, `Missing required parameter "action"`);
-        }
-        //ServiceDeviceTracker.createService(ws);
-        switch (parsedQuery.action) {
-            case ACTION.FROM_CLIENT:
-                ClientDataService.createService(ws,id,ip,port,query);
-                break;
-            case ACTION.DEVICE_LIST:
-                ServiceDeviceTracker.createService(ws);
-                break;
-            case ACTION.PROXY: {
-                const remote = parsedQuery.remote;
-                if (typeof remote !== 'string' || !remote) {
-                    ws.close(4003, `Invalid value "${remote}" for "remote" parameter`);
-                    break;
-                }
-                const udid = id; //parsedQuery.udid
-                if (typeof udid !== 'string' || !udid) {
-                    ws.close(4003, `Invalid value "${udid}" for "udid" parameter`);
-                    break;
-                }
-                const service = ServiceWebsocketProxy.createService(ws, udid, remote);
-                service.init().catch((e) => {
-                    const msg = `Failed to start service: ${e.message}`;
-                    console.error(msg);
-                    ws.close(4005, msg);
-                });
-                break;
-            }
-            default:
-                ws.close(4003, `Invalid value "${parsedQuery.action}" for "action" parameter`);
+            if (!req.url) {
+                ws.close(4001, 'Invalid url');
                 return;
-        }
+            }
+            const parsed = url.parse(req.url);
+            const parsedQuery = querystring.parse(parsed.query || '');
+            if (typeof parsedQuery.action === 'undefined') {
+                ws.close(4002, `Missing required parameter "action"`);
+            }
+            //ServiceDeviceTracker.createService(ws);
+            switch (parsedQuery.action) {
+                case ACTION.FROM_CLIENT:
+                    if(!hasFromClient){
+                        ClientDataService.createService(ws,msg);
+                        hasFromClient = true;
+                    }
+                    break;
+                case ACTION.DEVICE_LIST:
+                    if(!hasGetDeviceList){
+                        ServiceDeviceTracker.createService(ws,msg);
+                        hasGetDeviceList = true;
+                    }
+                    break;
+                case ACTION.PROXY: {
+                    if(!hasCreateProxy){
+                        const remote = parsedQuery.remote;
+                        if (typeof remote !== 'string' || !remote) {
+                            ws.close(4003, `Invalid value "${remote}" for "remote" parameter`);
+                            break;
+                        }
+                        const udid = msg.udid; //parsedQuery.udid
+                        if (typeof udid !== 'string' || !udid) {
+                            ws.close(4003, `Invalid value "${udid}" for "udid" parameter`);
+                            break;
+                        }
+                        const service = ServiceWebsocketProxy.createService(ws, udid, remote,msg);
+                        service.init(function(){
+                            if(callback !=null){
+                                callback()
+                            }
+                        }).catch((e) => {
+                            const msg = `Failed to start service: ${e.message}`;
+                            console.error(msg);
+                            ws.close(4005, msg);
+                        });
+                        hasCreateProxy = true;
+                    }
+                    break;
+                }
+                default:
+                    ws.close(4003, `Invalid value "${parsedQuery.action}" for "action" parameter`);
+                    return;
+            }
+
     });
 }
 
-export function startScrcpyServer(id:string,ip:string,port:number,query:string,callback?:()=>void){
+export function startScrcpyServer(isReactPreviewer:boolean,id:string,ip:string,port:number,query:string,callback?:()=>void){
     if(mWebSocket != undefined){
         mWebSocket.close();
     }
@@ -108,6 +126,19 @@ export function startScrcpyServer(id:string,ip:string,port:number,query:string,c
         server.close();
     }
 
+    var PUBLIC_DIR:string;
+    var serverPort:number = parseInt(process.argv[2], 10) || port;
+
+    if(isReactPreviewer){
+        PUBLIC_DIR = getPath('previewer-react');
+        //serverPort = parseInt(process.argv[2], 10) || FRONTEND_PORT_REACT;
+    }
+    else{
+        PUBLIC_DIR = getPath('previewer');
+        //serverPort = parseInt(process.argv[2], 10) || FRONTEND_PORT;
+    }
+    console.log(serverPort)
+    console.log(PUBLIC_DIR)
     server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
         if (!req.url) {
             res.statusCode = 400;
@@ -145,12 +176,28 @@ export function startScrcpyServer(id:string,ip:string,port:number,query:string,c
         });
     });
 
+    // const msg: ClientMessage = {
+    //     ip: ip,
+    //     port: port,
+    //     query: query,
+    //     udid:id,
+    // };
+
+    clientMsg = {
+        ip: ip,
+        port: port,
+        query: query,
+        udid:id,
+    };
 
     server.listen(serverPort);
     server.on('listening', function() {
-        printListeningMsg(()=>{
+        console.log('23');
+        printListeningMsg(serverPort,()=>{
             mWebSocket = new WebSocket.Server({server});
-            setWSSConnection(mWebSocket,id,ip,port,query);
+            setWSSConnection(mWebSocket,clientMsg,function(){
+                console.log('3223');
+            });
             if(callback) callback()
         })
     });
@@ -162,12 +209,13 @@ function fixedEncodeURI(str: string): string {
     return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');
 }
 
-function printListeningMsg(callback?:()=>void):void{
+function printListeningMsg(port:number,callback?:()=>void):void{
     const list: string[] = [];
     const formatAddress = (ip: string, ipv6: boolean): void => {
         const host = ipv6 ? `[${ip}]` : ip;
-        list.push(`http://${host}:${serverPort}`);
+        list.push(`http://${host}:${port}`);
     };
+    
     formatAddress(os.hostname(), false);
     Object.keys(os.networkInterfaces())
         .map((key) => os.networkInterfaces()[key])

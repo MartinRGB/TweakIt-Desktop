@@ -1,46 +1,62 @@
-import React ,{useEffect,useRef} from 'react'
+import React ,{useEffect,useRef,useState} from 'react'
 import { render } from 'react-dom'
-const { ipcRenderer } = require('electron')
-import { ScrcpyClient } from './client/ScrcpyClient';
+import styled from '@emotion/styled'
+import {PrepareDataClientReact} from './client/PrepareDataClientReact'
+import {SocketEventListener} from './interfaces/SocketEventListener'
+import {FinalMessage} from '../server/interfaces/Message'
+import ScrcpyClientReact from './client/ScrcpyClientReact'
 import { ScrcpyStreamParams } from './interfaces/ScrcpyStreamParams';
-import {FRONTEND_PORT,DEVICE_ID} from '../GlobalConstants'
-
 
 const mainElement = document.createElement('div')
 mainElement.setAttribute('id', 'root')
 document.body.appendChild(mainElement)
-
-const testObj = {
-  action: 'stream',
-  decoder: 'mse',
-  ip: `localhost`,
-  port: `${FRONTEND_PORT}`,
-  query: `?action=proxy&remote=tcp%3A8886&udid=${DEVICE_ID}`,
-  udid: `${DEVICE_ID}`,
-};
+document.body.style.margin = '0px';
+document.body.style.maxHeight = '100vh';
+document.body.style.overflow = 'hidden';
+document.body.style.background = 'black';
 
 const App = () => {
+  const [scrcpyStreamParams,setScrcpyStreamParams] = useState<any>()
   useEffect(() => {
 
-    new ScrcpyClient(testObj as ScrcpyStreamParams);
+    PrepareDataClientReact.start()
+    const listener: SocketEventListener = { 
+      onSocketOpen:()=>{
+        console.log('open');
+      },
+      onSocketClose:(e:CloseEvent)=>{
+        console.log(e)
+      },
+      onSocketMessage:(e:FinalMessage)=>{
+
+        const streamParams:ScrcpyStreamParams = {
+          action: 'stream',
+          decoder: 'mse',
+          ip: `${e.clientMsg.ip}`,
+          port: `${e.clientMsg.port}`,
+          query: `${e.clientMsg.query}`,
+          udid: `${e.clientMsg.udid}`,
+        };
+
+        setScrcpyStreamParams(streamParams)
+      }
+    };
+
+    PrepareDataClientReact.setSocketEventListener(listener)
   }, [])
 
-  const paraRef = useRef(null);
-
-
-  ipcRenderer.on('msg', function (event, ip,port,query,udid){
-    console.log(ip,port,query,udid);
-    paraRef.current.innerHTML = ip + port+query+udid;
-  });
-  
 
   return (
     <div>
-      <p style={{color:'white'}}>this is a test242</p>
-      <p ref={paraRef} style={{color:'white'}}>this is a test24444444</p>
+      <ScrcpyClientReact params={scrcpyStreamParams}></ScrcpyClientReact>
     </div>
   )
 }
+
+const IFrame =styled.iframe`
+  outline: none;
+  border: none;
+`
 
 
 render(<App />, mainElement)

@@ -4,7 +4,7 @@ export const SERVER_VERSION = '1.16-ws1';
 
 const LOG_LEVEL = 'ERROR';
 const MAX_SIZE = 0;
-const BITRATE = 8000000;
+const BITRATE = 10000000;
 const MAX_FPS = 60;
 const LOCKED_SCREEN_ORIENTATION = -1;
 const TUNNEL_FORWARD = false;

@@ -6,5 +6,5 @@ export interface ScrcpyStreamParams extends ParsedUrlQueryInput {
     decoder: 'mse';
     ip: string;
     port: string;
-    query?: string;
+    query: string;
 }

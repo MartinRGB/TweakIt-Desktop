@@ -36,6 +36,7 @@ export default class MseDecoder extends Decoder {
             tag.id = id;
         }
         tag.className = 'video-layer';
+        tag.id = 'video-layer';
         tag.style.position ='absolute';
         tag.style.zIndex = '0';
 

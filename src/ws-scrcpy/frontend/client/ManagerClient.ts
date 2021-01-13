@@ -1,5 +1,5 @@
 import { BaseClient } from './BaseClient';
-import {FRONTEND_PORT} from '../../GlobalConstants'
+import {BACKEND_SOCKET_PORT} from '../../GlobalConstants'
 
 export abstract class ManagerClient<T> extends BaseClient<T> {
     public static ACTION = 'unknown';
@@ -34,7 +34,9 @@ export abstract class ManagerClient<T> extends BaseClient<T> {
         const proto = location.protocol === 'https:' ? 'wss' : 'ws';
         const query = this.action ? `?action=${this.action}` : '';
         console.log(`${proto}://${location.host}${query}`);
-        return `${proto}://localhost:${FRONTEND_PORT}/${location.host}${query}`;
+        //console.log(`${proto}://localhost:${FRONTEND_PORT}/${location.host}${query}`);
+        console.log(`${proto}://localhost:${BACKEND_SOCKET_PORT}${query}`);
+        return `${proto}://localhost:${BACKEND_SOCKET_PORT}${query}`;
     }
 
     protected abstract onSocketOpen(e: Event): void;

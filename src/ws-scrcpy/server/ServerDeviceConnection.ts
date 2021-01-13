@@ -17,8 +17,6 @@ import { NetInterface } from './interfaces/NetInterface';
 
 const { app } = window.require('electron').remote;
 var appPath = app.getAppPath().replace(/ /g,"\\ ");
-var localAssetsPath = appPath + '/assets/';
-var appResPath = path.join(process.resourcesPath, "/assets/");
 var localDistRendererPath = appPath + '/dist/renderer/';
 
 const TEMP_PATH = '/data/local/tmp/';

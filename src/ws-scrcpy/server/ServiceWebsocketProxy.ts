@@ -1,25 +1,30 @@
 import { ReleasableService } from './ReleasableService';
 import WebSocket from 'ws';
 import { Util } from './Util';
+import { ClientMessage} from './interfaces/Message';
 
 export class ServiceWebsocketProxy extends ReleasableService {
     private remoteSocket?: WebSocket;
     private released = false;
     private storage: WebSocket.MessageEvent[] = [];
 
-    public static createService(ws: WebSocket, udid: string, remote: string): ServiceWebsocketProxy {
-        return new ServiceWebsocketProxy(ws, udid, remote);
+    public static createService(ws: WebSocket, udid: string, remote: string,msg:ClientMessage): ServiceWebsocketProxy {
+        return new ServiceWebsocketProxy(ws, udid, remote,msg);
     }
 
-    constructor(ws: WebSocket, private readonly udid: string, private readonly remote: string) {
-        super(ws);
+    constructor(ws: WebSocket, private readonly udid: string, private readonly remote: string,msg:ClientMessage) {
+        super(ws,msg);
     }
 
-    public async init(): Promise<void> {
+    public async init(callback?:()=>void): Promise<void> {
         const port = await Util.forward(this.udid, this.remote);
         const remoteSocket = new WebSocket(`ws://127.0.0.1:${port}`);
 
         remoteSocket.onopen = () => {
+            console.log('proxy service on opened');
+            if(callback !=null){
+                callback()
+            }
             this.remoteSocket = remoteSocket;
             this.flush();
         };
