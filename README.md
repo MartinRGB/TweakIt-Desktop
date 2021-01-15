@@ -89,7 +89,7 @@ This app is made for regular users(only run in macOS).Even without `adb` && `scr
 
 So there need integrate basic environment like `adb` and `node`.
 
-after`'brew install -f --cask android-platform-tools` or manually install the SDK via [Android Developers](https://developer.android.com/studio) ,then get the executable file in `/usr/local/Caskroom` or somewhere.
+after `brew install -f --cask android-platform-tools` or manually install the SDK via [Android Developers](https://developer.android.com/studio) ,then get the executable file in `/usr/local/Caskroom` or somewhere.
 
 after `brew install node` or install the PKG via [Node.js](https://nodejs.org/) ,then get the executable file in `/usr/local/bin` or somewhere.
 
