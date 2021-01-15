@@ -92,7 +92,7 @@ function createScrcpyPreviewerWindow(width:number,height:number) { //ip:string,p
   // });
 
   previewerWindow.on('closed',()=>{
-    execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9`)
+    //execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9`)
     previewerWindow = null;
   })
 }
@@ -126,7 +126,7 @@ function createReactPreviewerWindow(width:number,height:number) {
   }
 
   previewerReactWindow.on('closed',()=>{
-    execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9`)
+    //execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9`)
     previewerReactWindow = null;
   })
 }
