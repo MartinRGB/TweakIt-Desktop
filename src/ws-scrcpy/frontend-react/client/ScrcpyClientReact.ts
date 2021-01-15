@@ -1,16 +1,20 @@
+// import MseDecoder from '../../frontend/decoder/MseDecoder';
+// import Decoder from '../../frontend/decoder/Decoder';
+
 import MseDecoder from '../decoder/MseDecoder';
-import { BaseClient } from './BaseClient';
 import Decoder from '../decoder/Decoder';
-import { ScrcpyStreamParams } from '../interfaces/ScrcpyStreamParams';
-import VideoSettings from '../info/VideoSettings';
-import Size from '../utils/Size';
-import { ControlMessage } from '../controlMessage/ControlMessage';
-import { StreamReceiver } from './StreamReceiver';
-import { CommandControlMessage } from '../controlMessage/CommandControlMessage';
-import TouchHandler from '../event/TouchHandler';
-import Util from '../utils/Util';
-import ScreenInfo from '../info/ScreenInfo';
-import { TouchControlMessage } from '../controlMessage/TouchControlMessage';
+
+import { BaseClient } from '../../frontend/client/BaseClient';
+import { ScrcpyStreamParams } from '../../frontend/interfaces/ScrcpyStreamParams';
+import VideoSettings from '../../frontend/info/VideoSettings';
+import Size from '../../frontend/utils/Size';
+import { ControlMessage } from '../../frontend/controlMessage/ControlMessage';
+import { StreamReceiver } from '../../frontend/client/StreamReceiver';
+import { CommandControlMessage } from '../../frontend/controlMessage/CommandControlMessage';
+import TouchHandler from '../../frontend/event/TouchHandler';
+import Util from '../../frontend//utils/Util';
+import ScreenInfo from '../../frontend/info/ScreenInfo';
+import { TouchControlMessage } from '../../frontend//controlMessage/TouchControlMessage';
 import {SCALE_DOWN_FACTOR,WINDOW_PADDING_TOP} from '../../GlobalConstants'
 //import { KeyEventListener, KeyInputHandler } from '../KeyInputHandler';
 //import { KeyCodeControlMessage } from '../controlMessage/KeyCodeControlMessage';
@@ -19,7 +23,7 @@ import {SCALE_DOWN_FACTOR,WINDOW_PADDING_TOP} from '../../GlobalConstants'
 const deviceWidthInPx = 1080;
 const deviceHeightInPx = 2340;
 
-export class ScrcpyClient extends BaseClient<never> {
+export class ScrcpyClientReact extends BaseClient<never> {
     public static ACTION = 'stream';
     private hasTouchListeners = false;
     private deviceName = '';
@@ -27,64 +31,29 @@ export class ScrcpyClient extends BaseClient<never> {
     private clientsCount = -1;
     private requestedVideoSettings?: VideoSettings;
     private readonly streamReceiver: StreamReceiver;
+    private cursor?:HTMLDivElement;
     
-    constructor(params: ScrcpyStreamParams) {
+    constructor(params: ScrcpyStreamParams,videoContainer:HTMLDivElement,video:HTMLVideoElement,canvas:HTMLCanvasElement,cursor:HTMLDivElement) {
         super();
         this.streamReceiver = new StreamReceiver(params.ip, params.port, params.query);
-        this.startStream(params.udid);
+        this.startStream(params.udid,videoContainer,video,canvas);
         this.setBodyClass('stream');
         this.setTitle(`${params.udid} stream`);
+        this.cursor = cursor;
     }
 
-    public startStream(udid: string): void {
+    public startStream(udid: string,videoContainer:HTMLDivElement,video:HTMLVideoElement,canvas:HTMLCanvasElement): void {
         if (!udid) {
             return;
         }
 
-        const decoder = new MseDecoder(udid);
+        // const decoder = new MseDecoder(udid);
+        const decoder = new MseDecoder(udid,video,canvas);
         this.setTouchListeners(decoder);
 
-        const deviceView = document.createElement('div');
-        deviceView.className = 'device-view';
-        deviceView.id = 'device-view';
-        deviceView.style.transform = `scale(${1/SCALE_DOWN_FACTOR})`;
-        deviceView.style.transformOrigin = 'top left';
-        deviceView.style.float = 'none';
-        deviceView.style.zIndex = '1';
-        deviceView.style.display = 'inline-block';
-        deviceView.style.paddingTop = WINDOW_PADDING_TOP*SCALE_DOWN_FACTOR+'px';
-        deviceView.style.background = 'black';
-
-        const idView = document.createElement('div');
-        idView.id = 'id-view';
-        idView.style.position = 'absolute';
-        idView.style.lineHeight = WINDOW_PADDING_TOP*SCALE_DOWN_FACTOR + 'px'
-        idView.style.fontSize = (WINDOW_PADDING_TOP-10) + 'px';
-        idView.style.color = 'white';
-        idView.style.textAlign = 'center';
-        idView.style.left = '0px';
-        idView.style.top = '0px';
-        idView.style.width = '100%';
-        idView.style.fontFamily = 'Futura'
-        idView.style["-webkit-app-region"] = 'drag';
-        idView.style.userSelect = 'none';
-        idView.style.boxShadow = '0px 3px 14px 0px #00000047';
-        idView.style.zIndex = '10';
-
-        deviceView.appendChild(idView);
-
-        const video = document.createElement('div');
-        video.className = 'video';
-        video.id = 'video-container';
-        video.style.width = deviceWidthInPx + 'px';
-        video.style.height = deviceHeightInPx + 'px';
-        video.style.background = 'black';
-
-        deviceView.appendChild(video);
-        decoder.setParent(video);
+        decoder.setParent(videoContainer);
         decoder.pause();
 
-        document.body.appendChild(deviceView);
         const current = decoder.getVideoSettings();
 
         //TODO
@@ -100,10 +69,10 @@ export class ScrcpyClient extends BaseClient<never> {
         });
         decoder.setVideoSettings(newVideoSettings, false);
 
-        const element = decoder.getTouchableElement();
-        element.style.position = 'absolute';
-        element.style.zIndex = '1';
-        element.id="touch-canvas";
+        // const element = decoder.getTouchableElement();
+        // element.style.position = 'absolute';
+        // element.style.zIndex = '1';
+        // element.id="touch-canvas";
 
         const streamReceiver = this.streamReceiver;
 
@@ -113,13 +82,12 @@ export class ScrcpyClient extends BaseClient<never> {
                 decoder.play();
             }
             if (decoder.getState() === STATE.PLAYING) {
+                console.log('push Frame')
                 decoder.pushFrame(new Uint8Array(data));
             }
         });
         streamReceiver.on('clientsStats', (stats) => {
             this.deviceName = stats.deviceName;
-
-            idView.innerHTML = stats.deviceName + ' --- ' +udid;
             this.clientId = stats.clientId;
             this.clientsCount = stats.clientsCount;
         });
@@ -165,8 +133,8 @@ export class ScrcpyClient extends BaseClient<never> {
                 }
             }
 
-            video.style.width = screenInfo.contentRect.right + 'px';
-            video.style.height = screenInfo.contentRect.bottom + 'px';
+            videoContainer.style.width = screenInfo.contentRect.right + 'px';
+            videoContainer.style.height = screenInfo.contentRect.bottom + 'px';
 
             decoder.resizeVideoElement(screenInfo);
 
@@ -262,17 +230,51 @@ export class ScrcpyClient extends BaseClient<never> {
                 },
                 options,
             );
+
+
             element.addEventListener('mousedown', (e: MouseEvent): void => {
                 down++;
                 onMouseEvent(e);
+                if(this.cursor){
+                    this.cursor.style.width = '50px'
+                    this.cursor.style.height = '50px'
+                    this.cursor.style.opacity = '.2'
+                }
+
             });
             element.addEventListener('mouseup', (e: MouseEvent): void => {
                 onMouseEvent(e);
                 down--;
+                if(this.cursor){
+                    this.cursor.style.width = '20px'
+                    this.cursor.style.height = '20px'
+                    this.cursor.style.opacity = '.3'
+                }
             });
             element.addEventListener('mousemove', (e: MouseEvent): void => {
                 onMouseEvent(e);
+               
+
+                var x = e.clientX;
+                var y = e.clientY;
+                if(this.cursor){
+                    this.cursor.style.left = x + 'px';
+                    this.cursor.style.top = y + 'px';
+                }
             });
+
+            element.addEventListener('mouseover', (e: MouseEvent): void => {
+                if(this.cursor){
+                    this.cursor.style.display = 'block'
+                }
+            });
+
+            element.addEventListener('mouseout', (e: MouseEvent): void => {
+                if(this.cursor){
+                    this.cursor.style.display = 'none'
+                }
+            });
+
             this.hasTouchListeners = true;
         }
     }

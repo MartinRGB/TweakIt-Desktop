@@ -1,5 +1,6 @@
 import { DeviceTrackerClient, MapItem } from './DeviceTrackerClient';
-import { ACTION, SERVER_PORT } from '../../server/Constants';
+import { SERVER_PORT } from '../../GlobalConstants';
+import {ACTION} from '../../GlobalConstants'
 import DroidDeviceDescriptor from '../../server/interfaces/DroidDeviceDescriptor';
 import querystring from 'querystring';
 import { ScrcpyStreamParams } from '../interfaces/ScrcpyStreamParams';

@@ -1,10 +1,7 @@
-//import '../style/app.css';
-//import * as querystring from 'querystring';
-//import { ScrcpyClient } from './client/ScrcpyClient';
-//import { ShellClient } from './client/ShellClient';
-//import { DroidDeviceTrackerClient } from './client/DroidDeviceTrackerClient';
-//import { ScrcpyStreamParams } from './interfaces/ScrcpyStreamParams';
-//import { ShellParams } from '../common/ShellParams';
+import * as querystring from 'querystring';
+import { ScrcpyClient } from './client/ScrcpyClient';
+import { DroidDeviceTrackerClient } from './client/DroidDeviceTrackerClient';
+import { ScrcpyStreamParams } from './interfaces/ScrcpyStreamParams';
 import {PrepareDataClient} from './client/PrepareDataClient'
 // import {FRONTEND_PORT,DEVICE_ID} from '../GlobalConstants'
 
@@ -20,6 +17,7 @@ window.onload = function (): void {
     // ipcRenderer.on('msg', function (event, ip,port,query,udid){
     //     console.log(ip,port,query,udid);
 
+    // Test Method
     //     const testObj = {
     //         action: 'stream',
     //         decoder: 'mse',
@@ -31,9 +29,11 @@ window.onload = function (): void {
     //     new ScrcpyClient(testObj as ScrcpyStreamParams);
     // });
 
+    // Direct Method
     //DroidDeviceTrackerClient.start();
     //new ScrcpyClient(testObj as ScrcpyStreamParams);
     
     PrepareDataClient.start();
+
 
 };

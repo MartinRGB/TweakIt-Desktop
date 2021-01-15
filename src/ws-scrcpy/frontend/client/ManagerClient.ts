@@ -21,6 +21,7 @@ export abstract class ManagerClient<T> extends BaseClient<T> {
 
     protected openNewWebSocket(): WebSocket {
         if (this.hasConnection()) {
+            console.log('close soket');
             (this.ws as WebSocket).close();
         }
         this.ws = new WebSocket(this.buildWebSocketUrl());
@@ -33,9 +34,9 @@ export abstract class ManagerClient<T> extends BaseClient<T> {
     protected buildWebSocketUrl(): string {
         const proto = location.protocol === 'https:' ? 'wss' : 'ws';
         const query = this.action ? `?action=${this.action}` : '';
-        console.log(`${proto}://${location.host}${query}`);
+        //console.log(`current ${proto}://${location.host}${query}`);
         //console.log(`${proto}://localhost:${FRONTEND_PORT}/${location.host}${query}`);
-        console.log(`${proto}://localhost:${BACKEND_SOCKET_PORT}${query}`);
+        console.log(`current ${proto}://localhost:${BACKEND_SOCKET_PORT}${query}`);
         return `${proto}://localhost:${BACKEND_SOCKET_PORT}${query}`;
     }
 

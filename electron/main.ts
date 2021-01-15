@@ -3,6 +3,13 @@ import * as path from 'path'
 import * as url from 'url'
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
+import {execCMDPromise} from "../src/helpers/ADBCommand/ADBCommand"
+import {BACKEND_SOCKET_PORT} from '../src/ws-scrcpy/GlobalConstants'
+
+var appPath = app.getAppPath().replace(/ /g,"\\ ");
+var localAssetsPath = appPath + '/assets/';
+var appResPath = path.join(process.resourcesPath, "/assets/");
+
 let mainWindow: Electron.BrowserWindow | null
 let previewerWindow: Electron.BrowserWindow | null;
 let previewerReactWindow: Electron.BrowserWindow | null;
@@ -39,7 +46,7 @@ function createMainWindow() {
   })
 }
 
-function createPreviewerWindow(width:number,height:number) { //ip:string,port:number,query:string,udid:string,
+function createScrcpyPreviewerWindow(width:number,height:number) { //ip:string,port:number,query:string,udid:string,
   previewerWindow = new BrowserWindow({
     width: width,
     height: height,
@@ -62,7 +69,7 @@ function createPreviewerWindow(width:number,height:number) { //ip:string,port:nu
   } else {
     previewerWindow.loadURL(
       url.format({
-        pathname: path.join(__dirname, 'renderer/previewer/index.html'),
+        pathname: appResPath +'scrcpy-previewer/index.html',
         protocol: 'file:',
         slashes: true
       })
@@ -85,11 +92,12 @@ function createPreviewerWindow(width:number,height:number) { //ip:string,port:nu
   // });
 
   previewerWindow.on('closed',()=>{
+    execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9`)
     previewerWindow = null;
   })
 }
 
-function createPreviewerReactWindow(width:number,height:number) {
+function createReactPreviewerWindow(width:number,height:number) {
   previewerReactWindow = new BrowserWindow({
     width: width,
     height: height,
@@ -110,7 +118,7 @@ function createPreviewerReactWindow(width:number,height:number) {
   } else {
     previewerReactWindow.loadURL(
       url.format({
-        pathname: path.join(__dirname, 'renderer/test/index.html'),
+        pathname: appResPath + 'react-previewer/index.html',
         protocol: 'file:',
         slashes: true
       })
@@ -118,6 +126,7 @@ function createPreviewerReactWindow(width:number,height:number) {
   }
 
   previewerReactWindow.on('closed',()=>{
+    execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9`)
     previewerReactWindow = null;
   })
 }
@@ -147,25 +156,25 @@ app.on('ready', createMainWindow)
     //   }
     // })
 
-    ipcMain.on('createPreviewerWindow', (event,width,height) => {
+    ipcMain.on('createScrcpyPreviewerWindow', (event,width,height) => {
       event.sender.send('test', { not_right: false })
       if(previewerWindow !=null){
-        previewerWindow.close();
-        createPreviewerWindow(width,height)
+        //previewerWindow.close();
+        createScrcpyPreviewerWindow(width,height)
       }
       else{
-        createPreviewerWindow(width,height)
+        createScrcpyPreviewerWindow(width,height)
       }
     })
 
-    ipcMain.on('createPreviewerReactWindow', (event,width,height) => {
+    ipcMain.on('createReactPreviewerWindow', (event,width,height) => {
       event.sender.send('test', { not_right: false })
       if(previewerReactWindow !=null){
-        previewerReactWindow.close();
-        createPreviewerReactWindow(width,height)
+        //previewerReactWindow.close();
+        createReactPreviewerWindow(width,height)
       }
       else{
-        createPreviewerReactWindow(width,height)
+        createReactPreviewerWindow(width,height)
       }
     })
   })

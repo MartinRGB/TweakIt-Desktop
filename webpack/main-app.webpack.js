@@ -2,7 +2,6 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const rootPath = path.resolve(__dirname, '..');
-const nodeExternals = require('webpack-node-externals');
 
 const common = {
 }
@@ -125,85 +124,6 @@ const scrcpyFrontend = {
   },
 };
 
-// const scrcpyServer = {
-//   entry: path.resolve(rootPath, './src/ws-scrcpy/server', 'index.ts'),
-//   externals: [nodeExternals()],
-//   // devtool: 'inline-source-map',
-//   target: 'node',
-//   mode: 'development',
-//   devtool: 'source-map',
-//   module: {
-//     rules: [
-//       {
-//         test: /\.tsx?$/,
-//         use: 'babel-loader',
-//         exclude: /node_modules/,
-//       },
-//       {
-//         include: path.resolve(__dirname, '../ws-scrcpy/vendor/Genymobile'),
-//         use: [
-//           {
-//             loader: 'file-loader',
-//             options: {
-//               name: '[path][name].[ext]'
-//             }
-//           }
-//         ]
-//       }
-//     ]
-//     },
-//   node: {
-//     global: false,
-//     __filename: false,
-//     __dirname: false,
-//   },
-//   output: {
-//     filename: 'index.js',
-//     path: path.resolve(rootPath, 'dist/scrcpy-server'),
-//   },
-//   resolve: {
-//     extensions: [ '.tsx', '.ts', '.js' ],
-//   },
-// };
-
-
 module.exports = [
   Object.assign({} , common, mainApplication),
-  Object.assign({} , common, scrcpyFrontend),
 ]
-// const path = require("path");
-// const HtmlWebpackPlugin = require("html-webpack-plugin");
-
-// module.exports = {
-//   resolve: {
-//     extensions: [".tsx", ".ts", ".js"],
-//     mainFields: ["main", "module", "browser"],
-//   },
-//   entry: "./src/app.tsx",
-//   target: "electron-renderer",
-//   devtool: "source-map",
-//   module: {
-//     rules: [
-//       {
-//         test: /\.(js|ts|tsx)$/,
-//         exclude: /node_modules/,
-//         use: {
-//           loader: "babel-loader",
-//         },
-//       },
-//     ],
-//   },
-//   devServer: {
-//     contentBase: path.join(__dirname, "../dist/renderer"),
-//     historyApiFallback: true,
-//     compress: true,
-//     hot: true,
-//     port: 4000,
-//     publicPath: "/",
-//   },
-//   output: {
-//     path: path.resolve(__dirname, "dist"),
-//     filename: "js/[name].js",
-//   },
-//   plugins: [new HtmlWebpackPlugin()],
-// };

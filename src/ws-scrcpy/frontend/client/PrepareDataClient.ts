@@ -1,16 +1,13 @@
 import { ManagerClient } from './ManagerClient';
 import { Message,ClientMessage,FinalMessage} from '../../server/interfaces/Message';
-import { ACTION } from '../../server/Constants';
+import { ACTION } from '../../GlobalConstants';
 import {ScrcpyClient} from './ScrcpyClient'
 import {ScrcpyStreamParams} from '../interfaces/ScrcpyStreamParams'
-import {SocketEventListener} from '../interfaces/SocketEventListener'
 
 export class PrepareDataClient extends ManagerClient<null>{
 
-    //public static ACTION = ACTION.FROM_CLIENT;
-    private static mSocketEventListener:SocketEventListener;
 
-    public static ACTION = ACTION.DEVICE_LIST;
+    public static ACTION = ACTION.FROM_CLIENT;
 
     public static start(): PrepareDataClient {
         return new PrepareDataClient(this.ACTION);
@@ -22,9 +19,6 @@ export class PrepareDataClient extends ManagerClient<null>{
     }
 
     protected onSocketOpen(): void {
-        if( PrepareDataClient.mSocketEventListener ){
-            PrepareDataClient.mSocketEventListener.onSocketOpen();
-        }
     }
 
     protected onSocketClose(e: CloseEvent): void {
@@ -32,9 +26,6 @@ export class PrepareDataClient extends ManagerClient<null>{
         setTimeout(() => {
             this.openNewWebSocket();
         }, 2000);
-        if( PrepareDataClient.mSocketEventListener ){
-            PrepareDataClient.mSocketEventListener.onSocketClose(e);
-        }
     }
 
     protected onSocketMessage(e: MessageEvent): void {
@@ -51,12 +42,7 @@ export class PrepareDataClient extends ManagerClient<null>{
                 udid: `${message.clientMsg.udid}`,
             };
 
-            if( PrepareDataClient.mSocketEventListener ){
-                PrepareDataClient.mSocketEventListener.onSocketMessage(message);
-            }
-        
             new ScrcpyClient(paraObj as ScrcpyStreamParams);
-            //this.onGetStreamParams(paraObj as ScrcpyStreamParams)
         } catch (error) {
             console.error(error.message);
             console.log(e.data);
@@ -64,7 +50,4 @@ export class PrepareDataClient extends ManagerClient<null>{
         }
     }
 
-    public static setSocketEventListener(listener: SocketEventListener): void{
-        PrepareDataClient.mSocketEventListener = listener;
-    };
 }

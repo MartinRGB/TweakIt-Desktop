@@ -1,6 +1,4 @@
-export const SERVER_PACKAGE = 'com.genymobile.scrcpy.Server';
-export const SERVER_PORT = 8886;
-export const SERVER_VERSION = '1.16-ws1';
+import {SERVER_PACKAGE, SERVER_PORT,SERVER_VERSION } from '../GlobalConstants'
 
 const LOG_LEVEL = 'ERROR';
 const MAX_SIZE = 0;
@@ -37,10 +35,3 @@ const ARGUMENTS = [
 ];
 
 export const ARGS_STRING = `/ ${SERVER_PACKAGE} ${ARGUMENTS.join(' ')} 2>&1 > /dev/null`;
-
-export enum ACTION {
-    DEVICE_LIST = 'droid-device-list',
-    SHELL = 'shell',
-    PROXY = 'proxy',
-    FROM_CLIENT = 'from-client'
-}

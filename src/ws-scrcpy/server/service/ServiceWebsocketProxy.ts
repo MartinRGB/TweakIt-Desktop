@@ -1,19 +1,19 @@
 import { ReleasableService } from './ReleasableService';
 import WebSocket from 'ws';
-import { Util } from './Util';
-import { ClientMessage} from './interfaces/Message';
+import { Util } from '../Util';
+import { ClientMessage} from '../interfaces/Message';
 
 export class ServiceWebsocketProxy extends ReleasableService {
     private remoteSocket?: WebSocket;
     private released = false;
     private storage: WebSocket.MessageEvent[] = [];
 
-    public static createService(ws: WebSocket, udid: string, remote: string,msg:ClientMessage): ServiceWebsocketProxy {
-        return new ServiceWebsocketProxy(ws, udid, remote,msg);
+    public static createService(ws: WebSocket, udid: string, remote: string): ServiceWebsocketProxy {
+        return new ServiceWebsocketProxy(ws, udid, remote);
     }
 
-    constructor(ws: WebSocket, private readonly udid: string, private readonly remote: string,msg:ClientMessage) {
-        super(ws,msg);
+    constructor(ws: WebSocket, private readonly udid: string, private readonly remote: string) {
+        super(ws);
     }
 
     public async init(callback?:()=>void): Promise<void> {
@@ -29,11 +29,13 @@ export class ServiceWebsocketProxy extends ReleasableService {
             this.flush();
         };
         remoteSocket.onmessage = (event) => {
+            //console.log('proxy service on message');
             if (this.ws && this.ws.readyState === this.ws.OPEN) {
                 this.ws.send(event.data);
             }
         };
         remoteSocket.onclose = (e) => {
+            console.log('proxy service on closed');
             if (this.ws.readyState === this.ws.OPEN) {
                 this.ws.close(e.wasClean ? 1000 : 4010);
             }

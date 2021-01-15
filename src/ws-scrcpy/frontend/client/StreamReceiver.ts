@@ -4,6 +4,7 @@ import DeviceMessage from '../event/DeviceMessage';
 import VideoSettings from '../info/VideoSettings';
 import ScreenInfo from '../info/ScreenInfo';
 import Util from '../utils/Util';
+import {BACKEND_SOCKET_PORT} from '../../GlobalConstants'
 
 const DEVICE_NAME_FIELD_LENGTH = 64;
 const MAGIC = 'scrcpy';
@@ -87,9 +88,9 @@ export class StreamReceiver extends ManagerClient<StreamReceiverEvents> {
 
     protected onSocketMessage(e: MessageEvent): void {
         if (e.data instanceof ArrayBuffer) {
-            //console.log(e.data);
             const data = new Uint8Array(e.data);
             const magicBytes = new Uint8Array(e.data, 0, MAGIC.length);
+       
             if (StreamReceiver.EqualArrays(magicBytes, MAGIC_BYTES)) {
                 if (data.length === DEVICE_INFO_LENGTH) {
                     this.handleDeviceInfo(e.data);
@@ -99,7 +100,6 @@ export class StreamReceiver extends ManagerClient<StreamReceiverEvents> {
                     this.emit('deviceMessage', message);
                 }
             } else {
-                //console.log(data);
                 this.emit('video', data);
             }
         }

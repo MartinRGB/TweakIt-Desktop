@@ -1,20 +1,44 @@
 import WebSocket from 'ws';
 import * as os from 'os';
 import * as http from 'http';
-import * as https from 'https';
 import * as url from 'url';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as querystring from 'querystring';
 import * as readline from 'readline';
 import { IncomingMessage, ServerResponse, STATUS_CODES } from 'http';
-import { ServiceDeviceTracker } from './ServiceDeviceTracker';
-import { ClientDataService } from './ClientDataService';
-import { ACTION } from './Constants';
-import { ServiceWebsocketProxy } from './ServiceWebsocketProxy';
+import { ServiceDeviceTracker } from './service/ServiceDeviceTracker';
+import { ACTION } from '../GlobalConstants';
+import { ServiceWebsocketProxy } from './service/ServiceWebsocketProxy';
+import { ServicePrepareData } from './service/ServicePrepareData';
 import { ClientMessage} from './interfaces/Message';
 
-//const port = parseInt(process.argv[2], 10) || portNum;
+
+// node index.js [ip] [port] [query] [udid] [isReactPreviewer]
+
+const ip = process.argv[2]
+const port = parseInt(process.argv[3], 10);
+const query = process.argv[4];
+const udid = process.argv[5]
+const isFrontEndReact = process.argv[6];
+const assetsDir = process.argv[7];
+
+function getPath(folderName:string){
+    var DIR;
+    DIR = assetsDir + folderName;
+    //DIR = path.join(__dirname, '../' + folderName)
+    return DIR;
+}
+
+var PUBLIC_DIR:string;
+
+if(isFrontEndReact === 'true'){
+    PUBLIC_DIR = getPath('react-previewer');
+}
+else{
+    PUBLIC_DIR = getPath('scrcpy-previewer');
+}
+
 const map: Record<string, string> = {
     '.wasm': 'application/wasm',
     '.js': 'text/javascript',
@@ -26,196 +50,104 @@ const map: Record<string, string> = {
     '.jpg': 'image/jpeg',
 };
 
-//TODO
-//const PUBLIC_DIR = path.join(__dirname, '../public');
-//const PUBLIC_DIR = path.join(__dirname, 'renderer/public');
-
-//const PUBLIC_DIR = '/Users/MartinRGB/Documents/GitHub/TweakIt-Desktop/dist/public';
-//const PUBLIC_DIR = '/Users/MartinRGB/Documents/GitHub/TweakIt-Desktop/dist/renderer/previewer'
-//const serverPort = parseInt(process.argv[2], 10) || FRONTEND_PORT;
-
-const { app } = window.require('electron').remote;
-var appPath = app.getAppPath().replace(/ /g,"\\ ");
-var localAssetsPath = appPath + '/assets/';
-var appResPath = path.join(process.resourcesPath, "/assets/");
-var localDistRendererPath = appPath + '/dist/renderer/';
-
-var mWebSocket:WebSocket.Server;
-var server;
-
-var clientMsg:ClientMessage;
-
-export function getPath(folderName:string){
-    var DIR;
-    DIR = path.join(__dirname, localDistRendererPath + folderName); //cast
-    return DIR;
-}
-
-export function getClientMessage(){
-    return clientMsg;
-}
-
-function setWSSConnection(wss:WebSocket.Server,msg:ClientMessage,callback?:()=>void){
-
-    var hasGetDeviceList:boolean = false;
-    var hasCreateProxy:boolean = false;
-    var hasFromClient:boolean = false;
-    wss.on('connection', async (ws: WebSocket, req) => {
-            if (!req.url) {
-                ws.close(4001, 'Invalid url');
-                return;
+const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
+    if (!req.url) {
+        res.statusCode = 400;
+        res.end(STATUS_CODES[400]);
+        return;
+    }
+    const parsedUrl = url.parse(req.url);
+    let pathname = path.join(PUBLIC_DIR, (parsedUrl.pathname || '.').replace(/^(\.)+/, '.'));
+    fs.stat(pathname, (statErr, stat) => {
+        if (statErr) {
+            if (statErr.code === 'ENOENT') {
+                // if the file is not found, return 404
+                res.statusCode = 404;
+                res.end(`File ${pathname} not found!`);
+            } else {
+                res.statusCode = 500;
+                res.end(`Error getting the file: ${statErr}.`);
             }
-            const parsed = url.parse(req.url);
-            const parsedQuery = querystring.parse(parsed.query || '');
-            if (typeof parsedQuery.action === 'undefined') {
-                ws.close(4002, `Missing required parameter "action"`);
-            }
-            //ServiceDeviceTracker.createService(ws);
-            switch (parsedQuery.action) {
-                case ACTION.FROM_CLIENT:
-                    if(!hasFromClient){
-                        ClientDataService.createService(ws,msg);
-                        hasFromClient = true;
-                    }
-                    break;
-                case ACTION.DEVICE_LIST:
-                    if(!hasGetDeviceList){
-                        ServiceDeviceTracker.createService(ws,msg);
-                        hasGetDeviceList = true;
-                    }
-                    break;
-                case ACTION.PROXY: {
-                    if(!hasCreateProxy){
-                        const remote = parsedQuery.remote;
-                        if (typeof remote !== 'string' || !remote) {
-                            ws.close(4003, `Invalid value "${remote}" for "remote" parameter`);
-                            break;
-                        }
-                        const udid = msg.udid; //parsedQuery.udid
-                        if (typeof udid !== 'string' || !udid) {
-                            ws.close(4003, `Invalid value "${udid}" for "udid" parameter`);
-                            break;
-                        }
-                        const service = ServiceWebsocketProxy.createService(ws, udid, remote,msg);
-                        service.init(function(){
-                            if(callback !=null){
-                                callback()
-                            }
-                        }).catch((e) => {
-                            const msg = `Failed to start service: ${e.message}`;
-                            console.error(msg);
-                            ws.close(4005, msg);
-                        });
-                        hasCreateProxy = true;
-                    }
-                    break;
-                }
-                default:
-                    ws.close(4003, `Invalid value "${parsedQuery.action}" for "action" parameter`);
-                    return;
-            }
-
-    });
-}
-
-export function startScrcpyServer(isReactPreviewer:boolean,id:string,ip:string,port:number,query:string,callback?:()=>void){
-    if(mWebSocket != undefined){
-        mWebSocket.close();
-    }
-    if(server != undefined){
-        server.close();
-    }
-
-    var PUBLIC_DIR:string;
-    var serverPort:number = parseInt(process.argv[2], 10) || port;
-
-    if(isReactPreviewer){
-        PUBLIC_DIR = getPath('previewer-react');
-        //serverPort = parseInt(process.argv[2], 10) || FRONTEND_PORT_REACT;
-    }
-    else{
-        PUBLIC_DIR = getPath('previewer');
-        //serverPort = parseInt(process.argv[2], 10) || FRONTEND_PORT;
-    }
-    console.log(serverPort)
-    console.log(PUBLIC_DIR)
-    server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
-        if (!req.url) {
-            res.statusCode = 400;
-            res.end(STATUS_CODES[400]);
             return;
         }
-        const parsedUrl = url.parse(req.url);
-        let pathname = path.join(PUBLIC_DIR, (parsedUrl.pathname || '.').replace(/^(\.)+/, '.'));
-        fs.stat(pathname, (statErr, stat) => {
-            if (statErr) {
-                if (statErr.code === 'ENOENT') {
-                    // if the file is not found, return 404
-                    res.statusCode = 404;
-                    res.end(`File ${pathname} not found!`);
-                } else {
-                    res.statusCode = 500;
-                    res.end(`Error getting the file: ${statErr}.`);
-                }
-                return;
+        if (stat.isDirectory()) {
+            pathname = path.join(pathname, 'index.html');
+        }
+        const ext = path.parse(pathname).ext;
+        fs.readFile(pathname, (readErr, data) => {
+            if (readErr) {
+                res.statusCode = 500;
+                res.end(`Error getting the file: ${statErr}.`);
+            } else {
+                // if the file is found, set Content-type and send data
+                res.setHeader('Content-type', map[ext] || 'text/plain');
+                res.end(data);
             }
-            if (stat.isDirectory()) {
-                pathname = path.join(pathname, 'index.html');
-            }
-            const ext = path.parse(pathname).ext;
-            fs.readFile(pathname, (readErr, data) => {
-                if (readErr) {
-                    res.statusCode = 500;
-                    res.end(`Error getting the file: ${statErr}.`);
-                } else {
-                    // if the file is found, set Content-type and send data
-                    res.setHeader('Content-type', map[ext] || 'text/plain');
-                    res.end(data);
-                }
-            });
         });
     });
+});
 
-    // const msg: ClientMessage = {
-    //     ip: ip,
-    //     port: port,
-    //     query: query,
-    //     udid:id,
-    // };
-
-    clientMsg = {
-        ip: ip,
-        port: port,
-        query: query,
-        udid:id,
-    };
-
-    server.listen(serverPort);
-    server.on('listening', function() {
-        console.log('23');
-        printListeningMsg(serverPort,()=>{
-            mWebSocket = new WebSocket.Server({server});
-            setWSSConnection(mWebSocket,clientMsg,function(){
-                console.log('3223');
+const wss = new WebSocket.Server({ server });
+wss.on('connection', async (ws: WebSocket, req) => {
+    if (!req.url) {
+        ws.close(4001, 'Invalid url');
+        return;
+    }
+    const parsed = url.parse(req.url);
+    const parsedQuery = querystring.parse(parsed.query || '');
+    if (typeof parsedQuery.action === 'undefined') {
+        ws.close(4002, `Missing required parameter "action"`);
+    }
+    switch (parsedQuery.action) {
+        case ACTION.FROM_CLIENT:
+            const clientMsg:ClientMessage = {
+                ip: ip,
+                port: port,
+                query: query,
+                udid:udid,
+            };
+            ServicePrepareData.createService(ws,clientMsg,assetsDir);
+        case ACTION.DEVICE_LIST:
+            ServiceDeviceTracker.createService(ws,assetsDir);
+            break;
+        case ACTION.PROXY: {
+            const remote = parsedQuery.remote;
+            if (typeof remote !== 'string' || !remote) {
+                ws.close(4003, `Invalid value "${remote}" for "remote" parameter`);
+                break;
+            }
+            //const udid = parsedQuery.udid; //parsedQuery.udid process.argv[2]
+            if (typeof udid !== 'string' || !udid) {
+                ws.close(4003, `Invalid value "${udid}" for "udid" parameter`);
+                break;
+            }
+            const service = ServiceWebsocketProxy.createService(ws, udid, remote);
+            service.init().catch((e) => {
+                const msg = `Failed to start service: ${e.message}`;
+                console.error(msg);
+                ws.close(4005, msg);
             });
-            if(callback) callback()
-        })
-    });
+            break;
+        }
+        default:
+            ws.close(4003, `Invalid value "${parsedQuery.action}" for "action" parameter`);
+            return;
+    }
+});
 
-
-}
+server.listen(port);
+server.on('listening', printListeningMsg);
 
 function fixedEncodeURI(str: string): string {
     return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');
 }
 
-function printListeningMsg(port:number,callback?:()=>void):void{
+function printListeningMsg(): void {
     const list: string[] = [];
     const formatAddress = (ip: string, ipv6: boolean): void => {
         const host = ipv6 ? `[${ip}]` : ip;
         list.push(`http://${host}:${port}`);
     };
-    
     formatAddress(os.hostname(), false);
     Object.keys(os.networkInterfaces())
         .map((key) => os.networkInterfaces()[key])
@@ -230,7 +162,6 @@ function printListeningMsg(port:number,callback?:()=>void):void{
             });
         });
     console.log('Listening on:', list.map(fixedEncodeURI).join(' '));
-    if(callback!=null)callback();
 }
 
 if (process.platform === 'win32') {

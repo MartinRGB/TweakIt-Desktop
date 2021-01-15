@@ -1,28 +1,26 @@
-import '../vendor/Genymobile/scrcpy/scrcpy-server.jar';
-import '../vendor/Genymobile/scrcpy/LICENSE.txt';
+import '../../vendor/Genymobile/scrcpy/scrcpy-server.jar';
+import '../../vendor/Genymobile/scrcpy/LICENSE.txt';
 
 import ADB from '@devicefarmer/adbkit';
-import { AdbKitChangesSet, AdbKitClient, AdbKitTracker, PushTransfer} from './@devicefarmer/adbkit'
+import { AdbKitChangesSet, AdbKitClient, AdbKitTracker, PushTransfer} from '../@devicefarmer/adbkit'
 import { EventEmitter } from 'events';
 import { spawn } from 'child_process';
 import * as path from 'path';
 import { DeviceDescriptor } from './DeviceDescriptor';
-import { ARGS_STRING, SERVER_PACKAGE, SERVER_VERSION } from './Constants';
-import DroidDeviceDescriptor from './interfaces/DroidDeviceDescriptor';
+import { ARGS_STRING } from '../ServerConstants';
+import { SERVER_PACKAGE, SERVER_VERSION} from '../../GlobalConstants'
+import DroidDeviceDescriptor from '../interfaces/DroidDeviceDescriptor';
 // import Timeout = NodeJS.Timeout;
-import { NetInterface } from './interfaces/NetInterface';
+import { NetInterface } from '../interfaces/NetInterface';
 
-
-
-
-const { app } = window.require('electron').remote;
-var appPath = app.getAppPath().replace(/ /g,"\\ ");
-var localDistRendererPath = appPath + '/dist/renderer/';
+// const { app } = window.require('electron').remote;
+// var appPath = app.getAppPath().replace(/ /g,"\\ ");
+// var localDistRendererPath = appPath + '/dist/renderer/';
+// const FILE_DIR = path.join(__dirname, localDistRendererPath + 'vendor/Genymobile/scrcpy');
 
 const TEMP_PATH = '/data/local/tmp/';
-const FILE_DIR = path.join(__dirname, localDistRendererPath + 'vendor/Genymobile/scrcpy');
+//const FILE_DIR = path.join(__dirname, 'vendor/Genymobile/scrcpy');
 const FILE_NAME = 'scrcpy-server.jar';
-
 
 const GET_SHELL_PROCESSES = 'for DIR in /proc/*; do [ -d "$DIR" ] && echo $DIR;  done';
 const CHECK_CMDLINE = `[ -f "$a/cmdline" ] && grep -av find "$a/cmdline" |grep -sae '^app_process.*${SERVER_PACKAGE}' |grep ${SERVER_VERSION} 2>&1 > /dev/null && echo $a;`;
@@ -41,17 +39,19 @@ export class ServerDeviceConnection extends EventEmitter {
     private restartTimeoutId?: NodeJS.Timeout;
     private throttleTimeoutId?: NodeJS.Timeout;
     private lastEmit = 0;
+    private FILE_DIR:string;
     private waitAfterError = 1000;
     private ignoredDevices: Set<string> = new Set();
     private pendingInfoUpdate: Set<string> = new Set();
-    public static getInstance(): ServerDeviceConnection {
+    public static getInstance(dir:string): ServerDeviceConnection {
         if (!this.instance) {
-            this.instance = new ServerDeviceConnection();
+            this.instance = new ServerDeviceConnection(dir);
         }
         return this.instance;
     }
-    constructor() {
+    constructor(dir:string) {
         super();
+        this.FILE_DIR = dir + 'scrcpy-server/vendor/Genymobile/scrcpy';
     }
 
     public async init(): Promise<void> {
@@ -198,6 +198,7 @@ export class ServerDeviceConnection extends EventEmitter {
     private async pushAndSpawnServer(udid: string, fields: DroidDeviceDescriptor): Promise<void> {
         try {
             let pid = await this.getPid(udid);
+            console.log('current PID' + pid);
             const isIgnored = this.ignoredDevices.has(udid);
             if (!isIgnored) {
                 let count = 0;
@@ -300,7 +301,7 @@ export class ServerDeviceConnection extends EventEmitter {
         const client = this.getOrCreateClient(udid);
         await client.waitBootComplete(udid);
         
-        const src = path.join(FILE_DIR, FILE_NAME);
+        const src = path.join(this.FILE_DIR, FILE_NAME);
         const dst = TEMP_PATH + FILE_NAME; // don't use path.join(): will not work on win host
         return client.push(udid, src, dst);
     }

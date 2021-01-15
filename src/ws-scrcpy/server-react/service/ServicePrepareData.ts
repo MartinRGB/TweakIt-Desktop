@@ -1,55 +1,50 @@
 import WebSocket from 'ws';
-import { ServerDeviceConnection } from './ServerDeviceConnection';
-import { ReleasableService } from './ReleasableService';
-import { ClientMessage,FinalMessage} from './interfaces/Message';
-import DroidDeviceDescriptor from './interfaces/DroidDeviceDescriptor';
+import { ServerDeviceConnection } from '../device-info/ServerDeviceConnection';
+import { ReleasableService } from '../../server/service/ReleasableService';
+import { ClientMessage,Message,FinalMessage } from '../../server/interfaces/Message';
+import DroidDeviceDescriptor from '../../server/interfaces/DroidDeviceDescriptor';
 
 enum Command {
     KILL_SERVER = 'kill_server',
     START_SERVER = 'start_server',
 }
 
-export class ServiceDeviceTracker extends ReleasableService {
+export class ServicePrepareData extends ReleasableService {
     private sdc: ServerDeviceConnection = ServerDeviceConnection.getInstance();
 
     constructor(ws: WebSocket,msg:ClientMessage) {
-        super(ws,msg);
-
+        super(ws);
         this.sdc
-            .init()
-            .then(() => {
-                this.sdc.addListener(ServerDeviceConnection.UPDATE_EVENT, this.buildAndSendMessage);
-                this.buildAndSendMessage(this.sdc.getDevices(),msg);
-            })
-            .catch((e: Error) => {
-                console.error(`Error: ${e.message}`);
-            });
+        .init()
+        .then(() => {
+            //this.sdc.addListener(ServerDeviceConnection.UPDATE_EVENT, this.buildAndSendSDCMessage);
+            this.buildAndSendSDCMessage(this.sdc.getDevices(),msg);
+        })
+        .catch((e: Error) => {
+            console.error(`Error: ${e.message}`);
+        });
     }
 
-    private buildAndSendMessage = (list: DroidDeviceDescriptor[],message:ClientMessage): void => {
-        // const msg: Message = {
-        //     id: -1,
-        //     type: 'devicelist',
-        //     data: list,
-        // };
+    public static createService(ws: WebSocket,msg:ClientMessage): ReleasableService {
+        return new ServicePrepareData(ws,msg);
+    }
+
+    private buildAndSendSDCMessage = (list: DroidDeviceDescriptor[],message:ClientMessage): void => {
         const msg: FinalMessage = {
             id: -1,
             type: 'devicelist',
             data: list,
             clientMsg:message,
         };
-
-        this.sendMessage(msg);
+        this.sendClientMessage(msg);
     };
 
-    public static createService(ws: WebSocket,msg:ClientMessage): ReleasableService {
-        return new ServiceDeviceTracker(ws,msg);
-    }
 
     protected onSocketMessage(event: WebSocket.MessageEvent): void {
         let data;
         try {
             data = JSON.parse(event.data.toString());
+            console.log(data)
         } catch (e) {
             console.log(`Received message: ${event.data}`);
             return;
@@ -58,6 +53,7 @@ export class ServiceDeviceTracker extends ReleasableService {
             console.log(`Received message: ${event.data}`);
             return;
         }
+
         const command = data.command;
         switch (command) {
             case Command.KILL_SERVER: {
@@ -93,6 +89,5 @@ export class ServiceDeviceTracker extends ReleasableService {
 
     public release(): void {
         super.release();
-        this.sdc.removeListener(ServerDeviceConnection.UPDATE_EVENT, this.buildAndSendMessage);
     }
 }

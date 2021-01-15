@@ -1,70 +1,56 @@
 import WebSocket from 'ws';
-import { ServerDeviceConnection } from './ServerDeviceConnection';
+import { ServerDeviceConnection } from '../device-info/ServerDeviceConnection';
 import { ReleasableService } from './ReleasableService';
-import { ClientMessage,Message,FinalMessage } from './interfaces/Message';
-import DroidDeviceDescriptor from './interfaces/DroidDeviceDescriptor';
+import { ClientMessage,FinalMessage,Message} from '../interfaces/Message';
+import DroidDeviceDescriptor from '../interfaces/DroidDeviceDescriptor';
 
 enum Command {
     KILL_SERVER = 'kill_server',
     START_SERVER = 'start_server',
 }
 
-export class ClientDataService extends ReleasableService {
-    private sdc: ServerDeviceConnection = ServerDeviceConnection.getInstance();
+export class ServiceDeviceTracker extends ReleasableService {
+    private sdc: ServerDeviceConnection;
 
-    constructor(ws: WebSocket,msg:ClientMessage) {
-        super(ws,msg);
-
-        //this.buildAndSendMessage(msg);
-
+    constructor(ws: WebSocket,dir:string) { //,msg:ClientMessage
+        super(ws);
+        this.sdc = ServerDeviceConnection.getInstance(dir);
         this.sdc
-        .init()
-        .then(() => {
-            this.sdc.addListener(ServerDeviceConnection.UPDATE_EVENT, this.buildAndSendSDCMessage);
-            this.buildAndSendSDCMessage(this.sdc.getDevices(),msg);
-        })
-        .catch((e: Error) => {
-            console.error(`Error: ${e.message}`);
-        });
+            .init()
+            .then(() => {
+                this.sdc.addListener(ServerDeviceConnection.UPDATE_EVENT, this.buildAndSendMessage);
+                this.buildAndSendMessage(this.sdc.getDevices()); //,msg
+            })
+            .catch((e: Error) => {
+                console.error(`Error: ${e.message}`);
+            });
     }
 
-    public static createService(ws: WebSocket,msg:ClientMessage): ReleasableService {
-        return new ClientDataService(ws,msg);
-    }
-
-    // private buildAndSendMessage = (msg:ClientMessage): void => {
-    //     // const msg: ClientMessage = {
-    //     //     ip: ip,
-    //     //     port: port,
-    //     //     query: query,
-    //     //     udid:udid,
-    //     // };
-    //     this.sendMessage(msg);
-    // };
-
-
-    private buildAndSendSDCMessage = (list: DroidDeviceDescriptor[],message:ClientMessage): void => {
-        // const msg: Message = {
-        //     id: -1,
-        //     type: 'devicelist',
-        //     data: list,
-        // };
-
-        const msg: FinalMessage = {
+    private buildAndSendMessage = (list: DroidDeviceDescriptor[]): void => { //,message:ClientMessage
+        const msg: Message = {
             id: -1,
             type: 'devicelist',
             data: list,
-            clientMsg:message,
         };
+        // const msg: FinalMessage = {
+        //     id: -1,
+        //     type: 'devicelist',
+        //     data: list,
+        //     clientMsg:message,
+        // };
+
+        console.log(msg)
         this.sendMessage(msg);
     };
 
+    public static createService(ws: WebSocket,dir:string): ReleasableService { //,msg:ClientMessage
+        return new ServiceDeviceTracker(ws,dir); //msg
+    }
 
     protected onSocketMessage(event: WebSocket.MessageEvent): void {
         let data;
         try {
             data = JSON.parse(event.data.toString());
-            console.log(data)
         } catch (e) {
             console.log(`Received message: ${event.data}`);
             return;
@@ -73,7 +59,6 @@ export class ClientDataService extends ReleasableService {
             console.log(`Received message: ${event.data}`);
             return;
         }
-
         const command = data.command;
         switch (command) {
             case Command.KILL_SERVER: {
@@ -109,5 +94,6 @@ export class ClientDataService extends ReleasableService {
 
     public release(): void {
         super.release();
+        this.sdc.removeListener(ServerDeviceConnection.UPDATE_EVENT, this.buildAndSendMessage);
     }
 }
