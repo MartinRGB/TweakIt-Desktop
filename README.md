@@ -100,7 +100,7 @@ after `brew install node` or install the PKG via [Node.js](https://nodejs.org/) 
             ├── adb                # 'adb' executable file(macOS)
         ├── node                   # 'adb' folder
             ├── node               # 'node' executable file(macOS)
-        ├── ...                    # some file will generated here by using Webpack(node need access those files)
+        ├── ...                    # some Webpack generated files(node needs access them)
     ├── ...                    
 
 In order to run this project 2 scripts will need to be executed `dev:react` and `dev:electron`, run each one in a different terminal and always run `dev:react` before `dev:electron`, or `dev` to run them in order automatically
