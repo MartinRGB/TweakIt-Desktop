@@ -17,7 +17,6 @@
     "build:main-app": "webpack --config webpack/main-app.webpack.js",
     "build:previewer-app": "webpack --config webpack/previewer-app.webpack.js",
     "build:scrcpy": "webpack --config webpack/scrcpy.webpack.js",
-    
     "build:scrcpy-standalone": "webpack --config ws-scrcpy-standalone/ws-scrcpy.webpack.js",
     "start:scrcpy-standalone": "npm run build:scrcpy-standalone;node dist/scrcpy-server/index.js",
     "package": "npm-run-all build package:dist",
@@ -35,6 +34,7 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
+    "@babel/runtime": "^7.12.5",
     "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^9.0.1",
     "@commitlint/core": "^9.0.1",
@@ -58,6 +58,7 @@
     "babel-loader": "^8.1.0",
     "babel-plugin-macros": "^2.6.1",
     "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-runtime": "^6.26.0",
     "bluebird": "^3.7.2",
     "commitizen": "^4.1.2",
     "cross-env": "^7.0.2",

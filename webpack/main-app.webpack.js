@@ -71,59 +71,6 @@ const mainApplication = {
   },
 }
 
-
-
-const scrcpyFrontend = {
-  //target: 'electron-renderer',
-  // devtool: 'source-map',
-  target: 'web',
-  mode: 'development',
-  devtool: 'inline-source-map',
-  entry: path.resolve(rootPath, 'src', 'ws-scrcpy/frontend/index.ts'), // path.resolve(rootPath, 'src', 'ws-scrcpy/frontend/Previewer.tsx')
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'babel-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.(png|jpe?g|gif)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-          },
-        ],
-      },
-    ]
-  },
-  plugins: [
-    new HtmlWebpackPlugin(),
-  ],
-  // devServer: {
-  //   contentBase: path.join(rootPath, 'dist/renderer/previewer'),
-  //   historyApiFallback: true,
-  //   compress: true,
-  //   hot: true,
-  //   port: 50001,
-  //   publicPath: '/'
-  // },
-  output: {
-    path: path.join(rootPath, 'dist/renderer/previewer'),
-    filename: '[name].js',
-    publicPath: './'
-  },
-  resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
-    plugins: [
-      new TsconfigPathsPlugin({
-        extensions: ['.tsx', '.ts', '.js', '.json', '.png', '.jpg'],
-      }),
-    ],
-    mainFields: ['main', 'module', 'browser']
-  },
-};
-
 module.exports = [
   Object.assign({} , common, mainApplication),
 ]
