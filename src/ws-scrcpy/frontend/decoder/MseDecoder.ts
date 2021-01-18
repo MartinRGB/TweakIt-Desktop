@@ -65,8 +65,8 @@ export default class MseDecoder extends Decoder {
     private MAX_BUFFER = this.isSafari ? 2 : this.isChrome && this.isMac ? 0.9 : 0.2;
     private MAX_AHEAD = -0.2;
 
-    constructor(udid: string, protected tag: HTMLVideoElement = MseDecoder.createElement()) {
-        super(udid, 'MseDecoder', tag);
+    constructor(udid: string, tag:HTMLVideoElement,touchableCanvas:HTMLCanvasElement) { //protected tag: HTMLVideoElement = MseDecoder.createElement()
+        super(udid, 'MseDecoder', tag,touchableCanvas);
         
         tag.oncontextmenu = function (e: MouseEvent): boolean {
             e.preventDefault();

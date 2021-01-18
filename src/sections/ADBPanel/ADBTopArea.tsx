@@ -15,8 +15,8 @@ import {getUserHome,SDCardTmpPath} from '@Helpers/GlobalEnvironments/PathEnviron
 import {ADBConnectionContext}  from '@Context/ADBConnectionContext';
 import { useTranslation, Trans} from 'react-i18next'
 import {execCMD, execCMDPromise} from "@Helpers/ADBCommand/ADBCommand"
-import {startScrcpyServer} from '@WSScrcpy/server-react'
 import {WINDOW_PADDING_TOP,SCALE_DOWN_FACTOR,BACKEND_SOCKET_PORT} from '@WSScrcpy/GlobalConstants'
+import {startServer} from '@WSScrcpy/server'
 
 const ipcRenderer = require('electron').ipcRenderer
 
@@ -95,107 +95,48 @@ const ADBTopArea: React.FC = memo(({ children }) => {
 
   useEffect(() => {
     execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9`)
+
+    console.log(path.join(__dirname, '/scrcpy-server/index.js'));
+
   }, [])
 
 
   // Soft rendering
   const [hasTriggerServer,setHasTriggerServer] = useState<boolean>(false);
+  const [currentProcess,setCurrentProcess] = useState<any>();
   const [isSoftRender,setIsSoftRender] = useState<boolean>(true);
 
-  const startScrcpyByMSE = (isFEReact:boolean) =>{
+  const startScrcpyByMSEReact = () =>{
 
-    const isWifi = serialNoDevicesTargets[currentDeviceSelectIndex].includes('.');
     const deviceId = `${serialNoDevicesTargets[currentDeviceSelectIndex]}`;
-    const deviceUuId = serialNoDeivces[currentDeviceSelectIndex];
 
-    const ip = isWifi?`${deviceId.split(':')[0]}`:'localhost';
-    const isFrontEndReact = isFEReact; // true StreamReceiver Bug
-    const port = isWifi?8886:BACKEND_SOCKET_PORT; //isFrontEndReact?50002:50001)
-    const query = isWifi?``:`?action=proxy&remote=tcp%3A8886&udid=${deviceId}`;
-    const udid = isWifi?`${deviceUuId}`:`${deviceId}`;
-    
     if(deviceId != null && deviceId != undefined) {      
-      startScrcpyServer(hasTriggerServer,isFrontEndReact,udid,ip,port,query,()=>{
-        const sizeStr = "counter=`adb -s {target} shell wm size | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm size | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi";
-        execCMDPromise(sizeStr.replace(/{target}/g, deviceId),function(val:any){
-          const width=Number(val.split('\n')[0])/SCALE_DOWN_FACTOR;
-          const height=Number(val.split('\n')[1])/SCALE_DOWN_FACTOR + WINDOW_PADDING_TOP;
-          if(isFrontEndReact){
-            ipcRenderer.send('createReactPreviewerWindow',width,height);
-          }
-          else{
-            ipcRenderer.send('createScrcpyPreviewerWindow',width,height);
-          }
-          
-          // Notice:IPC Render Method is not agile
-          // ipcRenderer.send('createCastWindow', 
-          // `${ip}`,
-          // `${port}`,
-          // `${query}`,
-          // `${udid}`,
-          // width,
-          // height);
-      
-        })
-      });
-    }
-  }
-
-
-  const triggerScrcpyServerReact = (isFEReact:boolean) =>{
-    if(!hasTriggerServer){
-      execCMD(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9;`,'',function(){
-        setHasTriggerServer(true);
-        startScrcpyByMSE(isFEReact);
-      });
-    }
-    else{
-      startScrcpyByMSE(isFEReact);
-    }
-      
-  }
-
-  const triggerScrcpyServer = (isFEReact:boolean) =>{
-    execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9;`,(e) =>{
       const isWifi = serialNoDevicesTargets[currentDeviceSelectIndex].includes('.');
-      const deviceId = `${serialNoDevicesTargets[currentDeviceSelectIndex]}`;
       const deviceUuId = serialNoDeivces[currentDeviceSelectIndex];
 
       const ip = isWifi?`${deviceId.split(':')[0]}`:'localhost';
-      const isFrontEndReact = isFEReact; // true StreamReceiver Bug
       const port = isWifi?8886:BACKEND_SOCKET_PORT; //isReactPreviewer?50002:50001)
       const query = isWifi?``:`?action=proxy&remote=tcp%3A8886&udid=${deviceId}`;
       const udid = isWifi?`${deviceUuId}`:`${deviceId}`;
 
-      var serverPath:string = '';
-      var assetsPath:string = ''
-
-      if (process.env.NODE_ENV === 'development') {
-        console.log('1')
-        assetsPath = `${localAssetsPath}`;
-      }else{
-        console.log('2')
-        assetsPath = `${appResPath}`;
-      }
-
-      if(deviceId != null && deviceId != undefined) {      
-        execCMDPromise(`node ${assetsPath}scrcpy-server/index.js ${ip} ${port} '${query}' ${udid} ${isFrontEndReact} ${assetsPath}`,()=>{},(e)=>{console.log(e)})
-
-        const sizeStr = "counter=`adb -s {target} shell wm size | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm size | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi";
-        execCMDPromise(sizeStr.replace(/{target}/g, deviceId),function(val:any){
-          const width=Number(val.split('\n')[0])/SCALE_DOWN_FACTOR;
-          const height=Number(val.split('\n')[1])/SCALE_DOWN_FACTOR + WINDOW_PADDING_TOP;
-          if(isFrontEndReact){
+      if(deviceId != null && deviceId != undefined) {
+          const process = startServer(`${ip}`,port,`${query}`,`${udid}`);
+          const sizeStr = "counter=`adb -s {target} shell wm size | grep 'Override' | wc -l`; if [ $counter -eq 1 ]; then adb -s {target} shell wm size | grep 'Override' | grep -Eo '[0-9]{1,4}'; else adb -s {target} shell wm size | grep 'Physical' | grep -Eo '[0-9]{1,4}';fi";
+          execCMDPromise(sizeStr.replace(/{target}/g, deviceId),function(val:any){
+            const width=Number(val.split('\n')[0])/SCALE_DOWN_FACTOR;
+            const height=Number(val.split('\n')[1])/SCALE_DOWN_FACTOR + WINDOW_PADDING_TOP;
             ipcRenderer.send('createReactPreviewerWindow',width,height);
-          }
-          else{
-            ipcRenderer.send('createScrcpyPreviewerWindow',width,height);
-          }
-      
-        })
+          })
       }
+    }
+  }
 
-    });
+
+  const triggerScrcpyServerReact = () =>{
+    // execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9;`,(e) =>{
+    //   startScrcpyByMSEReact();
+    // });
+    startScrcpyByMSEReact();
   }
 
 
@@ -216,11 +157,6 @@ const ADBTopArea: React.FC = memo(({ children }) => {
           onClickIndex={(i:any,val:any)=>{onDeviceIndexClicked(i,val)}} 
           selectIndex={currentDeviceSelectIndex}
         ></DropDownMenuDevice>
-
-        {/* <button style={{width:`40px`}} onClick={()=>{triggerScrcpyServerReact(false)}}>bRfN</button>
-        <button style={{width:`40px`}} onClick={()=>{triggerScrcpyServerReact(true)}}>bRfR</button>
-        <button style={{width:`40px`}} onClick={()=>{triggerScrcpyServer(false)}}>bNfN</button>
-        <button style={{width:`40px`}} onClick={()=>{triggerScrcpyServer(true)}}>bNFR</button> */}
 
         <RadioGroupContainer
           enable = {(
@@ -307,7 +243,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             onMenuClickIndex={(i:any,val:any) =>{onCastIndexClickded(i,val)}}
             menuSelectIndex={castSelectIndex}
             onClick={()=>{
-              isSoftRender?triggerScrcpyServer(true):``}}
+              isSoftRender?triggerScrcpyServerReact():``}}
             currentTopSelectIndex={currentDeviceSelectIndex}
           >
 

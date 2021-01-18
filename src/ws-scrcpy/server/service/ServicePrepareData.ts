@@ -10,11 +10,10 @@ enum Command {
 }
 
 export class ServicePrepareData extends ReleasableService {
-    private sdc: ServerDeviceConnection;
+    private sdc: ServerDeviceConnection = ServerDeviceConnection.getInstance();
 
-    constructor(ws: WebSocket,msg:ClientMessage,dir:string) {
+    constructor(ws: WebSocket,msg:ClientMessage) {
         super(ws);
-        this.sdc = ServerDeviceConnection.getInstance(dir);
         this.sdc
         .init()
         .then(() => {
@@ -26,8 +25,8 @@ export class ServicePrepareData extends ReleasableService {
         });
     }
 
-    public static createService(ws: WebSocket,msg:ClientMessage,dir:string): ReleasableService {
-        return new ServicePrepareData(ws,msg,dir);
+    public static createService(ws: WebSocket,msg:ClientMessage): ReleasableService {
+        return new ServicePrepareData(ws,msg);
     }
 
     private buildAndSendSDCMessage = (list: DroidDeviceDescriptor[],message:ClientMessage): void => {

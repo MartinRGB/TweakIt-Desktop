@@ -4,7 +4,7 @@
   "description": "An Electron Tools including TypeScript, React, Jest and ESLint.",
   "main": "./dist/main.js",
   "scripts": {
-    "dev": "rm -rf assets/scrcpy-server assets/scrcpy-previewer assets/react-previewer;rm -rf dist;npm-run-all -p build:scrcpy build:main-app build:previewer-app dev:main-app dev:previewer-app electron:serve",
+    "dev": "rm -rf assets/scrcpy-server assets/scrcpy-previewer assets/react-previewer;rm -rf dist;npm-run-all -p build:main-app build:previewer-app dev:main-app dev:previewer-app electron:serve",
     "dev:electron": "cross-env NODE_ENV=development webpack --config webpack/electron.webpack.js --mode development && npm run start:electron",
     "dev:main-app": "cross-env NODE_ENV=development webpack-dev-server --config webpack/main-app.webpack.js --mode development",
     "dev:previewer-app": "cross-env NODE_ENV=development webpack-dev-server --config webpack/previewer-app.webpack.js --mode development",
@@ -16,9 +16,7 @@
     "build:electron": "webpack --config webpack/electron.webpack.js",
     "build:main-app": "webpack --config webpack/main-app.webpack.js",
     "build:previewer-app": "webpack --config webpack/previewer-app.webpack.js",
-    "build:scrcpy": "webpack --config webpack/scrcpy.webpack.js",
-    "build:scrcpy-standalone": "webpack --config ws-scrcpy-standalone/ws-scrcpy.webpack.js",
-    "start:scrcpy-standalone": "npm run build:scrcpy-standalone;node dist/scrcpy-server/index.js",
+
     "package": "npm-run-all build package:dist",
     "package:dist": "electron-builder --dir",
     "package-all": "npm run package-mac;npm run package-win;npm run package-linux",

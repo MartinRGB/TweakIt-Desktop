@@ -42,7 +42,7 @@ export default abstract class Decoder {
     protected screenInfo?: ScreenInfo;
     protected videoSettings: VideoSettings;
     protected parentElement?: HTMLElement;
-    protected touchableCanvas: HTMLCanvasElement;
+    //protected touchableCanvas: HTMLCanvasElement;
     protected inputBytes: BitrateStat[] = [];
     protected perSecondQualityStats?: FramesPerSecondStats;
     protected momentumQualityStats?: PlaybackQuality;
@@ -63,17 +63,25 @@ export default abstract class Decoder {
     private receivedFirstFrame = false;
     private statLines: string[] = [];
     public readonly supportsScreenshot: boolean = false;
+    protected tag:HTMLElement;
+    protected touchableCanvas:HTMLCanvasElement;
 
     constructor(
         protected udid: string,
         protected name: string = 'Decoder',
-        protected tag: HTMLElement = document.createElement('div'),
+        //protected tag: HTMLElement = document.createElement('div'),
+        tag: HTMLElement,
+        touchableCanvas: HTMLCanvasElement,
     ) {
-        this.touchableCanvas = document.createElement('canvas');
-        this.touchableCanvas.className = 'touch-layer';
+        // this.touchableCanvas = document.createElement('canvas');
+        //this.touchableCanvas.className = 'touch-canvas';
+
+        this.touchableCanvas = touchableCanvas;
         this.touchableCanvas.oncontextmenu = function (e: MouseEvent): void {
             e.preventDefault();
         };
+        this.tag = tag;
+
         const preferred = this.getPreferredVideoSetting();
         this.videoSettings = Decoder.getVideoSettingFromStorage(preferred, this.name, udid);
     }
@@ -157,6 +165,7 @@ export default abstract class Decoder {
 
     public play(): void {
         if (this.needScreenInfoBeforePlay() && !this.screenInfo) {
+            console.log('not push')
             return;
         }
         this.state = Decoder.STATE.PLAYING;
@@ -195,9 +204,9 @@ export default abstract class Decoder {
     }
 
     public setParent(parent: HTMLElement): void {
-        this.parentElement = parent;
-        parent.appendChild(this.tag);
-        parent.appendChild(this.touchableCanvas);
+        // this.parentElement = parent;
+        // parent.appendChild(this.tag);
+        // parent.appendChild(this.touchableCanvas);
     }
 
     public resizeVideoElement(screenInfo:ScreenInfo){

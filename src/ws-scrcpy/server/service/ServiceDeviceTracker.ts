@@ -10,11 +10,10 @@ enum Command {
 }
 
 export class ServiceDeviceTracker extends ReleasableService {
-    private sdc: ServerDeviceConnection;
+    private sdc: ServerDeviceConnection = ServerDeviceConnection.getInstance();
 
-    constructor(ws: WebSocket,dir:string) { //,msg:ClientMessage
+    constructor(ws: WebSocket) { //,msg:ClientMessage
         super(ws);
-        this.sdc = ServerDeviceConnection.getInstance(dir);
         this.sdc
             .init()
             .then(() => {
@@ -43,8 +42,8 @@ export class ServiceDeviceTracker extends ReleasableService {
         this.sendMessage(msg);
     };
 
-    public static createService(ws: WebSocket,dir:string): ReleasableService { //,msg:ClientMessage
-        return new ServiceDeviceTracker(ws,dir); //msg
+    public static createService(ws: WebSocket): ReleasableService { //,msg:ClientMessage
+        return new ServiceDeviceTracker(ws); //msg
     }
 
     protected onSocketMessage(event: WebSocket.MessageEvent): void {

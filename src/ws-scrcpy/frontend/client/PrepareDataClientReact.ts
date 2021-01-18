@@ -1,7 +1,7 @@
-import { ManagerClient } from '../../frontend/client/ManagerClient';
+import { ManagerClient } from '../client/ManagerClient';
 import { FinalMessage} from '../../server/interfaces/Message';
 import { ACTION } from '../../GlobalConstants';
-import {SocketEventListener} from '../../frontend/interfaces/SocketEventListener'
+import {SocketEventListener} from '../interfaces/SocketEventListener'
 
 export class PrepareDataClientReact extends ManagerClient<null>{
 

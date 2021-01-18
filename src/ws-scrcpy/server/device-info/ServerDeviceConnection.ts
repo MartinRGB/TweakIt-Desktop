@@ -13,10 +13,10 @@ import DroidDeviceDescriptor from '../interfaces/DroidDeviceDescriptor';
 // import Timeout = NodeJS.Timeout;
 import { NetInterface } from '../interfaces/NetInterface';
 
-// const { app } = window.require('electron').remote;
-// var appPath = app.getAppPath().replace(/ /g,"\\ ");
-// var localDistRendererPath = appPath + '/dist/renderer/';
-// const FILE_DIR = path.join(__dirname, localDistRendererPath + 'vendor/Genymobile/scrcpy');
+const { app } = window.require('electron').remote;
+var appPath = app.getAppPath().replace(/ /g,"\\ ");
+var localDistRendererPath = appPath + '/dist/renderer/';
+const FILE_DIR = path.join(__dirname, localDistRendererPath + 'vendor/Genymobile/scrcpy');
 
 const TEMP_PATH = '/data/local/tmp/';
 //const FILE_DIR = path.join(__dirname, 'vendor/Genymobile/scrcpy');
@@ -39,19 +39,17 @@ export class ServerDeviceConnection extends EventEmitter {
     private restartTimeoutId?: NodeJS.Timeout;
     private throttleTimeoutId?: NodeJS.Timeout;
     private lastEmit = 0;
-    private FILE_DIR:string;
     private waitAfterError = 1000;
     private ignoredDevices: Set<string> = new Set();
     private pendingInfoUpdate: Set<string> = new Set();
-    public static getInstance(dir:string): ServerDeviceConnection {
+    public static getInstance(): ServerDeviceConnection {
         if (!this.instance) {
-            this.instance = new ServerDeviceConnection(dir);
+            this.instance = new ServerDeviceConnection();
         }
         return this.instance;
     }
-    constructor(dir:string) {
+    constructor() {
         super();
-        this.FILE_DIR = dir + 'scrcpy-server/vendor/Genymobile/scrcpy';
     }
 
     public async init(): Promise<void> {
@@ -301,7 +299,7 @@ export class ServerDeviceConnection extends EventEmitter {
         const client = this.getOrCreateClient(udid);
         await client.waitBootComplete(udid);
         
-        const src = path.join(this.FILE_DIR, FILE_NAME);
+        const src = path.join(FILE_DIR, FILE_NAME);
         const dst = TEMP_PATH + FILE_NAME; // don't use path.join(): will not work on win host
         return client.push(udid, src, dst);
     }

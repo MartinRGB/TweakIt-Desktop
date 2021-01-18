@@ -11,7 +11,7 @@ var localAssetsPath = appPath + '/assets/';
 var appResPath = path.join(process.resourcesPath, "/assets/");
 
 let mainWindow: Electron.BrowserWindow | null
-let previewerWindow: Electron.BrowserWindow | null;
+let previewerScrcpyWindow: Electron.BrowserWindow | null;
 let previewerReactWindow: Electron.BrowserWindow | null;
 
 function createMainWindow() {
@@ -46,57 +46,6 @@ function createMainWindow() {
   })
 }
 
-function createScrcpyPreviewerWindow(width:number,height:number) { //ip:string,port:number,query:string,udid:string,
-  previewerWindow = new BrowserWindow({
-    width: width,
-    height: height,
-    minWidth: width,
-    minHeight: height,
-    maxWidth:width,
-    maxHeight:height,
-    //frame: false,
-    backgroundColor: '#000000',
-    // backgroundColor: '#191622',
-    titleBarStyle: 'hiddenInset',
-    webPreferences: {
-      nodeIntegration: true
-    }
-  });
-
-  // TODO
-  if (process.env.NODE_ENV === 'development') {
-    previewerWindow.loadURL('http://localhost:50001')
-  } else {
-    previewerWindow.loadURL(
-      url.format({
-        pathname: appResPath +'scrcpy-previewer/index.html',
-        protocol: 'file:',
-        slashes: true
-      })
-    )
-  }
-
-  // previewerWindow.loadURL(
-  //   url.format({
-  //     pathname: path.join(__dirname, 'renderer/previewer/index.html'),
-  //     protocol: 'file:',
-  //     slashes: true
-  //   })
-  // )
-
-  // Notice IPC Render Method is not agile
-  // previewerWindow.webContents.on('did-finish-load', () => {
-  //   if(previewerWindow !=null){
-  //     previewerWindow.webContents.send('msg', ip,port,query,udid);
-  //   }
-  // });
-
-  previewerWindow.on('closed',()=>{
-    //execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9`)
-    previewerWindow = null;
-  })
-}
-
 function createReactPreviewerWindow(width:number,height:number) {
   previewerReactWindow = new BrowserWindow({
     width: width,
@@ -118,7 +67,7 @@ function createReactPreviewerWindow(width:number,height:number) {
   } else {
     previewerReactWindow.loadURL(
       url.format({
-        pathname: appResPath + 'react-previewer/index.html',
+        pathname: path.join(__dirname, 'renderer/react-previewer/index.html'),
         protocol: 'file:',
         slashes: true
       })
@@ -155,18 +104,6 @@ app.on('ready', createMainWindow)
     //     createCastWindow(ip,port,query,udid,width,height)
     //   }
     // })
-
-    ipcMain.on('createScrcpyPreviewerWindow', (event,width,height) => {
-      event.sender.send('test', { not_right: false })
-      if(previewerWindow !=null){
-        //previewerWindow.close();
-        createScrcpyPreviewerWindow(width,height)
-      }
-      else{
-        createScrcpyPreviewerWindow(width,height)
-      }
-    })
-
     ipcMain.on('createReactPreviewerWindow', (event,width,height) => {
       event.sender.send('test', { not_right: false })
       if(previewerReactWindow !=null){

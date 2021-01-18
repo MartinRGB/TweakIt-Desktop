@@ -12,7 +12,7 @@ const previewerApplication = {
   target: 'web',
   mode: 'development',
   devtool: 'inline-source-map',
-  entry: path.resolve(rootPath, 'src', 'ws-scrcpy/frontend-react/Previewer.tsx'), // path.resolve(rootPath, 'src', 'ws-scrcpy/frontend/Previewer.tsx')
+  entry: path.resolve(rootPath, 'src', 'ws-scrcpy/frontend/Previewer.tsx'), // path.resolve(rootPath, 'src', 'ws-scrcpy/frontend/Previewer.tsx')
   module: {
     rules: [
       {
@@ -34,7 +34,7 @@ const previewerApplication = {
     new HtmlWebpackPlugin(),
   ],
   devServer: {
-    contentBase: path.join(rootPath, 'assets/react-previewer'), //assets/react-previewer
+    contentBase: path.join(rootPath, 'dist/renderer/react-previewer'), //assets/react-previewer
     historyApiFallback: true,
     compress: true,
     hot: true,
@@ -42,7 +42,7 @@ const previewerApplication = {
     publicPath: '/'
   },
   output: {
-    path: path.join(rootPath, 'assets/react-previewer'), //assets/react-previewer
+    path: path.join(rootPath, 'dist/renderer/react-previewer'), //assets/react-previewer
     filename: '[name].js',
     publicPath: './'
   },
