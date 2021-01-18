@@ -8,6 +8,7 @@ import ScrcpyClientInReact from './client/ScrcpyClientInReact'
 import {ScrcpyClientReact} from './client/ScrcpyClientReact'
 import { ScrcpyStreamParams } from '../frontend/interfaces/ScrcpyStreamParams';
 import {SCALE_DOWN_FACTOR,WINDOW_PADDING_TOP} from '../GlobalConstants'
+import cursorImg from '@Assets/img/cursor.png'
 
 const mainElement = document.createElement('div')
 mainElement.setAttribute('id', 'root')
@@ -19,8 +20,8 @@ document.body.style.background = 'black';
 //document.body.style.cursor = 'none';
 document.body.classList.add("stream");
 
-const deviceWidthInPx = 720;
-const deviceHeightInPx = 720;
+const deviceWidthInPx = 0;
+const deviceHeightInPx = 0;
 
 const App = () => {
   const [scrcpyStreamParams,setScrcpyStreamParams] = useState<any>()
@@ -95,7 +96,7 @@ const App = () => {
 
         </IVideoContainer>
       </IDeviceView>
-      <ICursor ref={cursorRef}></ICursor>
+      <ICursor style={{backgroundImage: `url(${cursorImg})` }}  ref={cursorRef}></ICursor>
     </div>
   )
 }
@@ -139,11 +140,11 @@ cursor:none;
 `
 
 const ICursor =styled.div`
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 60px;
   border-radius: 100%;
-  background-color: #77FBAD;
-  opacity: .3;
+  background-size: contain;
+  opacity: .6;
   position: fixed;
   transform: translate(-50%, -50%);
   pointer-events: none;

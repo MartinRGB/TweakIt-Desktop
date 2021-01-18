@@ -142,7 +142,7 @@ export default class TouchHandler {
         const x = (touchX * width) / clientWidth;
         const y = ((touchY) * height) / clientHeight;
         const size = new Size(width, height);
-        // weird 2
+        // TODO fix here with Resolution
         const point = new Point(x*SCALE_DOWN_FACTOR, (y+WINDOW_PADDING_TOP*2)*SCALE_DOWN_FACTOR);
         const position = new Position(point, size);
         const buttons = this.BUTTONS_MAP[e.button];

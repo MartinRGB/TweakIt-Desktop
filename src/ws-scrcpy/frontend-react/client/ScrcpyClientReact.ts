@@ -20,6 +20,7 @@ import {SCALE_DOWN_FACTOR,WINDOW_PADDING_TOP} from '../../GlobalConstants'
 //import { KeyCodeControlMessage } from '../controlMessage/KeyCodeControlMessage';
 
 // Try get High Resolution
+// TODO set Resolution
 const deviceWidthInPx = 1080;
 const deviceHeightInPx = 2340;
 
@@ -236,9 +237,9 @@ export class ScrcpyClientReact extends BaseClient<never> {
                 down++;
                 onMouseEvent(e);
                 if(this.cursor){
-                    this.cursor.style.width = '50px'
-                    this.cursor.style.height = '50px'
-                    this.cursor.style.opacity = '.2'
+                    this.cursor.style.width = '40px'
+                    this.cursor.style.height = '40px'
+                    this.cursor.style.opacity = '1'
                 }
 
             });
@@ -246,9 +247,9 @@ export class ScrcpyClientReact extends BaseClient<never> {
                 onMouseEvent(e);
                 down--;
                 if(this.cursor){
-                    this.cursor.style.width = '20px'
-                    this.cursor.style.height = '20px'
-                    this.cursor.style.opacity = '.3'
+                    this.cursor.style.width = '60px'
+                    this.cursor.style.height = '60px'
+                    this.cursor.style.opacity = '.6'
                 }
             });
             element.addEventListener('mousemove', (e: MouseEvent): void => {
