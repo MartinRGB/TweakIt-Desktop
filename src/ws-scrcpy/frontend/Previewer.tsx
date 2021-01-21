@@ -15,13 +15,20 @@ import VideoSettings from './info/VideoSettings'
 import Size from './utils/Size'
 import * as THREE from 'three'
 import { extend,apply,Canvas,useFrame,useLoader,useRender,ReactThreeFiber,useThree} from 'react-three-fiber'
-import { EffectComposer, SSAO } from 'react-postprocessing'
+import { EffectComposer, SMAA ,SSAO } from 'react-postprocessing'
 import { useAspect } from "@react-three/drei/useAspect";
 import { RoundedBox } from "@react-three/drei"
 import Controls from './Controls'
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import testGlb from './assets/device.glb'
 import {useGLTF} from 'drei'
+import nx from './assets/cubemap/nx.jpg'
+import ny from './assets/cubemap/ny.jpg'
+import nz from './assets/cubemap/nz.jpg'
+import px from './assets/cubemap/px.jpg'
+import py from './assets/cubemap/py.jpg'
+import pz from './assets/cubemap/pz.jpg'
+import OnePlus_Diffuse from './assets/OnePlus_7_Diffuse.jpg'
 
 
 function Swarm({ count, mouse }) {
@@ -86,7 +93,7 @@ document.body.classList.add("stream");
 
 // const DEFAULT_LAYER = 0
 
-function Elf({video}) { // layer = DEFAULT_LAYER
+function PhoneModel({video}) { // layer = DEFAULT_LAYER
   //const group = useRef()
   const { nodes,materials,scene } = useGLTF(testGlb)
   // console.log(nodes)
@@ -109,24 +116,96 @@ function Elf({video}) { // layer = DEFAULT_LAYER
   //   </group>
   // )
 
+  const cubeUrls = [
+      px, nx,
+      py, ny,
+      pz,nz
+  ];
+
+  const reflectionCube = new THREE.CubeTextureLoader().load( cubeUrls );
+
+
+  
   console.log(scene)
 
   scene.traverse(function(children){
     if(children.name === 'OnePlus_7_Pro_Screen'){
-
-
       const videoTexture = new THREE.VideoTexture( video );
       videoTexture.flipY = false;
-      const videoParameters = { color: 0xffffff, map: videoTexture };
-      // let mat = new THREE.MeshStandardMaterial;
-      // let color = new THREE.Color(0xaa5511);
-      // mat.color = color;
+      const videoParameters = { color: 0xffffff, map: videoTexture,reflectivity:0.0 };
       let videoMat = new THREE.MeshBasicMaterial( videoParameters );
       children.material = videoMat; 
     }
+    if(children.name === 'OnePlus_7_Pro_Cam_Glass'){
+      console.log(children)
+      children.material = new THREE.MeshPhongMaterial( {
+        emissiveIntensity : 1.00,
+        emissive:new THREE.Color('#000000'),
+        shininess: 10, 
+        color: new THREE.Color('#000000'), 
+        specular: new THREE.Color('#FFFFFF'), 
+        reflectivity:0.2, 
+        refractionRatio: 0.98,
+        envMap: reflectionCube,
+        opacity: 0.2,
+        transparent: true,
+      });
+    }
+    if(children.name === 'OnePlus_7_Pro_Body'){
+      
+      children.children[3].material = new THREE.MeshPhongMaterial( {
+        emissiveIntensity : 1.00,
+        emissive:new THREE.Color('#000000'),
+        shininess: 4, 
+        color: new THREE.Color('#000000'), 
+        specular: new THREE.Color('#FFFFFF'), 
+        reflectivity:0.7, 
+        refractionRatio: 0.8,
+        envMap: reflectionCube,
+      });
+
+      const prevMap = children.children[7].material.map;
+      children.children[7].material = new THREE.MeshStandardMaterial( {
+        emissiveIntensity : 0.400,
+        emissive:new THREE.Color('#ffffff'),
+        refractionRatio: 0.8,
+        envMap: reflectionCube,
+        envMapIntensity:15,
+        metalness:0.2,
+        map:prevMap,
+        side: THREE.FrontSide,
+      
+      });
+      children.children[8].material = new THREE.MeshPhongMaterial( {
+        emissiveIntensity : 1.00,
+        emissive:new THREE.Color('#000000'),
+        shininess: 4, 
+        color: new THREE.Color('#000000'), 
+        specular: new THREE.Color('#FFFFFF'), 
+        reflectivity:0.2, 
+        refractionRatio: 0.38,
+        envMap: reflectionCube,
+        opacity: 0.9,
+        transparent: true,
+      });
+    }
+    if(children.name === 'OnePlus_7_Pro_Screen_Glass'){
+      children.material = new THREE.MeshPhongMaterial( {
+        emissiveIntensity : 0.00,
+        emissive:new THREE.Color('#000000'),
+        shininess: 10, 
+        color: new THREE.Color('#000000'), 
+        specular: new THREE.Color('#ffffff'), 
+        reflectivity:1.0, 
+        refractionRatio: 0.98,
+        envMap: reflectionCube,
+        opacity: 0.1,
+        transparent: true,
+      });
+    }
   });
 
-  //useFrame(() => (scene.rotation.y += 0.008))
+  useFrame(() => (scene.rotation.y += 0.002))
 
   return (
     <primitive object={scene} dispose={null} position={[0, -80, 0]}/>
@@ -329,7 +408,7 @@ const App = () => {
       });
       ScrcpyClientReact.getInstance().getCurrentDecoder().setVideoSettings(newVideoSettings, false);
       ScrcpyClientReact.getInstance().sendNewVideoSetting(newVideoSettings);
-      // setCanvasVideoPixelRatio(fac*2)
+      setCanvasVideoPixelRatio(2*fac)
     }
   }
 
@@ -359,22 +438,6 @@ const App = () => {
         <button onClick={()=>{setPercentage(0.2)}}>0.2</button>
         <button onClick={()=>{setSoftRendering()}}>Soft Rendering</button>
       </TitleContainer>
-
-      {/* <IThreeCanvasContainer>
-        <Canvas
-        shadowMap
-        gl={{ alpha: false, antialias: false }}
-        camera={{ fov: 75, position: [0, 0, 70], near: 10, far: 150 }}
-        onCreated={(state) => state.gl.setClearColor('#f0f0f0')}>
-          <ambientLight intensity={1.5} />
-          <pointLight position={[100, 100, 100]} intensity={2} castShadow />
-          <pointLight position={[-100, -100, -100]} intensity={5} color="red" />
-          <Swarm count={50} />
-          <EffectComposer multisampling={0}>
-            <SSAO samples={31} radius={20} intensity={40} luminanceInfluence={0.1} color="black" />
-          </EffectComposer>
-        </Canvas>
-      </IThreeCanvasContainer> */}
       
 
       <IDeviceView style={{transform:`scale(${videoScale})`,paddingTop:`${WINDOW_PADDING_TOP*(1/videoScale)}px`,width: `${(1/videoScale)*100}%`}}>
@@ -397,10 +460,10 @@ const App = () => {
             transform: `translate3d(0px, ${WINDOW_PADDING_TOP}px, 0px)`,
           }}
           ref = {threeCanvasRef}
-        
+          
         >
           <Canvas
-            pixelRatio={2} 
+            pixelRatio={canvasVideoPixelRatio} 
             // orthographic
             shadowMap
             colorManagement={false}
@@ -408,32 +471,30 @@ const App = () => {
             //camera={{ position: [0, 0, 12], fov: 50 }}
             gl={{ antialias: true }}
           >
-            <directionalLight
-              castShadow
-              position={[10, 8, -5]}
-              intensity={1.5}
-              shadow-mapSize-width={1024}
-              shadow-mapSize-height={1024}
-              shadow-camera-far={100}
-              shadow-camera-left={-10}
-              shadow-camera-right={10}
-              shadow-camera-top={10}
-              shadow-camera-bottom={-10}
-            />
-            <ambientLight intensity={10.5} />
-            <pointLight position={[100, 100, 100]} intensity={10} castShadow />
-            <pointLight position={[-100, -100, -100]} intensity={5} color="white" />
 
-            <ambientLight intensity={0.5} />
-            <pointLight position={[0, 60, -100]} intensity={20} />
-            <pointLight position={[-50, 0, -50]} intensity={5} />
+            <pointLight position={[100, 100, 100]} intensity={0.75} color="blue" />
+            <pointLight position={[-100, -100, 100]} intensity={0.75} color="red" />
+            <pointLight position={[100, 100, 100]} intensity={0.75} color="white" />
+            <pointLight position={[-100, -100, 100]} intensity={0.75} color="white" />
+            <pointLight position={[100, -100, 100]} intensity={0.75} color="white" />
+            <pointLight position={[-100, 100, 100]} intensity={0.75} color="white" />
+
+            <pointLight position={[100, 100, -100]} intensity={0.75} color="white"/>
+            <pointLight position={[-100, -100, -100]} intensity={0.75} color="white"/>
+            <pointLight position={[100, 100, -100]} intensity={0.75} color="red"/>
+            <pointLight position={[-100, -100, -100]} intensity={0.75} color="blue"/>
+
+            <ambientLight intensity={50} />
 
             {/* <Screen video={videoRef.current} width={canvasVideoWidth} height={canvasVideoHeight} canvasEl={threeCanvasRef.current} /> */}
 
 
             <Suspense fallback={null}>
-              <Elf video={videoRef.current}/>
+              <PhoneModel video={videoRef.current}/>
+
             </Suspense>
+
+            
             {/* <EffectComposer multisampling={0}>
               <SSAO samples={31} radius={20} intensity={40} luminanceInfluence={0.1} color="black" />
             </EffectComposer> */}
