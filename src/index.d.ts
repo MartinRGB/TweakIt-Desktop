@@ -1,2 +1,5 @@
 declare module '*.png'
 declare module '*.jpg'
+declare module '*.obj'
+declare module '*.mtl'
+declare module '*.glb'

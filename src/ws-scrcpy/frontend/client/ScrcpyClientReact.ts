@@ -15,14 +15,15 @@ import TouchHandler from '../event/TouchHandler';
 import Util from '..//utils/Util';
 import ScreenInfo from '../info/ScreenInfo';
 import { TouchControlMessage } from '..//controlMessage/TouchControlMessage';
-import {SCALE_DOWN_FACTOR,WINDOW_PADDING_TOP} from '../../GlobalConstants'
+import {ScrcpyEventListener} from '../interfaces/ScrcpyEventListener'
+//import {SCALE_DOWN_FACTOR,WINDOW_PADDING_TOP} from '../../GlobalConstants'
 //import { KeyEventListener, KeyInputHandler } from '../KeyInputHandler';
 //import { KeyCodeControlMessage } from '../controlMessage/KeyCodeControlMessage';
 
 // Try get High Resolution
 // TODO set Resolution
-const deviceWidthInPx = 1080;
-const deviceHeightInPx = 2340;
+const defaultWidth = 1080;
+const defaultHeight = 2340;
 
 export class ScrcpyClientReact extends BaseClient<never> {
     public static ACTION = 'stream';
@@ -33,6 +34,11 @@ export class ScrcpyClientReact extends BaseClient<never> {
     private requestedVideoSettings?: VideoSettings;
     private readonly streamReceiver: StreamReceiver;
     private cursor?:HTMLDivElement;
+    private mScrcpyEventListener:ScrcpyEventListener | undefined;
+    private static instance: ScrcpyClientReact;
+    private scaleFactor = 0;
+    private currentDecoder:MseDecoder;
+    private isHiddenVideo:boolean = false;
     
     constructor(params: ScrcpyStreamParams,videoContainer:HTMLDivElement,video:HTMLVideoElement,canvas:HTMLCanvasElement,cursor:HTMLDivElement) {
         super();
@@ -43,22 +49,51 @@ export class ScrcpyClientReact extends BaseClient<never> {
         this.cursor = cursor;
     }
 
+    public static createInstance(params: ScrcpyStreamParams,videoContainer:HTMLDivElement,video:HTMLVideoElement,canvas:HTMLCanvasElement,cursor:HTMLDivElement):void {
+        this.instance = new ScrcpyClientReact(params,videoContainer,video,canvas,cursor);
+    }
+
+    public static getInstance():ScrcpyClientReact{
+        return this.instance;
+    }
+
+    public setScrcpyEventListener(listener: ScrcpyEventListener): void{
+        this.mScrcpyEventListener = listener;
+    };
+
+    public setScaleFactor(factor:number):void{
+        this.scaleFactor = factor;
+    }
+
+    public getCurrentDecoder():MseDecoder{
+        return this.currentDecoder;
+    }
+
+    public setVideoQuality(percentage:number):void{
+
+    }
+
+    public setIsHiddenvideo(boo:boolean):void{
+        this.isHiddenVideo = boo;
+    }
+
+
     public startStream(udid: string,videoContainer:HTMLDivElement,video:HTMLVideoElement,canvas:HTMLCanvasElement): void {
         if (!udid) {
             return;
         }
 
         // const decoder = new MseDecoder(udid);
-        const decoder = new MseDecoder(udid,video,canvas);
-        this.setTouchListeners(decoder);
+        this.currentDecoder = new MseDecoder(udid,video,canvas);
+        this.setTouchListeners(this.currentDecoder);
 
-        decoder.setParent(videoContainer);
-        decoder.pause();
+        this.currentDecoder.setParent(videoContainer);
+        this.currentDecoder.pause();
 
-        const current = decoder.getVideoSettings();
+        const current = this.currentDecoder.getVideoSettings();
 
         //TODO
-        const bounds = new Size(deviceWidthInPx, deviceHeightInPx); //this.getMaxSize();
+        const bounds = new Size(defaultWidth, defaultHeight); //this.getMaxSize();
         const { bitrate, maxFps, iFrameInterval, lockedVideoOrientation, sendFrameMeta } = current;
         const newVideoSettings = new VideoSettings({
             bounds,
@@ -68,7 +103,7 @@ export class ScrcpyClientReact extends BaseClient<never> {
             lockedVideoOrientation,
             sendFrameMeta,
         });
-        decoder.setVideoSettings(newVideoSettings, false);
+        this.currentDecoder.setVideoSettings(newVideoSettings, false);
 
         // const element = decoder.getTouchableElement();
         // element.style.position = 'absolute';
@@ -79,12 +114,14 @@ export class ScrcpyClientReact extends BaseClient<never> {
 
         streamReceiver.on('video', (data) => {
             const STATE = Decoder.STATE;
-            if (decoder.getState() === STATE.PAUSED) {
-                decoder.play();
+            if (this.currentDecoder.getState() === STATE.PAUSED) {
+                this.currentDecoder.play();
             }
-            if (decoder.getState() === STATE.PLAYING) {
-                console.log('push Frame')
-                decoder.pushFrame(new Uint8Array(data));
+            if (this.currentDecoder.getState() === STATE.PLAYING) {
+                if(video.style.display === 'none' && !this.isHiddenVideo){
+                    video.style.display = 'block'
+                }
+                this.currentDecoder.pushFrame(new Uint8Array(data));
             }
         });
         streamReceiver.on('clientsStats', (stats) => {
@@ -96,18 +133,18 @@ export class ScrcpyClientReact extends BaseClient<never> {
             let min: VideoSettings = VideoSettings.copy(videoSettings) as VideoSettings;
             let playing = false;
             const STATE = Decoder.STATE;
-            if (decoder.getState() === STATE.PAUSED) {
-                decoder.play();
+            if (this.currentDecoder.getState() === STATE.PAUSED) {
+                this.currentDecoder.play();
             }
-            if (decoder.getState() === STATE.PLAYING) {
+            if (this.currentDecoder.getState() === STATE.PLAYING) {
                 playing = true;
             }
-            const oldInfo = decoder.getScreenInfo();
+            const oldInfo = this.currentDecoder.getScreenInfo();
             if (!screenInfo.equals(oldInfo)) {
-                decoder.setScreenInfo(screenInfo);
+                this.currentDecoder.setScreenInfo(screenInfo);
             }
 
-            const oldSettings = decoder.getVideoSettings();
+            const oldSettings = this.currentDecoder.getVideoSettings();
             if (!videoSettings.equals(oldSettings)) {
                 const bounds = new Size(screenInfo.contentRect.right, screenInfo.contentRect.bottom); 
                 const { bitrate, maxFps, iFrameInterval, lockedVideoOrientation, sendFrameMeta } = current;
@@ -119,7 +156,7 @@ export class ScrcpyClientReact extends BaseClient<never> {
                     lockedVideoOrientation,
                     sendFrameMeta,
                 });
-                decoder.setVideoSettings(newVideoSettings, false);
+                this.currentDecoder.setVideoSettings(newVideoSettings, false);
                 //decoder.setVideoSettings(videoSettings, videoSettings.equals(this.requestedVideoSettings));
             }
             if (!oldInfo) {
@@ -136,14 +173,19 @@ export class ScrcpyClientReact extends BaseClient<never> {
 
             videoContainer.style.width = screenInfo.contentRect.right + 'px';
             videoContainer.style.height = screenInfo.contentRect.bottom + 'px';
+            video.style.display='none';
 
-            decoder.resizeVideoElement(screenInfo);
+            if( this.mScrcpyEventListener ){
+                this.mScrcpyEventListener.onVideoParametersPrepared(screenInfo.contentRect.right,screenInfo.contentRect.bottom);
+            }
+
+            this.currentDecoder.resizeVideoElement(screenInfo);
 
             if (!min.equals(videoSettings) || !playing) {
                 this.sendNewVideoSetting(min);
             }
         });
-        console.log(decoder.getName(), udid);
+        console.log(this.currentDecoder.getName(), udid);
 
     }
 
@@ -174,8 +216,8 @@ export class ScrcpyClientReact extends BaseClient<never> {
             let down = 0;
             const supportsPassive = Util.supportsPassive();
             const onMouseEvent = (e: MouseEvent | TouchEvent) => {
-                const tag = decoder.getTouchableElement();
-                if (e.target === tag) {
+                //const tag = decoder.getTouchableElement();
+                //if (e.target === tag) {
                     const screenInfo: ScreenInfo = decoder.getScreenInfo() as ScreenInfo;
                     if (!screenInfo) {
                         return;
@@ -184,9 +226,9 @@ export class ScrcpyClientReact extends BaseClient<never> {
                     let condition = true;
                     if (e instanceof MouseEvent) {
                         condition = down > 0;
-                        events = TouchHandler.buildTouchEvent(e, screenInfo);
+                        events = TouchHandler.buildTouchEvent(e, screenInfo,this.scaleFactor);
                     } else if (e instanceof TouchEvent) {
-                        events = TouchHandler.formatTouchEvent(e, screenInfo, tag);
+                        events = TouchHandler.formatTouchEvent(e, screenInfo,this.scaleFactor); //tag
                     }
                     if (events && events.length && condition) {
                         events.forEach((event) => {
@@ -197,7 +239,7 @@ export class ScrcpyClientReact extends BaseClient<never> {
                         e.preventDefault();
                     }
                     e.stopPropagation();
-                }
+                //}
             };
 
             var element = decoder.getTouchableElement();

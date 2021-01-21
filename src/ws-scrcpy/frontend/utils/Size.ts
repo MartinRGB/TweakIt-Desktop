@@ -4,12 +4,12 @@ export interface SizeInterface {
 }
 
 export default class Size {
-    public readonly w: number;
-    public readonly h: number;
+    public width: number;
+    public height: number;
 
-    constructor(readonly width: number, readonly height: number) {
-        this.w = width;
-        this.h = height;
+    constructor(width: number, height: number) {
+        this.width = width;
+        this.height = height;
     }
 
     public static equals(a?: Size | null, b?: Size | null): boolean {

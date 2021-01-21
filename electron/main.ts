@@ -44,6 +44,10 @@ function createMainWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+  if(previewerReactWindow !=null){
+    previewerReactWindow= null
+  }
+
 }
 
 function createReactPreviewerWindow(width:number,height:number) {
@@ -52,8 +56,8 @@ function createReactPreviewerWindow(width:number,height:number) {
     height: height,
     minWidth: width,
     minHeight: height,
-    maxWidth:width,
-    maxHeight:height,
+    // maxWidth:width,
+    // maxHeight:height,
     backgroundColor: '#000000',
     titleBarStyle: 'hiddenInset',
     webPreferences: {

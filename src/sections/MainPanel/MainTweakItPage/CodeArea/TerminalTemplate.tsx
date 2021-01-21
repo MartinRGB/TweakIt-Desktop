@@ -39,7 +39,7 @@ const TerminalTemplate: React.FC<ITerminalSnippet> = memo(({style,scrollRef}) =>
 
 
   const [isInit,setIsInit] = useState<boolean>(false)
-  const initHeight = 191;
+  const initHeight = 174;
   const paddingValue = 10;
 
   const textAreaRef = useRef();

@@ -106,22 +106,22 @@ export default class TouchHandler {
         return pointerId;
     }
 
-    private static calculateCoordinates(e: CommonTouchAndMouse, screenInfo: ScreenInfo): TouchOnClient | null {
+    private static calculateCoordinates(e: CommonTouchAndMouse, screenInfo: ScreenInfo,scaleFactor:number): TouchOnClient | null {
         const action = this.EVENT_ACTION_MAP[e.type];
         if (typeof action === 'undefined' || !screenInfo) {
             return null;
         }
-        const htmlTag = document.getElementsByTagName('html')[0] as HTMLElement;
+        //const htmlTag = document.getElementsByTagName('html')[0] as HTMLElement;
         const { width, height } = screenInfo.videoSize;
         const target: HTMLElement = e.target as HTMLElement;
-        const { scrollTop, scrollLeft } = htmlTag;
-        let { clientWidth, clientHeight } = target;
-        let touchX = e.clientX - target.offsetLeft + scrollLeft;
-        let touchY = e.clientY - target.offsetTop + scrollTop;
-        const eps = 1e5;
-        const ratio = width / height;
-        const shouldBe = Math.round(eps * ratio);
-        const haveNow = Math.round((eps * clientWidth) / clientHeight);
+        //const { scrollTop, scrollLeft } = htmlTag;
+        //let { clientWidth, clientHeight } = target;
+        let touchX = e.clientX  - target.offsetLeft; //- target.offsetLeft + scrollLeft //(target.offsetLeft*(1/scaleFactor))
+        let touchY = e.clientY - WINDOW_PADDING_TOP; //- target.offsetTop + scrollTop
+        //const eps = 1e5;
+        //const ratio = width / height;
+        // const shouldBe = Math.round(eps * ratio);
+        // const haveNow = Math.round((eps * clientWidth) / clientHeight);
         // if (shouldBe > haveNow) {
         //     const realHeight = Math.ceil(clientWidth / ratio);
         //     const top = (clientHeight - realHeight) / 2;
@@ -139,17 +139,24 @@ export default class TouchHandler {
         //     touchX -= left;
         //     clientWidth = realWidth;
         // }
-        const x = (touchX * width) / clientWidth;
-        const y = ((touchY) * height) / clientHeight;
+
+        // const x = (touchX * width) / clientWidth;
+        // const y = (touchY * height) / clientHeight;
+        const x = (touchX * width) / (screenInfo.contentRect.right);
+        const y = (touchY * height) / (screenInfo.contentRect.bottom);
         const size = new Size(width, height);
+
+        console.log(height)
+        console.log(screenInfo.contentRect.bottom)
+
         // TODO fix here with Resolution
-        const point = new Point(x*SCALE_DOWN_FACTOR, (y+WINDOW_PADDING_TOP*2)*SCALE_DOWN_FACTOR);
+        const point = new Point(x*scaleFactor, y*scaleFactor);
         const position = new Position(point, size);
         const buttons = this.BUTTONS_MAP[e.button];
         return {
             client: {
-                width: clientWidth,
-                height: clientHeight,
+                width: screenInfo.contentRect.right,
+                height: screenInfo.contentRect.bottom,
             },
             touch: {
                 action,
@@ -159,8 +166,8 @@ export default class TouchHandler {
         };
     }
 
-    private static getTouch(e: MouseEvent, screenInfo: ScreenInfo): Touch[] | null {
-        const touchOnClient = this.calculateCoordinates(e, screenInfo);
+    private static getTouch(e: MouseEvent, screenInfo: ScreenInfo,scaleFactor:number): Touch[] | null {
+        const touchOnClient = this.calculateCoordinates(e, screenInfo,scaleFactor);
         if (!touchOnClient) {
             return null;
         }
@@ -284,7 +291,8 @@ export default class TouchHandler {
     public static formatTouchEvent(
         e: TouchEvent,
         screenInfo: ScreenInfo,
-        tag: HTMLElement,
+        scaleFactor:number,
+        //tag: HTMLElement,
     ): TouchControlMessage[] | null {
         const events: TouchControlMessage[] = [];
         const touches = e.changedTouches;
@@ -292,9 +300,9 @@ export default class TouchHandler {
             for (let i = 0, l = touches.length; i < l; i++) {
                 const touch = touches[i];
                 const pointerId = TouchHandler.getPointerId(e.type, touch.identifier);
-                if (touch.target !== tag) {
-                    continue;
-                }
+                // if (touch.target !== tag) {
+                //     continue;
+                // }
                 const item: CommonTouchAndMouse = {
                     clientX: touch.clientX,
                     clientY: touch.clientY,
@@ -302,7 +310,7 @@ export default class TouchHandler {
                     button: 0,
                     target: e.target,
                 };
-                const event = this.calculateCoordinates(item, screenInfo);
+                const event = this.calculateCoordinates(item, screenInfo,scaleFactor);
                 if (event) {
                     const { action, buttons, position } = event.touch;
                     const pressure = touch.force * 255;
@@ -320,8 +328,8 @@ export default class TouchHandler {
         return null;
     }
 
-    public static buildTouchEvent(e: MouseEvent, screenInfo: ScreenInfo): TouchControlMessage[] | null {
-        const touches = this.getTouch(e, screenInfo);
+    public static buildTouchEvent(e: MouseEvent, screenInfo: ScreenInfo,scaleFactor:number): TouchControlMessage[] | null {
+        const touches = this.getTouch(e, screenInfo,scaleFactor);
         if (!touches) {
             return null;
         }
