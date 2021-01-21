@@ -19,14 +19,8 @@ import { EffectComposer, SSAO } from 'react-postprocessing'
 import { useAspect } from "@react-three/drei/useAspect";
 import { RoundedBox } from "@react-three/drei"
 import Controls from './Controls'
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
-import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import deviceObj from './assets/device.obj'
-import deviceMtl from './assets/device.mtl'
-import glassObj from './assets/glass.obj'
-import glassMtl from './assets/glass.mtl'
-import testGlb from './assets/arwing.glb'
+import testGlb from './assets/device.glb'
 import {useGLTF} from 'drei'
 
 
@@ -132,7 +126,7 @@ function Elf({video}) { // layer = DEFAULT_LAYER
     }
   });
 
-  // useFrame(() => (scene.rotation.y += 0.008))
+  //useFrame(() => (scene.rotation.y += 0.008))
 
   return (
     <primitive object={scene} dispose={null} position={[0, -80, 0]}/>
@@ -339,8 +333,8 @@ const App = () => {
     }
   }
 
-  const getVideoSrc = () =>{
-    console.log(videoRef.current.src)
+  const setSoftRendering = () =>{
+    setIsThreeRenderer(!isThreeRenderer)
   }
 
 
@@ -363,7 +357,7 @@ const App = () => {
         <button onClick={()=>{setPercentage(0.6)}}>0.6</button>
         <button onClick={()=>{setPercentage(0.4)}}>0.4</button>
         <button onClick={()=>{setPercentage(0.2)}}>0.2</button>
-        <button onClick={()=>{getVideoSrc()}}>0</button>
+        <button onClick={()=>{setSoftRendering()}}>Soft Rendering</button>
       </TitleContainer>
 
       {/* <IThreeCanvasContainer>
@@ -406,7 +400,6 @@ const App = () => {
         
         >
           <Canvas
-            sRGB
             pixelRatio={2} 
             // orthographic
             shadowMap
@@ -415,7 +408,7 @@ const App = () => {
             //camera={{ position: [0, 0, 12], fov: 50 }}
             gl={{ antialias: true }}
           >
-                <directionalLight
+            <directionalLight
               castShadow
               position={[10, 8, -5]}
               intensity={1.5}
@@ -427,13 +420,13 @@ const App = () => {
               shadow-camera-top={10}
               shadow-camera-bottom={-10}
             />
-            <ambientLight intensity={1.5} />
-            <pointLight position={[100, 100, 100]} intensity={2} castShadow />
+            <ambientLight intensity={10.5} />
+            <pointLight position={[100, 100, 100]} intensity={10} castShadow />
             <pointLight position={[-100, -100, -100]} intensity={5} color="white" />
 
             <ambientLight intensity={0.5} />
             <pointLight position={[0, 60, -100]} intensity={20} />
-            <pointLight position={[-50, 0, -50]} intensity={2} />
+            <pointLight position={[-50, 0, -50]} intensity={5} />
 
             {/* <Screen video={videoRef.current} width={canvasVideoWidth} height={canvasVideoHeight} canvasEl={threeCanvasRef.current} /> */}
 
@@ -458,6 +451,25 @@ const App = () => {
     </div>
   )
 }
+
+const ILoadingContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: black;
+  left: 0;
+  top: 0;
+`
+
+const ILoadingText = styled.p`
+  font-size: 14px;
+  color: white;
+  transform: translate3d(-50%, calc(-50%), 0px);
+  position: absolute;
+  top: calc(50% - 38px);
+  left: 50%;
+  font-family: 'Futura';
+`
 
 
 const IDeviceView = styled.div`
