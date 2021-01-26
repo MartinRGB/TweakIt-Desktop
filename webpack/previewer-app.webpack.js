@@ -21,7 +21,7 @@ const previewerApplication = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|jpe?g|gif||obj|mtl|glb)$/i,
+        test: /\.(png|jpe?g|gif||obj|mtl|glb|mp4)$/i,
         use: [
           {
             loader: 'url-loader',

@@ -13,73 +13,10 @@ import cursorImg from './assets/cursor.png'
 import MseDecoder from './decoder/MseDecoder';
 import VideoSettings from './info/VideoSettings'
 import Size from './utils/Size'
-import * as THREE from 'three'
-import { extend,apply,Canvas,useFrame,useLoader,useRender,ReactThreeFiber,useThree} from 'react-three-fiber'
-import { EffectComposer, SMAA ,SSAO } from 'react-postprocessing'
-import { useAspect } from "@react-three/drei/useAspect";
-import { RoundedBox } from "@react-three/drei"
-import Controls from './Controls'
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import testGlb from './assets/device.glb'
-import {useGLTF} from 'drei'
-import nx from './assets/cubemap/nx.jpg'
-import ny from './assets/cubemap/ny.jpg'
-import nz from './assets/cubemap/nz.jpg'
-import px from './assets/cubemap/px.jpg'
-import py from './assets/cubemap/py.jpg'
-import pz from './assets/cubemap/pz.jpg'
-import OnePlus_Diffuse from './assets/OnePlus_7_Diffuse.jpg'
+import FinalRenderer from './gl/FinalRenderer'
+import PureScreen from './gl/PureScreen'
+import modelVideo from './assets/model.mp4'
 
-
-function Swarm({ count, mouse }) {
-  const mesh = useRef()
-  const [dummy] = useState(() => new THREE.Object3D())
-
-
-  const particles = useMemo(() => {
-    const temp = []
-    for (let i = 0; i < count; i++) {
-      const t = Math.random() * 100
-      const factor = 20 + Math.random() * 100
-      const speed = 0.01 + Math.random() / 200
-      const xFactor = -20 + Math.random() * 40
-      const yFactor = -20 + Math.random() * 40
-      const zFactor = -20 + Math.random() * 40
-      temp.push({ t, factor, speed, xFactor, yFactor, zFactor, mx: 0, my: 0 })
-    }
-    return temp
-  }, [count])
-
-  useFrame((state) => {
-    particles.forEach((particle, i) => {
-      let { t, factor, speed, xFactor, yFactor, zFactor } = particle
-      t = particle.t += speed / 2
-      const a = Math.cos(t) + Math.sin(t * 1) / 10
-      const b = Math.sin(t) + Math.cos(t * 2) / 10
-      const s = Math.max(1.5, Math.cos(t) * 5)
-      particle.mx += (state.mouse.x * state.viewport.width - particle.mx) * 0.02
-      particle.my += (state.mouse.y * state.viewport.height - particle.my) * 0.02
-      dummy.position.set(
-        (particle.mx / 10) * a + xFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
-        (particle.my / 10) * b + yFactor + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
-        (particle.my / 10) * b + zFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
-      )
-      dummy.scale.set(s, s, s)
-      dummy.updateMatrix()
-      mesh.current.setMatrixAt(i, dummy.matrix)
-    })
-    mesh.current.instanceMatrix.needsUpdate = true
-  })
-
-  return (
-    <>
-      <instancedMesh ref={mesh} args={[null, null, count]} castShadow receiveShadow>
-        <sphereBufferGeometry args={[1, 32, 32]} />
-        <meshPhongMaterial />
-      </instancedMesh>
-    </>
-  )
-}
 
 const mainElement = document.createElement('div')
 mainElement.setAttribute('id', 'root')
@@ -90,172 +27,22 @@ document.body.style.overflow = 'hidden';
 document.body.style.background = 'black';
 document.body.classList.add("stream");
 
-
-// const DEFAULT_LAYER = 0
-
-function PhoneModel({video}) { // layer = DEFAULT_LAYER
-  //const group = useRef()
-  const { nodes,materials,scene } = useGLTF(testGlb)
-  // console.log(nodes)
-  // console.log(materials)
-  // console.log(scene)
-  // const material = useMemo(() => {
-  //   if (layer === DEFAULT_LAYER) return new THREE.MeshStandardMaterial({ color: new THREE.Color('#2a2a2a'), roughness: 1, metalness: 0.9 })
-  //   else return new THREE.MeshBasicMaterial({ color: new THREE.Color('black') })
-  // }, [layer])
-
-  //useFrame(() => (group.current.rotation.y += 0.004))
-
-  // return (
-  //   <group ref={group}>
-  //     <group rotation={[-1.5707963267948963, 0, 0]} position={[0, 2, 0]}>
-  //       <mesh geometry={nodes.mesh_0.geometry} material={material} layers={layer} receiveShadow castShadow></mesh>
-  //       <mesh geometry={nodes.mesh_1.geometry} material={material} layers={layer} receiveShadow castShadow></mesh>
-  //       <mesh geometry={nodes.mesh_2.geometry} material={material} layers={layer} receiveShadow castShadow></mesh>
-  //     </group>
-  //   </group>
-  // )
-
-  const cubeUrls = [
-      px, nx,
-      py, ny,
-      pz,nz
-  ];
-
-  const reflectionCube = new THREE.CubeTextureLoader().load( cubeUrls );
-
-
-  
-  console.log(scene)
-
-  scene.traverse(function(children){
-    if(children.name === 'OnePlus_7_Pro_Screen'){
-      const videoTexture = new THREE.VideoTexture( video );
-      videoTexture.flipY = false;
-      const videoParameters = { color: 0xffffff, map: videoTexture,reflectivity:0.0 };
-      let videoMat = new THREE.MeshBasicMaterial( videoParameters );
-      children.material = videoMat; 
-    }
-    if(children.name === 'OnePlus_7_Pro_Cam_Glass'){
-      console.log(children)
-      children.material = new THREE.MeshPhongMaterial( {
-        emissiveIntensity : 1.00,
-        emissive:new THREE.Color('#000000'),
-        shininess: 10, 
-        color: new THREE.Color('#000000'), 
-        specular: new THREE.Color('#FFFFFF'), 
-        reflectivity:0.2, 
-        refractionRatio: 0.98,
-        envMap: reflectionCube,
-        opacity: 0.2,
-        transparent: true,
-      });
-    }
-    if(children.name === 'OnePlus_7_Pro_Body'){
-      
-      children.children[3].material = new THREE.MeshPhongMaterial( {
-        emissiveIntensity : 1.00,
-        emissive:new THREE.Color('#000000'),
-        shininess: 4, 
-        color: new THREE.Color('#000000'), 
-        specular: new THREE.Color('#FFFFFF'), 
-        reflectivity:0.7, 
-        refractionRatio: 0.8,
-        envMap: reflectionCube,
-      });
-
-      const prevMap = children.children[7].material.map;
-      children.children[7].material = new THREE.MeshStandardMaterial( {
-        emissiveIntensity : 0.400,
-        emissive:new THREE.Color('#ffffff'),
-        refractionRatio: 0.8,
-        envMap: reflectionCube,
-        envMapIntensity:15,
-        metalness:0.2,
-        map:prevMap,
-        side: THREE.FrontSide,
-      
-      });
-      children.children[8].material = new THREE.MeshPhongMaterial( {
-        emissiveIntensity : 1.00,
-        emissive:new THREE.Color('#000000'),
-        shininess: 4, 
-        color: new THREE.Color('#000000'), 
-        specular: new THREE.Color('#FFFFFF'), 
-        reflectivity:0.2, 
-        refractionRatio: 0.38,
-        envMap: reflectionCube,
-        opacity: 0.9,
-        transparent: true,
-      });
-    }
-    if(children.name === 'OnePlus_7_Pro_Screen_Glass'){
-      children.material = new THREE.MeshPhongMaterial( {
-        emissiveIntensity : 0.00,
-        emissive:new THREE.Color('#000000'),
-        shininess: 10, 
-        color: new THREE.Color('#000000'), 
-        specular: new THREE.Color('#ffffff'), 
-        reflectivity:1.0, 
-        refractionRatio: 0.98,
-        envMap: reflectionCube,
-        opacity: 0.1,
-        transparent: true,
-      });
-    }
-  });
-
-  useFrame(() => (scene.rotation.y += 0.002))
-
-  return (
-    <primitive object={scene} dispose={null} position={[0, -80, 0]}/>
-  )
-}
-
-
-function Screen({video,width,height,canvasEl}) {
-  //console.log(viewport.width, viewport.height);
-  const [x, y] = useAspect("cover", width, height);
-  //(WINDOW_PADDING_TOP/height)
-  // console.log(canvasEl.offsetWidth);
-  // console.log(canvasEl.offsetHeight);
-  // console.log(width)
-  // console.log(height)
-
-  console.log(width/canvasEl.offsetWidth)
-  console.log(height/canvasEl.offsetHeight)
-  const ratioW = width/canvasEl.offsetWidth;
-  const ratioH = height/canvasEl.offsetHeight;
-  console.log(x)
-  console.log(y)
-
-  return (
-    <mesh scale={[x*Math.min(ratioW,ratioH), y*Math.min(ratioW,ratioH), 1]} position={[0, 0, 0]} castShadow receiveShadow>
-      <planeBufferGeometry args={[1,1]} />
-      <meshBasicMaterial >
-        <videoTexture attach="map" args={[video]} />
-      </meshBasicMaterial>
-    </mesh>
-  );
-}
-
 const App = () => {
   const [scrcpyStreamParams,setScrcpyStreamParams] = useState<any>()
   const [modelName,setModelName] = useState<any>()
   const [videoScale,setVideoScale] = useState<number>(1/SCALE_DOWN_FACTOR);
   const [canvasVideoWidth,setCanvasVideoWidth] = useState<number>(0);
   const [canvasVideoHeight,setCanvasVideoHeight] = useState<number>(0);
-  const [canvasVideoPixelRatio,setCanvasVideoPixelRatio] = useState<number>(2);
+  const [canvasPixelRatio,setCanvasPixelRatio] = useState<number>(2);
   const [isThreeRenderer,setIsThreeRenderer] = useState<boolean>(true);
-  const [videoElement,setVideoElement] = useState<HTMLVideoElement>(document.createElement('video'));
-
 
   const idViewRef = useRef();
   const videoContainerRef = useRef();
   const videoRef = useRef();
+  const videoRef2 = useRef();
   const touchCanvasRef = useRef();
   const cursorRef = useRef();
-  const threeCanvasRef = useRef();
+  const threeCanvasContainerRef = useRef();
 
 
   useEffect(() => {
@@ -292,57 +79,15 @@ const App = () => {
           }
         }
 
-        // ### Method React Client ###
-        // if(scrcpyRef && scrcpyRef.current){
-        //   scrcpyRef.current.startVideoStream(streamParams)
-        // }
-
-        // ### Method TS Client ###
-        // if(isThreeRenderer){
-        //   if(videoContainerRef.current && idViewRef.current && touchCanvasRef.current){
-        //     document.title = `${streamParams.udid} stream`
-        //     document.body.classList.add("stream");
-        //     videoElement.muted = true;
-        //     videoElement.autoplay = true;
-        //     videoElement.setAttribute('muted', 'muted');
-        //     videoElement.setAttribute('autoplay', 'autoplay');
-        //     videoElement.className = 'video-layer';
-        //     videoElement.id = 'video-layer';
-
-        //     ScrcpyClientReact.createInstance(
-        //       streamParams,
-        //       videoContainerRef.current,
-        //       videoElement,
-        //       touchCanvasRef.current,
-        //       cursorRef.current,
-        //     )
-        //     ScrcpyClientReact.getInstance().setScrcpyEventListener(scrcpyListener);
-
-        //   }
-        // }
-        // else{
-        //   if(videoContainerRef.current && idViewRef.current && videoRef.current && touchCanvasRef.current){
-        //     document.title = `${streamParams.udid} stream`
-        //     document.body.classList.add("stream");
-        //     videoRef.current.setAttribute('muted', 'muted');
-        //     videoRef.current.setAttribute('autoplay', 'autoplay');
-  
-        //     ScrcpyClientReact.createInstance(
-        //       streamParams,
-        //       videoContainerRef.current,
-        //       videoRef.current,
-        //       touchCanvasRef.current,
-        //       cursorRef.current,
-        //     )
-        //     ScrcpyClientReact.getInstance().setScrcpyEventListener(scrcpyListener);
-        //   }
-        // }
-
         if(videoContainerRef.current && idViewRef.current && videoRef.current && touchCanvasRef.current){
           document.title = `${streamParams.udid} stream`
           document.body.classList.add("stream");
           videoRef.current.setAttribute('muted', 'muted');
           videoRef.current.setAttribute('autoplay', 'autoplay');
+
+          videoRef2.current.setAttribute('muted', 'muted');
+          videoRef2.current.setAttribute('autoplay', 'autoplay');
+          videoRef2.current.setAttribute('loop', 'loop');
 
           ScrcpyClientReact.createInstance(
             streamParams,
@@ -352,7 +97,6 @@ const App = () => {
             cursorRef.current,
           )
           ScrcpyClientReact.getInstance().setScrcpyEventListener(scrcpyListener);
-          //if(isThreeRenderer) ScrcpyClientReact.getInstance().setIsHiddenvideo(true)
         }
 
       }
@@ -395,9 +139,10 @@ const App = () => {
   const setPercentage = (fac:number) => {
     const decoder:MseDecoder = ScrcpyClientReact.getInstance().getCurrentDecoder();
     if(decoder && decoder instanceof MseDecoder){
-      const vs:VideoSettings = decoder.getVideoSettings();
-      const bounds = new Size(vs.bounds.width*fac,vs.bounds.height*fac); 
-      const { bitrate, maxFps, iFrameInterval, lockedVideoOrientation, sendFrameMeta } = vs;
+      const currentVideoSetting:VideoSettings = decoder.getVideoSettings();
+      const bounds = new Size(currentVideoSetting.bounds.width*fac,currentVideoSetting.bounds.height*fac); 
+      const { bitrate, maxFps, iFrameInterval, lockedVideoOrientation, sendFrameMeta } = currentVideoSetting;
+   
       const newVideoSettings = new VideoSettings({
             bounds,
             bitrate,
@@ -408,7 +153,7 @@ const App = () => {
       });
       ScrcpyClientReact.getInstance().getCurrentDecoder().setVideoSettings(newVideoSettings, false);
       ScrcpyClientReact.getInstance().sendNewVideoSetting(newVideoSettings);
-      setCanvasVideoPixelRatio(2*fac)
+      setCanvasPixelRatio(2*fac)
     }
   }
 
@@ -416,16 +161,7 @@ const App = () => {
     setIsThreeRenderer(!isThreeRenderer)
   }
 
-
   return (
-
-    // ### Method IFrame ###
-    // <IFrame src="http://localhost:50001/" width={360} height={818}></IFrame>
-
-    // ### Method React Client ###
-    // <div>
-    //   <ScrcpyClientInReact ref={scrcpyRef} params={scrcpyStreamParams}></ScrcpyClientInReact>
-    // </div>
 
     // ### Method TS Client ###
     <div ref={sizeRef}>
@@ -448,58 +184,29 @@ const App = () => {
             width:`${0}px`,
             height:`${0}px`,}}>
             <IVideo ref={videoRef} muted={true} autoPlay={true} id={'video-layer'} className={'video-layer'}></IVideo>
+
+
+
             <IVideoMask isThree={isThreeRenderer}></IVideoMask>
         </IVideoContainer>
       </IDeviceView>
+      
+          
 
-      {/* style={{width:`${canvasVideoWidth}px`,height:`${canvasVideoHeight}px`}} */}
+      <IVideo2 crossOrigin="anonymous" width={608} height={1080} ref={videoRef2} muted={true} autoPlay={true} id={'video-layer-2'} className={'video-layer-2'} >
+              <source src={modelVideo} type="video/mp4"/>
+      </IVideo2>
+
       {isThreeRenderer?<IThreeContainer>
         <IThreeCanvasContainer
           style={{
             height: `calc(100% - ${WINDOW_PADDING_TOP}px)`,
             transform: `translate3d(0px, ${WINDOW_PADDING_TOP}px, 0px)`,
           }}
-          ref = {threeCanvasRef}
-          
+          ref={threeCanvasContainerRef} 
         >
-          <Canvas
-            pixelRatio={canvasVideoPixelRatio} 
-            // orthographic
-            shadowMap
-            colorManagement={false}
-            camera={{ position: [0, 0, 100]}}
-            //camera={{ position: [0, 0, 12], fov: 50 }}
-            gl={{ antialias: true }}
-          >
-
-            <pointLight position={[100, 100, 100]} intensity={0.75} color="blue" />
-            <pointLight position={[-100, -100, 100]} intensity={0.75} color="red" />
-            <pointLight position={[100, 100, 100]} intensity={0.75} color="white" />
-            <pointLight position={[-100, -100, 100]} intensity={0.75} color="white" />
-            <pointLight position={[100, -100, 100]} intensity={0.75} color="white" />
-            <pointLight position={[-100, 100, 100]} intensity={0.75} color="white" />
-
-            <pointLight position={[100, 100, -100]} intensity={0.75} color="white"/>
-            <pointLight position={[-100, -100, -100]} intensity={0.75} color="white"/>
-            <pointLight position={[100, 100, -100]} intensity={0.75} color="red"/>
-            <pointLight position={[-100, -100, -100]} intensity={0.75} color="blue"/>
-
-            <ambientLight intensity={50} />
-
-            {/* <Screen video={videoRef.current} width={canvasVideoWidth} height={canvasVideoHeight} canvasEl={threeCanvasRef.current} /> */}
-
-
-            <Suspense fallback={null}>
-              <PhoneModel video={videoRef.current}/>
-
-            </Suspense>
-
-            
-            {/* <EffectComposer multisampling={0}>
-              <SSAO samples={31} radius={20} intensity={40} luminanceInfluence={0.1} color="black" />
-            </EffectComposer> */}
-            <Controls />
-          </Canvas>
+          {/* <FinalRenderer video={videoRef2.current} pixelRatio={canvasPixelRatio}></FinalRenderer> */}
+          <PureScreen video={videoRef.current} canvasVideoWidth={canvasVideoWidth} canvasVideoHeight={canvasVideoHeight} pixelRatio={canvasPixelRatio}></PureScreen>
         </IThreeCanvasContainer>
       </IThreeContainer>:''}
 
@@ -509,6 +216,9 @@ const App = () => {
         </ITouchCanvas>
       </ITouchCanvasContainer>
       <ICursor style={{backgroundImage: `url(${cursorImg})` }} ref={cursorRef}></ICursor>
+
+          
+
     </div>
   )
 }
@@ -565,6 +275,12 @@ const IVideoContainer = styled.div`
 `
 
 const IVideo =styled.video`
+  position: absolute;
+  z-index: 0;
+  display:none;
+`
+
+const IVideo2 =styled.video`
   position: absolute;
   z-index: 0;
   display:none;
@@ -631,11 +347,6 @@ const ICursor =styled.div`
   pointer-events: none;
   transition: width .3s, height .3s, opacity .3s;
   z-index:5;
-`
-
-const IFrame =styled.iframe`
-  outline: none;
-  border: none;
 `
 
 
