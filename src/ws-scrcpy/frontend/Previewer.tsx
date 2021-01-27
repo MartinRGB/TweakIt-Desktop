@@ -85,9 +85,11 @@ const App = () => {
           videoRef.current.setAttribute('muted', 'muted');
           videoRef.current.setAttribute('autoplay', 'autoplay');
 
-          videoRef2.current.setAttribute('muted', 'muted');
-          videoRef2.current.setAttribute('autoplay', 'autoplay');
-          videoRef2.current.setAttribute('loop', 'loop');
+          if(videoRef2.current){
+            videoRef2.current.setAttribute('muted', 'muted');
+            videoRef2.current.setAttribute('autoplay', 'autoplay');
+            videoRef2.current.setAttribute('loop', 'loop');
+          }
 
           ScrcpyClientReact.createInstance(
             streamParams,
@@ -193,9 +195,9 @@ const App = () => {
       
           
 
-      <IVideo2 crossOrigin="anonymous" width={608} height={1080} ref={videoRef2} muted={true} autoPlay={true} id={'video-layer-2'} className={'video-layer-2'} >
+      {/* <IVideo2 crossOrigin="anonymous" width={608} height={1080} ref={videoRef2} muted={true} autoPlay={true} id={'video-layer-2'} className={'video-layer-2'} >
               <source src={modelVideo} type="video/mp4"/>
-      </IVideo2>
+      </IVideo2> */}
 
       {isThreeRenderer?<IThreeContainer>
         <IThreeCanvasContainer

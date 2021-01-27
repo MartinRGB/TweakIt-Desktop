@@ -20,7 +20,7 @@ export default {
     {
         vec2 uv = vec2(gl_FragCoord.xy / (resolution.xy / 2. ));
         vec2 halfpixel = 0.5 / (resolution.xy / 2.0);
-        float offset = 3.0;
+        float offset = 4.0;
     
         vec4 sum = texture2D(tDiffuse, uv) * 4.0;
         sum += texture2D(tDiffuse, uv - halfpixel.xy * offset);

@@ -16,11 +16,12 @@ export default {
     uniform vec2 resolution;
     varying vec2 vUv;
 
+
     vec4 kawase()
     {
-        vec2 uv = vec2(gl_FragCoord.xy / (resolution.xy * 2. * sqrt(4.)));
+        vec2 uv = vec2(gl_FragCoord.xy / (resolution.xy * 2. * sqrt(2.)));
         vec2 halfpixel = 0.5 / (resolution.xy * 2.0);
-        float offset = 3.0;
+        float offset = 4.0;
     
         vec4 sum = texture2D(tDiffuse, uv +vec2(-halfpixel.x * 2.0, 0.0) * offset);
     
@@ -36,6 +37,8 @@ export default {
     }
 
     void main() {
-      gl_FragColor = kawase();
+      vec4 blurImage = kawase();
+      gl_FragColor = blurImage;
+      
     }`
 }

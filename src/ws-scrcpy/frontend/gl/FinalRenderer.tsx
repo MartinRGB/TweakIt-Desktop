@@ -15,7 +15,6 @@ import nz from '../assets/envmap_citynight/nz.jpg'
 import px from '../assets/envmap_citynight/px.jpg'
 import py from '../assets/envmap_citynight/py.jpg'
 import pz from '../assets/envmap_citynight/pz.jpg'
-import Effects from './Effects'
 
 const cubeUrls = [
   px, nx,
