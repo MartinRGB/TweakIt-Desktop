@@ -33,6 +33,8 @@
       "@Vendor/*": ["src/vendor/*"],
       "@WSScrcpy/*": ["src/ws-scrcpy/*"],
       "@Electron/*": ["electron/*"],
+      "three":["src/ws-scrcpy/frontend/gl/three"],
+      "three/*":["src/ws-scrcpy/frontend/gl/three/*"]
     },
   },
 }

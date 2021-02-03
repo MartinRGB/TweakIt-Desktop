@@ -13,8 +13,9 @@ import cursorImg from './assets/cursor.png'
 import MseDecoder from './decoder/MseDecoder';
 import VideoSettings from './info/VideoSettings'
 import Size from './utils/Size'
-import FinalRenderer from './gl/FinalRenderer'
-import PureScreen from './gl/PureScreen'
+import FinalModelRenderer from './gl/FinalModelRenderer'
+import FinalMirrorRenderer from './gl/FinalMirrorRenderer'
+import SceneTest from './gl/SceneTest'
 import modelVideo from './assets/model.mp4'
 
 
@@ -195,9 +196,9 @@ const App = () => {
       
           
 
-      {/* <IVideo2 crossOrigin="anonymous" width={608} height={1080} ref={videoRef2} muted={true} autoPlay={true} id={'video-layer-2'} className={'video-layer-2'} >
+      <IVideo2 crossOrigin="anonymous" width={608} height={1080} ref={videoRef2} muted={true} autoPlay={true} id={'video-layer-2'} className={'video-layer-2'} >
               <source src={modelVideo} type="video/mp4"/>
-      </IVideo2> */}
+      </IVideo2>
 
       {isThreeRenderer?<IThreeContainer>
         <IThreeCanvasContainer
@@ -207,8 +208,10 @@ const App = () => {
           }}
           ref={threeCanvasContainerRef} 
         >
-          {/* <FinalRenderer video={videoRef2.current} pixelRatio={canvasPixelRatio}></FinalRenderer> */}
-          <PureScreen video={videoRef.current} canvasVideoWidth={canvasVideoWidth} canvasVideoHeight={canvasVideoHeight} pixelRatio={canvasPixelRatio}></PureScreen>
+          {/* <FinalModelRenderer video={videoRef.current} pixelRatio={canvasPixelRatio}></FinalModelRenderer> */}
+          {/* <FinalMirrorRenderer video={videoRef.current} canvasVideoWidth={canvasVideoWidth} canvasVideoHeight={canvasVideoHeight} pixelRatio={canvasPixelRatio}></FinalMirrorRenderer> */}
+          <SceneTest video={videoRef.current} canvasVideoWidth={canvasVideoWidth} canvasVideoHeight={canvasVideoHeight} pixelRatio={canvasPixelRatio}></SceneTest>
+
         </IThreeCanvasContainer>
       </IThreeContainer>:''}
 

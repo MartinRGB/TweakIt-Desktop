@@ -1,5 +1,12 @@
 import React from "react";
 
+declare module '*.png'
+declare module '*.jpg'
+declare module '*.obj'
+declare module '*.mtl'
+declare module '*.glb'
+declare module '*.mp4'
+
 export interface IButton {
   children?: React.ReactNode;
   onClick?: any;
