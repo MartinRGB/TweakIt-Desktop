@@ -92,7 +92,7 @@ import { Scene } from './scenes/Scene.js';
 export { BoxGeometry as CubeGeometry };
 export { MathUtils as Math };
 
-var isConsoleOpened = false;
+var isConsoleOpened = true;
 
 export function Face4( a, b, c, d, normal, color, materialIndex ) {
 

@@ -378,13 +378,28 @@ void ClipQuadToHorizon(inout vec3 L[5], out int n)
         L[4] = L[0];
 }
 
+vec3 IntegrateEdgeVec(vec3 v1, vec3 v2)
+{
+    float x = dot(v1, v2);
+    float y = abs(x);
+
+    float a = 0.8543985 + (0.4965155 + 0.0145206*y)*y;
+    float b = 3.4175940 + (4.1616724 + y)*y;
+    float v = a / b;
+
+    float theta_sintheta = (x > 0.0) ? v : 0.5*inversesqrt(max(1.0 - x*x, 1e-7)) - v;
+
+    return cross(v1, v2)*theta_sintheta;
+}
+
 float IntegrateEdge(vec3 v1, vec3 v2)
 {
     float cosTheta = dot(v1, v2);
     float theta = acos(cosTheta);    
     float res = cross(v1, v2).z * ((theta > 0.001) ? theta/sin(theta) : 1.0);
 
-    return res;
+	return res;
+	//return IntegrateEdgeVec(v1, v2).z;
 }
 
 
@@ -441,16 +456,18 @@ vec3 LTC_Evaluate_With_Texture( const in vec3 N, const in vec3 V, const in vec3 
     vec2 Tlight_shape = vec2(length(L[0] - L[1]), length(L[2] - L[1]));
     V2 = V2 - L[1];
     //float b = e1.y*e2.x - e1.x*e2.y + .1; // + .1 to remove artifacts
-	float b = e1.y*e2.x - e1.x*e2.y + .1; // + .1 to remove artifacts
+	//float b = e1.y*e2.x - e1.x*e2.y + .1; // + .1 to remove artifacts
+	float b = 1.;
 	vec2 pLight = vec2((V2.y*e2.x - V2.x*e2.y)/b, (V2.x*e1.y - V2.y*e1.x)/b);
    	pLight /= Tlight_shape;
-    // pLight -= .5;
+    //pLight -= .5;
     // pLight /= 2.5;
     // pLight += .5;
     
 	vec3 ref_col = texture(tex, pLight).xyz;
 	
-    vec3 Lo_i = vec3(sum) * ref_col;
+	vec3 Lo_i = vec3(sum) * ref_col;
+	
 
     return Lo_i;
 

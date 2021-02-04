@@ -78,21 +78,21 @@ AreaLightProxy.prototype.update = function ( a ) { //camera
 		f = LightProxy.rightVS,
 		g = LightProxy.normalVS,
 		h = LightProxy.upVS;
-	e.copy( d.getPosition() );
-	//e.setFromMatrixPosition( d );
-	a.multiplyVector3( e );
-	//e.applyMatrix4( a );
+	//e.copy( d.getPosition() );
+	e.setFromMatrixPosition( d );
+	//a.multiplyVector3( e );
+	e.applyMatrix4( a );
 	c.lightPositionVS.value.copy( e );
 	f.copy( b.right );
 	g.copy( b.normal );
-	d.rotateAxis( f );
-	d.rotateAxis( g );
-	a.rotateAxis( f );
-	a.rotateAxis( g );
-	// f.transformDirection( d );
-	// g.transformDirection( d );
-	// f.transformDirection( a );
-	// g.transformDirection( a );
+	// d.rotateAxis( f );
+	// d.rotateAxis( g );
+	// a.rotateAxis( f );
+	// a.rotateAxis( g );
+	f.transformDirection( d );
+	g.transformDirection( d );
+	f.transformDirection( a );
+	g.transformDirection( a );
 	h.crossVectors( f, g );
 	h.normalize();
 	c.lightRightVS.value.copy( f );

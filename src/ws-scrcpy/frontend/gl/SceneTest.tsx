@@ -27,8 +27,17 @@ import realistic_normal from '../assets/realistic_texture/normal.jpg'
 import lightmap_texture from '../assets/lightmap_texture/stone.jpg'
 import test_tex from '../assets/test_tex.png'
 
+import dl_diffuse from '../assets/downloaded/diffuse.jpg'
+import dl_normal from '../assets/downloaded/normal.jpg'
+import dl_bump from '../assets/downloaded/bump.jpg'
+import dl_ao from '../assets/downloaded/ambientocclusion.jpg'
+import dl_roughness from '../assets/downloaded/reflectiveocclusion.jpg'
+import dl_metal from '../assets/downloaded/metallic.jpg'
+
 
 const envTexture = new THREE.CubeTextureLoader().load( cubeUrls );
+const screenWidth = 108;
+const screenHeight = 234;
 
 export interface IPureScreen{
   video:any;
@@ -42,24 +51,24 @@ var HEIGHT = window.innerHeight;
 
 //console.log(ModifiedThree)
 
-function Ground({videoTexture,width,height}) {
+function Ground({envTexture,videoTexture,width,height}) {
   const [x, y] = useAspect("cover", width, height);
   const canvas = document.getElementById('screen-canvas')
   const ratioW = width/canvas.offsetWidth;
   const ratioH = height/canvas.offsetHeight;
 
-  const repeatX = 4
-  const repeatY = 4;
+  const repeatX = 1;
+  const repeatY = 1;
   const groundRef = useRef();
 
 
   var realisticNormal = useLoader(TextureLoader,realistic_normal);
-  realisticNormal.anisotropy = repeatY;
+  realisticNormal.anisotropy = 4;
   realisticNormal.wrapS = realisticNormal.wrapT = THREE.RepeatWrapping;
-  realisticNormal.repeat.set(repeatX, repeatY);
+  realisticNormal.repeat.set(repeatX, repeatX);
 
   var realisticTex = useLoader(TextureLoader,realistic_texutre);
-  realisticTex.anisotropy = 16;
+  realisticTex.anisotropy = 4;
   realisticTex.wrapS = realisticTex.wrapT = THREE.RepeatWrapping;
   realisticTex.repeat.set(repeatX, repeatY); //4
 
@@ -68,17 +77,56 @@ function Ground({videoTexture,width,height}) {
   lightMapTex.wrapS = lightMapTex.wrapT = THREE.RepeatWrapping;
   lightMapTex.repeat.set(repeatX, repeatY); //4
 
+  var dlNorm = useLoader(TextureLoader,dl_normal);
+  dlNorm.anisotropy = 4;
+  dlNorm.wrapS = dlNorm.wrapT = THREE.RepeatWrapping;
+  dlNorm.repeat.set(repeatX, repeatX);
+
+  var dlDiff = useLoader(TextureLoader,dl_diffuse);
+  dlDiff.anisotropy = 4;
+  dlDiff.wrapS = dlDiff.wrapT = THREE.RepeatWrapping;
+  dlDiff.repeat.set(repeatX, repeatY); //4
+
+  var dlBump = useLoader(TextureLoader,dl_bump);
+  dlBump.anisotropy = 4;
+  dlBump.wrapS = dlBump.wrapT = THREE.RepeatWrapping;
+  dlBump.repeat.set(repeatX, repeatY); //4
+
+  var dlAO = useLoader(TextureLoader,dl_ao);
+  dlAO.anisotropy = 4;
+  dlAO.wrapS = dlAO.dlAO = THREE.RepeatWrapping;
+  dlAO.repeat.set(repeatX, repeatY); //4
+
+  var dlRoughness = useLoader(TextureLoader,dl_roughness);
+  dlRoughness.anisotropy = 4;
+  dlRoughness.wrapS = dlRoughness.dlAO = THREE.RepeatWrapping;
+  dlRoughness.repeat.set(repeatX, repeatY); //4
+
+  var dlMetal = useLoader(TextureLoader,dl_metal);
+  dlMetal.anisotropy = 4;
+  dlMetal.wrapS = dlMetal.dlAO = THREE.RepeatWrapping;
+  dlMetal.repeat.set(repeatX, repeatY); //4
+
   const [hasSetTex,SetHasSetTex] = useState<boolean>(false);
 
   useEffect(() => {
     if(groundRef.current && !hasSetTex){
       groundRef.current.material = new THREE.MeshStandardMaterial( { 
-        color: 0x444444, 
-        map:realisticTex,
-        bumpMap: lightMapTex, 
-        bumpScale: 0.5,
-        roughness: 0.25,
-        reflectivity: 0.,
+        color: 0x444444,
+        map:dlDiff,
+        aoMap:dlAO,
+        aoMapIntensity:0.5, 
+        bumpMap: dlBump, 
+        // metalnessMap:dlMetal,
+        // metalness:0.05,
+        bumpScale: 5.5,
+        normalMap:dlNorm,
+        normalScale: new THREE.Vector2(0.5,0.5),
+        roughnessMap:dlRoughness,
+        roughness: 0.5,
+        // reflectivity: 0.8,
+        // envMap:envTexture,
+        // envMapIntensity:10,
         transparent: true,
         opacity: 1.0
 
@@ -228,7 +276,7 @@ function AreaLight({videoTexture,width,height}){
         // realisticTex.wrapS = realisticTex.wrapT = THREE.RepeatWrapping;
         // realisticTex.repeat.set(4, 4);
 
-        const areaLight = new THREE.TextureAreaLight( 0xffffff, 4,108,234, videoTexture , gl );
+        const areaLight = new THREE.TextureAreaLight( 0xffffff, 4,screenWidth,screenHeight, videoTexture , gl );
 
         areaLight.position.set( 0, 0, 0 );
         //areaLight.rotation.set( Math.PI, 0, 0 );
@@ -270,16 +318,17 @@ function AreaLight({videoTexture,width,height}){
 
 
 
+  const liftHeight = 20;
   return(
   <>
-  <mesh position={[0,234/2-50 +20,0]}>
+  <mesh position={[0,screenHeight/2-50 + liftHeight,0]}>
 
-    <planeBufferGeometry args={[108, 234,32]}  attach="geometry" />
+    <planeBufferGeometry args={[screenWidth, screenHeight,32]}  attach="geometry" />
       <meshBasicMaterial side={DoubleSide} map={videoTexture}>
       </meshBasicMaterial>
   </mesh>
   <mesh
-    position={[0,234/2-50 +20,0]}
+    position={[0,screenHeight/2-50 + liftHeight,0]}
     ref={meshRef}
     rotation={[0,0.,0.]} //-Math.PI
     >
@@ -359,7 +408,7 @@ function Content({video,canvasVideoWidth,canvasVideoHeight}){
             {/* <ScreenOnly video={video} width={canvasVideoWidth} height={canvasVideoHeight}  /> */}
             <AreaLight videoTexture={videoTexture} width={canvasVideoWidth} height={canvasVideoHeight}></AreaLight>
             {/* <Mirror width={canvasVideoWidth} height={canvasVideoHeight}/> */}
-            <Ground videoTexture={videoTexture} width={canvasVideoWidth} height={canvasVideoHeight}/>
+            <Ground envTexture={envTexture} videoTexture={videoTexture} width={canvasVideoWidth} height={canvasVideoHeight}/>
           </Suspense>
           <OrbitControls/>
           </>
