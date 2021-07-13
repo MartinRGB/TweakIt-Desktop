@@ -69,20 +69,6 @@
 
 An Android Debugging Application
 
-A project using Electron, React, Typescript, Emotion, TailWindCSS, Theme UI and React-i18next.
-
-## Installation
-
-Use a package manager of your choice (npm, yarn, etc.) in order to install all dependencies
-
-```bash
-npm install
-```cle
-
-```bash
-yarn install
-```
-
 ## Preview
 
 **Main UI**
@@ -101,6 +87,18 @@ yarn install
 | ------------- |-------------| 
 |      <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/previewer1.gif" alt="" data-canonical-src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/previewer1.gif"/> |     <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/previewer2.gif" alt="" data-canonical-src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/previewer2.gif"/> |
 
+
+## Installation
+
+Use a package manager of your choice (npm, yarn, etc.) in order to install all dependencies
+
+```bash
+npm install
+```cle
+
+```bash
+yarn install
+```
 
 ## Usage
 
