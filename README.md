@@ -83,6 +83,25 @@ npm install
 yarn install
 ```
 
+## Preview
+
+**Main UI**
+
+| Animation Previewer        | ADB Controller           |
+| ------------- |-------------|
+|     <img src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/main/art/anim_previewer.png" alt="" data-canonical-src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/main/art/anim_previewer.png"/> |     <img src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/main/art/adb.png" alt="" data-canonical-src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/main/art/adb.png"/> |
+
+**Previewer**
+
+| ScreenCast(Model)        | ScreenCast(Scene)           | ScreenCast(Realtime AreaLight)  |
+| ------------- |-------------| ----- | 
+|     <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/p1.png" alt="" data-canonical-src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/p1.png"/> |     <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/p2.png" alt="" data-canonical-src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/p2.png"/> |    <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/p3.png" alt="" data-canonical-src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/p3.png"/> |
+
+| ScreenCast(Realtime Lighting 1)        | ScreenCast(Realtime Lighting 2)           |
+| ------------- |-------------| 
+|      <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/previewer1.gif" alt="" data-canonical-src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/previewer1.gif"/> |     <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/previewer2.gif" alt="" data-canonical-src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/previewer2.gif"/> |
+
+
 ## Usage
 
 This app is made for regular users(only run in macOS).Even without `adb` && `scrcpy` installed,it should provide basic soft rendering for them.
