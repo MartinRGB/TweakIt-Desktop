@@ -67,7 +67,12 @@
 
 ## TweakIt-Desktop
 
-An Android Debugging Application
+An Android Debugging Application made for regular users(only run in macOS).
+
+This app integrated basic environment like `adb` and `node`.
+
+Even without `adb` && `scrcpy` installed,it also provide basic soft rendering for them.
+
 
 ## Preview
 
@@ -101,10 +106,6 @@ yarn install
 ```
 
 ## Usage
-
-This app is made for regular users(only run in macOS).Even without `adb` && `scrcpy` installed,it also provide basic soft rendering for them.
-
-This app integrated basic environment like `adb` and `node`.
 
 __get 'adb'__
 
