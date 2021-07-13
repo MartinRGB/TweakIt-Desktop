@@ -104,9 +104,9 @@ yarn install
 
 ## Usage
 
-This app is made for regular users(only run in macOS).Even without `adb` && `scrcpy` installed,it should provide basic soft rendering for them.
+This app is made for regular users(only run in macOS).Even without `adb` && `scrcpy` installed,it also provide basic soft rendering for them.
 
-So there need integrate basic environment like `adb` and `node`.
+This app integrated basic environment like `adb` and `node`.
 
 __get 'adb'__
 
