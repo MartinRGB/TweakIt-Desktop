@@ -80,7 +80,7 @@ Even without `adb` && `scrcpy` installed,it also provide basic soft rendering fo
 
 | Animation Previewer        | ADB Controller           |
 | ------------- |-------------|
-|     <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/anim_previewer.png" alt="" data-canonical-src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/anim_previewer.png"/> |     <img src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/main/art/adb.png" alt="" data-canonical-src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/main/art/adb.png"/> |
+|     <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/anim_previewer.png" alt="" data-canonical-src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/anim_previewer.png"/> |     <img src="https://github.com/MartinRGB/TweakIt-Desktop/blob/main/art/adb.png" alt="" data-canonical-src="https://raw.githubusercontent.com/MartinRGB/TweakIt-Desktop/main/art/adb.png"/> |
 
 **Previewer**
 
