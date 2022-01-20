@@ -1,9 +1,9 @@
 import React ,{memo,useContext, useEffect,useState,forwardRef, useRef, useImperativeHandle } from 'react';
 
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
@@ -75,7 +75,7 @@ const CopyToast = memo(forwardRef((props,ref) =>{
       >
       <ToastArrow></ToastArrow>
       <Icons.Done style={{marginRight:`3px`,}}></Icons.Done>
-      <p>copied</p>
+      <p style={{margin:`0px`}}>copied</p>
     </ToastDiv>
   )
 }))

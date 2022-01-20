@@ -3,9 +3,9 @@ import { render } from 'react-dom'
 import ReactDOM from 'react-dom'
 import styled from '@emotion/styled'
 import * as THREE from 'three'
-import { extend,Canvas,useFrame,useLoader,ReactThreeFiber,useThree} from 'react-three-fiber'
-import { EffectComposer, SMAA ,SSAO ,DepthOfField, Bloom, Noise, Vignette} from 'react-postprocessing'
-import { useAspect } from "@react-three/drei/useAspect";
+import { extend,Canvas,useFrame,useLoader,ReactThreeFiber,useThree} from '@react-three/fiber'
+import { EffectComposer, SMAA ,SSAO ,DepthOfField, Bloom, Noise, Vignette} from '@react-three/postprocessing'
+import { useAspect } from "@react-three/drei";
 import {OrbitControls,Plane} from '@react-three/drei'
 import deviceGLB from '../assets/device.glb'
 import {useGLTF} from 'drei'

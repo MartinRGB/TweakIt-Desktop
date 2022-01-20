@@ -1,6 +1,6 @@
 import React ,{memo,Suspense,useRef,useState,useEffect,useMemo,useCallback} from 'react'
-import { useAspect } from "@react-three/drei/useAspect";
-import { extend,Canvas,useFrame,useLoader,ReactThreeFiber,useThree} from 'react-three-fiber'
+import { useAspect } from "@react-three/drei";
+import { extend,Canvas,useFrame,useLoader,ReactThreeFiber,useThree} from '@react-three/fiber'
 import {OrbitControls,Plane,Box,useHelper} from '@react-three/drei'
 //import * as THREE from './three/src/Three'
 import * as THREE from 'three'
@@ -373,11 +373,18 @@ function AreaLight({videoTexture,width,height}){
 // }
 
 function Content({video,canvasVideoWidth,canvasVideoHeight}){
-  const camera = useRef();
-  const { size, setDefaultCamera,scene} = useThree();
-  useEffect(() => void setDefaultCamera(camera.current), [camera]);
-  useFrame(() => camera.current.updateMatrixWorld())
+  // const camera = useRef();
+  // const { size, setDefaultCamera,scene} = useThree();
+  // useEffect(() => void setDefaultCamera(camera.current), [camera]);
+  // useFrame(() => camera.current.updateMatrixWorld())
 
+  const {scene,size} = useThree();
+
+  const ref = useRef();
+  const set = useThree((state) => state.set);
+  useEffect(() => void set({ camera: ref.current }), []);
+  useFrame(() => ref.current.updateMatrixWorld());
+  
   scene.background = envTexture;
   scene.environment = envTexture;
 
@@ -393,7 +400,7 @@ function Content({video,canvasVideoWidth,canvasVideoHeight}){
     <spotLight castShadow intensity={0.5} color={'rgb(255, 220, 180)'} position={[-12*45, 6*45, -10*20]} shadow-mapSize-width={4096} shadow-mapSize-height={4096} /> */}
 
     <perspectiveCamera
-        ref={camera}
+        ref={ref}
         aspect={size.width / size.height}
         radius={(size.width + size.height) / 4}
         fov={75}
@@ -402,7 +409,7 @@ function Content({video,canvasVideoWidth,canvasVideoHeight}){
         position={[0, 0, 100]}
         onUpdate={self => self.updateProjectionMatrix()}
       />
-      {camera.current && (
+      {ref.current && (
           <>
           <Suspense fallback={null}>
             {/* <ScreenOnly video={video} width={canvasVideoWidth} height={canvasVideoHeight}  /> */}

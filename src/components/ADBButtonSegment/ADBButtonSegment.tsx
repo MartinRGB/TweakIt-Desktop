@@ -1,8 +1,8 @@
 import React,{memo,useContext,useState} from 'react'
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 import { IADBSegment } from "@Types";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'

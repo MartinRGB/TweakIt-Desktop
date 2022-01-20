@@ -14,7 +14,6 @@ import Android from'@Helpers/Solver/Calculator/platform/Android'
 import iOS from'@Helpers/Solver/Calculator/platform/iOS'
 import Fluent from'@Helpers/Solver/Calculator/platform/Fluent'
 import Flutter from'@Helpers/Solver/Calculator/platform/Flutter'
-import Smartisan from'@Helpers/Solver/Calculator/platform/Smartisan'
 import Web from'@Helpers/Solver/Calculator/platform/Web'
 import BezierCurve from'@Helpers/Solver/Calculator/platform/BezierCurve'
 import DesignTools from'@Helpers/Solver/Calculator/platform/DesignTools'
@@ -25,7 +24,6 @@ const Solver = {
     iOS,
     Fluent,
     Flutter,
-    Smartisan,
     Web,
     BezierCurve,
     DesignTools,

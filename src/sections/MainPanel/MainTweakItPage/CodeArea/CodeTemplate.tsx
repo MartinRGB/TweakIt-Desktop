@@ -1,9 +1,9 @@
 import React ,{memo,useContext, useEffect,useState,useRef} from 'react';
 
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
@@ -28,7 +28,7 @@ export interface ICodeSnippet{
 
 const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
 
-  const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimPlatform,currentAnimName,interpolatorName,iOSName,webName,flutterName,smartisanName} = useContext(
+  const {selectTransition,durationData,currentSolverData,currentAnimCalculator,currentAnimPlatform,currentAnimName,interpolatorName,iOSName,webName,flutterName} = useContext(
     AnimatorTypeContext
   );
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
@@ -167,28 +167,6 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
     return (WorkInProgressBlock())
   }
 
-  const SmartisanSpringAnimationComponents = () =>{
-    var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
-    //var evaluator = new SpringFactorEvaluator(cIF(mSolver['stiffness']),cIF(mSolver['damping']));
-    //console.log(evaluator)
-    return(
-      (smartisanName)?
-      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
-        <Comment>// Android Spring Animation</Comment> <Link target="_blank" href="https://developer.android.com/reference/androidx/dynamicanimation/animation/SpringAnimation.html">[API]</Link><Break/>
-        <Class>SpringAnimation</Class> springAnimation = <Keyword>new</Keyword> <Class>SpringAnimation</Class>.([<Property>view</Property>],[<Property>property</Property>],[<Property>finalValue</Property>]);<Break/>
-        <Class>SpringAnimation</Class>.getSpring().setStiffness(<Number>{smartisanName}.SPRING_ANIMATION_STIFFNESS</Number>);<Break/>
-        <Class>SpringAnimation</Class>.getSpring().setDampingRatio(<Number>{smartisanName}.SPRING_ANIMATION_DAMPING_RATIO</Number>);<Break/>
-        <Class>SpringAnimation</Class>.setStartVelocity(<Number>{smartisanName}.SPRING_ANIMATION_START_VELOCITY</Number>);<Break/>
-        <Break/>
-        <Comment>// Custom Spring Interpolator</Comment><Break/>
-        animator.setInterpolator(<Keyword>new</Keyword> <Class>SpringInterpolator</Class>(<Number>{smartisanName}.PROPERTY_ANIMATION_INTERPOLATOR_FACTOR</Number>))<Break/>
-        animator.setDuration(<Number>{smartisanName}.PROPERTY_ANIMATION_DURATION</Number>)
-      </CodeDiv>
-      :
-      CheckAndroidBlock()
-    )
-  }
-
   const AndroidFlingAnimationComponents = () =>{
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
     return (
@@ -213,9 +191,6 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
     return (WorkInProgressBlock())
   }
 
-  const SmartisanFlingAnimationComponents = () =>{
-    return (CheckAndroidBlock())
-  }
   
 
   const AndroidInterpolatorComponents = () =>{
@@ -259,9 +234,6 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
       )
   }
 
-  const SmartisanInterpolatorComponents = () =>{
-    return (CheckAndroidBlock())
-  }
   
   const AndroidCubicBezierComponents = () =>{
 
@@ -387,20 +359,6 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
     )
   }
 
-  const SmartisanCubicBezierComponents = () =>{
-    var duration = currentSolverData[currentSolverData.length-1]*1000
-    return (
-      (smartisanName)?
-      <CodeDiv isAnimationEnable={isGlobalAnimEnable}>
-        <Comment>// Universal Easing Presets</Comment><Break/>
-        <Class>Interpolator</Class> interpolator = <Class>CubicBezierPreset</Class>.getBezierInterpolator(<Number>CubicBezierPreset.CurveType.{smartisanName}</Number>);<Break/>
-        animator.setInterpolator(interpolator)<Break/>
-        animator.setDuration(<Number>{duration}</Number>)
-      </CodeDiv>
-      :
-      CheckAndroidBlock()
-      )
-  }
   
   const AndroidDoubleCubicBezierComponents = () =>{
 
@@ -430,9 +388,6 @@ const CodeTemplate: React.FC<ICodeSnippet> = memo(({name,isActive,style}) => {
     return (NoReferenceBlock())
   }
 
-  const SmartisanDoubleCubicBezierComponents = () =>{
-    return (NoReferenceBlock())
-  }
 
   const UniversalDataComponents = () =>{
     var mSolver = Solver.CreateSolverByString(currentAnimCalculator,currentAnimPlatform,currentAnimName,currentSolverData);
@@ -552,4 +507,8 @@ const CodeDiv = styled.div<{
     background: ${p => p.theme.colors.selection};
   }
   margin-bottom: 14px;
+
+  > p {
+    margin:0px;
+  }
 `

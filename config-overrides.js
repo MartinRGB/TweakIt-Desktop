@@ -6,7 +6,6 @@ const {
 } = require('customize-cra');
 
 const autoprefixer = require('autoprefixer');
-const tailwindcss = require('tailwindcss');
 const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 
 const addCustom = () => (config) => {
@@ -26,7 +25,6 @@ const addCustom = () => (config) => {
         options: {
           ident: 'postcss',
           plugins: [
-            tailwindcss(),
             autoprefixer()
           ]
         }

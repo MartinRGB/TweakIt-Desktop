@@ -2,7 +2,7 @@
 
   "isDarkMode":false,
   "isChineseLanguage":true,
-  "isAnimationEnable":true,
+  "isAnimationEnable":false,
   
   "codeBlockIsShow":true,
   "isBottomPannelExpanded":true,

@@ -1,6 +1,6 @@
 import React ,{memo,Suspense,useRef,useState,useEffect,useMemo,useCallback} from 'react'
-import { useAspect } from "@react-three/drei/useAspect";
-import { extend,Canvas,useFrame,useLoader,ReactThreeFiber,useThree} from 'react-three-fiber'
+import { useAspect } from "@react-three/drei";
+import { extend,Canvas,useFrame,useLoader,ReactThreeFiber,useThree} from '@react-three/fiber'
 import {OrbitControls,Plane,Box} from '@react-three/drei'
 import * as THREE from 'three'
 import nx from '../assets/envmap_citynight/nx.jpg'
@@ -9,7 +9,7 @@ import nz from '../assets/envmap_citynight/nz.jpg'
 import px from '../assets/envmap_citynight/px.jpg'
 import py from '../assets/envmap_citynight/py.jpg'
 import pz from '../assets/envmap_citynight/pz.jpg'
-import { Bloom} from 'react-postprocessing'
+import { Bloom} from '@react-three/postprocessing'
 const cubeUrls = [
     px, nx,
     py, ny,
@@ -332,10 +332,18 @@ function Effect({}){
 }
 
 function Content({video,canvasVideoWidth,canvasVideoHeight}){
-  const camera = useRef();
-  const { size, setDefaultCamera } = useThree();
-  useEffect(() => void setDefaultCamera(camera.current), [camera]);
-  useFrame(() => camera.current.updateMatrixWorld())
+  // const camera = useRef();
+  // const { size, setDefaultCamera } = useThree();
+  // useEffect(() => void setDefaultCamera(camera.current), [camera]);
+  // useFrame(() => camera.current.updateMatrixWorld())
+
+  const {scene,size} = useThree();
+
+  const ref = useRef();
+  const set = useThree((state) => state.set);
+  useEffect(() => void set({ camera: ref.current }), []);
+  useFrame(() => ref.current.updateMatrixWorld());
+
   const envTexture = new THREE.CubeTextureLoader().load( cubeUrls );
 
   const lightGroupBIntensity = 0.25;
@@ -363,7 +371,7 @@ function Content({video,canvasVideoWidth,canvasVideoHeight}){
     <pointLight position={[-100, 100, -100]} intensity={lightGroupBIntensity/2} color="white"/>  */}
 
     <perspectiveCamera
-        ref={camera}
+        ref={ref}
         aspect={size.width / size.height}
         radius={(size.width + size.height) / 4}
         fov={75}
@@ -372,7 +380,7 @@ function Content({video,canvasVideoWidth,canvasVideoHeight}){
         position={[0, 0, 100]}
         onUpdate={self => self.updateProjectionMatrix()}
       />
-      {camera.current && (
+      {ref.current && (
           <>
           <Suspense fallback={null}>
             <Mirror width={canvasVideoWidth} height={canvasVideoHeight}/>

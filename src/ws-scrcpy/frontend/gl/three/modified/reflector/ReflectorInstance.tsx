@@ -1,6 +1,6 @@
 import { Mesh } from '../../src/Three';
 import React, { forwardRef } from 'react';
-import { extend, ReactThreeFiber, Overwrite } from 'react-three-fiber';
+import { extend, ReactThreeFiber, Overwrite } from '@react-three/fiber';
 import {
 	Reflector as ReflectorImpl,
 	ReflectorOptions

@@ -1,8 +1,8 @@
 import React,{memo,useContext,useState} from 'react'
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 import { IButton } from "@Types";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
@@ -94,7 +94,7 @@ const Button = styled.button<{
   isAnimationEnable:boolean;
   isMouseActive:boolean;
 }>`
-  // ${tw`mt-4 p-2 text-white bg-blue-600`}
+  
   border-radius:4px;
   padding: 0;
   outline:none;

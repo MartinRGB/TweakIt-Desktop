@@ -1,7 +1,7 @@
 import React,{ memo,useContext, useEffect, useState} from 'react';
 import styled from '@emotion/styled'
-import {css} from "@emotion/core";
-import { jsx,useColorMode} from 'theme-ui'
+import { css,jsx } from "@emotion/react";
+import { useColorMode } from 'theme-ui';
 
 // i18n
 import '@Context/i18nContext'
@@ -21,7 +21,7 @@ import {startServer} from '@WSScrcpy/server'
 const ipcRenderer = require('electron').ipcRenderer
 
 const path = require("path");
-const { app } = window.require('electron').remote;
+const { app } = require('@electron/remote');
 const fs = require("fs");
 
 var appPath = app.getAppPath().replace(/ /g,"\\ ");
@@ -174,7 +174,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
             !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
           )}
-          style={{marginRight:`6px`}} onClick = {()=>{setIsSoftRender(true)}}><input style={{filter:`hue-rotate(260deg)`}}type="radio" checked={isSoftRender} onChange={e => {}} value="Soft" /><p style={{display:`inline-block`,marginLeft:`5px`}}><Trans>Software rendering</Trans></p></RadioContainer>
+          style={{marginRight:`6px`}} onClick = {()=>{setIsSoftRender(true)}}><input style={{filter:`hue-rotate(260deg)`}}type="radio" checked={isSoftRender} onChange={e => {}} value="Soft" /><p style={{display:`inline-block`,margin:`0px`,position:`absolute`,marginLeft:`5px`}}><Trans>Software rendering</Trans></p></RadioContainer>
           <RadioContainer 
           isAnimationEnable={isGlobalAnimEnable}
           enable = {(
@@ -183,7 +183,7 @@ const ADBTopArea: React.FC = memo(({ children }) => {
             !serialNoDevicesIsConnectingWifi[currentDeviceSelectIndex] &&
             !serialNoDevicesIsConnectingUSB[currentDeviceSelectIndex]
           )}
-          onClick = {()=>{setIsSoftRender(false)}}><input style={{filter:`hue-rotate(260deg)`}} type="radio" checked={!isSoftRender} onChange={e => {}} value="Hardware"  /><p style={{display:`inline-block`,marginLeft:`5px`}}><Trans>Hardware rendering</Trans></p></RadioContainer>
+          onClick = {()=>{setIsSoftRender(false)}}><input style={{filter:`hue-rotate(260deg)`}} type="radio" checked={!isSoftRender} onChange={e => {}} value="Hardware"  /><p style={{display:`inline-block`,margin:`0px`,position:`absolute`,marginLeft:`5px`,}}><Trans>Hardware rendering</Trans></p></RadioContainer>
         </RadioGroupContainer>
 
 

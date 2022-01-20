@@ -1,6 +1,6 @@
 import React ,{memo,useContext, useEffect,useState,useRef,useLayoutEffect} from 'react';
 import ReactDOM from 'react-dom';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 import styled from '@emotion/styled';
 import '@Context/i18nContext'
 import MainButtonToggle from '@Components/MainButtonToggle'
@@ -73,8 +73,7 @@ const CodeArea: React.FC = memo(({children}) => {
   
 
   const [activeName,setActiveName] = useState<string>('')
-  //,"Flutter","Smartisan"
-  const IconStr = ["Android","iOS","Web","Flutter","Smartisan","Data"];
+  const IconStr = ["Android","iOS","Web","Flutter","Data"];
 
 
   const [copyState,setCopyState] = useState<boolean>(false)
@@ -162,11 +161,10 @@ const CodeArea: React.FC = memo(({children}) => {
                           padding-right: 6px;
                           height: 16px;
                           > svg{
-                            top: -1px;
                           }
                           > span{
                             margin-left: 1px;
-                            top: -1px;
+                            
                           }
                         }
                       `}
@@ -196,11 +194,9 @@ const CodeArea: React.FC = memo(({children}) => {
                   padding-right: 6px;
                   height: 16px;
                   > svg{
-                    top: -1px;
                   }
                   > span{
                     margin-left: 1px;
-                    top: -1px;
                   }
                 }
               `
@@ -267,11 +263,9 @@ const CodeArea: React.FC = memo(({children}) => {
                 padding-right: 6px;
                 height: 16px;
                 > svg{
-                  top: -1px;
                 }
                 > span{
                   margin-left: 1px;
-                  top: -1px;
                 }
               }
             `}

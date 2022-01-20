@@ -41,12 +41,10 @@ export var AnimatorTypeContext = createContext({
   flutterName:'',
   webName:'',
   iOSName:'',
-  smartisanName:'',
   setInterpolatorName:(tag: string) => {},
   setFlutterName:(tag: string) => {},
   setWebName:(tag: string) => {},
   setiOSName:(tag: string) => {},
-  setSmartisanName:(tag: string) => {},
 });
 
 var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
@@ -73,7 +71,6 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
   const [mFlutterName, setFlutterName] = useState<string>('');
   const [mWebName, setWebName] = useState<string>('');
   const [miOSName, setiOSName] = useState<string>('');
-  const [mSmartisanName, setSmartisanName] = useState<string>('');
 
   function setInterpolatorNameAndSave(tag:string){
     setInterpolatorName(tag)
@@ -86,10 +83,6 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
   }
   function setiOSNameAndSave(tag:string){
     setiOSName(tag)
-  }
-
-  function setSmartisanNameAndSave(tag:string){
-    setSmartisanName(tag)
   }
 
   function setCurrAnimPlatformAndSave(tag:string){
@@ -250,12 +243,10 @@ var AnimatorTypeProvider: React.FC<{}> = ({ children }) => {
         flutterName:mFlutterName,
         webName:mWebName,
         iOSName:miOSName,
-        smartisanName:mSmartisanName,
         setInterpolatorName:setInterpolatorNameAndSave,
         setFlutterName:setFlutterNameAndSave,
         setWebName:setWebNameAndSave,
         setiOSName:setiOSNameAndSave,
-        setSmartisanName:setSmartisanNameAndSave,
       }}>
       {children}
     </AnimatorTypeContext.Provider>

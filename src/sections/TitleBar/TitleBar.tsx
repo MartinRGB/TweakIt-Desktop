@@ -1,8 +1,7 @@
 import React, {memo,useContext, useEffect,useRef,useState,useLayoutEffect} from 'react';
 import styled from '@emotion/styled'
-//import {css} from '@emotion/core'
-import { useColorMode,jsx,useThemeUI} from 'theme-ui'
-import {css} from "@emotion/core";
+import { useColorMode,useThemeUI} from 'theme-ui'
+import { css,jsx } from "@emotion/react";
 import TitleButtonNormal from '@Components/TitleButtonNormal'
 import TitleButtonToggle from '@Components/TitleButtonToggle'
 import Icons from '@Assets/icons';
@@ -85,6 +84,7 @@ const TitleBar: React.FC = memo(({ children }) => {
             margin-left:8px;
             margin-right:13px;
             height:38px;
+            
             > div > button{
               width:40px;
               height:22px;
@@ -107,6 +107,7 @@ const TitleBar: React.FC = memo(({ children }) => {
             height:38px;
             display: inline-flex;
             flex-direction: column;
+            
             -webkit-app-region: no-drag;
             > div > button{
               width:40px;
@@ -127,6 +128,7 @@ const TitleBar: React.FC = memo(({ children }) => {
           buttonCSS={css`
             height:38px;
             margin-left:8px;
+            
             >div > button{
               width:40px;
               height:22px;
@@ -147,6 +149,7 @@ const TitleBar: React.FC = memo(({ children }) => {
           buttonCSS={css`
             height:38px;
             margin-left:8px;
+            
             >div > button{
               width:40px;
               height:22px;
@@ -170,6 +173,7 @@ const TitleBar: React.FC = memo(({ children }) => {
             buttonCSS={css`
               margin-left:8px;
               margin-right:13px;
+              
               height:38px;
               > div > button{
                 width:40px;

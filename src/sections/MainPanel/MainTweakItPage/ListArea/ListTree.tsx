@@ -6,10 +6,10 @@ import ResizeObserver from 'resize-observer-polyfill'
 import { Icon, IListTree } from "@Types";
 // import * as Icons from './ListIcon'
 
-import { useColorMode, jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui'
+
 import styled from '@emotion/styled';
-import { css } from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
@@ -63,7 +63,7 @@ const ListTree: React.FC<IListTree> = memo(({
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
 
-  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setListDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,selectTransition,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex,setInterpolatorName,setFlutterName,setiOSName,setWebName,setSmartisanName} = useContext(
+  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setListDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,selectTransition,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex,setInterpolatorName,setFlutterName,setiOSName,setWebName} = useContext(
     AnimatorTypeContext
   );
 
@@ -360,6 +360,8 @@ const UlContent = styled(animated.div)`
 `
 
 const UlContainer = styled(animated.ul)`
+  margin: 0;
+  padding-left: 0px;
 `
 
 const Toggle = css`

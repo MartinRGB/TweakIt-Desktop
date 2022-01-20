@@ -1,9 +1,9 @@
 import React ,{memo,useContext, useEffect,useState} from 'react';
 
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
@@ -46,7 +46,7 @@ const ListArea: React.FC = memo(({children}) => {
                           name={animData['name']} 
                           calculator={animData['calculator']}
                           animation_data={animData['animation_data']}
-                          ease_name={[animData['interpolatorName'],animData['iOSName'],animData['webName'],animData['flutterName'],animData['smartisanName']]}
+                          ease_name={[animData['interpolatorName'],animData['iOSName'],animData['webName'],animData['flutterName']]}
                           visible={animData['visible']}
                           clickable={animData['clickable']}>
                        </ListTree>)
@@ -84,7 +84,7 @@ const ListArea: React.FC = memo(({children}) => {
                               name={animData['name']} 
                               calculator={animData['calculator']}
                               animation_data={animData['animation_data']}
-                              ease_name={[animData['interpolatorName'],animData['iOSName'],animData['webName'],animData['flutterName'],animData['smartisanName']]}
+                              ease_name={[animData['interpolatorName'],animData['iOSName'],animData['webName'],animData['flutterName']]}
                               visible={animData['visible']}
                               clickable={animData['clickable']}>
                            </ListTree>)

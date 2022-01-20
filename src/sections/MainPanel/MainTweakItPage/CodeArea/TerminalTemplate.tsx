@@ -1,9 +1,9 @@
 import React ,{memo,useContext, useEffect,useState,useRef} from 'react';
 
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
@@ -292,6 +292,10 @@ outline:none;
 ::selection {
   background: ${p => p.theme.colors.selection};
 }
+> p {
+  margin:0;
+}
+
 `
 
 const CommandInfo =styled.p`
@@ -336,6 +340,7 @@ const CMDPlaceHolder = styled.p<{
   user-select: none;
   transition:${p=>p.isAnimationEnable?'all 0.2s':'none'};
   left: ${p=>p.highlight?'-14px':'-7px'};
+  top: -12px;
 `
 
 const CMDInput = styled.input<{

@@ -1,10 +1,10 @@
 import React ,{ memo,useContext, useEffect} from 'react';
 
 
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 
 import ListArea from './ListArea'
 import CanvasArea from './CanvasArea'

@@ -1,5 +1,6 @@
-const { app } = window.require('electron').remote;
+const { app } = require('@electron/remote')
 var path = require("path");
+
 
 var appPath = app.getAppPath().replace(/ /g,"\\ ");
 var localNodeModulePath = appPath + '/node_modules/'
@@ -40,6 +41,8 @@ export const injectPathEnvironments = () =>{
   '/sbin:' + 
   '/opt/puppetlabs/bin:' +
   '/usr/local/munki:' + 
-  '/Library/Apple/usr/bin:';
+  '/Library/Apple/usr/bin:' +
+  '/opt/local/bin:' +
+  '/opt/local/share/java/android-sdk-macosx/platform-tools:' ;
 }
 

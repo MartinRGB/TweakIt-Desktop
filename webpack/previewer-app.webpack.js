@@ -34,17 +34,17 @@ const previewerApplication = {
     new HtmlWebpackPlugin(),
   ],
   devServer: {
-    contentBase: path.join(rootPath, 'dist/renderer/react-previewer'), //assets/react-previewer
+    static: path.join(rootPath, 'dist/renderer/react-previewer'), //assets/react-previewer
     historyApiFallback: true,
     compress: true,
     hot: true,
     port: 50002,
-    publicPath: '/'
+    //publicPath: '/'
   },
   output: {
     path: path.join(rootPath, 'dist/renderer/react-previewer'), //assets/react-previewer
     filename: '[name].js',
-    publicPath: './'
+    //publicPath: './'
   },
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],

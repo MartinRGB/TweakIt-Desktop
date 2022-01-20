@@ -1,7 +1,7 @@
 import React,{ memo,useContext, useEffect, useState} from 'react';
 import styled from '@emotion/styled'
-import {css} from "@emotion/core";
-import { jsx,useColorMode} from 'theme-ui'
+import { css,jsx } from "@emotion/react";
+import { useColorMode} from 'theme-ui'
 
 // i18n
 import '@Context/i18nContext'

@@ -4,7 +4,6 @@ import DeviceMessage from '../event/DeviceMessage';
 import VideoSettings from '../info/VideoSettings';
 import ScreenInfo from '../info/ScreenInfo';
 import Util from '../utils/Util';
-import {BACKEND_SOCKET_PORT} from '../../GlobalConstants'
 
 const DEVICE_NAME_FIELD_LENGTH = 64;
 const MAGIC = 'scrcpy';

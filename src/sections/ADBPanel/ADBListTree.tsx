@@ -6,10 +6,10 @@ import ResizeObserver from 'resize-observer-polyfill'
 import { Icon, IADBListTree } from "@Types";
 // import * as Icons from './ListIcon'
 
-import { useColorMode, jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui'
+
 import styled from '@emotion/styled';
-import { css } from "@emotion/core";
+import { css,jsx } from '@emotion/react';
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
@@ -463,6 +463,8 @@ const UlContent = styled(animated.div)`
 `
 
 const UlContainer = styled(animated.ul)`
+margin: 0;
+padding-left: 0px;
 `
 
 const Toggle = css`

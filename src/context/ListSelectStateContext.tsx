@@ -17,7 +17,7 @@ var ListSelectStateProvider: React.FC<{}> = ({ children }) => {
     setCurrentAnimItem(tag);
   }
 
-  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setListDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,selectTransition,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex,setInterpolatorName,setFlutterName,setiOSName,setWebName,setSmartisanName} = useContext(
+  const {currentAnimPlatform,previousAnimPlatform,setCurrentAnimPlatform,setPreviousAnimPlatform,setListDurationData,setPreviousDataRange,previousSolverData,currentSolverData,currentDataRange,previousDataRange,setCurrentDataRangeByIndex,currentAnimName,currentAnimCalculator,setCurrentSolverDataByIndex,currentAnimData,selectTransition,setCurrentAnimName, setCurrentAnimCalculator, setCurrentAnimData,setCurrentSolverData,setPreviousAnimName,setPreviousAnimCalculator,setPreviousSolverData,setSelectTransition,setPreviousDataRangeByIndex,setPreviousDataMinByIndex,setInterpolatorName,setFlutterName,setiOSName,setWebName} = useContext(
     AnimatorTypeContext
   );
   const {isGlobalAnimEnable} = useContext(GlobalAnimationStateContext)
@@ -42,7 +42,6 @@ var ListSelectStateProvider: React.FC<{}> = ({ children }) => {
     setiOSName(animEase[1])
     setWebName(animEase[2])
     setFlutterName(animEase[3])
-    setSmartisanName(animEase[4])
 
     if(animData){
       setCurrentAnimData(Object.entries(animData))

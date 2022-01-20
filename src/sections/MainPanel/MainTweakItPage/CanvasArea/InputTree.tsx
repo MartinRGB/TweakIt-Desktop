@@ -9,10 +9,9 @@ import { IInputTree } from "@Types";
 
 import {execCMD} from '@Helpers/ADBCommand/ADBCommand'
 
-import { useColorMode, jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui'
+
 import styled from '@emotion/styled';
-import { css } from "@emotion/core";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'

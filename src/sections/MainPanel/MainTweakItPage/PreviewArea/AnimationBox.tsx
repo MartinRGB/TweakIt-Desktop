@@ -1,9 +1,9 @@
 import React ,{memo,useContext, useEffect,useState,forwardRef, useRef, useImperativeHandle } from 'react';
 
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import '@Context/i18nContext'
@@ -61,8 +61,8 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
       setCSSAnimationProgress(startAnimator.getValueProgress());
       // execCMD(`adb shell am broadcast -a com.martinrgb.animerexample -e "STIFFNESS" "${Math.max(1,startAnimator.getValueProgress()*1000)}"`)
       // console.log(`adb shell am broadcast -a com.martinrgb.animerexample -e "STIFFNESS" "${Math.max(1,startAnimator.getValueProgress()*1000)}"`)
-      // exec(`adb shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${startAnimator.getValueProgress()*1000}}}]}"`);
-      // console.log(`adb shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${startAnimator.getValueProgress()*1000}}}]}"`)
+      // exec(`adb shell content call --uri content://com.martinrgb.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${startAnimator.getValueProgress()*1000}}}]}"`);
+      // console.log(`adb shell content call --uri content://com.martinrgb.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${startAnimator.getValueProgress()*1000}}}]}"`)
 
     })
     startAnimator.setOnEndCallback(()=>{
@@ -89,8 +89,8 @@ const AnimationBox = memo(forwardRef(({...IAnimationBox}, ref) =>{
       setCSSAnimationProgress(endAnimator.getValueProgress());
       // execCMD(`adb shell am broadcast -a com.martinrgb.animerexample -e "STIFFNESS" "${Math.max(1,endAnimator.getValueProgress()*1000)}"`)
       // console.log(`adb shell am broadcast -a com.martinrgb.animerexample -e "STIFFNESS" "${Math.max(1,endAnimator.getValueProgress()*1000)}"`)
-      // exec(`adb shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${endAnimator.getValueProgress()*500}}}]}"`);
-      // console.log(`adb shell content call --uri content://com.smartisan.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${endAnimator.getValueProgress()*500}}}]}"`)
+      // exec(`adb shell content call --uri content://com.martinrgb.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${endAnimator.getValueProgress()*500}}}]}"`);
+      // console.log(`adb shell content call --uri content://com.martinrgb.tweakit/tweak_call --method "anim_set" --arg "{"anim_list":[{"anim_name":'SMTUIScaleHelper.java_130',"anim_data":{"type":"SpringAnimation","dampingRatio":0.5,"naturalFreq":${endAnimator.getValueProgress()*500}}}]}"`)
     })
     endAnimator.setOnEndCallback(()=>{
     })

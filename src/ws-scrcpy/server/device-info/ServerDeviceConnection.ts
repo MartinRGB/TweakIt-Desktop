@@ -13,7 +13,8 @@ import DroidDeviceDescriptor from '../interfaces/DroidDeviceDescriptor';
 // import Timeout = NodeJS.Timeout;
 import { NetInterface } from '../interfaces/NetInterface';
 
-const { app } = window.require('electron').remote;
+//const { app } = require('@electron/remote');
+const { app } = require('@electron/remote')
 var appPath = app.getAppPath().replace(/ /g,"\\ ");
 var localDistRendererPath = appPath + '/dist/renderer/';
 const FILE_DIR = path.join(__dirname, localDistRendererPath + 'vendor/Genymobile/scrcpy');

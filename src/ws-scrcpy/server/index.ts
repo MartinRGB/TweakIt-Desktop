@@ -22,7 +22,8 @@ import { ClientMessage} from './interfaces/Message';
 
 //const PUBLIC_DIR = path.join(__dirname, '../react-previewer');
 
-const { app } = window.require('electron').remote;
+//const { app } = require('@electron/remote');
+const { app } = require('@electron/remote');
 var appPath = app.getAppPath().replace(/ /g,"\\ ");
 var localDistRendererPath = appPath + '/dist/renderer/';
 const PUBLIC_DIR = path.join(__dirname, localDistRendererPath + 'react-previewer');

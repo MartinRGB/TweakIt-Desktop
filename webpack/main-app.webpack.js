@@ -2,11 +2,13 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const rootPath = path.resolve(__dirname, '..');
+const nodeExternals = require('webpack-node-externals');
 
 const common = {
 }
 
 const mainApplication = {
+  //target: 'web',
   target: 'electron-renderer',
   //devtool: 'source-map',
   devtool: 'inline-source-map',
@@ -44,20 +46,23 @@ const mainApplication = {
     ]
   },
   devServer: {
-    contentBase: path.join(rootPath, 'dist/renderer'),
+    static: path.join(rootPath, 'dist/renderer'),
     historyApiFallback: true,
     compress: true,
     hot: true,
     port: 50000,
-    publicPath: '/'
+    //publicPath: '/'
   },
   output: {
     path: path.resolve(rootPath, 'dist/renderer'),
     filename: 'js/[name].js',
-    publicPath: './'
+    //publicPath: './'
   },
   plugins: [
-    new HtmlWebpackPlugin()
+    // new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '..', './src/index.html'),
+    }),
   ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
@@ -69,6 +74,8 @@ const mainApplication = {
     ],
     mainFields: ['main', 'module', 'browser']
   },
+  externals: [nodeExternals()],
+
 }
 
 module.exports = [

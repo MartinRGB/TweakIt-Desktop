@@ -1,7 +1,7 @@
 import React,{ useContext, useEffect, useState,memo} from 'react';
 import styled from '@emotion/styled'
-import {css} from "@emotion/core";
-import { jsx,useColorMode} from 'theme-ui'
+import { css,jsx } from "@emotion/react";
+import { useColorMode } from 'theme-ui';
 import MainIntroPage from './MainIntroPage'
 
 // i18n

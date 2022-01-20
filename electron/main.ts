@@ -4,7 +4,10 @@ import * as url from 'url'
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 import {execCMDPromise} from "../src/helpers/ADBCommand/ADBCommand"
-import {BACKEND_SOCKET_PORT} from '../src/ws-scrcpy/GlobalConstants'
+
+import * as remoteMain from '@electron/remote/main';
+
+remoteMain.initialize();
 
 var appPath = app.getAppPath().replace(/ /g,"\\ ");
 var localAssetsPath = appPath + '/assets/';
@@ -25,7 +28,8 @@ function createMainWindow() {
     // backgroundColor: '#191622',
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
     }
   })
 
@@ -48,6 +52,7 @@ function createMainWindow() {
     previewerReactWindow= null
   }
 
+  remoteMain.enable(mainWindow?.webContents);
 }
 
 function createReactPreviewerWindow(width:number,height:number) {
@@ -61,7 +66,8 @@ function createReactPreviewerWindow(width:number,height:number) {
     backgroundColor: '#000000',
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
     }
   });
 
@@ -82,6 +88,8 @@ function createReactPreviewerWindow(width:number,height:number) {
     //execCMDPromise(`lsof -P | grep ':${BACKEND_SOCKET_PORT}' | awk '{print $2}' | xargs kill -9`)
     previewerReactWindow = null;
   })
+
+
 }
 
 app.on('ready', createMainWindow)

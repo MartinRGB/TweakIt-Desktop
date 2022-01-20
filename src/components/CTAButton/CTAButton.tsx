@@ -1,9 +1,9 @@
 import React ,{ useContext, useEffect} from 'react';
 
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 import { ICallToActionButton } from "@Types";
 
 import { useTranslation, Trans, Translation } from 'react-i18next'
@@ -59,7 +59,7 @@ const AnimatedContainerCSS = css`
 
 // twmacro
 const Button = styled.button`
-  // ${tw`mt-4 p-2 text-white bg-blue-600`}
+  
   // height:20px;
   // width:24px;
   // border-radius:4px;

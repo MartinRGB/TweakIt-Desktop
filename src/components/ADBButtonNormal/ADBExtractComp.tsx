@@ -1,8 +1,8 @@
 import React, {memo,useContext, useEffect,useState}from 'react'
-import { useColorMode,jsx } from 'theme-ui'
-import tw from 'twin.macro'
+import { useColorMode } from 'theme-ui';
+
 import styled from '@emotion/styled';
-import {css} from "@emotion/core";
+import { css,jsx } from "@emotion/react";
 import { IInput } from "@Types";
 import { useTranslation, Trans, Translation } from 'react-i18next'
 import {GlobalAnimationStateContext}  from '@Context/GlobalAnimationContext';
@@ -11,7 +11,7 @@ import {CodeBlockStateContext} from '@Context/CodeBlockContext'
 import { execCMDPromise } from 'src/helpers/ADBCommand/ADBCommand.ts';
 import {getUserHome} from 'src/helpers/GlobalEnvironments/PathEnvironments';
 
-const {dialog} = require('electron').remote;
+const { dialog } = require('@electron/remote');
 import {ADBCommandStateContext}  from '@Context/ADBCommandContext';
 
 export interface IADBExtractComp{
