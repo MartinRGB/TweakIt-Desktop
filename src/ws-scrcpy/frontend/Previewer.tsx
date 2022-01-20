@@ -63,6 +63,7 @@ const App = () => {
       },
       onSocketMessage:(e:FinalMessage)=>{
         console.log(e)
+        if(e.clientMsg){
         const streamParams:ScrcpyStreamParams = {
           action: 'stream',
           decoder: 'mse',
@@ -100,6 +101,7 @@ const App = () => {
             cursorRef.current,
           )
           ScrcpyClientReact.getInstance().setScrcpyEventListener(scrcpyListener);
+        }
         }
 
       }

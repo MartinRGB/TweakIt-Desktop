@@ -26,6 +26,7 @@
   "author": "MartinRGB <qiuyinsen@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@devicefarmer/adbkit": "^2.11.3",
     "@babel/core": "^7.16.10",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-transform-runtime": "^7.16.10",
@@ -133,7 +134,6 @@
     "worker-loader": "^3.0.8"
   },
   "dependencies": {
-    "@devicefarmer/adbkit": "^3.2.1",
     "i18next": "^21.6.6",
     "node-pty": "^0.10.1",
     "portfinder": "^1.0.28",

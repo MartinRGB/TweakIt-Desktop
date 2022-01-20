@@ -1623,30 +1623,30 @@
     "ajv" "^6.12.0"
     "ajv-keywords" "^3.4.1"
 
-"@devicefarmer/adbkit-logcat@^2.1.1":
-  "integrity" "sha512-Wu9g/P6QatOtCr7D/HjjIN84Q6XhAOZLGf941HR2SMWZI7B/WwzxMpUSQN/d/lZT8qcxmH40X16p6GxQnlI6LQ=="
-  "resolved" "https://r2.cnpmjs.org/@devicefarmer/adbkit-logcat/-/adbkit-logcat-2.1.1.tgz"
-  "version" "2.1.1"
+"@devicefarmer/adbkit-logcat@^1.1.0":
+  "integrity" "sha512-K90P5gUXM/w+yzLvJIRQ+tJooNU6ipUPPQkljtPJ0laR66TGtpt4Gqsjm0n9dPHK1W5KGgU1R5wnCd6RTSlPNA=="
+  "resolved" "https://r2.cnpmjs.org/@devicefarmer/adbkit-logcat/-/adbkit-logcat-1.1.0.tgz"
+  "version" "1.1.0"
 
-"@devicefarmer/adbkit-monkey@~1.2.0":
-  "integrity" "sha512-IQ5D/rq0uuI4LHTRxhlF9lAxCR+Rg8VI7JthObe5N1gyeaxl6qRlWnRZYM7apOOASOadCnMcTY1hcDtG8VtaZw=="
-  "resolved" "https://r2.cnpmjs.org/@devicefarmer/adbkit-monkey/-/adbkit-monkey-1.2.0.tgz"
-  "version" "1.2.0"
+"@devicefarmer/adbkit-monkey@~1.0.1":
+  "integrity" "sha512-HilPrVrCosYWqSyjfpDtaaN1kJwdlBpS+IAflP3z+e7nsEgk3JGJf1Vg0NgHJooTf5HDfXSyZqMVg+5jvXCK0g=="
+  "resolved" "https://r2.cnpmjs.org/@devicefarmer/adbkit-monkey/-/adbkit-monkey-1.0.1.tgz"
+  "version" "1.0.1"
   dependencies:
     "async" "~0.2.9"
 
-"@devicefarmer/adbkit@^3.2.1":
-  "integrity" "sha512-boNclfkPUsO2UQvU9L6THaj8TpCVMf9RHJ5Am4m1HnuPzMpxqLxFDc/qeWUoR5Wax/zpjCdzDuC4ytaJuy5/AA=="
-  "resolved" "https://r2.cnpmjs.org/@devicefarmer/adbkit/-/adbkit-3.2.1.tgz"
-  "version" "3.2.1"
+"@devicefarmer/adbkit@^2.11.3":
+  "integrity" "sha512-rsgWREAvSRQjdP9/3GoAV6Tq+o97haywgbTfCgt5yUqiDpaaq3hlH9FTo9XsdG8x+Jd0VQ9nTC2IXsDu8JGRSA=="
+  "resolved" "https://r2.cnpmjs.org/@devicefarmer/adbkit/-/adbkit-2.11.3.tgz"
+  "version" "2.11.3"
   dependencies:
-    "@devicefarmer/adbkit-logcat" "^2.1.1"
-    "@devicefarmer/adbkit-monkey" "~1.2.0"
-    "bluebird" "~3.7"
-    "commander" "^6.2.1"
-    "debug" "~4.3.1"
+    "@devicefarmer/adbkit-logcat" "^1.1.0"
+    "@devicefarmer/adbkit-monkey" "~1.0.1"
+    "bluebird" "~2.9.24"
+    "commander" "^2.3.0"
+    "debug" "~2.6.3"
     "node-forge" "^0.10.0"
-    "split" "~1.0.1"
+    "split" "~0.3.3"
 
 "@discoveryjs/json-ext@^0.5.0":
   "integrity" "sha512-ws57AidsDvREKrZKYffXddNkyaF14iHNHm8VQnZH6t99E8gczjNN0GpvcGny0imC80yQ0tHz1xVUKk/KFQSUyA=="
@@ -4020,7 +4020,7 @@
   dependencies:
     "bluebird" "^3.5.5"
 
-"bluebird@^3.5.0", "bluebird@^3.5.5", "bluebird@^3.7.2", "bluebird@~3.7":
+"bluebird@^3.5.0", "bluebird@^3.5.5", "bluebird@^3.7.2":
   "integrity" "sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg=="
   "resolved" "https://r2.cnpmjs.org/bluebird/-/bluebird-3.7.2.tgz"
   "version" "3.7.2"
@@ -4707,11 +4707,6 @@
   "resolved" "https://registry.npmjs.org/commander/-/commander-5.1.0.tgz"
   "version" "5.1.0"
 
-"commander@^6.2.1":
-  "integrity" "sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA=="
-  "resolved" "https://r2.cnpmjs.org/commander/-/commander-6.2.1.tgz"
-  "version" "6.2.1"
-
 "commander@^7.0.0":
   "integrity" "sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw=="
   "resolved" "https://r2.cnpmjs.org/commander/-/commander-7.2.0.tgz"
@@ -5285,7 +5280,7 @@
   dependencies:
     "ms" "^2.1.1"
 
-"debug@^4.3.1", "debug@^4.3.2", "debug@^4.3.3", "debug@~4.3.1", "debug@4":
+"debug@^4.3.1", "debug@^4.3.2", "debug@^4.3.3", "debug@4":
   "integrity" "sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q=="
   "resolved" "https://r2.cnpmjs.org/debug/-/debug-4.3.3.tgz"
   "version" "4.3.3"
@@ -9418,7 +9413,7 @@
 
 "node-forge@^0.10.0":
   "integrity" "sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA=="
-  "resolved" "https://registry.npmjs.org/node-forge/-/node-forge-0.10.0.tgz"
+  "resolved" "https://r2.cnpmjs.org/node-forge/-/node-forge-0.10.0.tgz"
   "version" "0.10.0"
 
 "node-forge@^0.7.1":
@@ -11729,13 +11724,6 @@
   "integrity" "sha512-wD2AeVmxXRBoX44wAycgjVpMhvbwdI2aZjCkvfNcH1YqHQvJVa1duWc73OyVGJUc05fhFaTZeQ/PYsrmyH0JVA=="
   "resolved" "https://r2.cnpmjs.org/split/-/split-0.3.3.tgz"
   "version" "0.3.3"
-  dependencies:
-    "through" "2"
-
-"split@~1.0.1":
-  "integrity" "sha512-mTyOoPbrivtXnwnIxZRFYRrPNtEFKlpB2fvjSnCQUiAA6qAZzqwna5envK4uk6OIeP17CsdF3rSBGYVBsU0Tkg=="
-  "resolved" "https://r2.cnpmjs.org/split/-/split-1.0.1.tgz"
-  "version" "1.0.1"
   dependencies:
     "through" "2"
 

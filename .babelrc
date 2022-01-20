@@ -7,10 +7,11 @@
         "runtime": "automatic", "importSource": "@emotion/react" 
       }
     ],
-    "@babel/preset-typescript"
+    "@babel/preset-typescript",
+    "@emotion/babel-preset-css-prop"
   ],
   "plugins": [
-    "@emotion/babel-plugin",
+    "@emotion",
     [
       "@babel/plugin-transform-runtime",
       {
