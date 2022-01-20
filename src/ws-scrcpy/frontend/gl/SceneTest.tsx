@@ -57,53 +57,53 @@ function Ground({envTexture,videoTexture,width,height}) {
   const ratioW = width/canvas.offsetWidth;
   const ratioH = height/canvas.offsetHeight;
 
-  const repeatX = 1;
-  const repeatY = 1;
+  const repeatX = 2;
+  const repeatY = 2;
   const groundRef = useRef();
 
 
   var realisticNormal = useLoader(TextureLoader,realistic_normal);
-  realisticNormal.anisotropy = 4;
+  realisticNormal.anisotropy = 16;
   realisticNormal.wrapS = realisticNormal.wrapT = THREE.RepeatWrapping;
   realisticNormal.repeat.set(repeatX, repeatX);
 
   var realisticTex = useLoader(TextureLoader,realistic_texutre);
-  realisticTex.anisotropy = 4;
+  realisticTex.anisotropy = 16;
   realisticTex.wrapS = realisticTex.wrapT = THREE.RepeatWrapping;
   realisticTex.repeat.set(repeatX, repeatY); //4
 
   var lightMapTex = useLoader(TextureLoader,lightmap_texture);
-  lightMapTex.anisotropy = 4;
+  lightMapTex.anisotropy = 16;
   lightMapTex.wrapS = lightMapTex.wrapT = THREE.RepeatWrapping;
   lightMapTex.repeat.set(repeatX, repeatY); //4
 
   var dlNorm = useLoader(TextureLoader,dl_normal);
-  dlNorm.anisotropy = 4;
+  dlNorm.anisotropy = 16;
   dlNorm.wrapS = dlNorm.wrapT = THREE.RepeatWrapping;
   dlNorm.repeat.set(repeatX, repeatX);
 
   var dlDiff = useLoader(TextureLoader,dl_diffuse);
-  dlDiff.anisotropy = 4;
+  dlDiff.anisotropy = 16;
   dlDiff.wrapS = dlDiff.wrapT = THREE.RepeatWrapping;
   dlDiff.repeat.set(repeatX, repeatY); //4
 
   var dlBump = useLoader(TextureLoader,dl_bump);
-  dlBump.anisotropy = 4;
+  dlBump.anisotropy = 16;
   dlBump.wrapS = dlBump.wrapT = THREE.RepeatWrapping;
   dlBump.repeat.set(repeatX, repeatY); //4
 
   var dlAO = useLoader(TextureLoader,dl_ao);
-  dlAO.anisotropy = 4;
+  dlAO.anisotropy = 16;
   dlAO.wrapS = dlAO.dlAO = THREE.RepeatWrapping;
   dlAO.repeat.set(repeatX, repeatY); //4
 
   var dlRoughness = useLoader(TextureLoader,dl_roughness);
-  dlRoughness.anisotropy = 4;
+  dlRoughness.anisotropy = 16;
   dlRoughness.wrapS = dlRoughness.dlAO = THREE.RepeatWrapping;
   dlRoughness.repeat.set(repeatX, repeatY); //4
 
   var dlMetal = useLoader(TextureLoader,dl_metal);
-  dlMetal.anisotropy = 4;
+  dlMetal.anisotropy = 16;
   dlMetal.wrapS = dlMetal.dlAO = THREE.RepeatWrapping;
   dlMetal.repeat.set(repeatX, repeatY); //4
 
@@ -263,11 +263,18 @@ function AreaLight({videoTexture,width,height}){
   })
 
   useEffect(() => {
-    
+
+    RectAreaLightUniformsLib.init();
+    const areaLight = new THREE.TextureAreaLight( 0xffffff, 4,screenWidth,screenHeight, videoTexture , gl );
+
+    areaLight.position.set( 0, 0, 0 );
+    //areaLight.rotation.set( Math.PI, 0, 0 );
+    meshRef.current.add( areaLight );
+
+
     if(meshRef.current && ratioW && ratioH && !hasCreate ){
         RectAreaLightUniformsLib.init();
         //TextureAreaLightUniformsLib.init(testTex);
-
         const width = 50;
         const height = 100;
 
@@ -372,19 +379,40 @@ function AreaLight({videoTexture,width,height}){
 //   );
 // }
 
-function Content({video,canvasVideoWidth,canvasVideoHeight}){
-  // const camera = useRef();
-  // const { size, setDefaultCamera,scene} = useThree();
-  // useEffect(() => void setDefaultCamera(camera.current), [camera]);
-  // useFrame(() => camera.current.updateMatrixWorld())
 
-  const {scene,size} = useThree();
 
-  const ref = useRef();
-  const set = useThree((state) => state.set);
-  useEffect(() => void set({ camera: ref.current }), []);
-  useFrame(() => ref.current.updateMatrixWorld());
+function CustomCamera (props) {
+  const cameraRef = useRef()
+  const set = useThree(({ set }) => set)
+  const size = useThree(({ size }) => size)
   
+  useLayoutEffect(() => {
+      if (cameraRef.current) {
+        cameraRef.current.aspect = size.width / size.height
+        cameraRef.current.updateProjectionMatrix()
+      }
+    }, [size, props])
+  
+    useLayoutEffect(() => {
+      set({ camera: cameraRef.current })
+    }, [])
+  
+  return <perspectiveCamera ref={cameraRef} />
+}
+
+function Content({video,canvasVideoWidth,canvasVideoHeight}){
+  // const cameraRef = useRef();
+  // const { size, setDefaultCamera,scene} = useThree();
+  // useEffect(() => void setDefaultCamera(cameraRef.current), [cameraRef]);
+  // useFrame(() => cameraRef.current.updateMatrixWorld())
+  
+  const {scene,size} = useThree();
+  const cameraRef = useRef();
+  const set = useThree((state) => state.set);
+  useEffect(() => void set({ camera: cameraRef.current }), [cameraRef]);
+  useFrame(() => cameraRef.current.updateMatrixWorld());
+
+
   scene.background = envTexture;
   scene.environment = envTexture;
 
@@ -400,7 +428,7 @@ function Content({video,canvasVideoWidth,canvasVideoHeight}){
     <spotLight castShadow intensity={0.5} color={'rgb(255, 220, 180)'} position={[-12*45, 6*45, -10*20]} shadow-mapSize-width={4096} shadow-mapSize-height={4096} /> */}
 
     <perspectiveCamera
-        ref={ref}
+        ref={cameraRef}
         aspect={size.width / size.height}
         radius={(size.width + size.height) / 4}
         fov={75}
@@ -409,7 +437,7 @@ function Content({video,canvasVideoWidth,canvasVideoHeight}){
         position={[0, 0, 100]}
         onUpdate={self => self.updateProjectionMatrix()}
       />
-      {ref.current && (
+      {cameraRef.current && (
           <>
           <Suspense fallback={null}>
             {/* <ScreenOnly video={video} width={canvasVideoWidth} height={canvasVideoHeight}  /> */}

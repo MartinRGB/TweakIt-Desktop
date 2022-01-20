@@ -2240,16 +2240,16 @@
     "utility-types" "^3.10.0"
     "zustand" "^3.5.13"
 
-"@react-three/fiber@^6.0.13", "@react-three/fiber@>=6.0", "@react-three/fiber@>=7.0", "@react-three/fiber@latest":
-  "integrity" "sha512-XuL3683iVcwjm3enour57k4OjkA1MQztqpRL2oQh30v7ygf1vJg95gKo8cqqgPJctc2pZAMUW1eRpr+Xqjwqrg=="
-  "resolved" "https://r2.cnpmjs.org/@react-three/fiber/-/fiber-6.2.3.tgz"
-  "version" "6.2.3"
+"@react-three/fiber@^7.0.25", "@react-three/fiber@>=6.0", "@react-three/fiber@>=7.0", "@react-three/fiber@latest":
+  "integrity" "sha512-d4XudHlfSYhiMnA8E6HWK5UPr99SdQrg/wTNs2y/sjyqUMAa89WP62rsGUohGTN38qIk/c1DgaG/zSQKXEC6XA=="
+  "resolved" "https://r.cnpmjs.org/@react-three/fiber/-/fiber-7.0.25.tgz"
+  "version" "7.0.25"
   dependencies:
     "@babel/runtime" "^7.13.10"
     "react-merge-refs" "^1.1.0"
     "react-reconciler" "^0.26.2"
     "react-three-fiber" "0.0.0-deprecated"
-    "react-use-measure" "^2.0.4"
+    "react-use-measure" "^2.1.1"
     "resize-observer-polyfill" "^1.5.1"
     "scheduler" "^0.20.2"
     "use-asset" "^1.0.4"
@@ -10543,7 +10543,7 @@
   "resolved" "https://r2.cnpmjs.org/react-three-fiber/-/react-three-fiber-0.0.0-deprecated.tgz"
   "version" "0.0.0-deprecated"
 
-"react-use-measure@^2.0.4":
+"react-use-measure@^2.1.1":
   "integrity" "sha512-nocZhN26cproIiIduswYpV5y5lQpSQS1y/4KuvUCjSKmw7ZWIS/+g3aFnX3WdBkyuGUtTLif3UTqnLLhbDoQig=="
   "resolved" "https://r2.cnpmjs.org/react-use-measure/-/react-use-measure-2.1.1.tgz"
   "version" "2.1.1"
@@ -12328,7 +12328,7 @@
     "potpack" "^1.0.1"
     "zstddec" "^0.0.2"
 
-"three@^0.136.0", "three@>= 0.102.0 < 0.137.0", "three@>= 0.123.0", "three@>=0.103.0", "three@>=0.126", "three@>=0.128.0", "three@>=0.130.1", "three@>=0.134", "three@0.103.x - 0.121.x":
+"three@>= 0.102.0 < 0.137.0", "three@>= 0.123.0", "three@>=0.103.0", "three@>=0.126", "three@>=0.128.0", "three@>=0.130.1", "three@>=0.133", "three@>=0.134", "three@0.103.x - 0.121.x":
   "integrity" "sha512-+fEMX7nYLz2ZesVP/dyifli5Jf8gR3XPAnFJveQ80aMhibFduzrADnjMbARXh8+W9qLK7rshJCjAIL/6cDxC+A=="
   "resolved" "https://r2.cnpmjs.org/three/-/three-0.136.0.tgz"
   "version" "0.136.0"

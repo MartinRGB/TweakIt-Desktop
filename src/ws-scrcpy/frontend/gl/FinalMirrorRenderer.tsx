@@ -332,18 +332,10 @@ function Effect({}){
 }
 
 function Content({video,canvasVideoWidth,canvasVideoHeight}){
-  // const camera = useRef();
-  // const { size, setDefaultCamera } = useThree();
-  // useEffect(() => void setDefaultCamera(camera.current), [camera]);
-  // useFrame(() => camera.current.updateMatrixWorld())
-
-  const {scene,size} = useThree();
-
-  const ref = useRef();
-  const set = useThree((state) => state.set);
-  useEffect(() => void set({ camera: ref.current }), []);
-  useFrame(() => ref.current.updateMatrixWorld());
-
+  const camera = useRef();
+  const { size, setDefaultCamera } = useThree();
+  useEffect(() => void setDefaultCamera(camera.current), [camera]);
+  useFrame(() => camera.current.updateMatrixWorld())
   const envTexture = new THREE.CubeTextureLoader().load( cubeUrls );
 
   const lightGroupBIntensity = 0.25;
@@ -371,7 +363,7 @@ function Content({video,canvasVideoWidth,canvasVideoHeight}){
     <pointLight position={[-100, 100, -100]} intensity={lightGroupBIntensity/2} color="white"/>  */}
 
     <perspectiveCamera
-        ref={ref}
+        ref={camera}
         aspect={size.width / size.height}
         radius={(size.width + size.height) / 4}
         fov={75}
@@ -380,7 +372,7 @@ function Content({video,canvasVideoWidth,canvasVideoHeight}){
         position={[0, 0, 100]}
         onUpdate={self => self.updateProjectionMatrix()}
       />
-      {ref.current && (
+      {camera.current && (
           <>
           <Suspense fallback={null}>
             <Mirror width={canvasVideoWidth} height={canvasVideoHeight}/>

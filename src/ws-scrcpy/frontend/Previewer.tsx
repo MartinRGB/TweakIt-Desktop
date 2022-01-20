@@ -209,8 +209,8 @@ const App = () => {
           ref={threeCanvasContainerRef} 
         >
           {/* <FinalModelRenderer video={videoRef.current} pixelRatio={canvasPixelRatio}></FinalModelRenderer> */}
-          <FinalMirrorRenderer video={videoRef2.current} canvasVideoWidth={canvasVideoWidth} canvasVideoHeight={canvasVideoHeight} pixelRatio={canvasPixelRatio}></FinalMirrorRenderer>
-          {/* <SceneTest video={videoRef2.current} canvasVideoWidth={canvasVideoWidth} canvasVideoHeight={canvasVideoHeight} pixelRatio={canvasPixelRatio}></SceneTest> */}
+          {/* <FinalMirrorRenderer video={videoRef.current} canvasVideoWidth={canvasVideoWidth} canvasVideoHeight={canvasVideoHeight} pixelRatio={canvasPixelRatio}></FinalMirrorRenderer> */}
+          <SceneTest video={videoRef2.current} canvasVideoWidth={canvasVideoWidth} canvasVideoHeight={canvasVideoHeight} pixelRatio={canvasPixelRatio}></SceneTest>
 
         </IThreeCanvasContainer>
       </IThreeContainer>:''}
